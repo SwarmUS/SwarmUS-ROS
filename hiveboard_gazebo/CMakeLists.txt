@@ -48,16 +48,14 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  position.msg
-)
+# add_message_files(
+#  FILES
+# )
 
 ## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-  AddTwoInts.srv
-)
+# add_service_files(
+# FILES
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -67,10 +65,10 @@ add_service_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -102,7 +100,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  CATKIN_DEPENDS message_runtime
+#  CATKIN_DEPENDS message_runtime
   INCLUDE_DIRS include
 #  LIBRARIES hiveboard_gazebo
 #  CATKIN_DEPENDS roscpp rospy std_msgs
@@ -207,8 +205,6 @@ include_directories(
 
 add_executable(interloc src/interloc.cpp)
 target_link_libraries(interloc ${catkin_LIBRARIES})
-add_dependencies(interloc hiveboard_gazebo_generate_messages_cpp)
 
 add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
-add_dependencies(listener hiveboard_gazebo_generate_messages_cpp)

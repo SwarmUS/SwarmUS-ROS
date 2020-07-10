@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- Generic launch file for ROSBuzz  -->
+<!-- This file is included in all ROS workspace launch files  -->
+<!-- Modify with great care!  -->
+<launch>
+  <arg name="name" default="robot0"/>
+  <arg name="debug" default="true"/>
+
+  <node name="rosbuzz_node" pkg="rosbuzz" type="rosbuzz_node" respawn="false" output="screen" >
+    <rosparam file="$(find rosbuzz)/launch/launch_config/$(arg launch_config).yaml"/>
+    <param name="bzzfile_name" value="buzz_scripts/HelloBuzz.bzz" />
+    <param name="debug" value="$(arg debug)" />
+    <param name="name" value="$(arg name)"/>
+  </node>
+</launch>

@@ -134,6 +134,76 @@
     <limit effort="0" velocity="0"/>
   </joint>
 
+  <joint name="kinect_joint" type="fixed">
+    <child link="$(arg prefix)/kinect_ros_link" /> 
+    <parent link="$(arg prefix)/chassis" />
+  </joint>
+
+  <!-- Add the remaining xacros -->
+  <link name="$(arg prefix)/kinect_ros_link">
+    <inertial>
+      <mass value="0.1"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision name="collision">
+      <origin rpy="0  0  0" xyz="0       0       0.03599"/>
+      <geometry>
+        <box size="0.073000 0.276000 0.072000"/>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <origin rpy="0  0  0" xyz="0       0       0.03599"/>
+      <geometry>
+        <mesh filename="package://swarmus_ros_description/models/kinect_ros/meshes/kinect.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>  
+
+  <gazebo reference="$(arg prefix)/kinect_ros_link">
+    <sensor name="camera" type="depth">
+        <update_rate>20</update_rate>
+        <camera>
+          <horizontal_fov>1.047198</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>3</far>
+          </clip>
+        </camera>
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!-- Keep this zero, update_rate in the parent <sensor> tag
+            will control the frame rate. -->
+          <updateRate>0.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/color/image_raw</imageTopicName>
+          <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+          <frameName>camera_link</frameName>
+          <pointCloudCutoff>0.5</pointCloudCutoff>
+          <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
+      </sensor>
+  </gazebo>
+
   <gazebo reference="$(arg prefix)/imu_link">
     <sensor name="imu_sensor" type="imu">
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
@@ -147,4 +217,6 @@
       </plugin>
     </sensor>
   </gazebo>
+
+
 </robot>

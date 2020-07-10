@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<robot name="pioneer_swarmus" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="prefix" default="p_swarmus"/>
+  
+  <link name="$(arg prefix)/base_footprint" />
+  <link name="$(arg prefix)/base_link" />
+
+
+  <link name="$(arg prefix)/chassis">
+    <inertial>
+      <mass value="5.67"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0.07" ixy="0" ixz="0" iyy="0.08" iyz="0" izz="0.10"/>
+    </inertial>
+    <collision name="collision">
+      <origin rpy="0  0  0" xyz="0    0    0.16"/>
+      <geometry>
+        <box size="0.445 0.277 0.17"/>
+      </geometry>
+    </collision>
+    <collision name="castor_collision">
+      <origin rpy="0  0  0" xyz="-0.2   0    0.04"/>
+      <geometry>
+        <sphere radius="0.04"/>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <origin rpy="0  0  0" xyz="0   0   0.2"/>
+      <geometry>
+        <mesh filename="package://swarmus_ros_description/models/pioneer_swarmus/meshes/chassis.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <visual name="pioneer_swarmus__castor_visual">
+      <origin rpy="0  0  0" xyz="-0.2   0    0.04"/>
+      <geometry>
+        <sphere radius="0.04"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="$(arg prefix)/right_wheel">
+    <inertial>
+      <mass value="1.5"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0.0051" ixy="0" ixz="0" iyy="0.0051" iyz="0" izz="0.0090"/>
+    </inertial>
+    <collision name="collision">
+      <origin rpy="0  0  0" xyz="0    0   -0.03"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.11"/>
+      </geometry>
+      <!-- pas de friction?-->
+    </collision>
+    <visual name="visual">
+      <origin rpy="0  0  0" xyz="0    0   -0.03"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.11"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="$(arg prefix)/left_wheel">
+    <inertial>
+      <mass value="1.5"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0.0051" ixy="0" ixz="0" iyy="0.0051" iyz="0" izz="0.0090"/>
+    </inertial>
+    <collision name="collision">
+      <origin rpy="0  0  0" xyz="0    0    0.03"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.11"/>
+      </geometry>
+      <!-- pas de friction?-->
+    </collision>
+    <visual name="visual">
+      <origin rpy="0  0  0" xyz="0    0    0.03"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.11"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="$(arg prefix)/imu_link">
+    <inertial>
+      <mass value="0.0000001"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual name="pioneer_swarmus__visual">
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <geometry>
+        <box size="0.03 0.03 0.01"/>
+      </geometry>
+    </visual>
+    <!-- Rajouter le sensor-->
+  </link>  
+
+  <joint name="base_footprint_link_joint" type="fixed">
+    <!-- The 0.5 should be changed to have the real offset from the floor-->
+    <origin xyz="0 0 0.05" rpy="0 0 0" />
+    <parent link="$(arg prefix)/base_footprint" />
+    <child link="$(arg prefix)/base_link" />
+  </joint>
+  
+  <joint name="base_link_chassis_joint" type="fixed">
+    <!-- The 0.5 should be changed to have the real offset from the floor-->
+    <origin xyz="0 0 0.0" rpy="0 0 0" />
+    <parent link="$(arg prefix)/base_link" />
+    <child link="$(arg prefix)/chassis" />
+  </joint>
+
+
+  <joint name="left_wheel_hinge" type="continuous">
+    <parent link="$(arg prefix)/chassis"/>
+    <child link="$(arg prefix)/left_wheel"/>
+    <origin rpy="0      1.5707  1.5707" xyz="0.1  0.14     0.11"/>
+    <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
+    <limit effort="0.0" velocity="0.0"/>>
+  </joint>
+
+  <joint name="right_wheel_hinge" type="continuous">
+    <parent link="$(arg prefix)/chassis"/>
+    <child link="$(arg prefix)/right_wheel"/>
+    <origin rpy="0      1.5707  1.5707" xyz="0.1  -0.14  0.11"/>
+    <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
+    <limit effort="0.0" velocity="0.0"/>
+  </joint>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="$(arg prefix)/chassis"/>
+    <child link="$(arg prefix)/imu_link"/>
+    <origin rpy="0  0  0" xyz="0.07  0    0.27"/>
+    <axis xyz="0  0  0"/>
+    <limit effort="0" velocity="0"/>
+  </joint>
+
+  <gazebo reference="$(arg prefix)/imu_link">
+    <sensor name="imu_sensor" type="imu">
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu/data</topicName>
+        <bodyName>$(arg prefix)/imu_link</bodyName>
+        <updateRateHZ>100</updateRateHZ>
+        <gaussianNoise>0.01</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>$(arg prefix)/imu_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+</robot>

@@ -92,6 +92,7 @@
       </geometry>
     </visual>
   </link>  
+
   <link name="$(arg prefix)/kinect_ros_link">
     <inertial>
       <mass value="0.1"/>
@@ -137,6 +138,22 @@
     </visual>
   </link>
 
+  <link name="$(arg prefix)/hiveboard">
+    <inertial>
+      <mass value="0.0000001"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual name="visual">
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <geometry>
+        <box size="0.07 0.07 0.02"/>
+      </geometry>
+      <material name="Orange">
+        <color rgba="1.0 0.622 0.0 1"/>
+      </material>
+    </visual>
+  </link>
 
 
 <!-- ================================== Joints ==================================-->
@@ -189,7 +206,11 @@
     <origin rpy="0  0  0" xyz="0  0    0.21"/>
   </joint>
 
-
+  <joint name="hiveboard_joint" type="fixed">
+    <child link="$(arg prefix)/hiveboard"/>
+    <parent link="$(arg prefix)/chassis"/>
+    <origin rpy="0  0  0" xyz="-0.1  0.0  0.12"/>
+  </joint>
 <!-- ================================== Gazebo plugin ================================== -->
 
 <gazebo reference="$(arg prefix)/chassis">

@@ -50,7 +50,6 @@
       <geometry>
         <cylinder length="0.05" radius="0.11"/>
       </geometry>
-      <!-- pas de friction?-->
     </collision>
     <visual name="visual">
       <origin rpy="0  0  0" xyz="0    0   0"/>
@@ -71,7 +70,6 @@
       <geometry>
         <cylinder length="0.05" radius="0.11"/>
       </geometry>
-      <!-- pas de friction?-->
     </collision>
     <visual name="visual">
       <origin rpy="0  0  0" xyz="0    0   0"/>
@@ -93,7 +91,6 @@
         <box size="0.03 0.03 0.01"/>
       </geometry>
     </visual>
-    <!-- Rajouter le sensor-->
   </link>  
   <link name="$(arg prefix)/kinect_ros_link">
     <inertial>
@@ -144,14 +141,12 @@
 
 <!-- ================================== Joints ==================================-->
   <joint name="base_footprint_link_joint" type="fixed">
-    <!-- The 0.5 should be changed to have the real offset from the floor-->
     <origin xyz="0 0 0.16" rpy="0 0 0" />
     <parent link="$(arg prefix)/base_footprint" />
     <child link="$(arg prefix)/base_link" />
   </joint>
   
   <joint name="base_link_chassis_joint" type="fixed">
-    <!-- The 0.5 should be changed to have the real offset from the floor-->
     <origin xyz="0 0 0.0" rpy="0 0 0" />
     <parent link="$(arg prefix)/base_link" />
     <child link="$(arg prefix)/chassis" />
@@ -197,7 +192,63 @@
 
 <!-- ================================== Gazebo plugin ================================== -->
 
-<gazebo reference="$(arg prefix)/rplidar">
+<gazebo reference="$(arg prefix)/chassis">
+  <mu1 value="0.0"/>
+  <mu2 value="0.0"/>
+  <kp  value="1.0" />
+  <kd  value="1.0" />
+  <!-- material>Gazebo/$(arg color)</material-->
+</gazebo>
+
+<gazebo reference="$(arg prefix)/right_wheel">
+  <mu1 value="100000.0"/>
+  <mu2 value="100000.0"/>
+  <kp  value="0.0" />
+  <kd  value="0.0" />
+  <!-- material>Gazebo/$(arg color)</material-->
+</gazebo>
+
+<gazebo reference="$(arg prefix)/left_wheel">
+  <mu1 value="100000.0"/>
+  <mu2 value="100000.0"/>
+  <kp  value="0.0" />
+  <kd  value="0.0" />
+  <!-- material>Gazebo/$(arg color)</material-->
+</gazebo>
+
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>$(arg prefix)</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+  </plugin>
+</gazebo>
+
+  <gazebo>
+    <plugin name="differential_drive" filename="libgazebo_ros_diff_drive.so">
+      <robotNamespace>$(arg prefix)</robotNamespace>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometrySource>world</odometrySource>
+      <publishOdomTF>true</publishOdomTF>
+      <robotBaseFrame>$(arg prefix)/base_footprint</robotBaseFrame>
+      <publishWheelTF>false</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
+      <legacyMode>false</legacyMode>
+      <updateRate>50</updateRate>
+      <leftJoint>$(arg prefix)/left_wheel</leftJoint>
+      <rightJoint>$(arg prefix)/right_wheel</rightJoint>
+      <wheelSeparation>0.34</wheelSeparation>
+      <wheelDiameter>0.22</wheelDiameter>
+      <wheelAcceleration>1</wheelAcceleration>
+      <wheelTorque>10</wheelTorque>
+      <rosDebugLevel>na</rosDebugLevel>
+    </plugin>
+  </gazebo>
+
+
+  <gazebo reference="$(arg prefix)/rplidar">
       <sensor name="laser" type="ray">
         <pose>0.01 0 0.0175 0 -0 0</pose>
         <ray>
@@ -218,6 +269,7 @@
         </ray>
         <plugin name="laser" filename="libRayPlugin.so" />
         <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+          <robotNamespace>$(arg prefix)</robotNamespace>
           <topicName>scan</topicName>
           <frameName>base_laser</frameName>
         </plugin>
@@ -225,7 +277,7 @@
         <update_rate>10</update_rate>
         <visualize>true</visualize>
       </sensor>
-</gazebo>
+  </gazebo>
 
   <gazebo reference="$(arg prefix)/kinect_ros_link">
     <sensor name="camera" type="depth">
@@ -243,17 +295,18 @@
           </clip>
         </camera>
         <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+          <robotNamespace>$(arg prefix)</robotNamespace>
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
           <!-- Keep this zero, update_rate in the parent <sensor> tag
             will control the frame rate. -->
           <updateRate>0.0</updateRate>
           <cameraName>camera_ir</cameraName>
-          <imageTopicName>/camera/color/image_raw</imageTopicName>
+          <!--imageTopicName>/camera/color/image_raw</imageTopicName>
           <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
           <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
           <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
-          <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+          <pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
           <frameName>camera_link</frameName>
           <pointCloudCutoff>0.5</pointCloudCutoff>
           <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
@@ -274,6 +327,7 @@
   <gazebo reference="$(arg prefix)/imu_link">
     <sensor name="imu_sensor" type="imu">
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <robotNamespace>$(arg prefix)</robotNamespace>
         <topicName>imu/data</topicName>
         <bodyName>$(arg prefix)/imu_link</bodyName>
         <updateRateHZ>100</updateRateHZ>
@@ -284,6 +338,27 @@
       </plugin>
     </sensor>
   </gazebo>
+
+<!-- ================================== Transmission ================================== -->
+  <transmission name="$(arg prefix)_right_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$(arg prefix)_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="right_wheel_hinge">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="$(arg prefix)_left_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$(arg prefix)_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="left_wheel_hinge">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
 
 
 </robot>

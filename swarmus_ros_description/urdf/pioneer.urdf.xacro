@@ -6,6 +6,7 @@
   <link name="$(arg prefix)/base_link" />
 
 
+<!-- ================================== L ==================================-->
   <link name="$(arg prefix)/chassis">
     <inertial>
       <mass value="5.67"/>
@@ -13,25 +14,25 @@
       <inertia ixx="0.07" ixy="0" ixz="0" iyy="0.08" iyz="0" izz="0.10"/>
     </inertial>
     <collision name="collision">
-      <origin rpy="0  0  0" xyz="0    0    0.16"/>
+      <origin rpy="0  0  0" xyz="0    0    0"/>
       <geometry>
         <box size="0.445 0.277 0.17"/>
       </geometry>
     </collision>
     <collision name="castor_collision">
-      <origin rpy="0  0  0" xyz="-0.2   0    0.04"/>
+      <origin rpy="0  0  0" xyz="-0.2   0    -0.12"/>
       <geometry>
         <sphere radius="0.04"/>
       </geometry>
     </collision>
     <visual name="visual">
-      <origin rpy="0  0  0" xyz="0   0   0.2"/>
+      <origin rpy="0  0  0" xyz="0   0   0.04"/>
       <geometry>
         <mesh filename="package://swarmus_ros_description/models/pioneer_swarmus/meshes/chassis.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <visual name="pioneer_swarmus__castor_visual">
-      <origin rpy="0  0  0" xyz="-0.2   0    0.04"/>
+      <origin rpy="0  0  0" xyz="-0.2   0    -0.12"/>
       <geometry>
         <sphere radius="0.04"/>
       </geometry>
@@ -45,14 +46,14 @@
       <inertia ixx="0.0051" ixy="0" ixz="0" iyy="0.0051" iyz="0" izz="0.0090"/>
     </inertial>
     <collision name="collision">
-      <origin rpy="0  0  0" xyz="0    0   -0.03"/>
+      <origin rpy="0  0  0" xyz="0    0   0"/>
       <geometry>
         <cylinder length="0.05" radius="0.11"/>
       </geometry>
       <!-- pas de friction?-->
     </collision>
     <visual name="visual">
-      <origin rpy="0  0  0" xyz="0    0   -0.03"/>
+      <origin rpy="0  0  0" xyz="0    0   0"/>
       <geometry>
         <cylinder length="0.05" radius="0.11"/>
       </geometry>
@@ -66,14 +67,14 @@
       <inertia ixx="0.0051" ixy="0" ixz="0" iyy="0.0051" iyz="0" izz="0.0090"/>
     </inertial>
     <collision name="collision">
-      <origin rpy="0  0  0" xyz="0    0    0.03"/>
+      <origin rpy="0  0  0" xyz="0    0   0"/>
       <geometry>
         <cylinder length="0.05" radius="0.11"/>
       </geometry>
       <!-- pas de friction?-->
     </collision>
     <visual name="visual">
-      <origin rpy="0  0  0" xyz="0    0    0.03"/>
+      <origin rpy="0  0  0" xyz="0    0   0"/>
       <geometry>
         <cylinder length="0.05" radius="0.11"/>
       </geometry>
@@ -94,56 +95,6 @@
     </visual>
     <!-- Rajouter le sensor-->
   </link>  
-
-  <joint name="base_footprint_link_joint" type="fixed">
-    <!-- The 0.5 should be changed to have the real offset from the floor-->
-    <origin xyz="0 0 0.05" rpy="0 0 0" />
-    <parent link="$(arg prefix)/base_footprint" />
-    <child link="$(arg prefix)/base_link" />
-  </joint>
-  
-  <joint name="base_link_chassis_joint" type="fixed">
-    <!-- The 0.5 should be changed to have the real offset from the floor-->
-    <origin xyz="0 0 0.0" rpy="0 0 0" />
-    <parent link="$(arg prefix)/base_link" />
-    <child link="$(arg prefix)/chassis" />
-  </joint>
-
-
-  <joint name="left_wheel_hinge" type="continuous">
-    <parent link="$(arg prefix)/chassis"/>
-    <child link="$(arg prefix)/left_wheel"/>
-    <origin rpy="0      1.5707  1.5707" xyz="0.1  0.14     0.11"/>
-    <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
-    <limit effort="0.0" velocity="0.0"/>>
-  </joint>
-
-  <joint name="right_wheel_hinge" type="continuous">
-    <parent link="$(arg prefix)/chassis"/>
-    <child link="$(arg prefix)/right_wheel"/>
-    <origin rpy="0      1.5707  1.5707" xyz="0.1  -0.14  0.11"/>
-    <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
-    <limit effort="0.0" velocity="0.0"/>
-  </joint>
-
-  <joint name="imu_joint" type="fixed">
-    <parent link="$(arg prefix)/chassis"/>
-    <child link="$(arg prefix)/imu_link"/>
-    <origin rpy="0  0  0" xyz="0.07  0    0.27"/>
-    <axis xyz="0  0  0"/>
-    <limit effort="0" velocity="0"/>
-  </joint>
-
-  <joint name="kinect_joint" type="fixed">
-    <child link="$(arg prefix)/kinect_ros_link" /> 
-    <parent link="$(arg prefix)/chassis" />
-  </joint>
-
-  <joint name="rplidar_join" type="fixed">
-    <child link="$(arg prefix)/rplidar"/>
-    <parent link="$(arg prefix)/chassis" />
-  </joint>
-
   <link name="$(arg prefix)/kinect_ros_link">
     <inertial>
       <mass value="0.1"/>
@@ -167,7 +118,7 @@
   <link name="$(arg prefix)/rplidar">
     <inertial>
       <mass value="0.1"/>
-      <origin rpy="0  0  0.35" xyz="0  0  0"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
     </inertial>
     <collision name="collision">
@@ -188,6 +139,63 @@
       </geometry>
     </visual>
   </link>
+
+
+
+<!-- ================================== Joints ==================================-->
+  <joint name="base_footprint_link_joint" type="fixed">
+    <!-- The 0.5 should be changed to have the real offset from the floor-->
+    <origin xyz="0 0 0.16" rpy="0 0 0" />
+    <parent link="$(arg prefix)/base_footprint" />
+    <child link="$(arg prefix)/base_link" />
+  </joint>
+  
+  <joint name="base_link_chassis_joint" type="fixed">
+    <!-- The 0.5 should be changed to have the real offset from the floor-->
+    <origin xyz="0 0 0.0" rpy="0 0 0" />
+    <parent link="$(arg prefix)/base_link" />
+    <child link="$(arg prefix)/chassis" />
+  </joint>
+
+
+  <joint name="left_wheel_hinge" type="continuous">
+    <parent link="$(arg prefix)/chassis"/>
+    <child link="$(arg prefix)/left_wheel"/>
+    <origin rpy="0      1.5707  1.5707" xyz="0.1  0.17    -0.05"/>
+    <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
+    <limit effort="0.0" velocity="0.0"/>>
+  </joint>
+
+  <joint name="right_wheel_hinge" type="continuous">
+    <parent link="$(arg prefix)/chassis"/>
+    <child link="$(arg prefix)/right_wheel"/>
+    <origin rpy="0      1.5707  1.5707" xyz="0.1  -0.17  -0.05"/>
+    <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
+    <limit effort="0.0" velocity="0.0"/>
+  </joint>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="$(arg prefix)/chassis"/>
+    <child link="$(arg prefix)/imu_link"/>
+    <origin rpy="0  0  0" xyz="0.07  0    0.11"/>
+    <axis xyz="0  0  0"/>
+    <limit effort="0" velocity="0"/>
+  </joint>
+
+  <joint name="kinect_joint" type="fixed">
+    <child link="$(arg prefix)/kinect_ros_link" /> 
+    <parent link="$(arg prefix)/chassis" />
+    <origin rpy="0  0  0" xyz="0.20  0    0.11"/>
+  </joint>
+
+  <joint name="rplidar_joint" type="fixed">
+    <child link="$(arg prefix)/rplidar"/>
+    <parent link="$(arg prefix)/chassis" />
+    <origin rpy="0  0  0" xyz="0  0    0.21"/>
+  </joint>
+
+
+<!-- ================================== Gazebo plugin ================================== -->
 
 <gazebo reference="$(arg prefix)/rplidar">
       <sensor name="laser" type="ray">

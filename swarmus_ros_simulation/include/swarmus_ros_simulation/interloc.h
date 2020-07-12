@@ -2,16 +2,20 @@
 #include "std_msgs/String.h"
 #include <math.h>
 #include <tf/transform_listener.h>
+#include <string>
 
 #include <sstream>
 
+// TODO change std::String to std_msgs::String
+
 class Interloc {
     public:
-        Interloc();
-        float getDistanceFrom(int x, int y);
-        float getAnglefrom(int x, int y);
+        Interloc(std::string new_robot_name);
+        float getDistanceFrom(float x, float y);
+        float getAnglefrom(float x, float y);
         void publish(std_msgs::String msg);
         void move(int delta_x, int delta_y);
+        std::string robot_name;
 
     private:
         // ROS NodeHandle

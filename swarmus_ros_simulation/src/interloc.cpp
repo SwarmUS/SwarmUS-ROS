@@ -4,17 +4,20 @@
 Class function implementations
 */
 
-Interloc::Interloc() {
+Interloc::Interloc(std::string new_robot_name) {
+  robot_name = new_robot_name;
   interloc_pub = n.advertise<std_msgs::String>("interloc", 1000);
+
+  ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
 
-float Interloc::getDistanceFrom(int x, int y) {
+float Interloc::getDistanceFrom(float x, float y) {
   return sqrt(pow((pos_x - x), 2) + pow((pos_y - y), 2));
 }
 
-float Interloc::getAnglefrom(int x, int y) {
+float Interloc::getAnglefrom(float x, float y) {
   // calculer un angle depuis un point
-  return 90;
+  return atan2(y,x)*180.0/M_PI;
 }
 
 
@@ -42,7 +45,16 @@ ROS main
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "interloc");
-  Interloc interloc;
+  ros::NodeHandle n;
+
+  std::string robot_name;
+  if (!ros::param::get("~robot_name",robot_name)) // The ~ is used to get param declared inside the <node></node> tags
+  {
+    ROS_INFO("No param name was given. pioneer_0 will be used instead");
+    robot_name = "pioneer_0";
+  }
+
+  Interloc interloc(robot_name);
 
   ros::Rate loop_rate(10); // Probablement qu'on pourrait changer la boucle pour des evenements declenches par le board.
   
@@ -53,15 +65,20 @@ int main(int argc, char **argv)
     tf::StampedTransform transform;
 
     try{
-      listener.lookupTransform("pioneer_1/base_footprint", "pioneer_0/base_footprint",  
+      listener.lookupTransform("pioneer_0/base_footprint", "pioneer_1/base_footprint",  
                                ros::Time(0), transform);
+
     }
     catch (tf::TransformException ex){
       ROS_ERROR("%s",ex.what());
       ros::Duration(1.0).sleep();
     }
 
+    float dist = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
+    float angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
+
     ROS_INFO("X: %f, Y: %f, Z: %f", transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+    ROS_INFO("Distance: %f, Angle: %f", dist, angle);
     /*
     float distance = interloc.getDistanceFrom(0,0);
     float angle = interloc.getAnglefrom(0,0);

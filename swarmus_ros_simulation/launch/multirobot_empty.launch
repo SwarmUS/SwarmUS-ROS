@@ -31,6 +31,7 @@
         <arg name="headless" value="$(arg headless)"/>
     </include>
 
+
     <group ns="$(arg robot_0_name)">
 
         <param name="robot_description" command="$(find xacro)/xacro.py $(arg model) prefix:=$(arg robot_0_name) " />
@@ -45,7 +46,10 @@
             <param name="publish_frequency" type="double" value="30.0" />
             <remap from="/joint_states" to="/p_swarmus/joint_states"/>
         </node>
-
+        
+        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_0_name)" />
+        </node>
     </group>
 
     <group ns="$(arg robot_1_name)">
@@ -63,6 +67,12 @@
             <remap from="/joint_states" to="/p_swarmus/joint_states"/>
         </node>
 
+        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_1_name)" />
+        </node>
+
     </group>
+
+    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
 
 </launch>

@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     tf::StampedTransform transform;
 
     try{
-      listener.lookupTransform("/p_swarmus3/chassis", "/p_swarmus3/hiveboard",  
+      listener.lookupTransform("pioneer_1/base_footprint", "pioneer_0/base_footprint",  
                                ros::Time(0), transform);
     }
     catch (tf::TransformException ex){

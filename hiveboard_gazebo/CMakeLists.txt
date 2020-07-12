@@ -102,7 +102,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  CATKIN_DEPENDS message_runtime
-  INCLUDE_DIRS include
+#  INCLUDE_DIRS include
 #  LIBRARIES hiveboard_gazebo
 #  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
@@ -114,10 +114,10 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
+#include_directories(
+#  include
+#  ${catkin_INCLUDE_DIRS}
+#)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -207,5 +207,5 @@ include_directories(
 # add_executable(interloc src/interloc.cpp)
 # target_link_libraries(interloc ${catkin_LIBRARIES})
 
-# add_executable(listener src/listener.cpp)
-# target_link_libraries(listener ${catkin_LIBRARIES})
+#add_executable(listener src/listener.cpp)
+#target_link_libraries(listener ${catkin_LIBRARIES})

@@ -1,4 +1,4 @@
-#include "hiveboard_gazebo/interloc.h"
+#include "swarmus_ros_simulation/interloc.h"
 
 /*
 Class function implementations
@@ -46,8 +46,23 @@ int main(int argc, char **argv)
 
   ros::Rate loop_rate(10); // Probablement qu'on pourrait changer la boucle pour des evenements declenches par le board.
   
+  tf::TransformListener listener;
+
   while (ros::ok())
   {
+    tf::StampedTransform transform;
+
+    try{
+      listener.lookupTransform("/p_swarmus3/chassis", "/p_swarmus3/hiveboard",  
+                               ros::Time(0), transform);
+    }
+    catch (tf::TransformException ex){
+      ROS_ERROR("%s",ex.what());
+      ros::Duration(1.0).sleep();
+    }
+
+    ROS_INFO("X: %f, Y: %f, Z: %f", transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+    /*
     float distance = interloc.getDistanceFrom(0,0);
     float angle = interloc.getAnglefrom(0,0);
 
@@ -55,9 +70,10 @@ int main(int argc, char **argv)
     msg.data = buildInterloc(distance, angle).str();
 
     ROS_INFO("%s", msg.data.c_str());
+    */
 
     // Loop and stuff
-    interloc.move(1, 1);
+    // interloc.move(1, 1);
     ros::spinOnce();
     loop_rate.sleep();
   }

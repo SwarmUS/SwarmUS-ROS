@@ -14,13 +14,13 @@
     <arg name="robot_0_pos_x" default="0.0"/>
     <arg name="robot_0_pos_y" default="0.0"/>
     <arg name="robot_0_pos_z" default="1.0"/>
-    <arg name="robot_0_urdf_spawner_model" default="robot_0"/>
+    <arg name="robot_0_urdf_spawner_model" default="pioneer_0"/>
     
     <arg name="robot_1_name" default="pioneer_1"/>
     <arg name="robot_1_pos_x" default="1.0"/>
     <arg name="robot_1_pos_y" default="0.0"/>
     <arg name="robot_1_pos_z" default="1.0"/>
-    <arg name="robot_1_urdf_spawner_model" default="robot_1"/>
+    <arg name="robot_1_urdf_spawner_model" default="pioneer_1"/>
 
     <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">

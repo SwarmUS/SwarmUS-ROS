@@ -18,7 +18,7 @@
     <arg name="headless" value="$(arg headless)"/>
   </include>
 
-  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model) prefix:=p_swarmus3 " />
   <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner" 

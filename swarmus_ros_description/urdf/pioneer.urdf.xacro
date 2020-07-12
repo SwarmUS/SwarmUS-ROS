@@ -5,8 +5,7 @@
   <link name="$(arg prefix)/base_footprint" />
   <link name="$(arg prefix)/base_link" />
 
-
-<!-- ================================== L ==================================-->
+<!-- ================================== Links ==================================-->
   <link name="$(arg prefix)/chassis">
     <inertial>
       <mass value="5.67"/>

@@ -14,7 +14,7 @@ Interloc::Interloc(std::string new_robot_name) {
 
 Interloc::~Interloc()
 {
-  delete[] robot_list;
+  robot_list.clear();
 }
 
 float Interloc::getDistanceFrom(float x, float y) {
@@ -38,6 +38,9 @@ void Interloc:: move(int delta_x, int delta_y) {
 
 void Interloc::getRobotList(ros::NodeHandle nh)
 {
+  // Clear previous robot list
+  robot_list.clear();
+
   XmlRpc::XmlRpcValue v;
   if (!nh.getParam("/robot_list", v))
   {
@@ -45,16 +48,12 @@ void Interloc::getRobotList(ros::NodeHandle nh)
   }
 
   std::cout<<v.size()<<std::endl; // Only for debug
-  robot_list = new  std::string[2];
 
   for(int i =0; i < v.size(); i++)
   {
-    robot_list[i] = std::string(v[i]);
+    robot_list.push_back(v[i]);
     std::cout<<robot_list[i] <<std::endl;  // Only for debug
-    std::cout<<i<<std::endl;                // Only for debug
   }
-  std::cout<<"sizeof robot list"<<sizeof(robot_list)/sizeof(robot_list[0])<<std::endl;  // Only for debug
-
 }
 
 /*
@@ -94,16 +93,15 @@ int main(int argc, char **argv)
   while (ros::ok())
   {
 
-    for(int i=0; i < interloc.robot_list->size(); i++ )
+    for(std::string& robot_name : interloc.robot_list)
     {
-      std::string name = interloc.robot_list[i];
-      if (name == interloc.robot_name)
+      if (robot_name == interloc.robot_name)
       {
         continue;
       }
 
       std::string reference = interloc.robot_name + HIVEBOARD_LINK;
-      std::string target = name + HIVEBOARD_LINK;
+      std::string target = robot_name + HIVEBOARD_LINK;
 
       tf::StampedTransform transform;
       try{
@@ -117,7 +115,7 @@ int main(int argc, char **argv)
         
       float dist = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
       float angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
-      ROS_INFO("Distance: %f, Angle: %f, iiteration: %d", dist, angle, interloc.robot_list->size());         // Only for debug
+      ROS_INFO("Distance: %f, Angle: %f, iteration: %ld", dist, angle, interloc.robot_list.size());         // Only for debug
       
     }
     // TODO: faire une for loop qui passe dans robot_list et fait une tf avec lui meme sauf lui meme avec lui meme

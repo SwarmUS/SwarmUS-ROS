@@ -22,7 +22,7 @@ class Interloc {
 
 
         std::string robot_name;
-        std::string *robot_list;
+        std::vector<std::string> robot_list;
         /*std::map<std::string, 
         swarmus_ros_simulation::Interloc_msg> robot_list;*/           //TODO mettre la bonne classe
 

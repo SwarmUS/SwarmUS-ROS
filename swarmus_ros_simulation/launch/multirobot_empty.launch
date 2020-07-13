@@ -77,4 +77,6 @@
 
     <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
 
+    <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication"/>
+
 </launch>

@@ -218,3 +218,6 @@ add_dependencies(interloc ${catkin_EXPORTED_TARGETS})
 
 add_executable(tf_publisher src/tf_publisher.cpp)
 target_link_libraries(tf_publisher ${catkin_LIBRARIES})
+
+add_executable(interCommunication src/interCommunication.cpp)
+target_link_libraries(interCommunication ${catkin_LIBRARIES})

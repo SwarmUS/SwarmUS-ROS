@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   tf
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -51,11 +52,13 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
+ add_message_files(
+   DIRECTORY
+   FILES
+   Interloc_msg.msg
 #   Message1.msg
 #   Message2.msg
-# )
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -72,10 +75,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -109,7 +112,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES swarmus_ros_simulation
-#  CATKIN_DEPENDS controller_manager joint_state_controller robot_state_publisher roscpp rospy std_msgs tf
+  CATKIN_DEPENDS message_runtime controller_manager joint_state_controller robot_state_publisher roscpp rospy std_msgs tf
 #  DEPENDS system_lib
 )
 
@@ -211,6 +214,7 @@ include
 
 add_executable(interloc src/interloc.cpp)
 target_link_libraries(interloc ${catkin_LIBRARIES})
+add_dependencies(interloc ${catkin_EXPORTED_TARGETS})
 
 add_executable(tf_publisher src/tf_publisher.cpp)
 target_link_libraries(tf_publisher ${catkin_LIBRARIES})

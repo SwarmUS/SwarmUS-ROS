@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "swarmus_ros_simulation/Interloc_msg.h"
 #include <math.h>
 #include <tf/transform_listener.h>
 #include <string>
@@ -12,6 +13,7 @@
 class Interloc {
     public:
         Interloc(std::string new_robot_name);
+        ~Interloc();
         float getDistanceFrom(float x, float y);
         float getAnglefrom(float x, float y);
         void publish(std_msgs::String msg);
@@ -19,7 +21,9 @@ class Interloc {
         void getRobotList(ros::NodeHandle nh);
 
         std::string robot_name;
-        std::map<std::string, int> robot_list;           //TODO mettre la bonne classe
+        std::string *robot_list;
+        /*std::map<std::string, 
+        swarmus_ros_simulation::Interloc_msg> robot_list;*/           //TODO mettre la bonne classe
 
     private:
         // ROS NodeHandle

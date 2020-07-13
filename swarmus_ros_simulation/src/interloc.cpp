@@ -11,6 +11,11 @@ Interloc::Interloc(std::string new_robot_name) {
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
 
+Interloc::~Interloc()
+{
+  delete[] robot_list;
+}
+
 float Interloc::getDistanceFrom(float x, float y) {
   return sqrt(pow((pos_x - x), 2) + pow((pos_y - y), 2));
 }
@@ -35,18 +40,14 @@ void Interloc::getRobotList(ros::NodeHandle nh)
   XmlRpc::XmlRpcValue v;
   if (!nh.getParam("/robot_list", v))
   {
-    ROS_ERROR("No robot_list was found =============================");
+    ROS_ERROR("No robot_list was found");
   }
-  std::cout<<v<<typeid(v).name()<<std::string(v[0])<<std::endl;
-  
-  int offset = 0;
-  
-  //v[0].fromXml()
 
+  robot_list = new  std::string[v.size()];
   for(int i =0; i < v.size(); i++)
   {
-    std::string name = std::string(v[i]);
-    robot_list[name] = 0;
+    robot_list[i] = std::string(v[i]);
+    std::cout<<robot_list[i] <<std::endl;
   }
 }
 

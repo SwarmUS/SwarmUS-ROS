@@ -5,10 +5,10 @@
 #include <tf/transform_listener.h>
 #include <string>
 #include <XmlRpcValue.h> 
-
 #include <sstream>
 
 // TODO change std::String to std_msgs::String
+const std::string HIVEBOARD_LINK = "/hiveboard";
 
 class Interloc {
     public:
@@ -19,6 +19,7 @@ class Interloc {
         void publish(std_msgs::String msg);
         void move(int delta_x, int delta_y);
         void getRobotList(ros::NodeHandle nh);
+
 
         std::string robot_name;
         std::string *robot_list;

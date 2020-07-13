@@ -30,6 +30,26 @@ void Interloc:: move(int delta_x, int delta_y) {
   pos_y += delta_y;
 }
 
+void Interloc::getRobotList(ros::NodeHandle nh)
+{
+  XmlRpc::XmlRpcValue v;
+  if (!nh.getParam("/robot_list", v))
+  {
+    ROS_ERROR("No robot_list was found =============================");
+  }
+  std::cout<<v<<typeid(v).name()<<std::string(v[0])<<std::endl;
+  
+  int offset = 0;
+  
+  //v[0].fromXml()
+
+  for(int i =0; i < v.size(); i++)
+  {
+    std::string name = std::string(v[i]);
+    robot_list[name] = 0;
+  }
+}
+
 /*
 Helpers
 */
@@ -47,6 +67,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "interloc");
   ros::NodeHandle n;
 
+  
   std::string robot_name;
   if (!ros::param::get("~robot_name",robot_name)) // The ~ is used to get param declared inside the <node></node> tags
   {
@@ -62,6 +83,8 @@ int main(int argc, char **argv)
 
   while (ros::ok())
   {
+    interloc.getRobotList(n);
+
     tf::StampedTransform transform;
 
     try{
@@ -77,8 +100,8 @@ int main(int argc, char **argv)
     float dist = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
     float angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
 
-    ROS_INFO("X: %f, Y: %f, Z: %f", transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
-    ROS_INFO("Distance: %f, Angle: %f", dist, angle);
+    //ROS_INFO("X: %f, Y: %f, Z: %f", transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+    //ROS_INFO("Distance: %f, Angle: %f", dist, angle);
     /*
     float distance = interloc.getDistanceFrom(0,0);
     float angle = interloc.getAnglefrom(0,0);

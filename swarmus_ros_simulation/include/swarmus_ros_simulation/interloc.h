@@ -3,6 +3,7 @@
 #include <math.h>
 #include <tf/transform_listener.h>
 #include <string>
+#include <XmlRpcValue.h> 
 
 #include <sstream>
 
@@ -15,7 +16,10 @@ class Interloc {
         float getAnglefrom(float x, float y);
         void publish(std_msgs::String msg);
         void move(int delta_x, int delta_y);
+        void getRobotList(ros::NodeHandle nh);
+
         std::string robot_name;
+        std::map<std::string, int> robot_list;           //TODO mettre la bonne classe
 
     private:
         // ROS NodeHandle

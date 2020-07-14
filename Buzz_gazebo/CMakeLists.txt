@@ -11,19 +11,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSIMULATION=${SIM} -DMAVROSKINETIC=${KI
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  mavros_msgs
   sensor_msgs
-  nav_msgs
   message_generation
 )
 
 ##############################
 ##############################
 
-add_message_files(
- FILES
- neigh_pos.msg
-)
+
 
 generate_messages(
 DEPENDENCIES
@@ -36,9 +31,7 @@ sensor_msgs
 
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES xbee_ros_node
   CATKIN_DEPENDS roscpp std_msgs mavros_msgs sensor_msgs message_runtime
-#  DEPENDS system_lib
 )
 
 ###########
@@ -53,12 +46,10 @@ include_directories(
 link_directories(/usr/local/lib)
 
 # Executables 
-add_executable(rosbuzz_node src/rosbuzz.cpp
-  src/roscontroller.cpp
+add_executable(rosbuzz_node
   src/buzz_utility.cpp
-  src/buzzuav_closures.cpp
-  src/VoronoiDiagramGenerator.cpp
-  src/buzz_update.cpp)
+  src/ROSBuzz.cpp
+  )
 target_link_libraries(rosbuzz_node ${catkin_LIBRARIES} buzz buzzdbg pthread)
 add_dependencies(rosbuzz_node rosbuzz_generate_messages_cpp)
 

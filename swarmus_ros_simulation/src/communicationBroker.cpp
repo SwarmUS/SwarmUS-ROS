@@ -11,14 +11,33 @@ CommunicationBroker::CommunicationBroker() {
 
 CommunicationBroker::~CommunicationBroker() {}
 
+void CommunicationBroker::publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication_msg& msg) {
+  ROS_INFO("Publishing message: [%s] to [%s].", msg.message.c_str(), robot_name.c_str());
+  std_msgs::String publishedMsg;
+  publishedMsg.data = msg.message;
+  pub.publish(publishedMsg);
+}
+
 void CommunicationBroker::communicationCallback(const swarmus_ros_simulation::Communication_msg& msg) {
-    auto pubIter = publishersMap.find(msg.target_robot);
-    if (pubIter != publishersMap.end()) {
-        ROS_INFO("Publishing message: [%s] to [%s].", msg.message.c_str(), msg.target_robot.c_str());
-        std_msgs::String publishedMsg;
-        publishedMsg.data = msg.message;
-        pubIter->second.publish(publishedMsg);
+    if (msg.target_robot == Simulation::Communication::AllRobots)
+    {
+      for (auto const& robotPublisher : publishersMap)              
+        CommunicationBroker::publishMsg(robotPublisher.first, robotPublisher.second, msg);      
     }
+    else if (msg.target_robot == Simulation::Communication::AllRobotsExceptSelf)
+    {
+      for (auto const& robotPublisher : publishersMap)
+      {
+        if (robotPublisher.first != msg.source_robot)                
+          CommunicationBroker::publishMsg(robotPublisher.first, robotPublisher.second, msg);        
+      }      
+    }
+    else {
+      auto pubIter = publishersMap.find(msg.target_robot);
+      if (pubIter != publishersMap.end()) 
+        CommunicationBroker::publishMsg(msg.target_robot, pubIter->second, msg);      
+    }
+    
 }
 
 int main(int argc, char** argv){

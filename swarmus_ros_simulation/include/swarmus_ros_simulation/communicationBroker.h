@@ -12,6 +12,7 @@ public:
     ~CommunicationBroker();
 
 private:
+    static void publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication_msg& msg);
     
     // Contains all robot associated with their publisher
     std::map<std::string, ros::Publisher> publishersMap;

@@ -31,13 +31,15 @@ int main(int argc, char** argv){
 
   InterCommunication interCommunication(robot_name);
 
-  ros::Rate loop_rate(10);
+  // Send message each second
+  ros::Rate loop_rate(1);
 
   // For current implementation, pioneer_0 only will send a message to pioneer_1.
   while(ros::ok()) {
     swarmus_ros_simulation::Communication_msg msg;
     if (robot_name == "pioneer_0") {
-      msg.target_robot = "pioneer_1";
+      msg.source_robot = robot_name;
+      msg.target_robot = Simulation::Communication::AllRobotsExceptSelf;
       msg.message = robot_name + " say hello.";
 
       //ROS_INFO("%s", msg.data.c_str());

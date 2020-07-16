@@ -3,6 +3,11 @@
 
 namespace Simulation {
 
+    namespace Communication {
+        std::string AllRobots = "allRobots";
+        std::string AllRobotsExceptSelf = "allRobotsExceptSelf";
+    }
+
     static std::vector<std::string> GetRobotList() {
             ros::NodeHandle nh;
 

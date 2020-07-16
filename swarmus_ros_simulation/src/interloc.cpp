@@ -1,6 +1,5 @@
 #include "swarmus_ros_simulation/interloc.h"
 
-
 /*
 Class function implementations
 */
@@ -12,10 +11,7 @@ Interloc::Interloc(std::string new_robot_name) {
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
 
-Interloc::~Interloc()
-{
-  robot_list.clear();
-}
+Interloc::~Interloc() {}
 
 float Interloc::getDistanceFrom(float x, float y) {
   return sqrt(pow((pos_x - x), 2) + pow((pos_y - y), 2));
@@ -34,26 +30,6 @@ void Interloc::publish(std_msgs::String msg) {
 void Interloc:: move(int delta_x, int delta_y) {
   pos_x += delta_x;
   pos_y += delta_y;
-}
-
-void Interloc::getRobotList(ros::NodeHandle nh)
-{
-  // Clear previous robot list
-  robot_list.clear();
-
-  XmlRpc::XmlRpcValue v;
-  if (!nh.getParam("/robot_list", v))
-  {
-    ROS_ERROR("No robot_list was found");
-  }
-
-  std::cout<<v.size()<<std::endl; // Only for debug
-
-  for(int i =0; i < v.size(); i++)
-  {
-    robot_list.push_back(v[i]);
-    std::cout<<robot_list[i] <<std::endl;  // Only for debug
-  }
 }
 
 /*
@@ -84,16 +60,17 @@ int main(int argc, char **argv)
   }
   // Get the robot list
   Interloc interloc(robot_name);
-  interloc.getRobotList(n);
 
   ros::Rate loop_rate(10); // Probablement qu'on pourrait changer la boucle pour des evenements declenches par le board.
   
   tf::TransformListener listener;
 
+  int count = 0;
+
   while (ros::ok())
   {
 
-    for(std::string& robot_name : interloc.robot_list)
+    for(std::string& robot_name : Simulation::GetRobotList())
     {
       if (robot_name == interloc.robot_name)
       {
@@ -115,7 +92,7 @@ int main(int argc, char **argv)
         
       float dist = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
       float angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
-      ROS_INFO("Distance: %f, Angle: %f, iteration: %ld", dist, angle, interloc.robot_list.size());         // Only for debug
+      ROS_INFO("Distance: %f, Angle: %f, iteration: %d", dist, angle, count);         // Only for debug
       
     }
     // TODO: faire une for loop qui passe dans robot_list et fait une tf avec lui meme sauf lui meme avec lui meme
@@ -136,6 +113,7 @@ int main(int argc, char **argv)
 
     // Loop and stuff
     // interloc.move(1, 1);
+    ++count;
     ros::spinOnce();
     loop_rate.sleep();
   }

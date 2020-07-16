@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "swarmus_ros_simulation/Interloc_msg.h"
+#include "swarmus_ros_simulation/simulationUtility.hpp"
 #include <math.h>
 #include <tf/transform_listener.h>
 #include <string>
@@ -18,11 +19,9 @@ class Interloc {
         float getAnglefrom(float x, float y);
         void publish(std_msgs::String msg);
         void move(int delta_x, int delta_y);
-        void getRobotList(ros::NodeHandle nh);
 
 
         std::string robot_name;
-        std::vector<std::string> robot_list;
         /*std::map<std::string, 
         swarmus_ros_simulation::Interloc_msg> robot_list;*/           //TODO mettre la bonne classe
 

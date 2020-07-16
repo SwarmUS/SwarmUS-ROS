@@ -52,6 +52,10 @@
         <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
             <param name="robot_name" type="string" value="$(arg robot_0_name)" />
         </node>
+
+        <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_0_name)" />
+        </node>
     </group>
 
     <group ns="$(arg robot_1_name)">
@@ -73,10 +77,14 @@
             <param name="robot_name" type="string" value="$(arg robot_1_name)" />
         </node>
 
+        <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_1_name)" />
+        </node>
+
     </group>
 
-    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
+    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>    
 
-    <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication"/>
+    <node pkg="swarmus_ros_simulation" type="communicationBroker" name="communicationBroker" output="screen"/>
 
 </launch>

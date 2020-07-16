@@ -56,6 +56,7 @@ find_package(catkin REQUIRED COMPONENTS
    DIRECTORY
    FILES
    Interloc_msg.msg
+   Communication_msg.msg
 #   Message1.msg
 #   Message2.msg
  )
@@ -221,3 +222,6 @@ target_link_libraries(tf_publisher ${catkin_LIBRARIES})
 
 add_executable(interCommunication src/interCommunication.cpp)
 target_link_libraries(interCommunication ${catkin_LIBRARIES})
+
+add_executable(communicationBroker src/communicationBroker.cpp)
+target_link_libraries(communicationBroker ${catkin_LIBRARIES})

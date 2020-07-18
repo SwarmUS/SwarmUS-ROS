@@ -55,7 +55,8 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    DIRECTORY
    FILES
-   Interloc_msg.msg
+   Interloc.msg
+   Interloc_grid.msg
    Communication_msg.msg
 #   Message1.msg
 #   Message2.msg

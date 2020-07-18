@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "swarmus_ros_simulation/Interloc_msg.h"
+#include "swarmus_ros_simulation/Interloc.h"
+#include "swarmus_ros_simulation/Interloc_grid.h"
 #include "swarmus_ros_simulation/simulationUtility.hpp"
 #include <math.h>
 #include <tf/transform_listener.h>
@@ -13,11 +14,11 @@ const std::string HIVEBOARD_LINK = "/hiveboard";
 
 class Interloc {
     public:
-        Interloc(std::string new_robot_name);
+        Interloc(std::string new_robot_name, float x = 0.0, float y = 0.0);
         ~Interloc();
         float getDistanceFrom(float x, float y);
         float getAnglefrom(float x, float y);
-        void publish(std_msgs::String msg);
+        void publish(swarmus_ros_simulation::Interloc_grid grid);
         void move(int delta_x, int delta_y);
 
 

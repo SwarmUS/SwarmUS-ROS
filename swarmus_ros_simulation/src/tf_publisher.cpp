@@ -30,6 +30,10 @@ void tfCallback(const gazebo_msgs::ModelStates& msg){
             ros::Time::now(), 
             "world", 
             buf));
+
+        // Sleep for one nanosecond
+        ros::Duration(0, 1).sleep();
+            
         // TODO delete stale robots
     }
 }

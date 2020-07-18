@@ -174,7 +174,7 @@
     <child link="$(arg prefix)/left_wheel"/>
     <origin rpy="0      1.5707  1.5707" xyz="0.1  0.17    -0.05"/>
     <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
-    <limit effort="0.0" velocity="0.0"/>>
+    <limit effort="100.0" velocity="100"/>>
   </joint>
 
   <joint name="right_wheel_hinge" type="continuous">
@@ -182,7 +182,7 @@
     <child link="$(arg prefix)/right_wheel"/>
     <origin rpy="0      1.5707  1.5707" xyz="0.1  -0.17  -0.05"/>
     <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
-    <limit effort="0.0" velocity="0.0"/>
+    <limit effort="100.0" velocity="100"/>
   </joint>
 
   <joint name="imu_joint" type="fixed">
@@ -238,7 +238,7 @@
 
 <gazebo>
   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
   </plugin>
 </gazebo>
 

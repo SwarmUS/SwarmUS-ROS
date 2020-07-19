@@ -1,11 +1,13 @@
+
+BVMSTATE = "Hello"
+
 # Executed once at init time.
 function init() {
-    init_swarm()
 }
 
 # Executed at each time step.
 function step() {
-
+    log("State: ", BVMSTATE)
 }
 
 # Executed once when the robot (or the simulator) is reset.

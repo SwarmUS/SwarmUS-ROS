@@ -5,11 +5,12 @@
 <launch>
   <arg name="name" default="robot0"/>
   <arg name="debug" default="true"/>
+  <arg name="script" default="HelloBuzz"/>
+  
 
   <node name="rosbuzz_node" pkg="rosbuzz" type="rosbuzz_node" respawn="false" output="screen" >
-    <rosparam file="$(find rosbuzz)/launch/launch_config/$(arg launch_config).yaml"/>
-    <param name="bzzfile_name" value="buzz_scripts/HelloBuzz.bzz" />
-    <param name="debug" value="$(arg debug)" />
+    <!--<rosparam file="$(find rosbuzz)/launch/launch_config/$(arg launch_config).yaml"/> --> 
+    <param name="BzzFileName" value="/home/casto/catkin_ws/src/SwarmUS-ROS/Buzz_gazebo/buzz_scripts/$(arg script).bzz" />
     <param name="name" value="$(arg name)"/>
   </node>
 </launch>

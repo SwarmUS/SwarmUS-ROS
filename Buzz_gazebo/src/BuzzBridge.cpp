@@ -18,15 +18,16 @@ BuzzBridge::~BuzzBridge() {
 void BuzzBridge::getROSParameters() {
 
     if(m_NodeHandle->getParam("BzzFileName", m_BuzzFiles.script)) {
-        // Buzz script provided
+        ROS_INFO("Buzz script selected: %s", m_BuzzFiles.script.c_str());
     }
     else {
         ROS_ERROR("Provide a .bzz file to run in Launch file");
+        ROS_INFO("Buzz script selected: %s", m_BuzzFiles.script.c_str());
         system("rosnode kill rosbuzz_node"); // Node name defined launch file
     }
 
     std::string name;
-    if(m_NodeHandle->getParam("name", name)) {
+    if(m_NodeHandle->getParam("/rosbuzz_node/name", name)) {
         m_RobotID = stoi(name.erase(0, 5)); // extract number after robot (name:robot1 => m_RobotID:1)
     }
     else {

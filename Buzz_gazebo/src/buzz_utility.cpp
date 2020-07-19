@@ -14,7 +14,6 @@ static buzzvm_t VM = 0;
 static char* boFilename = 0;
 static uint8_t* boBuffer = 0;
 static buzzdebug_t dbgInfo = 0;
-static uint32_t MAX_MESSAGE_SIZE;
 static uint8_t robotID = 0;
 /*************************************************************************************************/
 
@@ -67,7 +66,7 @@ int setBuzzScript(const char* p_boFilename, const char* p_bdbgFilename, int p_ro
     {
         buzzvm_destroy(&VM);
         buzzdebug_destroy(&dbgInfo);
-        ROS_ERROR("[%i] %s: Error loading Buzz bytecode (update)", robotID);
+        ROS_ERROR("%d: Error loading Buzz bytecode", robotID);
         return 0;
     }
 
@@ -167,6 +166,24 @@ static const char* buzzErrorInfo() {
     asprintf(&msg, "%s: execution terminated abnormally at bytecode offset %d: %s\n\n", boFilename, VM->pc, VM->errormsg);
   }
   return msg;
+}
+
+/*************************************************************************************************/
+std::string compileBuzzScript(std::string p_bzzFilename){
+    std::stringstream bzzfile_in_compile;
+    std::string path = p_bzzFilename.substr(0, p_bzzFilename.find_last_of("\\/")) + "/";
+    std::string name = p_bzzFilename.substr(p_bzzFilename.find_last_of("/\\") + 1);
+    name = name.substr(0, name.find_last_of("."));
+    bzzfile_in_compile << "bzzc -I " << path << "include/";
+    bzzfile_in_compile << " -b " << path << name << ".bo";
+    bzzfile_in_compile << " -d " << path << name << ".bdb ";
+    bzzfile_in_compile << p_bzzFilename;
+
+    ROS_WARN("Launching buzz compilation: %s", bzzfile_in_compile.str().c_str());
+
+    system(bzzfile_in_compile.str().c_str());
+
+    return path + name;
 }
 
 } // namespace buzz_utility

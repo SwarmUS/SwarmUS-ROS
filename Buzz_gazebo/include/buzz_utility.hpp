@@ -14,6 +14,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <string>
+#include <ostream>
 #include <ros/ros.h>
 
 namespace buzz_utility {
@@ -27,6 +28,7 @@ int getSwarmSize();
 buzzvm_t getVM();
 std::string getVMState();
 static const char* buzzErrorInfo();
+std::string compileBuzzScript(std::string p_bzzFilename);
 
 } // namespace buzz_utility
 

@@ -31,7 +31,7 @@ sensor_msgs
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs mavros_msgs sensor_msgs message_runtime
+  CATKIN_DEPENDS roscpp std_msgs sensor_msgs message_runtime
 )
 
 ###########
@@ -46,9 +46,9 @@ include_directories(
 link_directories(/usr/local/lib)
 
 # Executables 
-add_executable(rosbuzz_node
+add_executable(rosbuzz_node src/ROSBuzz.cpp
   src/buzz_utility.cpp
-  src/ROSBuzz.cpp
+  src/BuzzBridge.cpp
   )
 target_link_libraries(rosbuzz_node ${catkin_LIBRARIES} buzz buzzdbg pthread)
 add_dependencies(rosbuzz_node rosbuzz_generate_messages_cpp)

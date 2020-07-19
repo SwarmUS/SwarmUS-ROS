@@ -25,6 +25,7 @@ public:
     BuzzBridge(ros::NodeHandle* p_NodeHandle);
     ~BuzzBridge();
     void execute(void);
+    void registerHookFunctions();
 };
 
 

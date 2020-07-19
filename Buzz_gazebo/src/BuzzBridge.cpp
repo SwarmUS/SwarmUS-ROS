@@ -7,6 +7,7 @@ BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     std::string filePath = buzz_utility::compileBuzzScript(m_BuzzFiles.script);
     m_BuzzFiles.byteCode = filePath + ".bo";
     m_BuzzFiles.debugCode = filePath +".bdb";
+    
 }
 
 /*************************************************************************************************/
@@ -42,10 +43,10 @@ void BuzzBridge::getROSParameters() {
 void BuzzBridge::execute() {
     ros::Rate loopRate(BUZZRATE);
     if( buzz_utility::setBuzzScript(m_BuzzFiles.byteCode.c_str(), m_BuzzFiles.debugCode.c_str(), m_RobotID) ) {
+        registerHookFunctions();
         while(ros::ok() && !buzz_utility::buzzScriptDone()){
 
             buzz_utility::buzzScriptStep();
-            ROS_INFO("Value: %s", buzz_utility::getVMState().c_str());
 
             // Call functions to publish topics
 
@@ -58,4 +59,10 @@ void BuzzBridge::execute() {
             }   
         }
     }
+}
+
+
+/*************************************************************************************************/
+void BuzzBridge::registerHookFunctions(){
+  buzz_utility::registerHookFunction("log", buzz_utility::buzzPrint);
 }

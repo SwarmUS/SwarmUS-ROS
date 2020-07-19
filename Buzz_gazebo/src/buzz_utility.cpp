@@ -182,8 +182,61 @@ std::string compileBuzzScript(std::string p_bzzFilename){
     ROS_WARN("Launching buzz compilation: %s", bzzfile_in_compile.str().c_str());
 
     system(bzzfile_in_compile.str().c_str());
-
+    
     return path + name;
+}
+
+/*************************************************************************************************/
+int registerHookFunction(const char* p_BuzzFunctionName, buzzvm_funp p_CallbackFunctionPointer) {
+    buzzvm_pushs(VM, buzzvm_string_register(VM, p_BuzzFunctionName, 1));
+    buzzvm_pushcc(VM, buzzvm_function_register(VM, p_CallbackFunctionPointer));
+    buzzvm_gstore(VM);
+    return VM->state;
+}
+
+int buzzPrint(buzzvm_t vm) {
+    std::ostringstream buffer(std::ostringstream::ate);
+    for (uint32_t index = 1; index < buzzdarray_size(vm->lsyms->syms); ++index)
+    {
+        buzzvm_lload(vm, index);
+        buzzobj_t o = buzzvm_stack_at(vm, 1);
+        buzzvm_pop(vm);
+        switch (o->o.type)
+        {
+        case BUZZTYPE_NIL:
+            buffer << " BUZZ - [nil]";
+            break;
+        case BUZZTYPE_INT:
+            buffer << " " << o->i.value;
+            break;
+        case BUZZTYPE_FLOAT:
+            buffer << " " << o->f.value;
+            break;
+        case BUZZTYPE_TABLE:
+            buffer << " [table with " << buzzdict_size(o->t.value) << " elems]";
+            break;
+        case BUZZTYPE_CLOSURE:
+            if (o->c.value.isnative)
+            {
+            buffer << " [n-closure @" << o->c.value.ref << "]";
+            }
+            else
+            {
+            buffer << " [c-closure @" << o->c.value.ref << "]";
+            }
+            break;
+        case BUZZTYPE_STRING:
+            buffer << "  " << o->s.value.str;
+            break;
+        case BUZZTYPE_USERDATA:
+            buffer << " [userdata @" << o->u.value << "]";
+            break;
+        default:
+            break;
+        }
+    }
+    ROS_INFO("%s", buffer.str().c_str());
+    return buzzvm_ret0(vm);
 }
 
 } // namespace buzz_utility

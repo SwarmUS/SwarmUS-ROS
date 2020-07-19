@@ -29,6 +29,9 @@ buzzvm_t getVM();
 std::string getVMState();
 static const char* buzzErrorInfo();
 std::string compileBuzzScript(std::string p_bzzFilename);
+int registerHookFunction(const char* p_BuzzFunctionName, buzzvm_funp p_CallbackFunctionPointer);
+int buzzPrint(buzzvm_t vm);
+
 
 } // namespace buzz_utility
 

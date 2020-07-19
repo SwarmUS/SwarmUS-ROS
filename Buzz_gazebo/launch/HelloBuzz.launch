@@ -10,7 +10,7 @@
 
   <node name="rosbuzz_node" pkg="rosbuzz" type="rosbuzz_node" respawn="false" output="screen" >
     <!--<rosparam file="$(find rosbuzz)/launch/launch_config/$(arg launch_config).yaml"/> --> 
-    <param name="BzzFileName" value="/home/casto/catkin_ws/src/SwarmUS-ROS/Buzz_gazebo/buzz_scripts/$(arg script).bzz" />
+    <param name="BzzFileName" value="$(find rosbuzz)/buzz_scripts/$(arg script).bzz" />
     <param name="name" value="$(arg name)"/>
   </node>
 </launch>

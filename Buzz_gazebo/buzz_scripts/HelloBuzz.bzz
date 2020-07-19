@@ -7,7 +7,7 @@ function init() {
 
 # Executed at each time step.
 function step() {
-    log("State: ", BVMSTATE)
+    counter = counter + 1
 }
 
 # Executed once when the robot (or the simulator) is reset.

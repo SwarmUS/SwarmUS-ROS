@@ -45,6 +45,7 @@ void BuzzBridge::execute() {
         while(ros::ok() && !buzz_utility::buzzScriptDone()){
 
             buzz_utility::buzzScriptStep();
+            ROS_INFO("Value: %s", buzz_utility::getVMState().c_str());
 
             // Call functions to publish topics
 

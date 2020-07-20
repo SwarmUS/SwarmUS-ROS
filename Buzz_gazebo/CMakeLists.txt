@@ -11,7 +11,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSIMULATION=${SIM} -DMAVROSKINETIC=${KI
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  sensor_msgs
   message_generation
 )
 
@@ -22,7 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 generate_messages(
 DEPENDENCIES
-sensor_msgs
+std_msgs
 )
 
 ###################################
@@ -31,7 +30,7 @@ sensor_msgs
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs sensor_msgs message_runtime
+  CATKIN_DEPENDS roscpp std_msgs message_runtime
 )
 
 ###########
@@ -47,11 +46,11 @@ link_directories(/usr/local/lib)
 
 # Executables 
 add_executable(rosbuzz_node src/ROSBuzz.cpp
-  src/buzz_utility.cpp
+  src/BuzzUtility.cpp
   src/BuzzBridge.cpp
   )
 target_link_libraries(rosbuzz_node ${catkin_LIBRARIES} buzz buzzdbg pthread)
-add_dependencies(rosbuzz_node rosbuzz_generate_messages_cpp)
+#add_dependencies(rosbuzz_node)
 
 # Executables and libraries for installation to do
 install(TARGETS rosbuzz_node

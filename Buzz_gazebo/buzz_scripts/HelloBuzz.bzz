@@ -8,8 +8,7 @@ function init() {
 # Executed at each time step.
 function step() {
     counter = counter + 1
-    log(counter)
-    log("Hello Buzz Beeeeeetches")
+    log("Hello Buzz Beeeeeetches (counter =", counter, ")")
 }
 
 # Executed once when the robot (or the simulator) is reset.

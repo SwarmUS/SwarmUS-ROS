@@ -5,9 +5,9 @@
  * the ROS ecosystem. 
  ******************************************/
 
-#include "buzz_utility.hpp"
+#include "BuzzUtility.hpp"
 /*************************************************************************************************/
-namespace buzz_utility {
+namespace BuzzUtility {
 
 /*************************************************************************************************/
 static buzzvm_t VM = 0;
@@ -85,6 +85,9 @@ int setBuzzScript(const char* p_boFilename, const char* p_bdbgFilename, int p_ro
     // Pop the init return value
     buzzvm_pop(VM);
     // All OK
+
+    // Register base log function in Buzz for ROS
+    registerHookFunction("log", BuzzUtility::buzzPrint);
     return 1;
 }
 
@@ -153,7 +156,7 @@ std::string getVMState() {
 }
 
 /*************************************************************************************************/
-static const char* buzzErrorInfo() {
+const char* buzzErrorInfo() {
   buzzdebug_entry_t dbg = *buzzdebug_info_get_fromoffset(dbgInfo, &VM->pc);
   char* msg;
   if (dbg != NULL)

@@ -2,7 +2,7 @@
 <package>
   <name>rosbuzz</name>
   <version>0.1.0</version>
-  <description>The rosbuzz package</description>
+  <description>The rosbuzz package, Handles interactions with the BVM from a ROS node</description>
   <maintainer email="swarmus@usherbrooke.ca">SwarmUs</maintainer>
 
 
@@ -29,15 +29,8 @@
   <run_depend>roscpp</run_depend>
   <build_depend>std_msgs</build_depend>
   <run_depend>std_msgs</run_depend>
-  <build_depend>mavros_msgs</build_depend>
-  <run_depend>mavros_msgs</run_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <run_depend>sensor_msgs</run_depend>
-  <build_depend>nav_msgs</build_depend>
-  <run_depend>nav_msgs</run_depend>
-  <build_depend>message_generation</build_depend> 
-  <run_depend>message_runtime</run_depend> 
-  <build_depend>roslaunch</build_depend>
+  <build_depend>message_runtime</build_depend>
+  <run_depend>message_runtime</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

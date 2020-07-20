@@ -4,7 +4,7 @@
 BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     m_NodeHandle = p_NodeHandle;
     getROSParameters();
-    std::string filePath = buzz_utility::compileBuzzScript(m_BuzzFiles.script);
+    std::string filePath = BuzzUtility::compileBuzzScript(m_BuzzFiles.script);
     m_BuzzFiles.byteCode = filePath + ".bo";
     m_BuzzFiles.debugCode = filePath +".bdb";
     
@@ -12,7 +12,7 @@ BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
 
 /*************************************************************************************************/
 BuzzBridge::~BuzzBridge() {
-    buzz_utility::buzzScriptDestroy();
+    BuzzUtility::buzzScriptDestroy();
 }
 
 /*************************************************************************************************/
@@ -28,7 +28,7 @@ void BuzzBridge::getROSParameters() {
     }
 
     std::string name;
-    if(m_NodeHandle->getParam("/rosbuzz_node/name", name)) {
+    if(m_NodeHandle->getParam("name", name)) {
         m_RobotID = stoi(name.erase(0, 5)); // extract number after robot (name:robot1 => m_RobotID:1)
     }
     else {
@@ -42,11 +42,11 @@ void BuzzBridge::getROSParameters() {
 /*************************************************************************************************/
 void BuzzBridge::execute() {
     ros::Rate loopRate(BUZZRATE);
-    if( buzz_utility::setBuzzScript(m_BuzzFiles.byteCode.c_str(), m_BuzzFiles.debugCode.c_str(), m_RobotID) ) {
+    if( BuzzUtility::setBuzzScript(m_BuzzFiles.byteCode.c_str(), m_BuzzFiles.debugCode.c_str(), m_RobotID) ) {
         registerHookFunctions();
-        while(ros::ok() && !buzz_utility::buzzScriptDone()){
+        while(ros::ok() && !BuzzUtility::buzzScriptDone()){
 
-            buzz_utility::buzzScriptStep();
+            BuzzUtility::buzzScriptStep();
 
             // Call functions to publish topics
 
@@ -64,5 +64,5 @@ void BuzzBridge::execute() {
 
 /*************************************************************************************************/
 void BuzzBridge::registerHookFunctions(){
-  buzz_utility::registerHookFunction("log", buzz_utility::buzzPrint);
+  // register more specified functions to be called from buzz
 }

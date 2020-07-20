@@ -1,7 +1,7 @@
 #ifndef BUZZBRIDGE_HPP
 #define BUZZBRIDGE_HPP
 
-#include "buzz_utility.hpp"
+#include "BuzzUtility.hpp"
 #include <ros/ros.h>
 
 #define BUZZRATE 10 // Frequency desired for buzz (in Hz)

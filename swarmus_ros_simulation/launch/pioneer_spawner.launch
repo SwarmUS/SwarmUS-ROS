@@ -9,16 +9,15 @@
     <arg name="roll" default="0"/>
     <arg name="pitch" default="0"/>
     <arg name="yaw" default="0"/>
-    <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) " />
-    <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
 
     <group ns="$(arg ns)">
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name)" />
+        <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
+        
         <!-- push robot_description to factory and spawn robot in gazebo -->
-        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" 
-            args="-x $(arg robot_pos_x) -y $(arg robot_pos_y) -z $(arg robot_pos_z) 
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_pos_x) -y $(arg robot_pos_y) -z $(arg robot_pos_z) 
                 -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
-                -unpause -urdf -model $(arg robot_name) -param robot_description" 
-            respawn="false" output="screen" />
+                -unpause -urdf -model $(arg robot_name) -param robot_description" respawn="false" output="screen" />
 
         <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
             <param name="publish_frequency" type="double" value="30.0" />

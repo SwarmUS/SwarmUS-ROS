@@ -29,28 +29,29 @@
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_0_name)"/>
         <arg name="robot_name" value="$(arg robot_0_name)"/>
+        <arg name="yaw" value="3.14159265358979"/>
     </include>
 
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_1_name)"/>
         <arg name="robot_name" value="$(arg robot_1_name)"/>
         <arg name="robot_pos_x" value="1.0"/>
-        <arg name="yaw" value="90"/>
+        <arg name="yaw" value="1.54"/>
     </include>
 
-    <!--include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_2_name)"/>
         <arg name="robot_name" value="$(arg robot_2_name)"/>
         <arg name="robot_pos_x" value="2.0"/>
-        <arg name="yaw" value="90"/>
-    </include-->
+    </include>
 
-    <!--include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_3_name)"/>
         <arg name="robot_name" value="$(arg robot_3_name)"/>
-        <arg name="robot_pos_x" value="10.0"/>
-        <arg name="robot_pos_y" value="10.0"/>
-    </include-->
+        <arg name="robot_pos_x" value="7.5"/>
+        <arg name="robot_pos_y" value="7.5"/>
+        <arg name="yaw" value="3.927"/>
+    </include>
 
     <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>    
 

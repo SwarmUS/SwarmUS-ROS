@@ -244,25 +244,25 @@
 
   <gazebo>
     <plugin name="differential_drive" filename="libgazebo_ros_diff_drive.so">
-      <robotNamespace>$(arg prefix)</robotNamespace>
+      <!--robotNamespace>$(arg prefix)</robotNamespace-->
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <odometrySource>world</odometrySource>
       <publishOdomTF>true</publishOdomTF>
-      <robotBaseFrame>$(arg prefix)/base_footprint</robotBaseFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
       <publishWheelTF>false</publishWheelTF>
       <publishTf>true</publishTf>
       <publishWheelJointState>true</publishWheelJointState>
       <legacyMode>false</legacyMode>
       <updateRate>50</updateRate>
-      <leftJoint>$(arg prefix)/left_wheel</leftJoint>
-      <rightJoint>$(arg prefix)/right_wheel</rightJoint>
+      <leftJoint>left_wheel_hinge</leftJoint>
+      <rightJoint>right_wheel_hinge</rightJoint>
       <wheelSeparation>0.34</wheelSeparation>
       <wheelDiameter>0.22</wheelDiameter>
       <wheelAcceleration>1</wheelAcceleration>
       <wheelTorque>10</wheelTorque>
-      <rosDebugLevel>na</rosDebugLevel>
+      <rosDebugLevel>true</rosDebugLevel>
     </plugin>
   </gazebo>
 
@@ -357,27 +357,4 @@
       </plugin>
     </sensor>
   </gazebo>
-
-<!-- ================================== Transmission ================================== -->
-  <transmission name="$(arg prefix)_right_wheel_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="$(arg prefix)_right_wheel_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="right_wheel_hinge">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-
-  <transmission name="$(arg prefix)_left_wheel_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="$(arg prefix)_left_wheel_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="left_wheel_hinge">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-
-
 </robot>

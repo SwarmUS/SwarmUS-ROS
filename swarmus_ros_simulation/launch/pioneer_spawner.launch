@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="arg_robot_name" default="pioneer"/>
+    <arg name="robot_pos_x" default="0.0"/>
+    <arg name="robot_pos_y" default="0.0"/>
+    <arg name="robot_pos_z" default="1.0"/>
+
+    <group ns="$(arg arg_robot_name)">
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg arg_robot_name) " />
+        <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
+
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="right_position_controller  left_position_controller joint_state_controller"/>
+
+        <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_pos_x) -y $(arg robot_pos_y) -z $(arg robot_pos_z) -unpause -urdf -model $(arg arg_robot_name) -param robot_description" respawn="false" output="screen" />
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <remap from="/joint_states" to="/p_swarmus/joint_states"/>
+        </node>
+        
+        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+            <param name="robot_name" type="string" value="$(arg arg_robot_name)" />
+        </node>
+
+        <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
+            <param name="robot_name" type="string" value="$(arg arg_robot_name)" />
+        </node>
+    </group>
+</launch>

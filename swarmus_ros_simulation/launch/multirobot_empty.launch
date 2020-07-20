@@ -33,6 +33,14 @@
         <arg name="headless" value="$(arg headless)"/>
     </include>
 
+    <!--include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="model" value="$(arg model)" />
+        <arg name="arg_robot_name" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include-->
+
 
     <group ns="$(arg robot_0_name)">
 

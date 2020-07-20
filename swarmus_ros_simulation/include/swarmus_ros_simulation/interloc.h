@@ -16,7 +16,7 @@ class Interloc {
     public:
         Interloc(std::string new_robot_name);
         ~Interloc();
-        float getDistance(float x, float y);
+        float getDistanceFrom(float x, float y);
         float getAnglefrom(float x, float y);
         void publish(swarmus_ros_simulation::Interloc_grid grid);
         void move(int delta_x, int delta_y);

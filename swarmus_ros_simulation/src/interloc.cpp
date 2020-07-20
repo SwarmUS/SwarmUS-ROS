@@ -12,14 +12,9 @@ Interloc::Interloc(std::string new_robot_name) {
 
 Interloc::~Interloc() {}
 
-float Interloc::getDistance(float x, float y) {
+float Interloc::getDistanceFrom(float x, float y) {
   return sqrt(pow(x, 2) + pow(y, 2));
 }
-
-/*
-float getDistance(tf::StampedTransform transform) {
-  return getDistance(transform.getOrigin().x(), transform.getOrigin().y());
-}*/
 
 float Interloc::getAnglefrom(float x, float y) {
   // TODO calculer un angle en prenant en considerant l'orientation
@@ -71,6 +66,10 @@ float getParamPosY() {
   return pos_y;
 }
 
+float toDegrees(float rad) {
+  return (rad * 180/M_PI);
+}
+
 /*
 ROS main
 */
@@ -116,8 +115,9 @@ int main(int argc, char **argv)
         
       swarmus_ros_simulation::Interloc i;
       i.target_robot = target;
-      i.distance = interloc.getDistance(transform.getOrigin().x(), transform.getOrigin().y());
+      i.distance = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
       i.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
+      i.rotation = toDegrees(transform.getRotation().getAngle());
       grid.otherRobots.push_back(i);
     }
 

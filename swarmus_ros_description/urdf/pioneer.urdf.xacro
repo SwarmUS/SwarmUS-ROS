@@ -174,7 +174,7 @@
     <child link="$(arg prefix)/left_wheel"/>
     <origin rpy="0      1.5707  1.5707" xyz="0.1  0.17    -0.05"/>
     <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
-    <limit effort="100.0" velocity="100"/>>
+    <limit effort="100.0" velocity="100"/>
   </joint>
 
   <joint name="right_wheel_hinge" type="continuous">
@@ -294,7 +294,7 @@
         </plugin>
         <always_on>1</always_on>
         <update_rate>10</update_rate>
-        <visualize>true</visualize>
+        <visualize>false</visualize>
       </sensor>
   </gazebo>
 

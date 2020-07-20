@@ -1,29 +1,27 @@
-#include "swarmus_ros_simulation/interloc.h"
+#include "swarmus_ros_simulation/interLocalization.h"
 
 /*
 Class function implementations
 */
-Interloc::Interloc(std::string new_robot_name) {
+InterLocalization::InterLocalization(std::string new_robot_name) {
   robot_name = new_robot_name;
-  interloc_pub = n.advertise<swarmus_ros_simulation::Interloc_grid>("interloc_grid", 1000);
+  interloc_pub = n.advertise<swarmus_ros_simulation::InterLocalization_grid_msg>("interlocalization_grid", 1000);
 
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
 
-Interloc::~Interloc() {}
+InterLocalization::~InterLocalization() {}
 
-float Interloc::getDistanceFrom(float x, float y) {
+float InterLocalization::getDistanceFrom(float x, float y) {
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
-float Interloc::getAnglefrom(float x, float y) {
-  // TODO calculer un angle en prenant en considerant l'orientation
-  // de self
+float InterLocalization::getAnglefrom(float x, float y) {
   return atan2(y,x)*180.0/M_PI;
 }
 
 
-void Interloc::publish(swarmus_ros_simulation::Interloc_grid grid) {
+void InterLocalization::publish(swarmus_ros_simulation::InterLocalization_grid_msg grid) {
     interloc_pub.publish(grid); 
 }
 
@@ -42,30 +40,6 @@ std::string getParamRobotName() {
   return robot_name;
 }
 
-float getParamPosX() {
-  float pos_x;
-
-  if (!ros::param::get("~pos_x",pos_x)) // The ~ is used to get param declared inside the <node></node> tags
-  {
-    ROS_INFO("No param pos_x was given. 0.0 will be used instead");
-    pos_x = 0.0;
-  }
-
-  return pos_x;
-}
-
-float getParamPosY() {
-  float pos_y;
-
-  if (!ros::param::get("~pos_y",pos_y)) // The ~ is used to get param declared inside the <node></node> tags
-  {
-    ROS_INFO("No param pos_y was given. 0.0 will be used instead");
-    pos_y = 0.0;
-  }
-
-  return pos_y;
-}
-
 float toDegrees(float rad) {
   return (rad * 180/M_PI);
 }
@@ -75,16 +49,14 @@ ROS main
 */
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "interloc");
+  ros::init(argc, argv, "InterLocalization");
   ros::NodeHandle n;
   
   std::string robot_name = getParamRobotName();
-  float pos_x = getParamPosX();
-  float pos_y = getParamPosY();
-  Interloc interloc(robot_name);
+  InterLocalization interloc(robot_name);
 
   std::string reference = interloc.robot_name + HIVEBOARD_LINK;
-  swarmus_ros_simulation::Interloc_grid grid;
+  swarmus_ros_simulation::InterLocalization_grid_msg grid;
   grid.source_robot = reference;
   
   tf::TransformListener listener;
@@ -113,7 +85,7 @@ int main(int argc, char **argv)
         ros::Duration(1.0).sleep();
       }
         
-      swarmus_ros_simulation::Interloc i;
+      swarmus_ros_simulation::InterLocalization_msg i;
       i.target_robot = target;
       i.distance = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
       i.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());

@@ -3,24 +3,27 @@
 /*
 Class function implementations
 */
-
-Interloc::Interloc(std::string new_robot_name, float x, float y) {
+Interloc::Interloc(std::string new_robot_name) {
   robot_name = new_robot_name;
   interloc_pub = n.advertise<swarmus_ros_simulation::Interloc_grid>("interloc_grid", 1000);
-  pos_x = x;
-  pos_y = y;
 
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
 
 Interloc::~Interloc() {}
 
-float Interloc::getDistanceFrom(float x, float y) {
-  return sqrt(pow((pos_x - x), 2) + pow((pos_y - y), 2));
+float Interloc::getDistance(float x, float y) {
+  return sqrt(pow(x, 2) + pow(y, 2));
 }
 
+/*
+float getDistance(tf::StampedTransform transform) {
+  return getDistance(transform.getOrigin().x(), transform.getOrigin().y());
+}*/
+
 float Interloc::getAnglefrom(float x, float y) {
-  // calculer un angle depuis un point
+  // TODO calculer un angle en prenant en considerant l'orientation
+  // de self
   return atan2(y,x)*180.0/M_PI;
 }
 
@@ -32,12 +35,6 @@ void Interloc::publish(swarmus_ros_simulation::Interloc_grid grid) {
 /*
 Helpers
 */
-std::stringstream buildInterloc(float distance, float angle) {
-  std::stringstream ss;
-  ss << "[Robot 0] relative distance : " << distance << ", angle : " << angle;
-  return ss;
-}
-
 std::string getParamRobotName() {
   std::string robot_name;
 
@@ -74,7 +71,6 @@ float getParamPosY() {
   return pos_y;
 }
 
-
 /*
 ROS main
 */
@@ -86,7 +82,7 @@ int main(int argc, char **argv)
   std::string robot_name = getParamRobotName();
   float pos_x = getParamPosX();
   float pos_y = getParamPosY();
-  Interloc interloc(robot_name, pos_x, pos_y);
+  Interloc interloc(robot_name);
 
   std::string reference = interloc.robot_name + HIVEBOARD_LINK;
   swarmus_ros_simulation::Interloc_grid grid;
@@ -103,7 +99,6 @@ int main(int argc, char **argv)
     {
       if (robot_name == interloc.robot_name)
       {
-        // TODO update position of self
         continue;
       }
 
@@ -119,25 +114,16 @@ int main(int argc, char **argv)
         ros::Duration(1.0).sleep();
       }
         
-      float dist = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
-      float angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
-      ROS_INFO("Distance: %f, Angle: %f, iteration: %d", dist, angle, count); // Only for debug
-
-      // Create interloc msg
       swarmus_ros_simulation::Interloc i;
       i.target_robot = target;
-      i.distance = dist;
-      i.angle = angle;
-
-      // append to interloc grid
+      i.distance = interloc.getDistance(transform.getOrigin().x(), transform.getOrigin().y());
+      i.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
       grid.otherRobots.push_back(i);
     }
 
-    // Publish interloc grid
     interloc.publish(grid);
     grid.otherRobots.clear();
     
-    // ROS loop and stuff
     ++count;
     ros::spinOnce();
     loop_rate.sleep();

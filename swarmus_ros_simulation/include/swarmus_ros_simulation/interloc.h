@@ -14,17 +14,15 @@ const std::string HIVEBOARD_LINK = "/hiveboard";
 
 class Interloc {
     public:
-        Interloc(std::string new_robot_name, float x = 0.0, float y = 0.0);
+        Interloc(std::string new_robot_name);
         ~Interloc();
-        float getDistanceFrom(float x, float y);
+        float getDistance(float x, float y);
         float getAnglefrom(float x, float y);
         void publish(swarmus_ros_simulation::Interloc_grid grid);
         void move(int delta_x, int delta_y);
 
 
         std::string robot_name;
-        /*std::map<std::string, 
-        swarmus_ros_simulation::Interloc_msg> robot_list;*/           //TODO mettre la bonne classe
 
     private:
         // ROS NodeHandle
@@ -32,11 +30,4 @@ class Interloc {
 
         // ROS Topic Publishers
         ros::Publisher interloc_pub;
-
-        // ROS Topic listeners
-//        tf::TransformListener ;
-        
-        // Variables
-        float pos_x = 0.0;
-        float pos_y = 0.0;
 };

@@ -271,7 +271,7 @@
         <ray>
           <scan>
             <horizontal>
-              <!-- Specs from racecar's rplidar -->base_lidar
+              <!-- Specs from racecar's rplidar -->
               <samples>360</samples>
               <resolution>1</resolution>
               <min_angle>-3.12413907051</min_angle>
@@ -288,7 +288,7 @@
         <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
           <robotNamespace>$(arg prefix)</robotNamespace>
           <topicName>scan</topicName>
-          <frameName>base_laser</frameName>
+          <frameName>rplidar</frameName>
         </plugin>
         <always_on>1</always_on>
         <update_rate>10</update_rate>
@@ -324,7 +324,7 @@
  <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
  <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
  <pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
-        <frameName>camera_link</frameName>
+        <frameName>kinect_ros_link</frameName>
         <pointCloudCutoff>0.5</pointCloudCutoff>
         <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
         <distortionK1>0</distortionK1>

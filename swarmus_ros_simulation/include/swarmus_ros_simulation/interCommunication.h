@@ -6,21 +6,21 @@
 class InterCommunication
 {
 public:
-    InterCommunication();    
+  InterCommunication();
 
-    void publish(const swarmus_ros_simulation::Communication_msg& msg);
-    const std::string getRobotName();
+  void publish(const swarmus_ros_simulation::Communication_msg& msg);
+  const std::string getRobotName();
 
 private:
-    void communicationCallback(const std_msgs::String::ConstPtr& msg);
+  void communicationCallback(const std_msgs::String::ConstPtr& msg);
 
-    std::string robot_name;
+  std::string robot_name;
 
-    // ROS NodeHandle
-    ros::NodeHandle n;
+  // ROS NodeHandle
+  ros::NodeHandle n;
 
-    // ROS Topic Publishers
-    ros::Publisher publisher;    
+  // ROS Topic Publishers
+  ros::Publisher publisher;
 
-    ros::Subscriber subscriber;            
+  ros::Subscriber subscriber;
 };

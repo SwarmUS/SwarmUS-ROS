@@ -21,7 +21,7 @@ void tfCallback(const gazebo_msgs::ModelStates& msg){
         
         // Name of the child link: robot/base_footprint
         std::string buf(msg.name[i].c_str());
-        buf.append("/base_footprint");
+        buf.append("/odom");
 
         // Send transform relative to "world"
         br.sendTransform(tf::StampedTransform(

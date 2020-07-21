@@ -28,7 +28,7 @@
     <visual name="visual">
       <origin rpy="0 0 0" xyz="0 0 0.04"/>
       <geometry>
-        <mesh filename="package://swarmus_ros_description/models/pioneer_swarmus/meshes/chassis.dae" scale="1.0 1.0 1.0"/>
+        <mesh filename="package://swarmus_ros_description/meshes/chassis.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <visual name="caster_visual">
@@ -108,7 +108,7 @@
     <visual name="visual">
       <origin rpy="0 0 0" xyz="0 0 0.03599"/>
       <geometry>
-        <mesh filename="package://swarmus_ros_description/models/kinect_ros/meshes/kinect.dae" scale="1.0 1.0 1.0"/>
+        <mesh filename="package://swarmus_ros_description/meshes/kinect.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -133,7 +133,7 @@
     </collision>
     <visual name="visual">
       <geometry>
-        <mesh filename="package://swarmus_ros_description/models/rplidar/meshes/hokuyo.dae" scale="1.0 1.0 1.0"/>
+        <mesh filename="package://swarmus_ros_description/meshes/hokuyo.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -175,8 +175,7 @@
     <child link="$(arg prefix)/left_wheel"/>
     <origin rpy="0 1.5707 1.5707" xyz="0.1 0.17 -0.05"/>
     <axis xyz="9.00000000e-05 9.00000000e-05 1.00000000e+00"/>
-    <limit effort="0.0" velocity="0.0"/>
->
+    <limit effort="100.0" velocity="100"/>
   </joint>
 
   <joint name="right_wheel_hinge" type="continuous">
@@ -184,7 +183,7 @@
     <child link="$(arg prefix)/right_wheel"/>
     <origin rpy="0 1.5707 1.5707" xyz="0.1 -0.17 -0.05"/>
     <axis xyz="9.00000000e-05 9.00000000e-05 1.00000000e+00"/>
-    <limit effort="0.0" velocity="0.0"/>
+    <limit effort="100.0" velocity="100"/>
   </joint>
 
   <joint name="imu_joint" type="fixed">
@@ -239,65 +238,62 @@
   </gazebo>
 
   <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-    </plugin>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
   </gazebo>
 
   <gazebo>
     <plugin name="differential_drive" filename="libgazebo_ros_diff_drive.so">
-      <robotNamespace>$(arg prefix)</robotNamespace>
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <odometrySource>world</odometrySource>
       <publishOdomTF>true</publishOdomTF>
-      <robotBaseFrame>$(arg prefix)/base_footprint</robotBaseFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
       <publishWheelTF>false</publishWheelTF>
       <publishTf>true</publishTf>
       <publishWheelJointState>true</publishWheelJointState>
       <legacyMode>false</legacyMode>
       <updateRate>50</updateRate>
-      <leftJoint>$(arg prefix)/left_wheel</leftJoint>
-      <rightJoint>$(arg prefix)/right_wheel</rightJoint>
+      <leftJoint>left_wheel_hinge</leftJoint>
+      <rightJoint>right_wheel_hinge</rightJoint>
       <wheelSeparation>0.34</wheelSeparation>
       <wheelDiameter>0.22</wheelDiameter>
       <wheelAcceleration>1</wheelAcceleration>
       <wheelTorque>10</wheelTorque>
-      <rosDebugLevel>na</rosDebugLevel>
+      <rosDebugLevel>true</rosDebugLevel>
     </plugin>
   </gazebo>
 
 
   <gazebo reference="$(arg prefix)/rplidar">
-    <sensor name="laser" type="ray">
-      <pose>0.01 0 0.0175 0 -0 0</pose>
-      <ray>
-        <scan>
-          <horizontal>
-            <!-- Specs from racecar's rplidar -->base_lidar
-            <samples>360</samples>
-            <resolution>1</resolution>
-            <min_angle>-3.12413907051</min_angle>
-            <max_angle>3.12413907051</max_angle>
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.15</min>
-          <max>12</max>
-          <resolution>0.01</resolution>
-        </range>
-      </ray>
-      <plugin name="laser" filename="libRayPlugin.so" />
-      <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
-        <robotNamespace>$(arg prefix)</robotNamespace>
-        <topicName>scan</topicName>
-        <frameName>base_laser</frameName>
-      </plugin>
-      <always_on>1</always_on>
-      <update_rate>10</update_rate>
-      <visualize>true</visualize>
-    </sensor>
+      <sensor name="laser" type="ray">
+        <pose>0.01 0 0.0175 0 -0 0</pose>
+        <ray>
+          <scan>
+            <horizontal>
+              <!-- Specs from racecar's rplidar -->base_lidar
+              <samples>360</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.12413907051</min_angle>
+              <max_angle>3.12413907051</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.15</min>
+            <max>12</max>
+            <resolution>0.01</resolution>
+          </range>
+        </ray>
+        <plugin name="laser" filename="libRayPlugin.so" />
+        <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+          <robotNamespace>$(arg prefix)</robotNamespace>
+          <topicName>scan</topicName>
+          <frameName>base_laser</frameName>
+        </plugin>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <visualize>false</visualize>
+      </sensor>
   </gazebo>
 
   <gazebo reference="$(arg prefix)/kinect_ros_link">
@@ -359,27 +355,4 @@
       </plugin>
     </sensor>
   </gazebo>
-
-  <!-- ================================== Transmission ================================== -->
-  <transmission name="$(arg prefix)_right_wheel_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="$(arg prefix)_right_wheel_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="right_wheel_hinge">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-
-  <transmission name="$(arg prefix)_left_wheel_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="$(arg prefix)_left_wheel_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="left_wheel_hinge">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-
-
 </robot>

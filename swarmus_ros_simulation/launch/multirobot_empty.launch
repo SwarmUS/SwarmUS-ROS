@@ -15,7 +15,7 @@
     <arg name="robot_0_pos_y" default="0.0"/>
     <arg name="robot_0_pos_z" default="0.0"/>
     <arg name="robot_0_urdf_spawner_model" default="pioneer_0"/>
-
+    
     <arg name="robot_1_name" default="pioneer_1"/>
     <arg name="robot_1_pos_x" default="1.0"/>
     <arg name="robot_1_pos_y" default="0.0"/>
@@ -28,7 +28,7 @@
     <arg name="robot_2_pos_z" default="0.0"/>
     <arg name="robot_2_urdf_spawner_model" default="pioneer_2"/>
 
-    <rosparam param="robot_list" subst_value="True">[$(arg robot_0_name),$(arg robot_1_name), $(arg robot_2_name)]</rosparam>
+    <rosparam param="robot_list" subst_value="True" >[$(arg robot_0_name),$(arg robot_1_name), $(arg robot_2_name)]</rosparam>
 
     <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -54,7 +54,7 @@
             <param name="publish_frequency" type="double" value="30.0" />
             <remap from="/joint_states" to="/p_swarmus/joint_states"/>
         </node>
-
+        
         <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
             <param name="robot_name" type="string" value="$(arg robot_0_name)" />
             <param name="pos_x" type="double" value="$(arg robot_0_pos_x)" />
@@ -93,7 +93,7 @@
 
     </group>
 
-    <group ns="$(arg robot_2_name)">
+        <group ns="$(arg robot_2_name)">
 
         <param name="robot_description" command="$(find xacro)/xacro.py $(arg model) prefix:=$(arg robot_2_name) " />
         <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
@@ -120,7 +120,7 @@
 
     </group>
 
-    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
+    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>    
 
     <node pkg="swarmus_ros_simulation" type="communicationBroker" name="communicationBroker" output="screen"/>
 

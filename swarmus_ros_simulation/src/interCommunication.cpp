@@ -1,34 +1,28 @@
 #include "swarmus_ros_simulation/interCommunication.h"
 
-InterCommunication::InterCommunication()
-{
+InterCommunication::InterCommunication() {
   ROS_INFO("HiveBoard communication initialization");
 
   robot_name = Simulation::GetParamRobotName();
 
   publisher = n.advertise<swarmus_ros_simulation::Communication_msg>("communication", 1000);
-  subscriber =
-      n.subscribe("/CommunicationBroker/" + robot_name, 1000, &InterCommunication::communicationCallback, this);
+  subscriber = n.subscribe("/CommunicationBroker/" + robot_name, 1000, &InterCommunication::communicationCallback, this);
 }
 
-void InterCommunication::publish(const swarmus_ros_simulation::Communication_msg& msg)
-{
+void InterCommunication::publish(const swarmus_ros_simulation::Communication_msg& msg) {
   publisher.publish(msg);
 }
 
-void InterCommunication::communicationCallback(const std_msgs::String::ConstPtr& msg)
-{
+void InterCommunication::communicationCallback(const std_msgs::String::ConstPtr& msg) {
   ROS_INFO("[%s] InterCommunication heard: [%s]", robot_name.c_str(), msg->data.c_str());
 }
 
-const std::string InterCommunication::getRobotName()
-{
+const std::string InterCommunication::getRobotName() {
   return robot_name;
 }
 
-int main(int argc, char** argv)
-{
-  ros::init(argc, argv, "hiveboard_interCommunications");
+int main(int argc, char** argv){
+  ros::init(argc, argv, "hiveboard_interCommunications");  
 
   InterCommunication interCommunication;
   std::string robot_name = interCommunication.getRobotName();
@@ -37,20 +31,18 @@ int main(int argc, char** argv)
   ros::Rate loop_rate(1);
 
   // For current implementation, pioneer_0 only will send a message to pioneer_1.
-  while (ros::ok())
-  {
+  while(ros::ok()) {
     swarmus_ros_simulation::Communication_msg msg;
-    if (robot_name == "pioneer_0")
-    {
+    if (robot_name == "pioneer_0") {
       msg.source_robot = robot_name;
       msg.target_robot = Simulation::Communication::AllRobotsExceptSelf;
       msg.message = robot_name + " say hello.";
 
-      // ROS_INFO("%s", msg.data.c_str());
+      //ROS_INFO("%s", msg.data.c_str());
 
       interCommunication.publish(msg);
     }
-
+    
     ros::spinOnce();
     loop_rate.sleep();
   }

@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<launch>
+
+    <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
+
+    <!-- define the robots as args -->
+    <arg name="robot_0_name" default="pioneer_0"/>
+    <arg name="robot_0_pos_x" default="0.0"/>
+    <arg name="robot_0_pos_y" default="0.0"/>
+    <arg name="robot_0_pos_z" default="0.0"/>
+    <arg name="robot_0_urdf_spawner_model" default="pioneer_0"/>
+    
+    <arg name="robot_1_name" default="pioneer_1"/>
+    <arg name="robot_1_pos_x" default="1.0"/>
+    <arg name="robot_1_pos_y" default="0.0"/>
+    <arg name="robot_1_pos_z" default="0.0"/>
+    <arg name="robot_1_urdf_spawner_model" default="pioneer_1"/>
+
+    <arg name="robot_2_name" default="pioneer_2"/>
+    <arg name="robot_2_pos_x" default="-1.0"/>
+    <arg name="robot_2_pos_y" default="1.0"/>
+    <arg name="robot_2_pos_z" default="0.0"/>
+    <arg name="robot_2_urdf_spawner_model" default="pioneer_2"/>
+
+    <rosparam param="robot_list" subst_value="True" >[$(arg robot_0_name),$(arg robot_1_name), $(arg robot_2_name)]</rosparam>
+
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+
+    <group ns="$(arg robot_0_name)">
+
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_0_name) " />
+        <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
+
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="right_position_controller  left_position_controller joint_state_controller"/>
+
+        <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_0_pos_x) -y $(arg robot_0_pos_y) -z $(arg robot_0_pos_z) -unpause -urdf -model $(arg robot_0_urdf_spawner_model) -param robot_description" respawn="false" output="screen" />
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <remap from="/joint_states" to="/p_swarmus/joint_states"/>
+        </node>
+        
+        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_0_name)" />
+            <param name="pos_x" type="double" value="$(arg robot_0_pos_x)" />
+            <param name="pos_y" type="double" value="$(arg robot_0_pos_y)" />
+        </node>
+
+        <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_0_name)" />
+        </node>
+    </group>
+
+    <group ns="$(arg robot_1_name)">
+
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_1_name) " />
+        <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
+
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="right_position_controller  left_position_controller joint_state_controller"/>
+
+        <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_1_pos_x) -y $(arg robot_1_pos_y) -z $(arg robot_1_pos_z) -unpause -urdf -model $(arg robot_1_urdf_spawner_model) -param robot_description" respawn="false" output="screen" />
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <remap from="/joint_states" to="/p_swarmus/joint_states"/>
+        </node>
+
+        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_1_name)" />
+            <param name="pos_x" type="double" value="$(arg robot_1_pos_x)" />
+            <param name="pos_y" type="double" value="$(arg robot_1_pos_y)" />
+        </node>
+
+        <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_1_name)" />
+        </node>
+
+    </group>
+
+        <group ns="$(arg robot_2_name)">
+
+        <param name="robot_description" command="$(find xacro)/xacro.py $(arg model) prefix:=$(arg robot_2_name) " />
+        <rosparam file="$(find swarmus_ros_description)/config/pioneer_control.yaml" command="load"/>
+
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg robot_2_name)" args="right_position_controller  left_position_controller joint_state_controller"/>
+
+        <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_2_pos_x) -y $(arg robot_2_pos_y) -z $(arg robot_2_pos_z) -unpause -urdf -model $(arg robot_2_urdf_spawner_model) -param robot_description" respawn="false" output="screen" />
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <remap from="/joint_states" to="/p_swarmus/joint_states"/>
+        </node>
+
+        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_2_name)" />
+            <param name="pos_x" type="double" value="$(arg robot_2_pos_x)" />
+            <param name="pos_y" type="double" value="$(arg robot_2_pos_y)" />
+        </node>
+
+        <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_2_name)" />
+        </node>
+
+    </group>
+
+    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>    
+
+    <node pkg="swarmus_ros_simulation" type="communicationBroker" name="communicationBroker" output="screen"/>
+
+</launch>

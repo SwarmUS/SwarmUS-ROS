@@ -2,7 +2,7 @@
 
 /*************************************************************************************************/
 BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
-    m_NodeHandle = p_NodeHandle;
+    m_NodeHandle = p_NodeHandle;        // Not used for now but will be for topic subscriptions and publications
     getROSParameters();
     std::string filePath = BuzzUtility::compileBuzzScript(m_BuzzFiles.script);
     m_BuzzFiles.byteCode = filePath + ".bo";
@@ -18,7 +18,7 @@ BuzzBridge::~BuzzBridge() {
 /*************************************************************************************************/
 void BuzzBridge::getROSParameters() {
 
-    if(m_NodeHandle->getParam("BzzFileName", m_BuzzFiles.script)) {
+    if(ros::param::get("~BzzFileName", m_BuzzFiles.script)) {
         ROS_INFO("Buzz script selected: %s", m_BuzzFiles.script.c_str());
     }
     else {
@@ -28,7 +28,7 @@ void BuzzBridge::getROSParameters() {
     }
 
     std::string name;
-    if(m_NodeHandle->getParam("name", name)) {
+    if(ros::param::get("~name", name)) {
         m_RobotID = stoi(name.erase(0, 5)); // extract number after robot (name:robot1 => m_RobotID:1)
     }
     else {

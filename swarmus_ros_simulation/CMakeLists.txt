@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   joint_state_controller
   robot_state_publisher
   roscpp
-  rospy
   std_msgs
   tf
   message_generation
@@ -55,10 +54,9 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    DIRECTORY
    FILES
-   Interloc_msg.msg
-   Communication_msg.msg
-#   Message1.msg
-#   Message2.msg
+   InterLocalization.msg
+   InterLocalization_grid.msg
+   Communication.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -113,7 +111,14 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES swarmus_ros_simulation
-  CATKIN_DEPENDS message_runtime controller_manager joint_state_controller robot_state_publisher roscpp rospy std_msgs tf
+  CATKIN_DEPENDS 
+    message_runtime
+    controller_manager 
+    joint_state_controller 
+    robot_state_publisher 
+    roscpp      
+    std_msgs 
+    tf
 #  DEPENDS system_lib
 )
 
@@ -213,9 +218,9 @@ include
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(interloc src/interloc.cpp)
-target_link_libraries(interloc ${catkin_LIBRARIES})
-add_dependencies(interloc ${catkin_EXPORTED_TARGETS})
+add_executable(interLocalization src/interLocalization.cpp)
+target_link_libraries(interLocalization ${catkin_LIBRARIES})
+add_dependencies(interLocalization ${catkin_EXPORTED_TARGETS})
 
 add_executable(tf_publisher src/tf_publisher.cpp)
 target_link_libraries(tf_publisher ${catkin_LIBRARIES})

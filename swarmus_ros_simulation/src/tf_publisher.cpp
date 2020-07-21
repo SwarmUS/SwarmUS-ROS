@@ -4,7 +4,6 @@
 std::map<std::string, tf::Transform> tf_map;
 
 tf::Transform poseToTransform(geometry_msgs::Pose pose) {
-    // TODO
     tf::Transform transform;
     transform.setOrigin(tf::Vector3(pose.position.x, pose.position.y, pose.position.z));
 
@@ -33,8 +32,6 @@ void tfCallback(const gazebo_msgs::ModelStates& msg){
 
         // Sleep for one nanosecond
         ros::Duration(0, 1).sleep();
-            
-        // TODO delete stale robots
     }
 }
 

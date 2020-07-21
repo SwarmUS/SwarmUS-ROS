@@ -1,6 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "swarmus_ros_simulation/Communication_msg.h"
+#include "swarmus_ros_simulation/Communication.h"
 #include "simulationUtility.hpp"
 #include <map>
 
@@ -9,10 +9,9 @@ class CommunicationBroker
 {
 public:
     CommunicationBroker();
-    ~CommunicationBroker();
 
 private:
-    static void publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication_msg& msg);
+    static void publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication& msg);
     
     // Contains all robot associated with their publisher
     std::map<std::string, ros::Publisher> publishersMap;
@@ -20,10 +19,10 @@ private:
     std::vector<ros::Subscriber> subscribersList; 
 
     // Called whenever a subscriber gets a message
-    void communicationCallback(const swarmus_ros_simulation::Communication_msg& msg);  
+    void communicationCallback(const swarmus_ros_simulation::Communication& msg);  
 
     // ROS NodeHandle
-    ros::NodeHandle n;
+    ros::NodeHandle node_handle;
 
     // ROS Topic Publisher
     ros::Publisher publisher;    

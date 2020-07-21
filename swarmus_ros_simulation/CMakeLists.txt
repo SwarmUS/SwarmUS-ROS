@@ -54,9 +54,9 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    DIRECTORY
    FILES
-   InterLocalization_msg.msg
-   InterLocalization_grid_msg.msg
-   Communication_msg.msg
+   InterLocalization.msg
+   InterLocalization_grid.msg
+   Communication.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -224,9 +224,12 @@ add_dependencies(interLocalization ${catkin_EXPORTED_TARGETS})
 
 add_executable(tf_publisher src/tf_publisher.cpp)
 target_link_libraries(tf_publisher ${catkin_LIBRARIES})
+add_dependencies(tf_publisher ${catkin_EXPORTED_TARGETS})
 
 add_executable(interCommunication src/interCommunication.cpp)
 target_link_libraries(interCommunication ${catkin_LIBRARIES})
+add_dependencies(interCommunication ${catkin_EXPORTED_TARGETS})
 
 add_executable(communicationBroker src/communicationBroker.cpp)
 target_link_libraries(communicationBroker ${catkin_LIBRARIES})
+add_dependencies(communicationBroker ${catkin_EXPORTED_TARGETS})

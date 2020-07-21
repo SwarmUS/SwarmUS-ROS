@@ -5,7 +5,7 @@ Class function implementations
 */
 InterLocalization::InterLocalization() {
   robot_name = Simulation::GetParamRobotName();
-  interloc_pub = n.advertise<swarmus_ros_simulation::InterLocalization_grid_msg>("interlocalization_grid", 1000);
+  interloc_pub = node_handle.advertise<swarmus_ros_simulation::InterLocalization_grid>("interlocalization_grid", 1000);
 
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
@@ -19,7 +19,7 @@ float InterLocalization::getAnglefrom(float x, float y) {
 }
 
 
-void InterLocalization::publish(swarmus_ros_simulation::InterLocalization_grid_msg grid) {
+void InterLocalization::publish(swarmus_ros_simulation::InterLocalization_grid grid) {
   interloc_pub.publish(grid); 
 }
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   InterLocalization interloc;
 
   std::string reference = interloc.getRobotName() + HIVEBOARD_LINK;
-  swarmus_ros_simulation::InterLocalization_grid_msg grid;
+  swarmus_ros_simulation::InterLocalization_grid grid;
   grid.source_robot = reference;
   
   tf::TransformListener listener;
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
         ros::Duration(1.0).sleep();
       }
         
-      swarmus_ros_simulation::InterLocalization_msg m;
+      swarmus_ros_simulation::InterLocalization m;
       m.target_robot = target;
       m.distance = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
       m.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());

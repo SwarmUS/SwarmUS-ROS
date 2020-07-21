@@ -5,11 +5,11 @@ InterCommunication::InterCommunication() {
 
   robot_name = Simulation::GetParamRobotName();
 
-  publisher = n.advertise<swarmus_ros_simulation::Communication_msg>("communication", 1000);
-  subscriber = n.subscribe("/CommunicationBroker/" + robot_name, 1000, &InterCommunication::communicationCallback, this);
+  publisher = node_handle.advertise<swarmus_ros_simulation::Communication>("communication", 1000);
+  subscriber = node_handle.subscribe("/CommunicationBroker/" + robot_name, 1000, &InterCommunication::communicationCallback, this);
 }
 
-void InterCommunication::publish(const swarmus_ros_simulation::Communication_msg& msg) {
+void InterCommunication::publish(const swarmus_ros_simulation::Communication& msg) {
   publisher.publish(msg);
 }
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv){
 
   // For current implementation, pioneer_0 only will send a message to pioneer_1.
   while(ros::ok()) {
-    swarmus_ros_simulation::Communication_msg msg;
+    swarmus_ros_simulation::Communication msg;
     if (robot_name == "pioneer_0") {
       msg.source_robot = robot_name;
       msg.target_robot = Simulation::Communication::AllRobotsExceptSelf;

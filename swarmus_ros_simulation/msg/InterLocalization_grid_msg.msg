@@ -1,2 +1,0 @@
-string source_robot
-swarmus_ros_simulation/InterLocalization_msg[] otherRobots

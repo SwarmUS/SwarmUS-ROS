@@ -1,7 +1,7 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "swarmus_ros_simulation/InterLocalization_msg.h"
-#include "swarmus_ros_simulation/InterLocalization_grid_msg.h"
+#include "swarmus_ros_simulation/InterLocalization_grid.h"
 #include "swarmus_ros_simulation/simulationUtility.hpp"
 #include <math.h>
 #include <tf/transform_listener.h>
@@ -16,13 +16,12 @@ class InterLocalization {
         InterLocalization();
         float getDistanceFrom(float x, float y);
         float getAnglefrom(float x, float y);
-        void publish(swarmus_ros_simulation::InterLocalization_grid_msg grid);
-        void move(int delta_x, int delta_y);
+        void publish(swarmus_ros_simulation::InterLocalization_grid grid);
         const std::string getRobotName();
 
     private:
         // ROS NodeHandle
-        ros::NodeHandle n;
+        ros::NodeHandle node_handle;
 
         // ROS Topic Publishers
         ros::Publisher interloc_pub;

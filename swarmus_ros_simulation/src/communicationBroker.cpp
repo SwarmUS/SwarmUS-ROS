@@ -7,22 +7,22 @@ CommunicationBroker::CommunicationBroker() {
     std::string publishing_topic = "CommunicationBroker/" + robot_name;
     std::string subscribing_topic = "/" + robot_name + "/communication";
 
-    ros::Publisher pub = n.advertise<std_msgs::String>(publishing_topic, 1000);
-    ros::Subscriber sub = n.subscribe(subscribing_topic, 1000, &CommunicationBroker::communicationCallback, this);
+    ros::Publisher pub = node_handle.advertise<std_msgs::String>(publishing_topic, 1000);
+    ros::Subscriber sub = node_handle.subscribe(subscribing_topic, 1000, &CommunicationBroker::communicationCallback, this);
 
     publishersMap.emplace(robot_name, pub);
     subscribersList.push_back(sub);
   }
 }
 
-void CommunicationBroker::publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication_msg& msg) {
+void CommunicationBroker::publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication& msg) {
   ROS_INFO("Publishing message: [%s] to [%s].", msg.message.c_str(), robot_name.c_str());
   std_msgs::String publishedMsg;
   publishedMsg.data = msg.message;
   pub.publish(publishedMsg);
 }
 
-void CommunicationBroker::communicationCallback(const swarmus_ros_simulation::Communication_msg& msg) {
+void CommunicationBroker::communicationCallback(const swarmus_ros_simulation::Communication& msg) {
   if (msg.target_robot == Simulation::Communication::AllRobots)
   {
     for (auto const& robotPublisher : publishersMap)              

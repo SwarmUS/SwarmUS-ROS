@@ -19,7 +19,7 @@
         <box size="0.445 0.277 0.17"/>
       </geometry>
     </collision>
-    <collision name="castor_collision">
+    <collision name="caster_collision">
       <origin rpy="0 0 0" xyz="-0.2 0 -0.12"/>
       <geometry>
         <sphere radius="0.04"/>
@@ -31,7 +31,7 @@
         <mesh filename="package://swarmus_ros_description/models/pioneer_swarmus/meshes/chassis.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
-    <visual name="pioneer_swarmus__castor_visual">
+    <visual name="caster_visual">
       <origin rpy="0 0 0" xyz="-0.2 0 -0.12"/>
       <geometry>
         <sphere radius="0.04"/>

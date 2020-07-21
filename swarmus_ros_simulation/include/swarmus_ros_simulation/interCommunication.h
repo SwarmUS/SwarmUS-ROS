@@ -6,10 +6,10 @@
 class InterCommunication
 {
 public:
-    InterCommunication(std::string new_robot_name);
-    ~InterCommunication();
+    InterCommunication();    
 
     void publish(const swarmus_ros_simulation::Communication_msg& msg);
+    const std::string getRobotName();
 
 private:
     void communicationCallback(const std_msgs::String::ConstPtr& msg);

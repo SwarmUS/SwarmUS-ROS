@@ -2,7 +2,7 @@
 <package format="2">
   <name>swarmus_ros_description</name>
   <version>0.0.0</version>
-  <description>The pioneer_gazebo package</description>
+  <description>The swarmus_ros_description package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

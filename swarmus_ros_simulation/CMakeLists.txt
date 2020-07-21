@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   joint_state_controller
   robot_state_publisher
   roscpp
-  rospy
   std_msgs
   tf
   message_generation
@@ -58,8 +57,6 @@ find_package(catkin REQUIRED COMPONENTS
    InterLocalization_msg.msg
    InterLocalization_grid_msg.msg
    Communication_msg.msg
-#   Message1.msg
-#   Message2.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -114,7 +111,14 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES swarmus_ros_simulation
-  CATKIN_DEPENDS message_runtime controller_manager joint_state_controller robot_state_publisher roscpp rospy std_msgs tf
+  CATKIN_DEPENDS 
+    message_runtime
+    controller_manager 
+    joint_state_controller 
+    robot_state_publisher 
+    roscpp      
+    std_msgs 
+    tf
 #  DEPENDS system_lib
 )
 

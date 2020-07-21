@@ -9,7 +9,6 @@ class CommunicationBroker
 {
 public:
     CommunicationBroker();
-    ~CommunicationBroker();
 
 private:
     static void publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication_msg& msg);

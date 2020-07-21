@@ -9,20 +9,16 @@
 #include <XmlRpcValue.h> 
 #include <sstream>
 
-// TODO change std::String to std_msgs::String
 const std::string HIVEBOARD_LINK = "/hiveboard";
 
 class InterLocalization {
     public:
-        InterLocalization(std::string new_robot_name);
-        ~InterLocalization();
+        InterLocalization();
         float getDistanceFrom(float x, float y);
         float getAnglefrom(float x, float y);
         void publish(swarmus_ros_simulation::InterLocalization_grid_msg grid);
         void move(int delta_x, int delta_y);
-
-
-        std::string robot_name;
+        const std::string getRobotName();
 
     private:
         // ROS NodeHandle
@@ -30,4 +26,6 @@ class InterLocalization {
 
         // ROS Topic Publishers
         ros::Publisher interloc_pub;
+
+        std::string robot_name;
 };

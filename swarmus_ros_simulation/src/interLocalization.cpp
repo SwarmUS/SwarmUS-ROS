@@ -3,14 +3,12 @@
 /*
 Class function implementations
 */
-InterLocalization::InterLocalization(std::string new_robot_name) {
-  robot_name = new_robot_name;
+InterLocalization::InterLocalization() {
+  robot_name = Simulation::GetParamRobotName();
   interloc_pub = n.advertise<swarmus_ros_simulation::InterLocalization_grid_msg>("interlocalization_grid", 1000);
 
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
-
-InterLocalization::~InterLocalization() {}
 
 float InterLocalization::getDistanceFrom(float x, float y) {
   return sqrt(pow(x, 2) + pow(y, 2));
@@ -22,26 +20,11 @@ float InterLocalization::getAnglefrom(float x, float y) {
 
 
 void InterLocalization::publish(swarmus_ros_simulation::InterLocalization_grid_msg grid) {
-    interloc_pub.publish(grid); 
+  interloc_pub.publish(grid); 
 }
 
-/*
-Helpers
-*/
-std::string getParamRobotName() {
-  std::string robot_name;
-
-  if (!ros::param::get("~robot_name",robot_name)) // The ~ is used to get param declared inside the <node></node> tags
-  {
-    ROS_INFO("No param name was given. pioneer_0 will be used instead");
-    robot_name = "pioneer_0";
-  }
-
+const std::string InterLocalization::getRobotName() {
   return robot_name;
-}
-
-float toDegrees(float rad) {
-  return (rad * 180/M_PI);
 }
 
 /*
@@ -50,12 +33,10 @@ ROS main
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "InterLocalization");
-  ros::NodeHandle n;
-  
-  std::string robot_name = getParamRobotName();
-  InterLocalization interloc(robot_name);
+    
+  InterLocalization interloc;
 
-  std::string reference = interloc.robot_name + HIVEBOARD_LINK;
+  std::string reference = interloc.getRobotName() + HIVEBOARD_LINK;
   swarmus_ros_simulation::InterLocalization_grid_msg grid;
   grid.source_robot = reference;
   
@@ -68,7 +49,7 @@ int main(int argc, char **argv)
   {
     for(std::string& robot_name : Simulation::GetRobotList())
     {
-      if (robot_name == interloc.robot_name)
+      if (robot_name == interloc.getRobotName())
       {
         continue;
       }
@@ -85,12 +66,13 @@ int main(int argc, char **argv)
         ros::Duration(1.0).sleep();
       }
         
-      swarmus_ros_simulation::InterLocalization_msg i;
-      i.target_robot = target;
-      i.distance = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
-      i.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
-      i.rotation = toDegrees(transform.getRotation().getAngle());
-      grid.otherRobots.push_back(i);
+      swarmus_ros_simulation::InterLocalization_msg m;
+      m.target_robot = target;
+      m.distance = interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
+      m.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
+      Simulation::Angle rotation(transform.getRotation().getAngle(), true);
+      m.rotation = rotation.inDegrees;
+      grid.otherRobots.push_back(m);
     }
 
     interloc.publish(grid);

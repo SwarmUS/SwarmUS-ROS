@@ -13,8 +13,6 @@ struct BuzzFiles_t {
 };
 
 class BuzzBridge {
-private:
-
 protected:
     BuzzFiles_t m_BuzzFiles;
     void getROSParameters();

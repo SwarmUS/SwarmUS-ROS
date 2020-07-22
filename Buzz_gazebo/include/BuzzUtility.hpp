@@ -19,18 +19,18 @@
 
 namespace BuzzUtility {
 
-int setBuzzScript(const char* bo_filename, const char* bdbg_filename, int robot_id);
-void buzzScriptStep();
-void buzzScriptDestroy();
-int buzzScriptDone();
-int getRobotID();
-int getSwarmSize();
-buzzvm_t getVM();
-std::string getVMState();
-const char* buzzErrorInfo();
-std::string compileBuzzScript(std::string p_bzzFilename);
-int registerHookFunction(const char* p_BuzzFunctionName, buzzvm_funp p_CallbackFunctionPointer);
-int buzzPrint(buzzvm_t vm);
+    int setBuzzScript(const char* bo_filename, const char* bdbg_filename, int robot_id);
+    void buzzScriptStep();
+    void buzzScriptDestroy();
+    int buzzScriptDone();
+    int getRobotID();
+    int getSwarmSize();
+    buzzvm_t getVM();
+    std::string getVMState();
+    const char* buzzErrorInfo();
+    std::string compileBuzzScript(std::string p_bzzFilename);
+    int registerHookFunction(const char* p_BuzzFunctionName, buzzvm_funp p_CallbackFunctionPointer);
+    int buzzPrint(buzzvm_t vm);
 
 
 } // namespace buzz_utility

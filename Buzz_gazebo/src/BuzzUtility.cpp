@@ -184,7 +184,11 @@ std::string compileBuzzScript(std::string p_bzzFilename){
 
     ROS_WARN("Launching buzz compilation: %s", bzzfile_in_compile.str().c_str());
 
-    system(bzzfile_in_compile.str().c_str());
+    int error = system(bzzfile_in_compile.str().c_str());
+    if(error != 0){
+        ROS_ERROR("Buzz compilation failed. Killing node");
+        return "error";
+    }
     
     return path + name;
 }

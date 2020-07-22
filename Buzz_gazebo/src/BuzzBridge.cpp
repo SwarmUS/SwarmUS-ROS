@@ -5,6 +5,10 @@ BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     m_NodeHandle = p_NodeHandle;        // Not used for now but will be for topic subscriptions and publications
     getROSParameters();
     std::string filePath = BuzzUtility::compileBuzzScript(m_BuzzFiles.script);
+    if(filePath == "error") {
+        ROS_ERROR("Buzz compilation failed. Killing node");
+        system("rosnode kill rosbuzz_node");
+    }
     m_BuzzFiles.byteCode = filePath + ".bo";
     m_BuzzFiles.debugCode = filePath +".bdb";
     
@@ -28,11 +32,11 @@ void BuzzBridge::getROSParameters() {
     }
 
     std::string name;
-    if(ros::param::get("~name", name)) {
-        m_RobotID = stoi(name.erase(0, 5)); // extract number after robot (name:robot1 => m_RobotID:1)
+    if(ros::param::get("~robot_name", name)) {
+        m_RobotID = stoi(name.erase(0, 5)); // extract number after robot(robot_name:robot1 => m_RobotID:1)
     }
     else {
-        ROS_ERROR("Provide a .bzz file to run in Launch file");
+        ROS_ERROR("Provide a robot_name in Launch file");
         system("rosnode kill rosbuzz_node"); // Node name defined launch file
     }
 

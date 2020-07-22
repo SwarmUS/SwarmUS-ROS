@@ -1,6 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "swarmus_ros_simulation/InterLocalization_msg.h"
+#include "swarmus_ros_simulation/InterLocalization.h"
 #include "swarmus_ros_simulation/InterLocalization_grid.h"
 #include "swarmus_ros_simulation/simulationUtility.hpp"
 #include <math.h>

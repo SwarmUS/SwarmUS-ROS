@@ -2,6 +2,7 @@
 <robot name="pioneer_swarmus"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default="p_swarmus"/>
+  <xacro:arg name="color" default="DepthMapVS"/>
 
   <link name="$(arg prefix)/base_footprint" />
   <link name="$(arg prefix)/base_link" />
@@ -348,6 +349,7 @@
         <hackBaseline>0</hackBaseline>
       </plugin>
     </sensor>
+    <material>Gazebo/$(arg color)</material>
   </gazebo>
 
   <gazebo reference="$(arg prefix)/imu_link">

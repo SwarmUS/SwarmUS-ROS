@@ -113,6 +113,9 @@
     </visual>
   </link>
 
+  <link name="$(arg prefix)/kinect_optical_ros_link">
+  </link>
+
   <link name="$(arg prefix)/rplidar">
     <inertial>
       <mass value="0.1"/>
@@ -198,6 +201,12 @@
     <child link="$(arg prefix)/kinect_ros_link" />
     <parent link="$(arg prefix)/chassis" />
     <origin rpy="0 0 0" xyz="0.20 0 0.11"/>
+  </joint>
+
+  <joint name="kinect_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    <parent link="$(arg prefix)/kinect_ros_link"/>
+    <child link="$(arg prefix)/kinect_optical_ros_link"/>
   </joint>
 
   <joint name="rplidar_joint" type="fixed">
@@ -324,7 +333,7 @@
  <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
  <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
  <pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
-        <frameName>kinect_ros_link</frameName>
+        <frameName>kinect_optical_ros_link</frameName>
         <pointCloudCutoff>0.5</pointCloudCutoff>
         <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
         <distortionK1>0</distortionK1>

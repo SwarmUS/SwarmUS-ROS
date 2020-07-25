@@ -318,7 +318,7 @@
         </image>
         <clip>
           <near>0.05</near>
-          <far>3</far>
+          <far>20</far>
         </clip>
       </camera>
       <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
@@ -335,8 +335,8 @@
  <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
  <pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
         <frameName>kinect_optical_ros_link</frameName>
-        <pointCloudCutoff>0.5</pointCloudCutoff>
-        <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+        <pointCloudCutoff>1.2</pointCloudCutoff>
+        <pointCloudCutoffMax>3.5</pointCloudCutoffMax>
         <distortionK1>0</distortionK1>
         <distortionK2>0</distortionK2>
         <distortionK3>0</distortionK3>

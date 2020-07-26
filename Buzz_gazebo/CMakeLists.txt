@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   message_generation
+  swarmus_ros_simulation
 )
 
 ##############################
@@ -50,6 +51,7 @@ add_executable(rosbuzz_node src/ROSBuzz.cpp
   src/BuzzBridge.cpp
   )
 target_link_libraries(rosbuzz_node ${catkin_LIBRARIES} buzz buzzdbg pthread)
+add_dependencies(rosbuzz_node ${catkin_EXPORTED_TARGETS})
 #add_dependencies(rosbuzz_node)
 
 # Executables and libraries for installation to do

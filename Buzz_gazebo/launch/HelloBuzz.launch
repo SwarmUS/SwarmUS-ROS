@@ -5,7 +5,7 @@
 
 <launch>
   <!-- Name of the robot. Will change when tested in other use cases -->
-  <arg name="name" default="robot0"/>
+  <arg name="name" default="pioneer_0"/>
   <!-- Buzz script to launch in BVM-->
   <arg name="script" default="HelloBuzz"/>
   

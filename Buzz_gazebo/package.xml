@@ -31,6 +31,8 @@
   <run_depend>std_msgs</run_depend>
   <build_depend>message_runtime</build_depend>
   <run_depend>message_runtime</run_depend>
+  <build_depend>swarmus_ros_simulation</build_depend>
+  <run_depend>swarmus_ros_simulation</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

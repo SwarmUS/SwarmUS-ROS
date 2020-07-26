@@ -1,5 +1,7 @@
 #include "BuzzBridge.hpp"
 
+#define DEGRESS_TO_RAD_FACTOR (0.01745F)
+
 /*************************************************************************************************/
 BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     m_NodeHandle = p_NodeHandle;
@@ -78,5 +80,7 @@ void BuzzBridge::registerHookFunctions(){
 
 /*************************************************************************************************/
 void BuzzBridge::interlocGridCallback(const swarmus_ros_simulation::InterLocalization_grid &p_Grid){
-    ROS_INFO("Grid call back for robot: %s", p_Grid.source_robot.c_str());
+    for(swarmus_ros_simulation::InterLocalization msg : p_Grid.otherRobots) {
+        BuzzUtility::addNeighbhor(stoi(msg.target_robot.erase(0,8)), msg.distance, msg.angle * DEGRESS_TO_RAD_FACTOR); 
+    }
 }

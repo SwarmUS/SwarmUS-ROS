@@ -31,6 +31,7 @@ namespace BuzzUtility {
     std::string compileBuzzScript(std::string p_bzzFilename);
     int registerHookFunction(const char* p_BuzzFunctionName, buzzvm_funp p_CallbackFunctionPointer);
     int buzzPrint(buzzvm_t vm);
+    int addNeighbhor(uint16_t p_RobotId, float p_Distance_meters, float p_HorizontalAngle_radians, float p_VerticalAngle_radians);
 
 
 } // namespace buzz_utility

@@ -247,5 +247,10 @@ int buzzPrint(buzzvm_t vm) {
     return buzzvm_ret0(vm);
 }
 
+/*************************************************************************************************/
+int addNeighbhor(uint16_t p_RobotId, float p_Distance_meters, float p_HorizontalAngle_radians, float p_VerticalAngle_radians = 0U){
+    return buzzneighbors_add(VM, p_RobotId, p_Distance_meters, p_HorizontalAngle_radians, p_VerticalAngle_radians);
+}
+
 } // namespace buzz_utility
 

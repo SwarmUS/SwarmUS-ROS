@@ -23,12 +23,17 @@
             <remap from="/joint_states" to="/p_swarmus/joint_states"/>
         </node>
 
-        <node pkg="swarmus_ros_simulation" type="interloc" name="interloc" output="screen">
+        <node pkg="swarmus_ros_simulation" type="interLocalization" name="interloc" output="screen">
             <param name="robot_name" type="string" value="$(arg robot_name)" />
         </node>
 
         <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
             <param name="robot_name" type="string" value="$(arg robot_name)" />
+        </node>
+
+        <node pkg="rosbuzz" type="rosbuzz_node" name="rosbuzz_node" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_name)" />
+            <param name="BzzFileName" value="$(find rosbuzz)/buzz_scripts/HelloBuzz.bzz"/>
         </node>
     </group>
 </launch>

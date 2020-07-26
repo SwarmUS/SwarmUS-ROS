@@ -33,10 +33,10 @@ void BuzzBridge::getROSParameters() {
 
     std::string name;
     if(ros::param::get("~robot_name", name)) {
-        m_RobotID = stoi(name.erase(0, 5)); // extract number after robot(robot_name:robot1 => m_RobotID:1)
+        ROS_INFO("Robot name provided: %s", name.c_str());
+        m_RobotID = stoi(name.erase(0, 8)); // extract number after robot(robot_name:robot1 => m_RobotID:1)
     }
     else {
-        ROS_ERROR("Provide a robot_name in Launch file");
         system("rosnode kill rosbuzz_node"); // Node name defined launch file
     }
 

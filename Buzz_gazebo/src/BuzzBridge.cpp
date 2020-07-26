@@ -2,7 +2,7 @@
 
 /*************************************************************************************************/
 BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
-    m_NodeHandle = p_NodeHandle;        // Not used for now but will be for topic subscriptions and publications
+    m_NodeHandle = p_NodeHandle;
     getROSParameters();
     std::string filePath = BuzzUtility::compileBuzzScript(m_BuzzFiles.script);
     if(filePath == "error") {
@@ -11,7 +11,12 @@ BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     }
     m_BuzzFiles.byteCode = filePath + ".bo";
     m_BuzzFiles.debugCode = filePath +".bdb";
-    
+
+    std::string interlocizationTopic;
+    ros::param::get("~robot_name", interlocizationTopic);
+    interlocizationTopic.append("/interlocalization_grid");
+    interlocizationTopic.insert(0, 1, '/');
+    m_InterlocalisationSubscriber = m_NodeHandle->subscribe(interlocizationTopic.c_str(), 1000, &BuzzBridge::interlocGridCallback, this);
 }
 
 /*************************************************************************************************/
@@ -69,4 +74,9 @@ void BuzzBridge::execute() {
 /*************************************************************************************************/
 void BuzzBridge::registerHookFunctions(){
   // register more specified functions to be called from buzz
+}
+
+/*************************************************************************************************/
+void BuzzBridge::interlocGridCallback(const swarmus_ros_simulation::InterLocalization_grid &p_Grid){
+    ROS_INFO("Grid call back for robot: %s", p_Grid.source_robot.c_str());
 }

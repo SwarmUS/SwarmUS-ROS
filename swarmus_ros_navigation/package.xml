@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>swarmus_ros_navigation</name>
+  <version>0.0.0</version>
+  <description>The swarmus_ros_navigation package</description>
+
+  <maintainer email="swarmus@usherbrooke.ca">SwarmUS</maintainer>
+
+  <license>MIT</license>
+
+  <author email="swarmus@usherbrooke.ca">SwarmUS</author>
+
+  <!-- The *depend tags are used to specify dependencies -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>move_base</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_export_depend>move_base</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>move_base</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

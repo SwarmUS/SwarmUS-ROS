@@ -178,6 +178,7 @@ std::string compileBuzzScript(std::string p_bzzFilename){
     std::string name = p_bzzFilename.substr(p_bzzFilename.find_last_of("/\\") + 1);
     name = name.substr(0, name.find_last_of("."));
     bzzfile_in_compile << "bzzc -I " << path << "include/";
+    bzzfile_in_compile << ":/usr/local/share/buzz/include";
     bzzfile_in_compile << " -b " << path << name << ".bo";
     bzzfile_in_compile << " -d " << path << name << ".bdb ";
     bzzfile_in_compile << p_bzzFilename;

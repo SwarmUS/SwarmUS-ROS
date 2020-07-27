@@ -13,7 +13,7 @@ obstacle_layer:
  inflation_radius: 0.2
 
  observation_sources: laser_scan_sensor
- laser_scan_sensor: {data_type: LaserScan, topic: pioneer_0/scan, marking: true, clearing: true}
+ laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true}
 
 
 inflation_layer:

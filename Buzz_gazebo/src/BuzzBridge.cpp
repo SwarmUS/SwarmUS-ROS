@@ -15,6 +15,8 @@ BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     m_RosParameters.bzzFileName.debugCode = filePath +".bdb";
 
     registerSubcriberCallbacks();
+
+    m_MoveByPublisher = m_NodeHandle->advertise<swarmus_ros_navigation::MoveByMessage>(m_RosParameters.robot_name + "/navigation/moveBy", 1000);
 }
 
 /*************************************************************************************************/
@@ -84,6 +86,7 @@ void BuzzBridge::execute() {
 /*************************************************************************************************/
 void BuzzBridge::registerHookFunctions(){
   // register more specified functions to be called from buzz
+  BuzzUtility::registerHookFunction("moveBy", moveByClosure);
 }
 
 /*************************************************************************************************/
@@ -97,4 +100,21 @@ void BuzzBridge::interlocGridCallback(const swarmus_ros_simulation::InterLocaliz
 void BuzzBridge::interCommunicationCallback(const std_msgs::String::ConstPtr& msg) {   
     //ROS_INFO("Message receveived: %s", msg->data.c_str());
     //TODO: handle received message
+}
+
+/*************************************************************************************************/
+int BuzzBridge::moveByClosure(buzzvm_t vm){
+    swarmus_ros_navigation::MoveByMessage msg;
+    
+    buzzvm_lload(vm, 1);
+    msg.distance_x = buzzvm_stack_at(vm, 1)->f.value;
+    buzzvm_pop(vm);
+
+    buzzvm_lload(vm, 2);
+    msg.distance_y = buzzvm_stack_at(vm, 1)->f.value;
+    buzzvm_pop(vm);
+
+    m_MoveByPublisher.publish(msg);
+
+    return buzzvm_ret0(vm);
 }

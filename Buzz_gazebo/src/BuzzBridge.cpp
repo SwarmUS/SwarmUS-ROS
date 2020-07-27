@@ -50,11 +50,11 @@ void BuzzBridge::getROSParameters() {
 void  BuzzBridge::registerSubcriberCallbacks() {
     std::string topic =  "/" + m_RosParameters.robot_name + "/interlocalization_grid";
     ROS_INFO("Subscribing to: %s", topic.c_str());
-    //m_InterlocalisationSubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &BuzzBridge::interlocGridCallback, this);
+    m_InterlocalisationSubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &BuzzBridge::interlocGridCallback, this);
 
     topic = "/CommunicationBroker/" + m_RosParameters.robot_name;
     ROS_INFO("Subscribing to: %s", topic.c_str());
-    m_IntercommunicationSubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &BuzzBridge::interCommunicationCallback, this);
+    //m_IntercommunicationSubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &BuzzBridge::interCommunicationCallback, this);
 }
 
 /*************************************************************************************************/

@@ -6,19 +6,15 @@
 BuzzBridge::BuzzBridge(ros::NodeHandle* p_NodeHandle) {
     m_NodeHandle = p_NodeHandle;
     getROSParameters();
-    std::string filePath = BuzzUtility::compileBuzzScript(m_BuzzFiles.script);
+    std::string filePath = BuzzUtility::compileBuzzScript(m_RosParameters.bzzFileName.script);
     if(filePath == "error") {
         ROS_ERROR("Buzz compilation failed. Killing node");
         system("rosnode kill rosbuzz_node");
     }
-    m_BuzzFiles.byteCode = filePath + ".bo";
-    m_BuzzFiles.debugCode = filePath +".bdb";
+    m_RosParameters.bzzFileName.byteCode = filePath + ".bo";
+    m_RosParameters.bzzFileName.debugCode = filePath +".bdb";
 
-    std::string interlocizationTopic;
-    ros::param::get("~robot_name", interlocizationTopic);
-    interlocizationTopic.append("/interlocalization_grid");
-    interlocizationTopic.insert(0, 1, '/');
-    m_InterlocalisationSubscriber = m_NodeHandle->subscribe(interlocizationTopic.c_str(), 1000, &BuzzBridge::interlocGridCallback, this);
+    registerSubcriberCallbacks();
 }
 
 /*************************************************************************************************/
@@ -29,19 +25,18 @@ BuzzBridge::~BuzzBridge() {
 /*************************************************************************************************/
 void BuzzBridge::getROSParameters() {
 
-    if(ros::param::get("~BzzFileName", m_BuzzFiles.script)) {
-        ROS_INFO("Buzz script selected: %s", m_BuzzFiles.script.c_str());
+    if(ros::param::get("~BzzFileName", m_RosParameters.bzzFileName.script)) {
+        ROS_INFO("Buzz script selected: %s", m_RosParameters.bzzFileName.script.c_str());
     }
     else {
         ROS_ERROR("Provide a .bzz file to run in Launch file");
-        ROS_INFO("Buzz script selected: %s", m_BuzzFiles.script.c_str());
+        ROS_INFO("Buzz script selected: %s", m_RosParameters.bzzFileName.script.c_str());
         system("rosnode kill rosbuzz_node"); // Node name defined launch file
     }
 
-    std::string name;
-    if(ros::param::get("~robot_name", name)) {
-        ROS_INFO("Robot name provided: %s", name.c_str());
-        m_RobotID = stoi(name.erase(0, 8)); // extract number after robot(robot_name:robot1 => m_RobotID:1)
+    if(ros::param::get("~robot_name", m_RosParameters.robot_name)) {
+        ROS_INFO("Robot name provided: %s", m_RosParameters.robot_name.c_str());
+        sscanf(m_RosParameters.robot_name.c_str(), "pioneer_%d", &m_RosParameters.robotID); // extract number after name
     }
     else {
         system("rosnode kill rosbuzz_node"); // Node name defined launch file
@@ -50,16 +45,29 @@ void BuzzBridge::getROSParameters() {
     // Add cases for other possible parameters as needed
 }
 
+
+/*************************************************************************************************/
+void  BuzzBridge::registerSubcriberCallbacks() {
+    std::string topic =  "/" + m_RosParameters.robot_name + "/interlocalization_grid";
+    ROS_INFO("Subscribing to: %s", topic.c_str());
+    //m_InterlocalisationSubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &BuzzBridge::interlocGridCallback, this);
+
+    topic = "/CommunicationBroker/" + m_RosParameters.robot_name;
+    ROS_INFO("Subscribing to: %s", topic.c_str());
+    m_IntercommunicationSubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &BuzzBridge::interCommunicationCallback, this);
+}
+
 /*************************************************************************************************/
 void BuzzBridge::execute() {
     ros::Rate loopRate(BUZZRATE);
-    if( BuzzUtility::setBuzzScript(m_BuzzFiles.byteCode.c_str(), m_BuzzFiles.debugCode.c_str(), m_RobotID) ) {
+    if( BuzzUtility::setBuzzScript(m_RosParameters.bzzFileName.byteCode.c_str(), m_RosParameters.bzzFileName.debugCode.c_str(), m_RosParameters.robotID) ) {
         registerHookFunctions();
         while(ros::ok() && !BuzzUtility::buzzScriptDone()){
 
             BuzzUtility::buzzScriptStep();
 
             // Call functions to publish topics
+
 
             ros::spinOnce(); // Execute all callbacks in callback queue
 
@@ -83,4 +91,10 @@ void BuzzBridge::interlocGridCallback(const swarmus_ros_simulation::InterLocaliz
     for(swarmus_ros_simulation::InterLocalization msg : p_Grid.otherRobots) {
         BuzzUtility::addNeighbhor(stoi(msg.target_robot.erase(0,8)), msg.distance, msg.angle * DEGRESS_TO_RAD_FACTOR); 
     }
+}
+
+/*************************************************************************************************/
+void BuzzBridge::interCommunicationCallback(const std_msgs::String::ConstPtr& msg) {   
+    //ROS_INFO("Message receveived: %s", msg->data.c_str());
+    //TODO: handle received message
 }

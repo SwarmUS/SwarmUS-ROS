@@ -9,12 +9,13 @@ Navigation::Navigation(ros::NodeHandle* p_NodeHandle)  {
     std::string topic = "/" + m_RosParameters.robot_name + "/navigation/moveBy";
     ROS_INFO("Subscribing to: %s", topic.c_str());
     m_MoveBySubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &Navigation::moveByCallback, this);
+    m_GoalPublisher = m_NodeHandle->advertise<geometry_msgs::PoseStamped>(m_RosParameters.clientDestination.c_str(), 1000);
 }
 
 /*************************************************************************************************/
 void Navigation::getRosParameters(){
     if(ros::param::get("~robot_name", m_RosParameters.robot_name)) {
-        m_RosParameters.clientDestination = '/' + m_RosParameters.robot_name + "/move_base";
+        m_RosParameters.clientDestination = '/' + m_RosParameters.robot_name + "/move_base_simple/goal";
         ROS_INFO("Robot name provided: %s", m_RosParameters.robot_name.c_str());
     }
     else {
@@ -34,28 +35,23 @@ void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg
 
     m_CurrentGoal.target_pose.pose.position.x = msg.distance_x;
     m_CurrentGoal.target_pose.pose.position.y = msg.distance_y;
-    m_CurrentGoal.target_pose.pose.orientation.w = 0;
+    m_CurrentGoal.target_pose.pose.position.z = 0;
+
+    m_CurrentGoal.target_pose.pose.orientation.x = 0;
+    m_CurrentGoal.target_pose.pose.orientation.y = 0;
+    m_CurrentGoal.target_pose.pose.orientation.z = 0;
+    m_CurrentGoal.target_pose.pose.orientation.w = 1;
     m_HasNewGoal = true;
 }
 
 /*************************************************************************************************/
 void Navigation::execute(){
     ros::Rate loopRate(RATE_HZ);
-    actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> m_MoveBaseClient(m_RosParameters.clientDestination.c_str(), true);
     while(ros::ok()) {
         ros::spinOnce();
         if(m_HasNewGoal) {
-            m_MoveBaseClient.sendGoal(m_CurrentGoal);
-            m_HasNewGoal = false;
-            m_MoveBaseClient.waitForResult();
-        }       
-        
-
-        if(m_MoveBaseClient.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
-            ROS_INFO("Current goal achieved");
-        }            
-        else {
-            //ROS_ERROR("Goal failed");
+            m_GoalPublisher.publish(m_CurrentGoal.target_pose);
+            m_HasNewGoal = false;            
         }
         loopRate.sleep();
     }

@@ -16,6 +16,7 @@
 
 struct RosParameters_t {
     std::string robot_name;
+    std::string clientDestination;
 };
 
 
@@ -23,8 +24,6 @@ class Navigation {
 protected:
     void getRosParameters();
     RosParameters_t m_RosParameters;
-
-    actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> m_MoveBaseClient;
     
     ros::NodeHandle* m_NodeHandle;
     ros::Subscriber m_MoveBySubscriber;

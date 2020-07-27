@@ -27,7 +27,7 @@ protected:
     
     ros::NodeHandle* m_NodeHandle;
     ros::Subscriber m_MoveBySubscriber;
-
+    ros::Publisher m_GoalPublisher;
     move_base_msgs::MoveBaseGoal m_CurrentGoal;
 
     bool m_HasNewGoal;

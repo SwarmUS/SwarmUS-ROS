@@ -5,11 +5,16 @@
   <arg name="odom_topic"    default="odom"/>
     
   <!-- Navigation -->
-  <group ns="$(arg robot_name)">
+  <group>
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
       <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-      <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <param name="global_costmap/global_frame" value="$(arg robot_name)/odom"/>
+      <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
+      <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />     
+      <param name="local_costmap/global_frame" value="$(arg robot_name)/odom"/>
+      <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_footprint"/>
+      
 
       <rosparam file="$(find swarmus_ros_navigation)/config/local_costmap_params.yaml" command="load" />
       <rosparam file="$(find swarmus_ros_navigation)/config/global_costmap_params.yaml" command="load" />

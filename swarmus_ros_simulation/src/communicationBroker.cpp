@@ -16,7 +16,6 @@ CommunicationBroker::CommunicationBroker() {
 }
 
 void CommunicationBroker::publishMsg(std::string robot_name, ros::Publisher pub, const swarmus_ros_simulation::Communication& msg) {
-  //ROS_INFO("Publishing message: [%s] to [%s].", msg.message.c_str(), robot_name.c_str());
   std_msgs::String publishedMsg;
   publishedMsg.data = msg.message;
   pub.publish(publishedMsg);

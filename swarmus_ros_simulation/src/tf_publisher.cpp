@@ -5,10 +5,10 @@ std::map<std::string, tf::Transform> tf_map;
 
 tf::Transform poseToTransform(geometry_msgs::Pose pose) {
     tf::Transform transform;
-    transform.setOrigin(tf::Vector3(pose.position.x, pose.position.y, pose.position.z));
+    //transform.setOrigin(tf::Vector3(pose.position.x, pose.position.y, pose.position.z));
 
-    tf::Quaternion q(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w);
-    transform.setRotation(q);
+    //tf::Quaternion q(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w);
+    transform.setRotation(tf::Quaternion::getIdentity());
 
     return transform;
 }

@@ -86,7 +86,7 @@ void BuzzBridge::execute() {
 /*************************************************************************************************/
 void BuzzBridge::registerHookFunctions(){
   // register more specified functions to be called from buzz
-  BuzzUtility::registerHookFunction("moveBy", moveByClosure);
+  //BuzzUtility::registerHookFunction("moveBy", moveByClosure);
 }
 
 /*************************************************************************************************/

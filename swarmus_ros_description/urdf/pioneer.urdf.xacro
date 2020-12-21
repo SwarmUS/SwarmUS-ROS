@@ -2,6 +2,7 @@
 <robot name="pioneer_swarmus"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default="p_swarmus"/>
+  <xacro:arg name="color" default="DepthMapVS"/>
 
   <link name="$(arg prefix)/base_footprint" />
   <link name="$(arg prefix)/base_link" />
@@ -113,6 +114,9 @@
     </visual>
   </link>
 
+  <link name="$(arg prefix)/kinect_optical_ros_link">
+  </link>
+
   <link name="$(arg prefix)/rplidar">
     <inertial>
       <mass value="0.1"/>
@@ -200,6 +204,12 @@
     <origin rpy="0 0 0" xyz="0.20 0 0.11"/>
   </joint>
 
+  <joint name="kinect_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    <parent link="$(arg prefix)/kinect_ros_link"/>
+    <child link="$(arg prefix)/kinect_optical_ros_link"/>
+  </joint>
+
   <joint name="rplidar_joint" type="fixed">
     <child link="$(arg prefix)/rplidar"/>
     <parent link="$(arg prefix)/chassis" />
@@ -271,7 +281,7 @@
         <ray>
           <scan>
             <horizontal>
-              <!-- Specs from racecar's rplidar -->base_lidar
+              <!-- Specs from racecar's rplidar -->
               <samples>360</samples>
               <resolution>1</resolution>
               <min_angle>-3.12413907051</min_angle>
@@ -288,7 +298,7 @@
         <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
           <robotNamespace>$(arg prefix)</robotNamespace>
           <topicName>scan</topicName>
-          <frameName>base_laser</frameName>
+          <frameName>rplidar</frameName>
         </plugin>
         <always_on>1</always_on>
         <update_rate>10</update_rate>
@@ -308,7 +318,7 @@
         </image>
         <clip>
           <near>0.05</near>
-          <far>3</far>
+          <far>20</far>
         </clip>
       </camera>
       <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
@@ -324,9 +334,9 @@
  <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
  <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
  <pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
-        <frameName>camera_link</frameName>
-        <pointCloudCutoff>0.5</pointCloudCutoff>
-        <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+        <frameName>kinect_optical_ros_link</frameName>
+        <pointCloudCutoff>1.2</pointCloudCutoff>
+        <pointCloudCutoffMax>3.5</pointCloudCutoffMax>
         <distortionK1>0</distortionK1>
         <distortionK2>0</distortionK2>
         <distortionK3>0</distortionK3>
@@ -339,6 +349,7 @@
         <hackBaseline>0</hackBaseline>
       </plugin>
     </sensor>
+    <material>Gazebo/$(arg color)</material>
   </gazebo>
 
   <gazebo reference="$(arg prefix)/imu_link">

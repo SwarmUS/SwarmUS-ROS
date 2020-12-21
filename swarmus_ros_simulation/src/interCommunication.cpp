@@ -14,7 +14,7 @@ void InterCommunication::publish(const swarmus_ros_simulation::Communication& ms
 }
 
 void InterCommunication::communicationCallback(const std_msgs::String::ConstPtr& msg) {
-  ROS_INFO("[%s] InterCommunication heard: [%s]", robot_name.c_str(), msg->data.c_str());
+  // DO SOMETHING AT MESSAGE RECEPTION
 }
 
 const std::string InterCommunication::getRobotName() {

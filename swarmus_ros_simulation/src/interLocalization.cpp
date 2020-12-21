@@ -6,6 +6,7 @@ Class function implementations
 InterLocalization::InterLocalization() {
   robot_name = Simulation::GetParamRobotName();
   interloc_pub = node_handle.advertise<swarmus_ros_simulation::InterLocalization_grid>("interlocalization_grid", 1000);
+  polygon_pub = node_handle.advertise<geometry_msgs::PolygonStamped>("PolygonStamped", 1000);
 
   ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
 }
@@ -21,10 +22,41 @@ float InterLocalization::getAnglefrom(float x, float y) {
 
 void InterLocalization::publish(swarmus_ros_simulation::InterLocalization_grid grid) {
   interloc_pub.publish(grid); 
+  polygon_pub.publish(GeneratePolyMsg(grid));
 }
 
 const std::string InterLocalization::getRobotName() {
   return robot_name;
+}
+geometry_msgs::PolygonStamped InterLocalization::GeneratePolyMsg(swarmus_ros_simulation::InterLocalization_grid grid) {
+  geometry_msgs::Polygon poly;
+  poly.points.reserve(2 * grid.otherRobotsListSize+1);
+  geometry_msgs::Point32 point;
+  point.x = 0.0;
+  point.y = 0.0;
+  point.z = 0.0;
+  poly.points.push_back(point);
+  
+  for(int i = 0; i < grid.otherRobotsListSize; i++) {
+    swarmus_ros_simulation::InterLocalization interLocalization = grid.otherRobots[i];
+    Simulation::Angle angle(interLocalization.angle, false);
+    point.x = interLocalization.distance * cos(angle.inRadians);
+    point.y = interLocalization.distance * sin(angle.inRadians);
+    poly.points.push_back(point);
+
+    // Add a point in polygon to return to hiveboard
+    point.x = 0.0;
+    point.y = 0.0;
+    point.z = 0.0;
+    poly.points.push_back(point);
+  }
+
+
+  geometry_msgs::PolygonStamped msg;
+  msg.polygon = poly;
+  msg.header.stamp = ros::Time::now();
+  msg.header.frame_id = robot_name + "/hiveboard";
+  return msg;
 }
 
 /*
@@ -42,11 +74,11 @@ int main(int argc, char **argv)
   
   tf::TransformListener listener;
 
-  int count = 0;
   ros::Rate loop_rate(10); // Probablement qu'on pourrait changer la boucle pour des evenements declenches par le board.
 
   while (ros::ok())
   {
+    int count = 0;
     for(std::string& robot_name : Simulation::GetRobotList())
     {
       if (robot_name == interloc.getRobotName())
@@ -73,12 +105,13 @@ int main(int argc, char **argv)
       Simulation::Angle rotation(transform.getRotation().getAngle(), true);
       m.rotation = rotation.inDegrees;
       grid.otherRobots.push_back(m);
+      count++;
     }
 
+    grid.otherRobotsListSize = count;
     interloc.publish(grid);
     grid.otherRobots.clear();
     
-    ++count;
     ros::spinOnce();
     loop_rate.sleep();
   }

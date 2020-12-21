@@ -38,7 +38,7 @@ catkin_package(
 ###########
 
 include_directories(
-  include ${rosbuzz_INCLUDE_DIRS}
+        include ${rosbuzz_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 # set the path to the library folder
@@ -46,8 +46,8 @@ link_directories(/usr/local/lib)
 
 # Executables 
 add_executable(rosbuzz_node src/ROSBuzz.cpp
-  src/BuzzUtility.cpp
-  src/BuzzBridge.cpp
+        src/BuzzUtility.cpp
+        src/BuzzBridge.cpp
   )
 target_link_libraries(rosbuzz_node ${catkin_LIBRARIES} buzz buzzdbg pthread)
 #add_dependencies(rosbuzz_node)

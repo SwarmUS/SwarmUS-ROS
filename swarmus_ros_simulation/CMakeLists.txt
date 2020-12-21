@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   robot_state_publisher
   roscpp
   std_msgs
+  geometry_msgs
   tf
   message_generation
 )
@@ -77,6 +78,7 @@ find_package(catkin REQUIRED COMPONENTS
  generate_messages(
    DEPENDENCIES
    std_msgs
+   geometry_msgs
  )
 
 ################################################
@@ -118,6 +120,7 @@ catkin_package(
     robot_state_publisher 
     roscpp      
     std_msgs 
+    geometry_msgs
     tf
 #  DEPENDS system_lib
 )

@@ -47,7 +47,7 @@ namespace Simulation {
             }
             else {
                 inDegrees = val;
-                inRadians = M_PI / (val * 180);
+                inRadians = val * M_PI / 180;
             }
         }
     };

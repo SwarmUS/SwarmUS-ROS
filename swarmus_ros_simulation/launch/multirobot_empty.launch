@@ -29,7 +29,6 @@
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_0_name)"/>
         <arg name="robot_name" value="$(arg robot_0_name)"/>
-        <arg name="yaw" value="3.14159265358979"/>
     </include>
 
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">

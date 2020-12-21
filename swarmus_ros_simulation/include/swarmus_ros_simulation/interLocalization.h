@@ -3,6 +3,9 @@
 #include "swarmus_ros_simulation/InterLocalization.h"
 #include "swarmus_ros_simulation/InterLocalization_grid.h"
 #include "swarmus_ros_simulation/simulationUtility.hpp"
+#include "geometry_msgs/Polygon.h"
+#include "geometry_msgs/Point32.h"
+#include "geometry_msgs/PolygonStamped.h"
 #include <math.h>
 #include <tf/transform_listener.h>
 #include <string>
@@ -25,6 +28,9 @@ class InterLocalization {
 
         // ROS Topic Publishers
         ros::Publisher interloc_pub;
+        ros::Publisher polygon_pub;
 
         std::string robot_name;
+
+        geometry_msgs::PolygonStamped GeneratePolyMsg(swarmus_ros_simulation::InterLocalization_grid grid);
 };

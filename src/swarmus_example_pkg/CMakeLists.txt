@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(hivemind_bridge)
+project(swarmus_example_pkg)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,6 +8,7 @@ project(hivemind_bridge)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  hive_mind
   roscpp
   std_msgs
 )
@@ -69,7 +70,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
+#   std_msgs
 # )
 
 ################################################
@@ -103,8 +104,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES hivemind_bridge
-#  CATKIN_DEPENDS roscpp std_msg
+#  LIBRARIES swarmus_example_pkg
+#  CATKIN_DEPENDS hive_mind roscpp std_msgs
 #  DEPENDS system_lib
 )
 
@@ -121,7 +122,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/hivemind_bridge.cpp
+#   src/${PROJECT_NAME}/swarmus_example_pkg.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -132,25 +133,24 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/hivemind_bridge_node.cpp)
-add_executable(hivemind_bridge src/main.cpp)
+# add_executable(${PROJECT_NAME}_node src/swarmus_example_pkg_node.cpp)
+add_executable(hive_mind_connector_dummy src/hive_mind_connector_dummy.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
+# set_target_properties(hive_mind_connector_dummy_node PROPERTIES OUTPUT_NAME node PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(hivemind_bridge ${catkin_EXPORTED_TARGETS})
+add_dependencies(hive_mind_connector_dummy ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(hivemind_bridge ${catkin_LIBRARIES})
+target_link_libraries(hive_mind_connector_dummy ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -199,7 +199,7 @@ target_link_libraries(hivemind_bridge ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_hivemind_bridge.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_swarmus_example_pkg.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

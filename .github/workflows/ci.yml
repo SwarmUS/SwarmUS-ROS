@@ -1,0 +1,45 @@
+name: ROS CI
+
+#on:
+#  push:
+#    branches: [ master ]
+#  pull_requests:
+#    branches: [ master, develop ]
+
+on: [push]
+
+env:
+  CATKIN_WS_DIR: catkin_ws
+  CATKIN_SRC_DIR: src
+  SWARMUS_ROS_DIR: SwarmUS-ROS
+
+jobs:
+  build-native:
+    runs-on: ubuntu-20.04
+    container:
+      image: swarmus/embedded
+    steps:
+      - name: create catkin_ws # create env variables for this
+        run: |
+          mkdir -p catkin_ws/src
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          catkin_make
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: 'catkin_ws/src/SwarmUS-ROS'
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+        working-directory: 'catkin_ws/src/SwarmUS-ROS'
+      - name: Install ROS dependencies
+        run: |
+          rosdep update
+          apt update
+          rosdep install --from-paths src --ignore-src -r -y
+        working-directory: 'catkin_ws'
+      - name: build
+        run: |
+          . ./devel/setup.sh
+          catkin_make
+        working-directory: 'catkin_ws'

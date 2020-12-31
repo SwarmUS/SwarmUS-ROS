@@ -1,17 +1,6 @@
 name: ROS CI
 
-#on:
-#  push:
-#    branches: [ master ]
-#  pull_requests:
-#    branches: [ master, develop ]
-
-on: [push]
-
-env:
-  CATKIN_WS_DIR: catkin_ws
-  CATKIN_SRC_DIR: src
-  SWARMUS_ROS_DIR: SwarmUS-ROS
+on: [push, pull_requests]
 
 jobs:
   build-native:
@@ -19,7 +8,7 @@ jobs:
     container:
       image: swarmus/embedded
     steps:
-      - name: create catkin_ws # create env variables for this
+      - name: create catkin_ws
         run: |
           mkdir -p catkin_ws/src
           cd catkin_ws

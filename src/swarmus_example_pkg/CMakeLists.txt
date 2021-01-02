@@ -103,7 +103,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES swarmus_example_pkg
 #  CATKIN_DEPENDS hive_mind roscpp std_msgs
 #  DEPENDS system_lib
@@ -116,9 +116,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+ include
   ${catkin_INCLUDE_DIRS}
 )
+
+set(HIVE_MIND_CONNECTOR_DUMMY_SOURCES
+        src/DummyUtils.cpp
+        src/HiveMindConnectorDummy.cpp)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -134,7 +138,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/swarmus_example_pkg_node.cpp)
-add_executable(hive_mind_connector_dummy src/hive_mind_connector_dummy.cpp)
+add_executable(hive_mind_connector_dummy ${HIVE_MIND_CONNECTOR_DUMMY_SOURCES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -203,6 +207,13 @@ target_link_libraries(hive_mind_connector_dummy ${catkin_LIBRARIES})
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
+catkin_add_gtest(DummyUtilsTests
+        test/DummyUtilsTests.cpp
+        src/DummyUtils.cpp)
+
+if(TARGET DummyUtilsTests)
+    target_link_libraries(DummyUtilsTests ${catkin_LIBRARIES})
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

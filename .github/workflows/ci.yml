@@ -8,7 +8,7 @@ jobs:
     container:
       image: swarmus/embedded
     steps:
-      - name: create catkin_ws
+      - name: Create catkin_ws
         run: |
           mkdir -p catkin_ws/src
           cd catkin_ws
@@ -41,6 +41,11 @@ jobs:
         run: |
           . ./devel/setup.sh
           catkin_make run_tests
+        working-directory: 'catkin_ws'
+      
+      - name: Check Format
+        run: |
+          python src/SwarmUS-ROS/tools/check_format.py
         working-directory: 'catkin_ws'
 
       - name: Generate Documentation

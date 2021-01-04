@@ -45,7 +45,7 @@ jobs:
       
       - name: Check Format
         run: |
-          python src/SwarmUS-ROS/tools/check_format.py
+          python src/SwarmUS-ROS/tools/contrib/run-clang-format.py --recursive --style=file src/SwarmUS-ROS/src/
         working-directory: 'catkin_ws'
 
       - name: Generate Documentation

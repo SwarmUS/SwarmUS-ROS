@@ -14,26 +14,47 @@ jobs:
           cd catkin_ws
           . /opt/ros/$ROS_DISTRO/setup.sh
           catkin_make
+
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           path: 'catkin_ws/src/SwarmUS-ROS'
+
       - name: Checkout submodules
         run: git submodule update --init --recursive
         working-directory: 'catkin_ws/src/SwarmUS-ROS'
+
       - name: Install ROS dependencies
         run: |
           rosdep update
           apt update
           rosdep install --from-paths src --ignore-src -r -y
         working-directory: 'catkin_ws'
-      - name: build
+
+      - name: Build
         run: |
           . ./devel/setup.sh
           catkin_make
         working-directory: 'catkin_ws'
-      - name: unit tests
+
+      - name: Unit Tests
         run: |
           . ./devel/setup.sh
           catkin_make run_tests
         working-directory: 'catkin_ws'
+
+      - name: Generate Documentation
+        run: |
+          . ./devel/setup.sh
+          python src/SwarmUS-ROS/tools/generate_doc.py doc
+        working-directory: 'catkin_ws'
+
+      - name: Publish Documentation
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            BRANCH: gh-pages
+            FOLDER: catkin_ws/doc/swarmus_example_pkg/html
+            TARGET_FOLDER: docs
+            CLEAN: true
+            SINGLE_COMMIT: true

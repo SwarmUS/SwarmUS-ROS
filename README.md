@@ -8,3 +8,6 @@ cd ~/catkin_ws/src
 git clone https://github.com/SwarmUS/SwarmUS-ROS.git
 cd ~/catkin_ws && catkin_cmake
 ```
+
+## Tools
+This repository contains a `tools` folder with some python scripts that help accomplish a few tasks, mainly the generation of the documentation and some linting. These tools are also used in the CI pipeline. Please refer to the scripts for some extended documentation.

@@ -1,7 +1,20 @@
+################################################################################
+# Generates Doxygen documentation 
+# 
+# This generates the documentation in an output folder specified with an argument 
+# (in this case, the "doc" folder) :
+# `path/to/generate_doc.py doc`
+#
+# The script will generate one folder for each ROS package found. Every ROS package
+# will then have its own standalone doxygen documentation.
+# 
+# This script should be run from the root of the catkin workspace. The path
+# of the output folder will then be relative to the catkin workspace's root.
+################################################################################
+
 import sys
 import os
-
-ROSDOC_LITE_CMD = "rosdoc_lite"
+from config import ROSDOC_LITE_CMD, SWARMUS_SRC_DIR
 
 def walklevel(some_dir, level=1):
     some_dir = some_dir.rstrip(os.path.sep)
@@ -26,15 +39,12 @@ def generate_doc_by_pkg(pkg_dir, output_path):
     output_path = output_path + "/" + pkg_name
     print("Generating documentation for {} in {}".format(pkg_name, output_path))
     cmd = ROSDOC_LITE_CMD + " -o " + output_path + " " + pkg_dir
-    # print(cmd)
     os.system(cmd)
 
 if __name__ == "__main__":
     output_path = sys.argv[1]
 
-    root_dir = 'src/SwarmUS-ROS/src' # TODO with env variable?
-
-    packages = get_package_list(root_dir)
+    packages = get_package_list(SWARMUS_SRC_DIR)
 
     for package in packages:
         generate_doc_by_pkg(package, output_path)

@@ -1,5 +1,5 @@
-#include "ros/ros.h"
 #include "hive_mind/ExampleMessage.h"
+#include "ros/ros.h"
 #include "swarmus_example_pkg/DummyUtils.h"
 
 void hiveMindTopicCallback(const hive_mind::ExampleMessage& msg) {
@@ -11,7 +11,7 @@ void hiveMindTopicCallback(const hive_mind::ExampleMessage& msg) {
     int incremented = DummyUtils::addTwoNumbers(2, msg.number);
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     ros::init(argc, argv, "swarmus_example_pkg");
 
     ros::NodeHandle n;

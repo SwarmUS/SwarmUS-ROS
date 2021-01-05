@@ -52,7 +52,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: catkin_ws/doc/swarmus_example_pkg/html
+          FOLDER: catkin_ws/doc
           TARGET_FOLDER: docs
           CLEAN: true
           SINGLE_COMMIT: true

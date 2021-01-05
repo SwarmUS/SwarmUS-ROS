@@ -1,6 +1,6 @@
-name: ROS CI
+name: Publish Documentation
 
-on: [push, pull_request]
+on: [push] # todo change
 
 jobs:
   build-native:
@@ -37,13 +37,22 @@ jobs:
           catkin_make
         working-directory: 'catkin_ws'
 
-      - name: Unit Tests
+      - name: Generate Documentation
         run: |
           . ./devel/setup.sh
-          catkin_make run_tests
+          python src/SwarmUS-ROS/tools/generate_doc.py doc
         working-directory: 'catkin_ws'
-      
-      - name: Check Format
+
+      - name: Prepare Publish Step
         run: |
-          python src/SwarmUS-ROS/tools/contrib/run-clang-format.py --recursive --style=file src/SwarmUS-ROS/src/
-        working-directory: 'catkin_ws'
+          apt-get update && apt-get install -y rsync
+
+      - name: Publish Documentation
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: catkin_ws/doc/swarmus_example_pkg/html
+          TARGET_FOLDER: docs
+          CLEAN: true
+          SINGLE_COMMIT: true

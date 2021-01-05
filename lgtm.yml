@@ -1,6 +1,15 @@
 path_classifiers:
   docs:
-    - README.md
-    - LICENSE
-  test:
-    - "src/*/tests/*.cpp" # tests are in src/ROS_PACKAGE/tests
+  - "README.md"
+  - "LICENSE"
+  test: "src/*/tests/*.cpp"
+queries:
+  exclude: "cpp/use-of-goto"
+extraction:
+  cpp:
+    prepare:
+      packages: "ros-${ROS_DISTRO}-controller-manager"
+    configure:
+      command: "cd swarmus_ros_simulation && mkdir build && cd build && cmake .."
+    index:
+      build_command: "make -j2 -s"

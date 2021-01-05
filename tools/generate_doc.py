@@ -52,7 +52,8 @@ if __name__ == "__main__":
     output_path = sys.argv[1]
     index_file = output_path + "/index.html"
 
-    f = open(index_file, "w")
+    os.system("mkdir {}".format(output_path))
+    f = open(index_file, "x")
     f.close()
 
     packages = get_package_list(SWARMUS_SRC_DIR)

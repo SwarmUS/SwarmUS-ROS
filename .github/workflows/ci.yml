@@ -54,6 +54,10 @@ jobs:
           python src/SwarmUS-ROS/tools/generate_doc.py doc
         working-directory: 'catkin_ws'
 
+      - name: Prepare
+        run: |
+          apt-get update && apt-get install -y rsync
+
       - name: Publish Documentation
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:

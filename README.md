@@ -8,12 +8,42 @@ SwarmUS-ROS contains all the ROS packages developed for the SwarmUS project. It 
 * [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu). Installing the package `ros-noetic-desktop-full` ensures that you have the Gazebo simulator, `rqt`, and `rviz` (required).
 * [Python 3.x](https://www.python.org/downloads/)
 
+## Folder structure
+
+```
+SwarmUS-ROS
+├── contrib
+│   └── HiveMind
+├── lgtm.yml
+├── LICENSE
+├── README.md
+├── src
+│   ├── swarmus_example_pkg
+│   ├── swarmus_ros_description
+│   └── swarmus_ros_simulation
+└── tools
+    ├── check_format.py
+    ├── config.py
+    ├── contrib
+    ├── format.py
+    ├── generate_doc.py
+```
+
+This repo contains a `contrib` folder which refers to external code that needs to be included as source.
+
+### HiveMind
+The [HiveMind repository](https://github.com/SwarmUS/HiveMind) is included as a git submodule. This repository contains a specific BSP that uses ROS nodes. This is to be used in a simulation environment. Thus, the simulation will use the "real" embedded code from the HiveMind.
+
 ## Building
-Assuming you have a working ROS + Gazebo setup on you system, you need only clone this repository in your Catkin workspace and build it.
+
+
+Assuming you have a working ROS + Gazebo setup on you system, you need only clone this repository in your Catkin workspace, initialise the git submodules, and build it. You might need to use [rosdep](http://wiki.ros.org/rosdep) to manage some external package dependencies.
 
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/SwarmUS/SwarmUS-ROS.git
+cd SwarmUS-ROS
+git submodule update --init --recursive
 cd ~/catkin_ws && catkin_cmake
 ```
 

@@ -24,19 +24,6 @@ jobs:
         run: git submodule update --init --recursive
         working-directory: 'catkin_ws/src/SwarmUS-ROS'
 
-      - name: Install ROS dependencies
-        run: |
-          rosdep update
-          apt update
-          rosdep install --from-paths src --ignore-src -r -y
-        working-directory: 'catkin_ws'
-
-      - name: Build
-        run: |
-          . ./devel/setup.sh
-          catkin_make
-        working-directory: 'catkin_ws'
-
       - name: Generate Documentation
         run: |
           . ./devel/setup.sh

@@ -34,17 +34,29 @@ def get_package_list(root_dir):
 
     return packages
 
+def extract_pkg_name(pkg_dir):
+    return pkg_dir[pkg_dir.rfind("/") + 1:]
+
 def generate_doc_by_pkg(pkg_dir, output_path):
-    pkg_name = pkg_dir[pkg_dir.rfind("/") + 1:]
+    pkg_name = extract_pkg_name(pkg_dir)
     output_path = output_path + "/" + pkg_name
     print("Generating documentation for {} in {}".format(pkg_name, output_path))
     cmd = ROSDOC_LITE_CMD + " -o " + output_path + " " + pkg_dir
     os.system(cmd)
 
+def write_href_in_index(index_file, package_name):
+    with open(index_file, "a") as file:
+        file.write("<a href=\"{}/html/index.html\">{}</a><br>\n".format(package_name, package_name))
+
 if __name__ == "__main__":
     output_path = sys.argv[1]
+    index_file = output_path + "/index.html"
+
+    f = open(index_file, "w")
+    f.close()
 
     packages = get_package_list(SWARMUS_SRC_DIR)
 
-    for package in packages:
-        generate_doc_by_pkg(package, output_path)
+    for package_dir in packages:
+        generate_doc_by_pkg(package_dir, output_path)
+        write_href_in_index(index_file, extract_pkg_name(package_dir))

@@ -1,6 +1,8 @@
 name: Publish Documentation
 
-on: [push] # todo change
+on:
+    push:
+      branches: [ master ]
 
 jobs:
   build-native:

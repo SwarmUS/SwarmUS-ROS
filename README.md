@@ -54,7 +54,7 @@ The [HiveMind repository](https://github.com/SwarmUS/HiveMind) is included as a 
 
 ## Building
 
-Assuming you have a working ROS + Gazebo setup on you system, you need only clone this repository in your Catkin workspace, initialise the git submodules, and build it. You might need to use [rosdep](http://wiki.ros.org/rosdep) to manage some external package dependencies.
+Assuming you have a working ROS + Gazebo setup on you system, you need only clone this repository in your Catkin workspace, initialise the git submodules, and build it. 
 
 ```
 cd ~/catkin_ws/src
@@ -62,6 +62,12 @@ git clone https://github.com/SwarmUS/SwarmUS-ROS.git
 cd SwarmUS-ROS
 git submodule update --init --recursive
 cd ~/catkin_ws && catkin_cmake
+```
+
+You might need to use [rosdep](http://wiki.ros.org/rosdep) to manage some external package dependencies. The following command installs the dependencies for all the packages of a given workspace :
+
+```
+rosdep install --from-paths src --ignore-src -r -y
 ```
 
 ## Running unit tests

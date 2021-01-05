@@ -11,3 +11,6 @@ cd ~/catkin_ws && catkin_cmake
 
 ## Tools
 This repository contains a `tools` folder with some python scripts that help accomplish a few tasks, mainly the generation of the documentation and some linting. Please refer to the scripts for some extended documentation.
+
+## Documentation
+An up to date version of the documentation can be found [here](https://swarmus.github.io/SwarmUS-ROS/index.html)

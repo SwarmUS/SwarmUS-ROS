@@ -78,6 +78,13 @@ Unit tests are run via Catkin :
 catkin_make run_tests
 ```
 
+## Running simulations in Gazebo
+As of now, there are some launch files located in the package `swarmus_ros_simulation` that spawn some robots in an empty scene in the Gazebo simulator. To launch the basic example, run the command:
+
+```
+roslaunch swarmus_ros_simulation multirobot_empty.launch
+```
+
 ## Tools
 This repository contains a `tools` folder with some python scripts that help accomplish a few tasks, mainly the generation of the documentation and some linting. Please refer to the scripts for some extended documentation.
 

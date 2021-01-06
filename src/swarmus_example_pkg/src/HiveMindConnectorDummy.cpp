@@ -3,20 +3,22 @@
 #include "swarmus_example_pkg/DummyUtils.h"
 
 class HiveMindDummyConnector {
-    public:
-        HiveMindDummyConnector();
+  public:
+    HiveMindDummyConnector();
 
-    private:
-        ros::NodeHandle node_handle;
-        ros::Publisher pub;
-        ros::Subscriber sub;
+  private:
+    ros::NodeHandle node_handle;
+    ros::Publisher pub;
+    ros::Subscriber sub;
 
-        void hiveMindTopicCallback(const hive_mind::ExampleMessage& msg);
+    void hiveMindTopicCallback(const hive_mind::ExampleMessage& msg);
 };
 
-HiveMindDummyConnector::HiveMindDummyConnector(){
-    pub = node_handle.advertise<hive_mind::ExampleMessage>("hiveMindConnectorDummy/exampleTopic", 1000);
-    sub = node_handle.subscribe("hive_mind/exampleTopic", 1000, &HiveMindDummyConnector::hiveMindTopicCallback, this);
+HiveMindDummyConnector::HiveMindDummyConnector() {
+    pub = node_handle.advertise<hive_mind::ExampleMessage>("hiveMindConnectorDummy/exampleTopic",
+                                                           1000);
+    sub = node_handle.subscribe("hive_mind/exampleTopic", 1000,
+                                &HiveMindDummyConnector::hiveMindTopicCallback, this);
 }
 
 void HiveMindDummyConnector::hiveMindTopicCallback(const hive_mind::ExampleMessage& msg) {

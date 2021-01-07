@@ -28,7 +28,7 @@ jobs:
         run: |
           apt install python2
           wget https://bootstrap.pypa.io/get-pip.py
-          python2 get-pip
+          python2 get-pip.py
           pip2 --version
           pip2 install haros
 

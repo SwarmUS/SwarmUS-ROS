@@ -1,3 +1,6 @@
+#ifndef _INTERLOCALIZATION_H
+#define _INTERLOCALIZATION_H
+
 #include "geometry_msgs/Point32.h"
 #include "geometry_msgs/Polygon.h"
 #include "geometry_msgs/PolygonStamped.h"
@@ -12,7 +15,7 @@
 #include <string>
 #include <tf/transform_listener.h>
 
-const std::string HIVEBOARD_LINK = "/hiveboard";
+static const std::string gs_hiveBoardLink = "/hiveboard";
 
 class InterLocalization {
   public:
@@ -20,18 +23,20 @@ class InterLocalization {
     float getDistanceFrom(float x, float y);
     float getAnglefrom(float x, float y);
     void publish(swarmus_ros_simulation::InterLocalization_grid grid);
-    const std::string getRobotName();
+    std::string getRobotName();
 
   private:
     // ROS NodeHandle
-    ros::NodeHandle node_handle;
+    ros::NodeHandle m_nodeHandle;
 
     // ROS Topic Publishers
-    ros::Publisher interloc_pub;
-    ros::Publisher polygon_pub;
+    ros::Publisher m_interlocPub;
+    ros::Publisher m_polygonPub;
 
-    std::string robot_name;
+    std::string m_robotName;
 
-    geometry_msgs::PolygonStamped GeneratePolyMsg(
+    geometry_msgs::PolygonStamped generatePolyMsg(
         swarmus_ros_simulation::InterLocalization_grid grid);
 };
+
+#endif // _INTERLOCALIZATION_H

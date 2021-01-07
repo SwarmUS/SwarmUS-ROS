@@ -1,10 +1,13 @@
+#ifndef _COMMUNICATIONBROKER_H
+#define _COMMUNICATIONBROKER_H
+
 #include "ros/ros.h"
 #include "simulationUtility.hpp"
 #include "std_msgs/String.h"
 #include "swarmus_ros_simulation/Communication.h"
 #include <map>
 
-// Publie des messages
+// Publishes messages
 class CommunicationBroker {
   public:
     CommunicationBroker();
@@ -15,19 +18,22 @@ class CommunicationBroker {
                            const swarmus_ros_simulation::Communication& msg);
 
     // Contains all robot associated with their publisher
-    std::map<std::string, ros::Publisher> publishersMap;
+    std::map<std::string, ros::Publisher> m_publishersMap;
+
     // Contains all robot's subscriber
-    std::vector<ros::Subscriber> subscribersList;
+    std::vector<ros::Subscriber> m_subscribersList;
 
     // Called whenever a subscriber gets a message
     void communicationCallback(const swarmus_ros_simulation::Communication& msg);
 
     // ROS NodeHandle
-    ros::NodeHandle node_handle;
+    ros::NodeHandle m_nodeHandle;
 
     // ROS Topic Publisher
-    ros::Publisher publisher;
+    ros::Publisher m_publisher;
 
     // ROS Topic subscriber
-    ros::Subscriber subscriber;
+    ros::Subscriber m_subscriber;
 };
+
+#endif // _COMMUNICATIONBROKER_H

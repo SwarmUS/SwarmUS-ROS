@@ -4,12 +4,12 @@
 Class function implementations
 */
 InterLocalization::InterLocalization() {
-    robot_name = Simulation::GetParamRobotName();
-    interloc_pub = node_handle.advertise<swarmus_ros_simulation::InterLocalization_grid>(
+    m_robotName = Simulation::getParamRobotName();
+    m_interlocPub = m_nodeHandle.advertise<swarmus_ros_simulation::InterLocalization_grid>(
         "interlocalization_grid", 1000);
-    polygon_pub = node_handle.advertise<geometry_msgs::PolygonStamped>("PolygonStamped", 1000);
+    m_polygonPub = m_nodeHandle.advertise<geometry_msgs::PolygonStamped>("PolygonStamped", 1000);
 
-    ROS_INFO("HiveBoard initialization of: %s", robot_name.c_str());
+    ROS_INFO("HiveBoard initialization of: %s", m_robotName.c_str());
 }
 
 float InterLocalization::getDistanceFrom(float x, float y) { return sqrt(pow(x, 2) + pow(y, 2)); }
@@ -17,12 +17,12 @@ float InterLocalization::getDistanceFrom(float x, float y) { return sqrt(pow(x, 
 float InterLocalization::getAnglefrom(float x, float y) { return atan2(y, x) * 180.0 / M_PI; }
 
 void InterLocalization::publish(swarmus_ros_simulation::InterLocalization_grid grid) {
-    interloc_pub.publish(grid);
-    polygon_pub.publish(GeneratePolyMsg(grid));
+    m_interlocPub.publish(grid);
+    m_polygonPub.publish(generatePolyMsg(grid));
 }
 
-const std::string InterLocalization::getRobotName() { return robot_name; }
-geometry_msgs::PolygonStamped InterLocalization::GeneratePolyMsg(
+std::string InterLocalization::getRobotName() { return m_robotName; }
+geometry_msgs::PolygonStamped InterLocalization::generatePolyMsg(
     swarmus_ros_simulation::InterLocalization_grid grid) {
     geometry_msgs::Polygon poly;
     poly.points.reserve(2 * grid.otherRobotsListSize + 1);
@@ -49,7 +49,7 @@ geometry_msgs::PolygonStamped InterLocalization::GeneratePolyMsg(
     geometry_msgs::PolygonStamped msg;
     msg.polygon = poly;
     msg.header.stamp = ros::Time::now();
-    msg.header.frame_id = robot_name + "/hiveboard";
+    msg.header.frame_id = m_robotName + "/hiveboard";
     return msg;
 }
 
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 
     InterLocalization interloc;
 
-    std::string reference = interloc.getRobotName() + HIVEBOARD_LINK;
+    std::string reference = interloc.getRobotName() + gs_hiveBoardLink;
     swarmus_ros_simulation::InterLocalization_grid grid;
     grid.source_robot = reference;
 
@@ -72,12 +72,12 @@ int main(int argc, char** argv) {
 
     while (ros::ok()) {
         int count = 0;
-        for (std::string& robot_name : Simulation::GetRobotList()) {
-            if (robot_name == interloc.getRobotName()) {
+        for (std::string& m_robotName : Simulation::getRobotList()) {
+            if (m_robotName == interloc.getRobotName()) {
                 continue;
             }
 
-            std::string target = robot_name + HIVEBOARD_LINK;
+            std::string target = m_robotName + gs_hiveBoardLink;
 
             tf::StampedTransform transform;
             try {
@@ -87,14 +87,14 @@ int main(int argc, char** argv) {
                 ros::Duration(1.0).sleep();
             }
 
-            swarmus_ros_simulation::InterLocalization m;
-            m.target_robot = target;
-            m.distance =
+            swarmus_ros_simulation::InterLocalization interlocMessage;
+            interlocMessage.target_robot = target;
+            interlocMessage.distance =
                 interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
-            m.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
+            interlocMessage.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
             Simulation::Angle rotation(transform.getRotation().getAngle(), true);
-            m.rotation = rotation.inDegrees;
-            grid.otherRobots.push_back(m);
+            interlocMessage.rotation = rotation.inDegrees;
+            grid.otherRobots.push_back(interlocMessage);
             count++;
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
 
-    <node pkg="swarmus_example_pkg" type="hive_mind_connector_dummy" name="hive_mind_connector_dummy"/>
-    <node pkg="hive_mind" type="hive_mind" name="hive_mind"/>
+    <node pkg="swarmus_example_pkg" type="hive_mind_connector_dummy" name="hive_mind_connector_dummy" output="screen"/>
+    <node pkg="hive_mind" type="hive_mind" name="hive_mind" output="screen"/>
     
 </launch>

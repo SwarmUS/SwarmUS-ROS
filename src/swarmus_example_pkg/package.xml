@@ -23,8 +23,6 @@
   <exec_depend>hive_mind</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-
-
   
   <export>
 

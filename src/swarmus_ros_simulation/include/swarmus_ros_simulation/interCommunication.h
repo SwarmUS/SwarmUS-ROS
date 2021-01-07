@@ -1,3 +1,6 @@
+#ifndef _INTERCOMMUNICATION_H
+#define _INTERCOMMUNICATION_H
+
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "swarmus_ros_simulation/Communication.h"
@@ -8,18 +11,20 @@ class InterCommunication {
     InterCommunication();
 
     void publish(const swarmus_ros_simulation::Communication& msg);
-    const std::string getRobotName();
+    std::string getRobotName();
 
   private:
     void communicationCallback(const std_msgs::String::ConstPtr& msg);
 
-    std::string robot_name;
+    std::string m_robotName;
 
     // ROS NodeHandle
-    ros::NodeHandle node_handle;
+    ros::NodeHandle m_nodeHandle;
 
-    // ROS Topic Publishers
-    ros::Publisher publisher;
+    // ROS Topic publishers
+    ros::Publisher m_publisher;
 
-    ros::Subscriber subscriber;
+    ros::Subscriber m_subscriber;
 };
+
+#endif // #ifndef _INTERCOMMUNICATION_H

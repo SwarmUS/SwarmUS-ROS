@@ -1,0 +1,3 @@
+[submodule "contrib/HiveMind"]
+	path = contrib/HiveMind
+	url = https://github.com/SwarmUS/HiveMind.git

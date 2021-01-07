@@ -1,0 +1,6 @@
+%YAML 1.1
+---
+packages:
+    - swarmus_example_pkg
+    - swarmus_ros_simulation
+    - hive_mind

@@ -54,5 +54,7 @@ catkin_add_gtest(DummyUtilsTests
         src/DummyUtils.cpp)
 
 if(TARGET DummyUtilsTests)
-    target_link_libraries(DummyUtilsTests ${catkin_LIBRARIES})
+    target_link_libraries(DummyUtilsTests 
+    ${catkin_LIBRARIES} 
+    gtest_main)
 endif()

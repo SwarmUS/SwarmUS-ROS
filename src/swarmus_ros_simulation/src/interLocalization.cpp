@@ -91,7 +91,8 @@ int main(int argc, char** argv) {
             interlocMessage.target_robot = target;
             interlocMessage.distance =
                 interloc.getDistanceFrom(transform.getOrigin().x(), transform.getOrigin().y());
-            interlocMessage.angle = interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
+            interlocMessage.angle =
+                interloc.getAnglefrom(transform.getOrigin().x(), transform.getOrigin().y());
             Simulation::Angle rotation(transform.getRotation().getAngle(), true);
             interlocMessage.rotation = rotation.inDegrees;
             grid.otherRobots.push_back(interlocMessage);

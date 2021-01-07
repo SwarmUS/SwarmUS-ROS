@@ -5,9 +5,10 @@ InterCommunication::InterCommunication() {
 
     m_robotName = Simulation::getParamRobotName();
 
-    m_publisher = m_nodeHandle.advertise<swarmus_ros_simulation::Communication>("communication", 1000);
+    m_publisher =
+        m_nodeHandle.advertise<swarmus_ros_simulation::Communication>("communication", 1000);
     m_subscriber = m_nodeHandle.subscribe("/CommunicationBroker/" + m_robotName, 1000,
-                                       &InterCommunication::communicationCallback, this);
+                                          &InterCommunication::communicationCallback, this);
 }
 
 void InterCommunication::publish(const swarmus_ros_simulation::Communication& msg)

@@ -1,0 +1,53 @@
+name: Run and Publish Haros Analysis
+
+on: push
+
+jobs:
+  haros:
+    runs-on: ubuntu-20.04
+    container:
+      image: swarmus/embedded
+    steps:
+      - name: Create catkin_ws
+        run: |
+          mkdir -p catkin_ws/src
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          catkin_make
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: 'catkin_ws/src/SwarmUS-ROS'
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+        working-directory: 'catkin_ws/src/SwarmUS-ROS'
+
+      - name: Install Haros
+        run: |
+          wget https://bootstrap.pypa.io/get-pip.py
+          python2 get-pip
+          pip2 --version
+          pip2 install haros
+
+      - name: Run Haros
+        run: |
+          haros analyse
+          haros export -v ./haros
+        working-directory: 'catkin_ws'
+
+      - name: Prepare Publish Step
+        run: |
+          apt-get update && apt-get install -y rsync
+
+      - name: Publish Result
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY_NAME: SwarmUS/Haros-viz
+          BRANCH: gh-pages
+          FOLDER: haros
+          TARGET_FOLDER: haros
+          CLEAN: true
+          SINGLE_COMMIT: true

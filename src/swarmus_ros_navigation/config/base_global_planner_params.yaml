@@ -1,0 +1,18 @@
+BaseGlobalPlanner:
+  allow_unknow: True          # Specifies if the unknow grid cells should be use to plan the trajectory
+  default_tolerance: 0.0      # Tolerance aroun the goal
+  
+  visual_potential: false     # Specifies or not to visualize the potential area computed via a PointCloud2
+
+  use_dijkstra: true          # If true, use Dijkstra's algorithm. Otherwise, use A*.
+  use_quadratic: true         # If true, use the quadratic approximation of the potential. Otherwise, use a simpler calculation
+  use_grid_path: false        # If true, create a path that follows the grid boundaries. Otherwise, use a gradient descent method
+  old_navfn_behavior: false   # If true, the planner will mirror the behavior of navfn
+
+  lethal_cost: 253            # Lethal cost (can be changed with dynamic reconfiguring)
+  cost_factor: 3.0            # Factor to multiply each cost from costmap by (can be changed with dynamic reconfiguring)
+
+  publish_potential: true     # Publish Potential Costmap (can be changed with dynamic reconfiguring)
+
+  orientation_mode: 0         # How to set the orientation of each point (None=0, Forward=1, Interpolate=2, ForwardThenInterpolate=3, Backward=4, Leftward=5, Rightward=6) (can be changed with dynamic reconfiguring)
+  orientation_window_size: 1  # What window to use to determine the orientation based on the position derivative specified by the orientation mode

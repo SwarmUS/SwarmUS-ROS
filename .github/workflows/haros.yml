@@ -1,6 +1,10 @@
 name: Haros Analysis
 
-on: push
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
 jobs:
   haros:

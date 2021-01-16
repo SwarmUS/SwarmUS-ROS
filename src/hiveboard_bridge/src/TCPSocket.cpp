@@ -2,7 +2,9 @@
 
 TCPSocket::TCPSocket(int port) {
     this->m_port = port;
+    m_maxFd = 0;
     FD_ZERO(&m_fileDescriptorSet);
+    bzero(m_buffer, TCP_BUFFER_LENGTH);
     init();
 }
 
@@ -41,10 +43,22 @@ int TCPSocket::listen(int backlog) {
         return ret;
     }
 
-    if ((m_socket = ::accept(m_serverFd, (struct sockaddr*) &m_address, (socklen_t*) &m_addressLength)) < 0) {
+    accept();
+}
+
+int TCPSocket::accept() {
+    if ((m_clientFd = ::accept(m_serverFd, (struct sockaddr*) &m_address, (socklen_t*) &m_addressLength)) < 0) {
         // ERROR
         return 0;
     }
+
+    FD_SET(m_clientFd, &m_fileDescriptorSet);
+
+    if (m_clientFd > m_maxFd) {
+        m_maxFd = m_clientFd;
+    }
+
+    send(3, "OK");
 }
 
 int TCPSocket::read(const int length, char* buff) {
@@ -52,7 +66,15 @@ int TCPSocket::read(const int length, char* buff) {
         // ERROR
     }
 
-    ::read(m_socket, m_buffer, length);
+    int nbBytesRecieved = ::recv(m_clientFd, m_buffer, length, 0);
+    if (nbBytesRecieved <= 0) {
+        if (nbBytesRecieved == 0) { // disconnect
+            ::close(m_clientFd);
+            FD_CLR(m_clientFd, &m_fileDescriptorSet);
+            m_maxFd = m_serverFd; // decrement the max since we closed a socket.
+        }
+    }
+
     std::memcpy(buff, m_buffer, length);
 
     return 0;
@@ -63,25 +85,29 @@ int TCPSocket::send(const int length, char *buff) {
         // ERROR
     }
 
-    ::send(m_socket, buff, length, 0);
+    ::send(m_clientFd, buff, length, 0);
 }
 
 void TCPSocket::loop() {
-    ROS_INFO("Loop");
-
     fd_set tempFileDescriptorSet = m_fileDescriptorSet;
 
-    int sel = select(m_serverFd + 1, &tempFileDescriptorSet, NULL, NULL, NULL);
+    int sel = select(m_maxFd + 1, &tempFileDescriptorSet, NULL, NULL, NULL);
     if(sel < 0) {
         //ERROR
     }
 
-    char temp[12] = "";
-    if (FD_ISSET(m_serverFd, &m_fileDescriptorSet)) {
-        // EXECUTE CALLBACK FUNCTION
-        read(12, temp);
-        ROS_INFO("RECIEVED FROM CLIENT: %s", temp);
+    char temp[12] = ""; // TODO remove this
 
-        FD_CLR(m_serverFd, &m_fileDescriptorSet);
+    for (int i = 0; i <= m_maxFd; i++) {
+        if (FD_ISSET(i, &tempFileDescriptorSet)) {
+            if (i == m_serverFd) { // There is new activity on the server FD
+                accept();
+            } else { // The remaining FDs are the sockets that have some data ready
+                // TODO EXECUTE CALLBACK FUNCTION
+                read(12, temp);
+                ROS_INFO("RECIEVED FROM CLIENT: %s", temp);
+                bzero(m_buffer, TCP_BUFFER_LENGTH);
+            }
+        }
     }
 }

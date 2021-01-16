@@ -27,18 +27,20 @@ public:
      */
     int listen(int backlog);
 
+    int accept();
+
     /**
      * Read data from socket.
      * @return
      */
     int read(const int length, char* buff); // const here?
 
-    int send(const int length, char* buff); // const here?
+    int send(const int length, char *buff); // const here?
 
     void loop();
 
 private:
-    int m_serverFd, m_port, m_socket;
+    int m_serverFd, m_clientFd, m_port, m_maxFd;
     int m_addressLength;
     struct sockaddr_in m_address;
     char m_buffer[TCP_BUFFER_LENGTH];

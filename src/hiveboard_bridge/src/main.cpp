@@ -16,7 +16,9 @@ int main(int argc, char** argv) {
     socket.send(strlen(sendValue), sendValue);
     ROS_INFO("Sent a message from server to client");
 
-    while(ros::ok()) {
+    int i = 0;
+    while(true) {
+        ROS_INFO("%d", i++);
         socket.loop();
     }
 

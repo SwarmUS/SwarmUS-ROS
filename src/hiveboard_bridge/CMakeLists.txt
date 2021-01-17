@@ -28,7 +28,8 @@ include_directories(
 
 set(HIVEBOARD_BRIDGE_SOURCES
         src/main.cpp
-        src/TCPSocket.cpp)
+        src/TCPServer.cpp
+        src/TCPServerMonitor.cpp)
 
 add_executable(hiveboard_bridge ${HIVEBOARD_BRIDGE_SOURCES})
 add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})

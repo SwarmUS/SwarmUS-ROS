@@ -1,4 +1,4 @@
-#include "TCPServer.h"
+#include "../include/hiveboard_bridge/TCPServer.h"
 
 TCPServer::TCPServer(int port, ITCPServerMonitor& monitor) : m_monitor(monitor) {
     m_port = port;

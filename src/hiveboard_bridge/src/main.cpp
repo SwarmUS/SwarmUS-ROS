@@ -1,5 +1,5 @@
-#include "TCPServer.h"
-#include "TCPServerMonitor.h"
+#include "../include/hiveboard_bridge/TCPServer.h"
+#include "../include/hiveboard_bridge/TCPServerMonitor.h"
 #include "ros/ros.h"
 
 int main(int argc, char** argv) {
@@ -17,17 +17,15 @@ int main(int argc, char** argv) {
     ROS_INFO("Sent a message from server to client");
 
     char buf[10] = "";
+    char okBuf[3] = "Ok";
     int i = 0;
     while (true) {
         ROS_INFO("%d", i++);
 
-        socket.read(buf, 2, true);
-        ROS_INFO("Header: %s", buf);
-        socket.send("OK", 3);
-
         bzero(buf, 10);
         socket.read(buf, 10, true);
         ROS_INFO("Data: %s", buf);
+        socket.send(okBuf, 3);
     }
 
     ros::spin();

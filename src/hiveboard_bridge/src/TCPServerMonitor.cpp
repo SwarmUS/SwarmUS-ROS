@@ -1,4 +1,4 @@
-#include "TCPServerMonitor.h"
+#include "../include/hiveboard_bridge/TCPServerMonitor.h"
 
 TCPServerMonitor::TCPServerMonitor() {
     m_maxFd = 0;

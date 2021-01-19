@@ -1,13 +1,16 @@
-#include "../include/hiveboard_bridge/TCPServer.h"
+#include "hiveboard_bridge/TCPServer.h"
 
-TCPServer::TCPServer(int port, ITCPServerMonitor& monitor) : m_monitor(monitor) {
+TCPServer::TCPServer(int port) {
     m_port = port;
     bzero(m_buffer, TCP_BUFFER_LENGTH);
 
     init();
 }
 
-TCPServer::~TCPServer() { ::close(m_serverFd); }
+TCPServer::~TCPServer() {
+    close();
+    ::close(m_serverFd);
+}
 
 void TCPServer::init() {
     int serverFd = 0;

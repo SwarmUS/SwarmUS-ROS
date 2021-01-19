@@ -2,23 +2,25 @@
 #define CATKIN_ROS_TCPSERVER_H
 
 #include "ITCPServerMonitor.h"
+#include "TCPServerMonitor.h"
 #include "ros/ros.h"
+#include <cstdint>
 #include <cstring>
+#include <memory>
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define TCP_BUFFER_LENGTH 65536 // max value of uint16
+#define TCP_BUFFER_LENGTH UINT16_MAX
 
 class TCPServer {
   public:
     /**
      * Construct a TCPServer
      * @param port Port to open the server to
-     * @param monitor A monitor object to orchestrate the socket
      */
-    TCPServer(int port, ITCPServerMonitor& monitor);
+    TCPServer(int port);
     ~TCPServer();
 
     /**
@@ -54,11 +56,11 @@ class TCPServer {
     struct sockaddr_in m_address;
     char m_buffer[TCP_BUFFER_LENGTH];
 
-    ITCPServerMonitor& m_monitor;
+    //    std::uniTCPServerMonitor m_monitor;
+    TCPServerMonitor m_monitor;
 
     /**
      * Create and bind the socket.
-     * @return
      */
     void init();
 };

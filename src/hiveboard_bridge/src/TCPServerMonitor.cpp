@@ -1,4 +1,4 @@
-#include "../include/hiveboard_bridge/TCPServerMonitor.h"
+#include "hiveboard_bridge/TCPServerMonitor.h"
 
 TCPServerMonitor::TCPServerMonitor() {
     m_maxFd = 0;
@@ -23,7 +23,7 @@ void TCPServerMonitor::addConn(int conn) {
 
 void TCPServerMonitor::removeConn(int conn) {
     FD_CLR(conn, &m_fileDescriptorSet);
-    m_maxFd = m_serverFd; // decrement the max since we closed a socket.
+    m_maxFd = m_serverFd; // reset the max since we closed a socket.
 }
 
 bool TCPServerMonitor::waitIncoming(int conn) {

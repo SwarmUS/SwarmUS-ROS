@@ -1,12 +1,26 @@
-#include "../include/hiveboard_bridge/TCPServer.h"
-#include "../include/hiveboard_bridge/TCPServerMonitor.h"
+#include "hiveboard_bridge/TCPServer.h"
+#include "hiveboard_bridge/TCPServerMonitor.h"
 #include "ros/ros.h"
+
+#define DEFAULT_TCP_SERVER_PORT 8080
+
+int getTcpServerPort() {
+    int port;
+
+    if (!ros::param::get("~TCP_SERVER_PORT", port)) {
+        ROS_INFO("No TCP_SERVER_PORT param was given. Using default value %d",
+                 DEFAULT_TCP_SERVER_PORT);
+        port = DEFAULT_TCP_SERVER_PORT;
+    }
+
+    return port;
+}
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
 
-    TCPServerMonitor monitor;
-    TCPServer socket(8080, monitor);
+    int port = getTcpServerPort();
+    TCPServer socket(port);
 
     ROS_INFO("Listening for incoming clients...");
     socket.listen();

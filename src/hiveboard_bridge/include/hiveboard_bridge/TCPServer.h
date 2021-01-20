@@ -55,8 +55,6 @@ class TCPServer {
     int m_addressLength;
     struct sockaddr_in m_address;
     char m_buffer[TCP_BUFFER_LENGTH];
-
-    //    std::uniTCPServerMonitor m_monitor;
     TCPServerMonitor m_monitor;
 
     /**

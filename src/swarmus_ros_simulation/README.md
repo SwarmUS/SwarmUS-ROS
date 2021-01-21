@@ -13,7 +13,7 @@ The source code is released under a [MIT License](SwarmUS-ROS/LICENSE).
 **Author: SwarmUS<br />
 Maintainer: SwarmUS, swarmus@usherbrooke.ca**
 
-The swarmus_ros_simulation package has been tested under [ROS] melodic on Ubuntu 14.04. and noetic on 20.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
+The swarmus_ros_simulation package has been tested under [ROS] melodic on Noetic on 20.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
 
 ## Installation
@@ -24,6 +24,8 @@ The swarmus_ros_simulation package has been tested under [ROS] melodic on Ubuntu
 
 - [Robot Operating System (ROS)](http://wiki.ros.org) (middleware for robotics),
 - [Gazebo](http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install) (physics simulator)
+- swarmus_ros_description
+- swarmus_ros_navigation
 
 #### Building
 
@@ -44,7 +46,7 @@ To start the basic multirobot simulation, run
 
 Then to visualize and control the pioneer_0, run
 
-    roslaunch swarmus_ros_simulation rviz_pioneer_0.launch 
+    roslaunch swarmus_ros_navigation rviz_pioneer_0.launch 
 
 ## Message files
 
@@ -57,7 +59,7 @@ Then to visualize and control the pioneer_0, run
 
 ## Launch files
 
-* **multirobot_empty.launch:** Defines all the necessary argument to start a Gazebo empty world, calls an instance of Gazebo world, defines the parameters to instance multiple robot, calls a pioneer_spawner for each robot, starts the publishing of the TFs relative to the world frame and starts the communication broker to make robots talk to each other.
+* **multirobot_empty.launch:** Defines all the necessary argument to start a Gazebo in a empty world, calls an instance of Gazebo world, defines the parameters to instance multiple robot, calls a pioneer_spawner for each robot, starts the publishing of the TFs relative to the world frame and starts the communication broker to make robots talk to each other.
 
      Gazebo arguments
 
@@ -73,9 +75,7 @@ Then to visualize and control the pioneer_0, run
 
      Robot instance arguments and params
      -  **`model`** Tells ROS where to find the .URDF model of the robot Default: `$(find swarmus_ros_description)/urdf/pioneer.urdf.xacr`.
-
-     - **`robot_0_name`**  Name of the first robot. Default: `pioneer_0`.
-     
+-  **`robot_0_name`**  Name of the first robot. Default: `pioneer_0`.
      - **`robot_1_name`**  Name of the first robot. Default: `pioneer_1`.
      **...**
      
@@ -135,26 +135,20 @@ Samll description of the node.
 
 ### tf_publisher
 
-Samll description of the node.
+Sets the transform between the /world frame and the /odom frame of all robots to 0 (same place, same orientation). This is done in order to have a common tf tree between all robots.
 
 #### Subscribed Topics
 
-* **`/subscribed topic`** ([link/toMsg])
+* **`/gazebo/model_states`** 
 
-	Add a small description
+	Gives the pose of all robots. The callback attached to this topic is the one that publishes the transforms between the world and the odom/ frames.
 
 
 #### Published Topics
 
-...
+- /**`tf`** 
 
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
+  The transform between the world and /odom frames of robots.
 
 ### robot_name/interloc
 
@@ -229,10 +223,3 @@ Samll description of the node.
 ## Bugs & Feature Requests
 
 Please report bugs and request features using the [Issue Tracker](https://github.com/ethz-asl/ros_best_practices/issues).
-
-
-[ROS]: http://www.ros.org
-[rviz]: http://wiki.ros.org/rviz
-[Eigen]: http://eigen.tuxfamily.org
-[std_srvs/Trigger]: http://docs.ros.org/api/std_srvs/html/srv/Trigger.html
-[sensor_msgs/Temperature]: http://docs.ros.org/api/sensor_msgs/html/msg/Temperature.html

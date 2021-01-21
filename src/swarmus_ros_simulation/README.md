@@ -83,95 +83,53 @@ Then to visualize and control the pioneer_0, run
 
 ## Nodes
 
-### Gazebo
-
-Samll description of the node.
-
-#### Subscribed Topics
-
-* **`/subscribed topic`** ([link/toMsg])
-
-	Add a small description
-
-
-#### Published Topics
-
-...
-
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
-
-
-### communicationBroker
-
-Samll description of the node.
-
-
-#### Subscribed Topics
-
-* **`/subscribed topic`** ([link/toMsg])
-
-	Add a small description
-
-
-#### Published Topics
-
-...
-
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
-
-
-
 ### tf_publisher
 
-Sets the transform between the /world frame and the /odom frame of all robots to 0 (same place, same orientation). This is done in order to have a common tf tree between all robots.
+- Sets the transform between the /world frame and the /odom frame of all robots to 0 (same place, same orientation). This is done in order to have a common tf tree between all robots.
 
 #### Subscribed Topics
 
-* **`/gazebo/model_states`** 
+* **`/gazebo/model_states`** (gazebo_msgs/ModelStates)
 
 	Gives the pose of all robots. The callback attached to this topic is the one that publishes the transforms between the world and the odom/ frames.
 
 
 #### Published Topics
 
-- /**`tf`** 
+- /**`tf`** (tf2_msgs/TFMessage)
 
   The transform between the world and /odom frames of robots.
 
-### robot_name/interloc
+### interLocalization
 
-Samll description of the node.
+Measures the position of all the robots relatively to the owner of the node. Its purpose is to simulate what the Hiveboard will measure in real life.
 
 #### Subscribed Topics
 
-* **`/subscribed topic`** ([link/toMsg])
+* **`/tf`** (tf2_msgs/TFMessage)
 
-	Add a small description
+	Contains the transforms of all frames between robot.
 
 
 #### Published Topics
 
-...
+- **`/robot_name/interlocalization_grid`** (swarmus_ros_simulation/InterLocalization_grid)
 
+  List of the relative position and orientation between all robot and the owner of the node (a simulated robot)
 
+- **`/robot_name/PolygonStamped`** (geometry_msgs/PolygonStamped)
+
+  Geometric lines that start from the owner of the node to all robots. This is used in Rviz to visualize the relative position of other robots.
 
 #### Parameters
 
-* **`param1`** (string, default: "/param1_value")
+* **`/robot_list`** (list of strings)
 
-	Description of the param
+	List of the name of all robots.
+
+- **`~/robot_name`**(string, default:"pioneer_0")
+
+  Name of the robot that owns the node
 
 ### robot_name/interCommunication
 
@@ -196,15 +154,16 @@ Samll description of the node.
 
 	Description of the param
 
-### robot_name/robot_state_publisher
+### communicationBroker
 
 Samll description of the node.
+
 
 #### Subscribed Topics
 
 * **`/subscribed topic`** ([link/toMsg])
 
-	Add a small description
+  Add a small description
 
 
 #### Published Topics
@@ -217,9 +176,12 @@ Samll description of the node.
 
 * **`param1`** (string, default: "/param1_value")
 
-	Description of the param
+  Description of the param
+
+
 
 
 ## Bugs & Feature Requests
 
-Please report bugs and request features using the [Issue Tracker](https://github.com/ethz-asl/ros_best_practices/issues).
+Please report bugs and request features using the [Issue Tracker](https://github.com/SwarmUS/SwarmUS-ROS/issues).
+

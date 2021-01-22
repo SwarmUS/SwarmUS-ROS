@@ -100,6 +100,8 @@ Then to visualize and control the pioneer_0, run
 
   The transform between the world and /odom frames of robots.
 
+  
+
 ### interLocalization
 
 Measures the position of all the robots relatively to the owner of the node. Its purpose is to simulate what the Hiveboard will measure in real life.
@@ -131,52 +133,56 @@ Measures the position of all the robots relatively to the owner of the node. Its
 
   Name of the robot that owns the node
 
-### robot_name/interCommunication
+  
 
-Samll description of the node.
+### interCommunication
+
+Node owned by a simulated robot that talks with a **communicationBroker** node. This node serves as an simulated interface between a robot and the network of robot. Its messages are destined to other robots or the entire network (broadcast) and it handles incoming message.
 
 #### Subscribed Topics
 
-* **`/subscribed topic`** ([link/toMsg])
+* **`/CommunicationBroker/robot_name`** (std_msgs/String])
 
-	Add a small description
+	Strings received from the broker.
 
 
 #### Published Topics
 
-...
+- **`/robot_name/communication`** (swarmus_ros_simulation/Communication)
 
-
+  Strings sent to the broker. Contains the destination robot, the source robot and the message itself. To broadcast, use "allRobots" as the destination or "allRobotsExceptSelf".
 
 #### Parameters
 
-* **`param1`** (string, default: "/param1_value")
+* **`~/robot_name`**(string, default:"pioneer_0")
 
-	Description of the param
+	Name of the robot that owns the node
+	
+	
 
 ### communicationBroker
 
-Samll description of the node.
+Act as a simulated network between robots. It knows every existing robot. Robots communicate to this node where their message is redirected towards the desired robot. Can be used to simulate real-life constraints on the communication network.
 
 
 #### Subscribed Topics
 
-* **`/subscribed topic`** ([link/toMsg])
+* **`/robot_name/communication`** (swarmus_ros_simulation/Communication)
 
-  Add a small description
+  Exist for each simulated robots.  Contains the destination robot, the source robot and the message itself. To broadcast, use "allRobots" as the destination or "allRobotsExceptSelf".
 
 
 #### Published Topics
 
-...
+- **`/CommunicationBroker/robot_name`**   (std_msgs/String])
 
-
+  Exist for each simulated robots. Message to send to a robot.
 
 #### Parameters
 
-* **`param1`** (string, default: "/param1_value")
+* **`/robot_list`** (list of strings)
 
-  Description of the param
+  List of the name of all robots.
 
 
 

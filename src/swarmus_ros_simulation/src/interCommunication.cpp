@@ -12,7 +12,6 @@ InterCommunication::InterCommunication() {
 }
 
 void InterCommunication::publish(const swarmus_ros_simulation::Communication& msg)
-
 {
     m_publisher.publish(msg);
 }

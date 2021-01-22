@@ -1,10 +1,6 @@
 [submodule "contrib/HiveMind"]
 	path = contrib/HiveMind
 	url = https://github.com/SwarmUS/HiveMind.git
-[submodule "contrib/roboclaw"]
-	path = contrib/roboclaw
-	url = https://github.com/csvance/roboclaw
-	branch = master
 [submodule "contrib/rplidar"]
 	path = contrib/rplidar
 	url = https://github.com/Slamtec/rplidar_ros

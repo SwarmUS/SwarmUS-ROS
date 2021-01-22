@@ -20,6 +20,7 @@ SwarmUS-ROS
 ├── src
 │   ├── swarmus_example_pkg
 │   ├── swarmus_ros_description
+|	├── swarmus_ros_navigation
 │   └── swarmus_ros_simulation
 └── tools
     ├── check_format.py

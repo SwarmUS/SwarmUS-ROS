@@ -13,3 +13,7 @@
 	path = contrib/mpu6050
 	url = https://github.com/chrisspen/ros_mpu6050_node
 	branch = master
+[submodule "contrib/roboclaw"]
+	path = contrib/roboclaw
+	url = https://github.com/SwarmUS/roboclaw
+	branch = master

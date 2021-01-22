@@ -35,7 +35,7 @@ sudo apt-get update && apt-get install -y \
 # Install cmake from pip for the latest release
 pip3 install cmake
 
-# Install Buzz
+# Install Buzz. The /tmp/buzz path can be changed.
 git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \
     cd /tmp/buzz && \
     mkdir build && \
@@ -45,7 +45,7 @@ git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \
     sudo make install && \
     sudo ldconfig
 
-# Install I2Cdevlib
+# Install I2Cdevlib. This exact path is needed. DO NOT CHANGE IT.
 sudo mkdir -p /usr/share/arduino/libraries && \
     cd /usr/share/arduino/libraries && \
     sudo git clone https://github.com/chrisspen/i2cdevlib.git

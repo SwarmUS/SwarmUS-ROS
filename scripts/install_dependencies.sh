@@ -31,6 +31,7 @@ sudo apt-get update && apt-get install -y \
     librealsense2-dbg \
     clang-tidy \
     clang-format \
+    doxygen \
 
 # Install cmake from pip for the latest release
 pip3 install cmake

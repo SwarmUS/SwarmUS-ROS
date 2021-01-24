@@ -73,7 +73,7 @@ sh scripts/install dependencies.sh
 rosdep install --from-paths src --ignore-src -r -y
 cd ~/catkin_ws && catkin_cmake
 ```
-NOTE: the `install dependencies.sh` script will ask for elevated permissions to install packages.
+NOTE: the `install dependencies.sh` script will only works on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
 ## Running unit tests
 
 Unit tests are run via Catkin :

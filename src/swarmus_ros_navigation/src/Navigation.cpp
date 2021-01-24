@@ -3,33 +3,34 @@
 #define RATE_HZ (10U)
 
 /*************************************************************************************************/
-Navigation::Navigation(ros::NodeHandle* p_NodeHandle)  {
+Navigation::Navigation(ros::NodeHandle* p_NodeHandle) {
     m_NodeHandle = p_NodeHandle;
     getRosParameters();
     std::string topic = "/" + m_RosParameters.robot_name + "/navigation/moveBy";
     ROS_INFO("Subscribing to: %s", topic.c_str());
-    m_MoveBySubscriber = m_NodeHandle->subscribe(topic.c_str(), 1000, &Navigation::moveByCallback, this);
-    m_GoalPublisher = m_NodeHandle->advertise<geometry_msgs::PoseStamped>(m_RosParameters.clientDestination.c_str(), 1000);
+    m_MoveBySubscriber =
+        m_NodeHandle->subscribe(topic.c_str(), 1000, &Navigation::moveByCallback, this);
+    m_GoalPublisher = m_NodeHandle->advertise<geometry_msgs::PoseStamped>(
+        m_RosParameters.clientDestination.c_str(), 1000);
 }
 
 /*************************************************************************************************/
-void Navigation::getRosParameters(){
-    if(ros::param::get("~robot_name", m_RosParameters.robot_name)) {
-        m_RosParameters.clientDestination = '/' + m_RosParameters.robot_name + "/move_base_simple/goal";
+void Navigation::getRosParameters() {
+    if (ros::param::get("~robot_name", m_RosParameters.robot_name)) {
+        m_RosParameters.clientDestination =
+            '/' + m_RosParameters.robot_name + "/move_base_simple/goal";
         ROS_INFO("Robot name provided: %s", m_RosParameters.robot_name.c_str());
-    }
-    else {
+    } else {
         system("rosnode kill swarmus_ros_navigation_node"); // Node name defined launch file
     }
-
 }
-
 
 /*************************************************************************************************/
 void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg) {
     ROS_INFO("New goal received for robot: %s", m_RosParameters.robot_name.c_str());
-    
-    m_CurrentGoal.target_pose.header.frame_id = m_RosParameters.robot_name + "/base_footprint"; // relative position to bot
+
+    m_CurrentGoal.target_pose.header.frame_id =
+        m_RosParameters.robot_name + "/base_footprint"; // relative position to bot
 
     m_CurrentGoal.target_pose.header.stamp = ros::Time::now();
 
@@ -45,13 +46,13 @@ void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg
 }
 
 /*************************************************************************************************/
-void Navigation::execute(){
+void Navigation::execute() {
     ros::Rate loopRate(RATE_HZ);
-    while(ros::ok()) {
+    while (ros::ok()) {
         ros::spinOnce();
-        if(m_HasNewGoal) {
+        if (m_HasNewGoal) {
             m_GoalPublisher.publish(m_CurrentGoal.target_pose);
-            m_HasNewGoal = false;            
+            m_HasNewGoal = false;
         }
         loopRate.sleep();
     }

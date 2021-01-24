@@ -19,7 +19,8 @@ void tfCallback(const gazebo_msgs::ModelStates& msg) {
         buf.append("/odom");
 
         // Send transform relative to "world"
-        s_br.sendTransform(tf::StampedTransform(getUnitTransform(), ros::Time::now(), "world", buf));
+        s_br.sendTransform(
+            tf::StampedTransform(getUnitTransform(), ros::Time::now(), "world", buf));
 
         // Sleep for one nanosecond
         ros::Duration(0, 1).sleep();

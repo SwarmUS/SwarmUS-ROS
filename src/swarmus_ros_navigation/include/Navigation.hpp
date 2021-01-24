@@ -7,24 +7,23 @@
 #ifndef NAVIGATION_HPP
 #define NAVIGATION_HPP
 
-#include <ros/ros.h>
-#include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
-#include <swarmus_ros_navigation/MoveByMessage.h>
-#include <iostream>
 #include <array>
+#include <iostream>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <ros/ros.h>
+#include <swarmus_ros_navigation/MoveByMessage.h>
 
 struct RosParameters_t {
     std::string robot_name;
     std::string clientDestination;
 };
 
-
 class Navigation {
-protected:
+  protected:
     void getRosParameters();
     RosParameters_t m_RosParameters;
-    
+
     ros::NodeHandle* m_NodeHandle;
     ros::Subscriber m_MoveBySubscriber;
     ros::Publisher m_GoalPublisher;
@@ -33,12 +32,11 @@ protected:
     bool m_HasNewGoal;
 
     void moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg);
-public:
+
+  public:
     Navigation(ros::NodeHandle* p_NodeHandle);
 
     void execute();
-    
 };
-
 
 #endif // NAVIGATION_HPP

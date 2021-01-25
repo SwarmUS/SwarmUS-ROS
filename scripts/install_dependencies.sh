@@ -46,20 +46,6 @@ git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \
     sudo make install && \
     sudo ldconfig
 
-# Install I2Cdevlib. This exact path is needed. DO NOT CHANGE IT.
-sudo mkdir -p /usr/share/arduino/libraries && \
-    cd /usr/share/arduino/libraries && \
-    sudo git clone https://github.com/chrisspen/i2cdevlib.git
-
-# Install Bcm2835
-cd /tmp &&
-    wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.50.tar.gz && \
-    tar zxvf bcm2835-1.50.tar.gz && \
-    cd bcm2835-1.50 && \
-    ./configure && \
-    make && \
-    sudo make install
-
 
 
 

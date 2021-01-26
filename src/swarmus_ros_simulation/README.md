@@ -13,7 +13,7 @@ The source code is released under a [MIT License](SwarmUS-ROS/LICENSE).
 **Author: SwarmUS<br />
 Maintainer: SwarmUS, swarmus@usherbrooke.ca**
 
-The swarmus_ros_simulation package has been tested under [ROS] melodic on Noetic on 20.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
+The swarmus_ros_simulation package has been tested under [ROS] melodic on 18.04 and Noetic on 20.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
 
 ## Installation
@@ -59,7 +59,7 @@ Then to visualize and control the pioneer_0, run
 
 ## Launch files
 
-* **multirobot_empty.launch:** Defines all the necessary argument to start a Gazebo in a empty world, calls an instance of Gazebo world, defines the parameters to instance multiple robot, calls a pioneer_spawner for each robot, starts the publishing of the TFs relative to the world frame and starts the communication broker to make robots talk to each other.
+* **multirobot_empty.launch:** Defines all the necessary argument to start a Gazebo in an empty world, calls an instance of Gazebo world, defines the parameters to instance multiple robot, calls a pioneer_spawner for each robot, starts the publishing of the TFs relative to the world frame and starts the communication broker to make robots talk to each other.
 
      Gazebo arguments
 

@@ -78,7 +78,7 @@ To start the navigation stack of a specific pioneer, run this command:
      * The config of rviz can be found at swarmus_ros_navigation/rviz/pioneer_0_config.rviz
 ## Nodes
 
-### navigation
+### Navigation
 
 - Node that transform a x and y desired deplacement of the robot and translate it in move_base goal.
 

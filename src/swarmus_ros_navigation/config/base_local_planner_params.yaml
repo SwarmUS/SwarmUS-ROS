@@ -38,7 +38,3 @@ TrajectoryPlannerROS:
 
   # Osciillation prevention parameters
   oscillation_reset_dist: 0.1
-
-#  dwa: true
-#  publish_cost_grid_pc: true
-#  global_frame_id: pioneer_0/odom

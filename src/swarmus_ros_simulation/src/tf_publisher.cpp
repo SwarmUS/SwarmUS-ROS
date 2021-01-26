@@ -11,15 +11,17 @@ tf::Transform getUnitTransform() {
 }
 
 void tfCallback(const gazebo_msgs::ModelStates& msg) {
-    static tf::TransformBroadcaster s_br;
+    static tf::TransformBroadcaster s_tfBroadcaster;
 
-    for (int i = 0; i < msg.name.size(); i++) {
+    std::vector<std::string>::const_iterator it;
+
+    for ( it = msg.name.begin(); it != msg.name.end(); ++it) {
         // Name of the child link: robot/odom
-        std::string buf(msg.name[i].c_str());
+        std::string buf(it->c_str());
         buf.append("/odom");
 
         // Send transform relative to "world"
-        s_br.sendTransform(
+        s_tfBroadcaster.sendTransform(
             tf::StampedTransform(getUnitTransform(), ros::Time::now(), "world", buf));
 
         // Sleep for one nanosecond

@@ -101,9 +101,3 @@ To start the navigation stack of a specific pioneer, run this command:
 
   Name of the robot that owns the node
 
-
-
-## Bugs & Feature Requests
-
-Please report bugs and request features using the [Issue Tracker](https://github.com/SwarmUS/SwarmUS-ROS/issues).
-

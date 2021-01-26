@@ -184,10 +184,3 @@ Act as a simulated network between robots. It knows every existing robot. Robots
 
   List of the name of all robots.
 
-
-
-
-## Bugs & Feature Requests
-
-Please report bugs and request features using the [Issue Tracker](https://github.com/SwarmUS/SwarmUS-ROS/issues).
-

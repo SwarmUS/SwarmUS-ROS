@@ -34,7 +34,7 @@ To build from source, clone the latest version from the root of this repository 
 	cd catkin_ws/src
 	git clone https://github.com/SwarmUS/SwarmUS-ROS.git
 	cd ../
-	rosdep install --from-paths . --ignore-src
+	rosdep install --from-paths . --ignore-src -r -y
 	catkin_make
 
 

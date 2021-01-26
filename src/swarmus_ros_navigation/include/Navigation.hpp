@@ -21,7 +21,7 @@ struct RosParameters {
 
 class Navigation {
   protected:
-    void getRosParameters();
+    void fetchRosParameters();
     RosParameters m_RosParameters;
 
     std::shared_ptr<ros::NodeHandle> m_NodeHandle;
@@ -29,12 +29,13 @@ class Navigation {
     ros::Publisher m_GoalPublisher;
     move_base_msgs::MoveBaseGoal m_CurrentGoal;
 
-    bool m_HasNewGoal;
+    bool m_hasNewGoal;
 
     void moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg);
 
   public:
     Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle);
+    ~Navigation();
 
     void execute();
 };

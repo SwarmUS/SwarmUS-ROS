@@ -17,7 +17,7 @@ void tfCallback(const gazebo_msgs::ModelStates& msg) {
 
     for ( it = msg.name.begin(); it != msg.name.end(); ++it) {
         // Name of the child link: robot/odom
-        std::string buf(it->c_str());
+        std::string buf(*it);
         buf.append("/odom");
 
         // Send transform relative to "world"

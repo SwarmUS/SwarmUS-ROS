@@ -22,7 +22,7 @@ struct RosParameters {
 class Navigation {
   protected:
     /**
-    * @brief Gets the robot_name ROS param and modify the clientDestination accordingly
+    * @brief Stores the robotName from the get robot_name ROS param and generates the clientDestination which is the name of the move_base topic
     **/
     void fetchRosParameters();
 

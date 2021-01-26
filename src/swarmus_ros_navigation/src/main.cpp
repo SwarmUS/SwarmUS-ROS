@@ -4,10 +4,10 @@
 int main(int argc, char** argv) {
     //  Initialize rosbuzz node
     ros::init(argc, argv, "navigation");
-    static ros::NodeHandle nodeHandle("~");
-
+    std::shared_ptr<ros::NodeHandle> nodeHandle(new ros::NodeHandle("~"));
+    
     // Initialize and start node execution
-    Navigation navigation(&nodeHandle);
+    Navigation navigation(nodeHandle);
     navigation.execute();
 
     return 0;

@@ -3,10 +3,10 @@
 #define RATE_HZ (10U)
 
 /*************************************************************************************************/
-Navigation::Navigation(ros::NodeHandle* p_NodeHandle) {
+Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) {
     m_NodeHandle = p_NodeHandle;
     getRosParameters();
-    std::string topic = "/" + m_RosParameters.robot_name + "/navigation/moveBy";
+    std::string topic = "/" + m_RosParameters.robotName + "/navigation/moveBy";
     ROS_INFO("Subscribing to: %s", topic.c_str());
     m_MoveBySubscriber =
         m_NodeHandle->subscribe(topic.c_str(), 1000, &Navigation::moveByCallback, this);
@@ -16,10 +16,10 @@ Navigation::Navigation(ros::NodeHandle* p_NodeHandle) {
 
 /*************************************************************************************************/
 void Navigation::getRosParameters() {
-    if (ros::param::get("~robot_name", m_RosParameters.robot_name)) {
+    if (ros::param::get("~robotName", m_RosParameters.robotName)) {
         m_RosParameters.clientDestination =
-            '/' + m_RosParameters.robot_name + "/move_base_simple/goal";
-        ROS_INFO("Robot name provided: %s", m_RosParameters.robot_name.c_str());
+            '/' + m_RosParameters.robotName + "/move_base_simple/goal";
+        ROS_INFO("Robot name provided: %s", m_RosParameters.robotName.c_str());
     } else {
         system("rosnode kill swarmus_ros_navigation_node"); // Node name defined launch file
     }
@@ -27,10 +27,10 @@ void Navigation::getRosParameters() {
 
 /*************************************************************************************************/
 void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg) {
-    ROS_INFO("New goal received for robot: %s", m_RosParameters.robot_name.c_str());
+    ROS_INFO("New goal received for robot: %s", m_RosParameters.robotName.c_str());
 
     m_CurrentGoal.target_pose.header.frame_id =
-        m_RosParameters.robot_name + "/base_footprint"; // relative position to bot
+        m_RosParameters.robotName + "/base_footprint"; // relative position to bot
 
     m_CurrentGoal.target_pose.header.stamp = ros::Time::now();
 

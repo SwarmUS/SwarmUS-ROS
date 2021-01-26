@@ -14,17 +14,17 @@
 #include <ros/ros.h>
 #include <swarmus_ros_navigation/MoveByMessage.h>
 
-struct RosParameters_t {
-    std::string robot_name;
+struct RosParameters {
+    std::string robotName;
     std::string clientDestination;
 };
 
 class Navigation {
   protected:
     void getRosParameters();
-    RosParameters_t m_RosParameters;
+    RosParameters m_RosParameters;
 
-    ros::NodeHandle* m_NodeHandle;
+    std::shared_ptr<ros::NodeHandle> m_NodeHandle;
     ros::Subscriber m_MoveBySubscriber;
     ros::Publisher m_GoalPublisher;
     move_base_msgs::MoveBaseGoal m_CurrentGoal;
@@ -34,7 +34,7 @@ class Navigation {
     void moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg);
 
   public:
-    Navigation(ros::NodeHandle* p_NodeHandle);
+    Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle);
 
     void execute();
 };

@@ -13,7 +13,7 @@ The source code is released under a [MIT License](SwarmUS-ROS/LICENSE).
 **Author: SwarmUS<br />
 Maintainer: SwarmUS, swarmus@usherbrooke.ca**
 
-The swarmus_ros_simulation package has been tested under [ROS] melodic on Ubuntu 14.04. and noetic on 20.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
+The swarmus_ros_simulation package has been tested under [ROS] melodic on 18.04 and Noetic on 20.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
 
 ## Installation
@@ -24,6 +24,8 @@ The swarmus_ros_simulation package has been tested under [ROS] melodic on Ubuntu
 
 - [Robot Operating System (ROS)](http://wiki.ros.org) (middleware for robotics),
 - [Gazebo](http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install) (physics simulator)
+- swarmus_ros_description
+- swarmus_ros_navigation
 
 #### Building
 
@@ -44,7 +46,7 @@ To start the basic multirobot simulation, run
 
 Then to visualize and control the pioneer_0, run
 
-    roslaunch swarmus_ros_simulation rviz_pioneer_0.launch 
+    roslaunch swarmus_ros_navigation rviz_pioneer_0.launch 
 
 ## Message files
 
@@ -57,7 +59,7 @@ Then to visualize and control the pioneer_0, run
 
 ## Launch files
 
-* **multirobot_empty.launch:** Defines all the necessary argument to start a Gazebo empty world, calls an instance of Gazebo world, defines the parameters to instance multiple robot, calls a pioneer_spawner for each robot, starts the publishing of the TFs relative to the world frame and starts the communication broker to make robots talk to each other.
+* **multirobot_empty.launch:** Defines all the necessary argument to start a Gazebo in an empty world, calls an instance of Gazebo world, defines the parameters to instance multiple robot, calls a pioneer_spawner for each robot, starts the publishing of the TFs relative to the world frame and starts the communication broker to make robots talk to each other.
 
      Gazebo arguments
 
@@ -73,9 +75,7 @@ Then to visualize and control the pioneer_0, run
 
      Robot instance arguments and params
      -  **`model`** Tells ROS where to find the .URDF model of the robot Default: `$(find swarmus_ros_description)/urdf/pioneer.urdf.xacr`.
-
-     - **`robot_0_name`**  Name of the first robot. Default: `pioneer_0`.
-     
+-  **`robot_0_name`**  Name of the first robot. Default: `pioneer_0`.
      - **`robot_1_name`**  Name of the first robot. Default: `pioneer_1`.
      **...**
      
@@ -83,156 +83,104 @@ Then to visualize and control the pioneer_0, run
 
 ## Nodes
 
-### Gazebo
+### tf_publisher
 
-Samll description of the node.
+- Sets the transform between the /world frame and the /odom frame of all robots to 0 (same place, same orientation). This is done in order to have a common tf tree between all robots.
 
 #### Subscribed Topics
 
-* **`/subscribed topic`** ([link/toMsg])
+* **`/gazebo/model_states`** (gazebo_msgs/ModelStates)
 
-	Add a small description
+	Gives the pose of all robots. The callback attached to this topic is the one that publishes the transforms between the world and the odom/ frames.
 
 
 #### Published Topics
 
-...
+- /**`tf`** (tf2_msgs/TFMessage)
+
+  The transform between the world and /odom frames of robots.
+
+  
+
+### interLocalization
+
+Measures the position of all the robots relatively to the owner of the node. Its purpose is to simulate what the Hiveboard will measure in real life.
+
+#### Subscribed Topics
+
+* **`/tf`** (tf2_msgs/TFMessage)
+
+	Contains the transforms of all frames between robot.
 
 
+#### Published Topics
+
+- **`/robot_name/interlocalization_grid`** (swarmus_ros_simulation/InterLocalization_grid)
+
+  List of the relative position and orientation between all robot and the owner of the node (a simulated robot)
+
+- **`/robot_name/PolygonStamped`** (geometry_msgs/PolygonStamped)
+
+  Geometric lines that start from the owner of the node to all robots. This is used in Rviz to visualize the relative position of other robots.
 
 #### Parameters
 
-* **`param1`** (string, default: "/param1_value")
+* **`/robot_list`** (list of strings)
 
-	Description of the param
+	List of the name of all robots.
 
+- **`~/robot_name`**(string, default:"pioneer_0")
+
+  Name of the robot that owns the node
+
+  
+
+### interCommunication
+
+Node owned by a simulated robot that talks with a **communicationBroker** node. This node serves as an simulated interface between a robot and the network of robot. Its messages are destined to other robots or the entire network (broadcast) and it handles incoming message.
+
+#### Subscribed Topics
+
+* **`/CommunicationBroker/robot_name`** (std_msgs/String])
+
+	Strings received from the broker.
+
+
+#### Published Topics
+
+- **`/robot_name/communication`** (swarmus_ros_simulation/Communication)
+
+  Strings sent to the broker. Contains the destination robot, the source robot and the message itself. To broadcast, use "allRobots" as the destination or "allRobotsExceptSelf".
+
+#### Parameters
+
+* **`~/robot_name`**(string, default:"pioneer_0")
+
+	Name of the robot that owns the node
+	
+	
 
 ### communicationBroker
 
-Samll description of the node.
+Act as a simulated network between robots. It knows every existing robot. Robots communicate to this node where their message is redirected towards the desired robot. Can be used to simulate real-life constraints on the communication network.
 
 
 #### Subscribed Topics
 
-* **`/subscribed topic`** ([link/toMsg])
+* **`/robot_name/communication`** (swarmus_ros_simulation/Communication)
 
-	Add a small description
-
-
-#### Published Topics
-
-...
-
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
-
-
-
-### tf_publisher
-
-Samll description of the node.
-
-#### Subscribed Topics
-
-* **`/subscribed topic`** ([link/toMsg])
-
-	Add a small description
+  Exist for each simulated robots.  Contains the destination robot, the source robot and the message itself. To broadcast, use "allRobots" as the destination or "allRobotsExceptSelf".
 
 
 #### Published Topics
 
-...
+- **`/CommunicationBroker/robot_name`**   (std_msgs/String])
 
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
-
-### robot_name/interloc
-
-Samll description of the node.
-
-#### Subscribed Topics
-
-* **`/subscribed topic`** ([link/toMsg])
-
-	Add a small description
-
-
-#### Published Topics
-
-...
-
-
+  Exist for each simulated robots. Message to send to a robot.
 
 #### Parameters
 
-* **`param1`** (string, default: "/param1_value")
+* **`/robot_list`** (list of strings)
 
-	Description of the param
+  List of the name of all robots.
 
-### robot_name/interCommunication
-
-Samll description of the node.
-
-#### Subscribed Topics
-
-* **`/subscribed topic`** ([link/toMsg])
-
-	Add a small description
-
-
-#### Published Topics
-
-...
-
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
-
-### robot_name/robot_state_publisher
-
-Samll description of the node.
-
-#### Subscribed Topics
-
-* **`/subscribed topic`** ([link/toMsg])
-
-	Add a small description
-
-
-#### Published Topics
-
-...
-
-
-
-#### Parameters
-
-* **`param1`** (string, default: "/param1_value")
-
-	Description of the param
-
-
-## Bugs & Feature Requests
-
-Please report bugs and request features using the [Issue Tracker](https://github.com/ethz-asl/ros_best_practices/issues).
-
-
-[ROS]: http://www.ros.org
-[rviz]: http://wiki.ros.org/rviz
-[Eigen]: http://eigen.tuxfamily.org
-[std_srvs/Trigger]: http://docs.ros.org/api/std_srvs/html/srv/Trigger.html
-[sensor_msgs/Temperature]: http://docs.ros.org/api/sensor_msgs/html/msg/Temperature.html

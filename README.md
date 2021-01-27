@@ -28,6 +28,7 @@ SwarmUS-ROS
 │   ├── swarmus_example_pkg
 │   ├── swarmus_pioneer
 │   ├── swarmus_ros_description
+|   ├── swarmus_ros_navigation
 │   └── swarmus_ros_simulation
 └── tools
     ├── check_format.py
@@ -89,7 +90,16 @@ As of now, there are some launch files located in the package `swarmus_ros_simul
 roslaunch swarmus_ros_simulation multirobot_empty.launch
 ```
 
+When the simulation is launched, you can control and visualize the data of the sensors of the pioneer_0 by running this command:
+
+```
+roslaunch swarmus_ros_navigation rviz_pioneer_0.launch
+```
+
+In Rviz, you can control directly the robot with the Teleop pannel in the bottom left corner or by using the *2D Nav Goal* command.
+
 ## Tools
+
 This repository contains a `tools` folder with some python scripts that help accomplish a few tasks, mainly the generation of the documentation and some linting. Please refer to the scripts for some extended documentation.
 
 ## Documentation

@@ -11,9 +11,7 @@ InterCommunication::InterCommunication() {
                                           &InterCommunication::communicationCallback, this);
 }
 
-void InterCommunication::publish(const swarmus_ros_simulation::Communication& msg)
-
-{
+void InterCommunication::publish(const swarmus_ros_simulation::Communication& msg) {
     m_publisher.publish(msg);
 }
 

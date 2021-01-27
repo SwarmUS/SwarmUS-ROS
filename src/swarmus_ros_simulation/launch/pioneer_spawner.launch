@@ -30,5 +30,15 @@
         <node pkg="swarmus_ros_simulation" type="interCommunication" name="interCommunication" output="screen">
             <param name="robot_name" type="string" value="$(arg robot_name)" />
         </node>
+
+        <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_name)" />
+        </node>
+
+        <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
+            <arg name="robot_name"    default="$(arg robot_name)"/>
+            <arg name="cmd_vel_topic" default="cmd_vel"/>
+            <arg name="odom_topic"    default="odom"/>
+        </include>
     </group>
 </launch>

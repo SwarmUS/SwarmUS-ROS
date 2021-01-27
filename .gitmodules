@@ -1,3 +1,15 @@
 [submodule "contrib/HiveMind"]
 	path = contrib/HiveMind
 	url = https://github.com/SwarmUS/HiveMind.git
+[submodule "contrib/rplidar"]
+	path = contrib/rplidar
+	url = https://github.com/Slamtec/rplidar_ros
+	tag = 1.7.0
+[submodule "contrib/realsense"]
+	path = contrib/realsense
+	url = https://github.com/IntelRealSense/realsense-ros
+	tag = 2.2.21
+[submodule "contrib/roboclaw"]
+	path = contrib/roboclaw
+	url = https://github.com/SwarmUS/roboclaw
+	branch = master

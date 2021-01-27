@@ -14,11 +14,19 @@ SwarmUS-ROS contains all the ROS packages developed for the SwarmUS project. It 
 SwarmUS-ROS
 ├── contrib
 │   └── HiveMind
+│   └── mpu6050
+│   └── realsense
+│   └── roboclaw
+│   └── rplidar
 ├── lgtm.yml
 ├── LICENSE
 ├── README.md
+├── scripts
+│    ├── install_dependencies.sh
 ├── src
+│   ├── hiveboard_bridge
 │   ├── swarmus_example_pkg
+│   ├── swarmus_pioneer
 │   ├── swarmus_ros_description
 |   ├── swarmus_ros_navigation
 │   └── swarmus_ros_simulation
@@ -55,22 +63,18 @@ The [HiveMind repository](https://github.com/SwarmUS/HiveMind) is included as a 
 
 ## Building
 
-Assuming you have a working ROS + Gazebo setup on you system, you need only clone this repository in your Catkin workspace, initialise the git submodules, and build it. 
+Assuming you have a working ROS + Gazebo setup on you system, you need only clone this repository in your Catkin workspace, initialise the git submodules, and build it. You will also need to use [rosdep](http://wiki.ros.org/rosdep) to manage some external package dependencies. Refer to the following instruction for building:
 
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/SwarmUS/SwarmUS-ROS.git
 cd SwarmUS-ROS
 git submodule update --init --recursive
+sh scripts/install dependencies.sh
+rosdep install --from-paths src --ignore-src -r -y
 cd ~/catkin_ws && catkin_cmake
 ```
-
-You might need to use [rosdep](http://wiki.ros.org/rosdep) to manage some external package dependencies. The following command installs the dependencies for all the packages of a given workspace :
-
-```
-rosdep install --from-paths src --ignore-src -r -y
-```
-
+NOTE: the `install dependencies.sh` script will only works on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
 ## Running unit tests
 
 Unit tests are run via Catkin :
@@ -102,4 +106,4 @@ This repository contains a `tools` folder with some python scripts that help acc
 An up to date version of the documentation can be found [here](https://swarmus.github.io/SwarmUS-ROS/index.html)
 
 ## Static analysis
-The packages in this repository are analysez with [Haros](https://github.com/git-afsantos/haros/tree/master/haros). The results are published (here)[https://swarmus.github.io/SwarmUS-ROS-Haros-viz/#dashboard].
+The packages in this repository are analysed with [Haros](https://github.com/git-afsantos/haros/tree/master/haros). The results are published (here)[https://swarmus.github.io/SwarmUS-ROS-Haros-viz/#dashboard].

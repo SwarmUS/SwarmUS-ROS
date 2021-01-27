@@ -4,7 +4,7 @@ static const uint32_t QUEUE_SIZE{1000};
 
 /*************************************************************************************************/
 Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) {
-    if (p_NodeHandle){
+    if (p_NodeHandle) {
         m_NodeHandle = p_NodeHandle;
         fetchRosParameters();
         std::string topic = "/" + m_RosParameters.robotName + "/navigation/moveBy";
@@ -16,9 +16,7 @@ Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) {
     }
 }
 
-Navigation::~Navigation() {
-    return;
-}
+Navigation::~Navigation() { return; }
 
 /*************************************************************************************************/
 void Navigation::fetchRosParameters() {

@@ -223,16 +223,16 @@ include_directories(
 
 add_executable(interLocalization src/interLocalization.cpp)
 target_link_libraries(interLocalization ${catkin_LIBRARIES})
-add_dependencies(interLocalization ${catkin_EXPORTED_TARGETS})
+add_dependencies(interLocalization ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(tf_publisher src/tf_publisher.cpp)
 target_link_libraries(tf_publisher ${catkin_LIBRARIES})
-add_dependencies(tf_publisher ${catkin_EXPORTED_TARGETS})
+add_dependencies(tf_publisher ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(interCommunication src/interCommunication.cpp)
 target_link_libraries(interCommunication ${catkin_LIBRARIES})
-add_dependencies(interCommunication ${catkin_EXPORTED_TARGETS})
+add_dependencies(interCommunication ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(communicationBroker src/communicationBroker.cpp)
 target_link_libraries(communicationBroker ${catkin_LIBRARIES})
-add_dependencies(communicationBroker ${catkin_EXPORTED_TARGETS})
+add_dependencies(communicationBroker ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})

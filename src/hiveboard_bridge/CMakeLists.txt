@@ -16,7 +16,9 @@ catkin_package(
 set(HIVEBOARD_BRIDGE_SOURCES
         src/main.cpp
         src/TCPServer.cpp
-        src/TCPServerMonitor.cpp)
+        src/TCPServerMonitor.cpp
+        src/StreamListener.cpp
+        src/MessageHandler.cpp)
 
 add_executable(hiveboard_bridge ${HIVEBOARD_BRIDGE_SOURCES})
 add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})

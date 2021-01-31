@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(hiveboard_bridge)
+set (CMAKE_CXX_STANDARD 17)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -13,6 +14,12 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+
+include_directories(
+        include
+        ${catkin_INCLUDE_DIRS}
+)
+
 set(HIVEBOARD_BRIDGE_SOURCES
         src/main.cpp
         src/TCPServer.cpp
@@ -22,7 +29,9 @@ set(HIVEBOARD_BRIDGE_SOURCES
 
 add_executable(hiveboard_bridge ${HIVEBOARD_BRIDGE_SOURCES})
 add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})
-target_link_libraries(hiveboard_bridge ${catkin_LIBRARIES})
+target_link_libraries(hiveboard_bridge
+        ${catkin_LIBRARIES}
+        )
 
 target_include_directories(hiveboard_bridge
         PUBLIC include
@@ -33,8 +42,13 @@ target_include_directories(hiveboard_bridge
 ## Testing ##
 #############
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_hiveboard_bridge.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+catkin_add_gtest(MessageHandlerUnitTest
+        test/MessageHandlerUnitTest.cpp
+        src/MessageHandler.cpp)
+
+if(TARGET MessageHandlerUnitTest)
+    target_link_libraries(MessageHandlerUnitTest
+            ${catkin_LIBRARIES}
+            gmock_main
+            )
+endif()

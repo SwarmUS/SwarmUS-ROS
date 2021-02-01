@@ -11,7 +11,6 @@ protected:
         int a = 0;
     };
 
-
     void SetUp() override {
         m_messageHandler.registerCallback("Test", m_testFunction);
     }

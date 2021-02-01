@@ -11,6 +11,9 @@ catkin_package(
   INCLUDE_DIRS include
 )
 
+include(cmake/propolis.cmake)
+propolis_fetch_populate()
+
 ###########
 ## Build ##
 ###########
@@ -31,6 +34,7 @@ add_executable(hiveboard_bridge ${HIVEBOARD_BRIDGE_SOURCES})
 add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})
 target_link_libraries(hiveboard_bridge
         ${catkin_LIBRARIES}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
         )
 
 target_include_directories(hiveboard_bridge

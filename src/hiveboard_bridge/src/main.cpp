@@ -8,6 +8,7 @@
 #include <mutex>
 #include <functional>
 #include <chrono> // TODO remove this
+#include <hivemind-host/FunctionCallArgumentDTO.h>
 
 #define DEFAULT_TCP_SERVER_PORT 8080
 

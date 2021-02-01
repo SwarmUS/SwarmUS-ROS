@@ -6,12 +6,12 @@
 #include <optional>
 #include <mutex>
 #include <functional>
-#include <chrono> // TODO remove this
 #include "TCPServer.h" // Todo replace this with pheromones?
 #include "MessageHandler.h"
 
 class StreamListener {
 public:
+
     StreamListener(int port, MessageHandler messageHandler);
     ~StreamListener();
 

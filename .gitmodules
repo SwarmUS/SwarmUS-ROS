@@ -13,3 +13,6 @@
 	path = contrib/roboclaw
 	url = https://github.com/SwarmUS/roboclaw
 	branch = master
+[submodule "contrib/propolis"]
+	path = contrib/propolis
+	url = https://github.com/SwarmUS/Propolis.git

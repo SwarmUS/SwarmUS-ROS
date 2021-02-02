@@ -2,20 +2,23 @@
 #define CATKIN_ROS_MESSAGEHANDLER_H
 
 #include <functional>
-#include <unordered_map>
-#include <optional>
-#include <ros/ros.h>
-#include <variant>
+#include <hivemind-host/FunctionCallArgumentDTO.h>
+#include <hivemind-host/FunctionCallRequestDTO.h>
+#include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
-#include <hivemind-host/FunctionCallRequestDTO.h>
-#include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallResponseDTO.h>
+#include <optional>
+#include <ros/ros.h>
+#include <unordered_map>
+#include <variant>
 
-typedef std::unordered_map<std::string, std::function<void()>> CallbackMap;
+typedef std::array<FunctionCallArgumentDTO,
+                   FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
+    callbackArgs;
+typedef std::unordered_map<std::string, std::function<void(callbackArgs)>> CallbackMap;
 
 class MessageHandler {
-public:
+  public:
     MessageHandler();
     ~MessageHandler();
 
@@ -31,18 +34,17 @@ public:
      * @param name Key of the callback
      * @param callback Callback function
      */
-    void registerCallback(std::string name, std::function<void()> callback);
+    void registerCallback(std::string name, std::function<void(callbackArgs)> callback);
 
     /**
      * Get an instance of a callback, if it exists.
      * @param name Key under which the callback was registered
      * @return The callback function if it exists.
      */
-    std::optional<std::function<void()>> getCallback(std::string name);
+    std::optional<std::function<void(callbackArgs)>> getCallback(std::string name);
 
-private:
+  private:
     CallbackMap m_callbacks;
 };
 
-
-#endif //CATKIN_ROS_MESSAGEHANDLER_H
+#endif // CATKIN_ROS_MESSAGEHANDLER_H

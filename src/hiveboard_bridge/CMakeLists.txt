@@ -46,13 +46,14 @@ target_include_directories(hiveboard_bridge
 ## Testing ##
 #############
 
-catkin_add_gtest(MessageHandlerUnitTest
+add_executable(MessageHandlerUnitTest
         test/MessageHandlerUnitTest.cpp
         src/MessageHandler.cpp)
 
-if(TARGET MessageHandlerUnitTest)
-    target_link_libraries(MessageHandlerUnitTest
-            ${catkin_LIBRARIES}
-            gmock_main
-            )
-endif()
+add_test(NAME MessageHandlerUnitTest COMMAND MessageHandlerUnitTest)
+
+target_link_libraries(MessageHandlerUnitTest
+        ${catkin_LIBRARIES}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        gmock_main
+        )

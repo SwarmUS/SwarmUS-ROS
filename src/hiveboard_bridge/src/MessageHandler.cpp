@@ -4,18 +4,29 @@ MessageHandler::MessageHandler() { }
 
 MessageHandler::~MessageHandler() { }
 
-bool MessageHandler::handleMessage(std::string message) {
-    // todo Parse the message
+bool MessageHandler::handleMessage(MessageDTO message) {
+    // todo Interpret the message
+    const std::variant<std::monostate, RequestDTO>& request = message.getMessage();
 
-    auto callback = getCallback(message);
+    if (std::holds_alternative<RequestDTO>(request)) {
+        std::variant<std::monostate, FunctionCallRequestDTO> functionCallRequest = std::get<RequestDTO>(request).getRequest();
 
-    // Call the right callback
-    if (callback) {
-        callback.value();
-        return true;
+        if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {
+            ROS_INFO("Function name: %s", std::get<FunctionCallRequestDTO>(functionCallRequest).getFunctionName());
+            return true;
+        }
     }
+     return false;
 
-    return false;
+//    auto callback = getCallback(message);
+//
+//    // Call the right callback
+//    if (callback) {
+//        callback.value();
+//        return true;
+//    }
+//
+//    return false;
 }
 
 void MessageHandler::registerCallback(std::string name, std::function<void()> callback) {

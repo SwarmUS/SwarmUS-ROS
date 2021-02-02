@@ -32,6 +32,6 @@ void StreamListener::receiveThread() {
         ROS_INFO("Received from thread: %s", buf);
         buf[5] = '\0';
         std::string str(buf);
-        m_messageHandler.handleMessage(str);
+//        m_messageHandler.handleMessage(str);
     }
 }

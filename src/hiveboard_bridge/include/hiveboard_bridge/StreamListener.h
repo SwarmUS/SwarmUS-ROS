@@ -8,6 +8,7 @@
 #include <functional>
 #include "TCPServer.h" // Todo replace this with pheromones?
 #include "MessageHandler.h"
+#include <hivemind-host/MessageDTO.h>
 
 class StreamListener {
 public:

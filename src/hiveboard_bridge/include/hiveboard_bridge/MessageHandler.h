@@ -5,6 +5,12 @@
 #include <unordered_map>
 #include <optional>
 #include <ros/ros.h>
+#include <variant>
+#include <hivemind-host/MessageDTO.h>
+#include <hivemind-host/RequestDTO.h>
+#include <hivemind-host/FunctionCallRequestDTO.h>
+#include <hivemind-host/FunctionCallArgumentDTO.h>
+#include <hivemind-host/FunctionCallResponseDTO.h>
 
 typedef std::unordered_map<std::string, std::function<void()>> CallbackMap;
 
@@ -18,7 +24,7 @@ public:
      * @param message the message to parse.
      * @return True if the appropriate callback was found and executed, false otherwise
      */
-    bool handleMessage(std::string message); // todo change this for a real message type
+    bool handleMessage(MessageDTO message);
 
     /**
      * Register a callback

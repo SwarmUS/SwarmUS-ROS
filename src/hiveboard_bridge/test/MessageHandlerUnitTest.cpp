@@ -1,8 +1,11 @@
 #include "hiveboard_bridge/MessageHandler.h"
-//#include <gtest/gtest.h>
+
 #include <gmock/gmock.h>
 #include <functional>
 #include <optional>
+#include <hivemind-host/MessageDTO.h>
+#include <hivemind-host/RequestDTO.h>
+#include <hivemind-host/FunctionCallRequestDTO.h>
 
 class MessageHandlerFixture : public testing::Test {
 protected:
@@ -11,8 +14,14 @@ protected:
         int a = 0;
     };
 
+
+
     void SetUp() override {
         m_messageHandler.registerCallback("Test", m_testFunction);
+
+        FunctionCallRequestDTO functionCallRequestDto("TestFunctionCallRequestDTO", nullptr, 0);
+        RequestDTO requestDto(1, functionCallRequestDto);
+        MessageDTO m_messageDto(1, 2, functionCallRequestDto);
     }
 
     void TearDown() override {}

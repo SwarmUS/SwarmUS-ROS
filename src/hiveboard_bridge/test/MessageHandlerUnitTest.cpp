@@ -28,8 +28,8 @@ class MessageHandlerFixture : public testing::Test {
     // Declare some test messages
     FunctionCallRequestDTO* m_functionCallRequestDto;
     RequestDTO* m_requestDto;
-
     MessageDTO* m_messageDto;
+
     FunctionCallRequestDTO* m_nonExistingFunctionCallRequestDto;
     RequestDTO* m_nonExistingRequestDto;
     MessageDTO* m_nonExistingMessageDto;

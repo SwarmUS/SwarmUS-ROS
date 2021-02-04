@@ -13,13 +13,13 @@
 #include <variant>
 
 typedef std::array<FunctionCallArgumentDTO,
-FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
-        CallbackArgs;
+                   FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
+    CallbackArgs;
 typedef std::function<void(CallbackArgs)> CallbackFunction;
 typedef std::unordered_map<std::string, CallbackFunction> CallbackMap;
 
 class IMessageHandler {
-public:
+  public:
     virtual ~IMessageHandler() = default;
 
     /**
@@ -44,4 +44,4 @@ public:
     virtual std::optional<CallbackFunction> getCallback(std::string name) = 0;
 };
 
-#endif //HIVEBOARD_BRIDGE_IMESSAGEHANDLER_H
+#endif // HIVEBOARD_BRIDGE_IMESSAGEHANDLER_H

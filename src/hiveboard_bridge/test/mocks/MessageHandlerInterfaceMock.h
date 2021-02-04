@@ -2,14 +2,18 @@
 #define HIVEBOARD_BRIDGE_MESSAGEHANDLERINTERFACEMOCK_H
 
 #include "hiveboard_bridge/IMessageHandler.h"
-#include <hivemind-host/MessageDTO.h>
 #include <gmock/gmock.h>
+#include <hivemind-host/MessageDTO.h>
 
 class MessageHandlerInterfaceMock : public IMessageHandler {
-public:
+  public:
     ~MessageHandlerInterfaceMock() = default;
 
     MOCK_METHOD(bool, handleMessage, (MessageDTO message), (override));
+
+    MOCK_METHOD(void, registerCallback, (std::string name, CallbackFunction callback), (override));
+
+    MOCK_METHOD(std::optional<CallbackFunction>, getCallback, (std::string name), (override));
 };
 
-#endif //HIVEBOARD_BRIDGE_MESSAGEHANDLERINTERFACEMOCK_H
+#endif // HIVEBOARD_BRIDGE_MESSAGEHANDLERINTERFACEMOCK_H

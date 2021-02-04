@@ -49,7 +49,6 @@ void TCPServer::listen() {
 
 bool TCPServer::receive(uint8_t* data, uint16_t length) {
     int nbBytesReceived = ::recv(m_clientFd, data, length, MSG_WAITALL);
-    ROS_INFO("RECIEVED : %s", (char*)data);
 
     if (nbBytesReceived == 0) { // Client disconnected
         ROS_WARN("TCP client disconnected");

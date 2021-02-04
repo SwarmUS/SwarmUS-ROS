@@ -7,9 +7,9 @@
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
+#include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
-#include <hivemind-host/HiveMindHostDeserializer.h>
 #include <mutex>
 #include <optional>
 #include <thread>
@@ -39,10 +39,11 @@ int main(int argc, char** argv) {
     ROS_INFO("Client connected.");
 
     HiveMindHostDeserializer deserializer(tcpServer);
-
     MessageHandler messageHandler;
 
-    StreamListener(deserializer, messageHandler);
+    ReceiveThreadAction receiveThreadAction(deserializer, messageHandler);
+
+    StreamListener streamListener(receiveThreadAction);
 
     ros::spin();
     return 0;

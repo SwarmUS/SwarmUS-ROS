@@ -28,7 +28,8 @@ set(HIVEBOARD_BRIDGE_SOURCES
         src/TCPServer.cpp
         src/TCPServerMonitor.cpp
         src/StreamListener.cpp
-        src/MessageHandler.cpp)
+        src/MessageHandler.cpp
+        src/ReceiveThreadAction.cpp)
 
 add_executable(hiveboard_bridge ${HIVEBOARD_BRIDGE_SOURCES})
 add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})
@@ -60,13 +61,13 @@ target_link_libraries(MessageHandlerUnitTest
         )
 
 # StreamListenerUnitTest
-add_executable(StreamListenerUnitTest
-        test/StreamListenerUnitTest.cpp
-        src/StreamListener.cpp)
+add_executable(ReceiveThreadActionUnitTest
+        test/ReceiveThreadActionUnitTest.cpp
+        src/ReceiveThreadAction.cpp)
 
-add_test(NAME StreamListenerUnitTest COMMAND StreamListenerUnitTest)
+add_test(NAME ReceiveThreadActionUnitTest COMMAND ReceiveThreadActionUnitTest)
 
-target_link_libraries(StreamListenerUnitTest
+target_link_libraries(ReceiveThreadActionUnitTest
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
         gmock_main

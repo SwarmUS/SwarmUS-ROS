@@ -14,7 +14,7 @@ bool MessageHandler::handleMessage(MessageDTO message) {
         if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {
             FunctionCallRequestDTO function = std::get<FunctionCallRequestDTO>(functionCallRequest);
             std::string functionName = function.getFunctionName();
-            callbackArgs functionArgs = function.getArguments();
+            CallbackArgs functionArgs = function.getArguments();
             uint16_t argsLength = function.getArgumentsLength();
 
             auto callback = getCallback(functionName);
@@ -33,11 +33,11 @@ bool MessageHandler::handleMessage(MessageDTO message) {
 }
 
 void MessageHandler::registerCallback(std::string name,
-                                      std::function<void(callbackArgs)> callback) {
+                                      CallbackFunction callback) {
     m_callbacks[name] = callback;
 }
 
-std::optional<std::function<void(callbackArgs)>> MessageHandler::getCallback(std::string name) {
+std::optional<CallbackFunction> MessageHandler::getCallback(std::string name) {
     auto callback = m_callbacks.find(name);
     if (callback != m_callbacks.end()) {
         return callback->second;

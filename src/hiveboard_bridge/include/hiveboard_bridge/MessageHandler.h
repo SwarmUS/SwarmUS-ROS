@@ -14,8 +14,9 @@
 
 typedef std::array<FunctionCallArgumentDTO,
                    FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
-    callbackArgs;
-typedef std::unordered_map<std::string, std::function<void(callbackArgs)>> CallbackMap;
+    CallbackArgs;
+typedef std::function<void(CallbackArgs)> CallbackFunction;
+typedef std::unordered_map<std::string, CallbackFunction> CallbackMap;
 
 class MessageHandler {
   public:
@@ -34,14 +35,14 @@ class MessageHandler {
      * @param name Key of the callback
      * @param callback Callback function
      */
-    void registerCallback(std::string name, std::function<void(callbackArgs)> callback);
+    void registerCallback(std::string name, CallbackFunction callback);
 
     /**
      * Get an instance of a callback, if it exists.
      * @param name Key under which the callback was registered
      * @return The callback function if it exists.
      */
-    std::optional<std::function<void(callbackArgs)>> getCallback(std::string name);
+    std::optional<CallbackFunction> getCallback(std::string name);
 
   private:
     CallbackMap m_callbacks;

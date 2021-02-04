@@ -4,6 +4,7 @@
 #include "ITCPServerMonitor.h"
 #include "TCPServerMonitor.h"
 #include "ros/ros.h"
+#include <common/IProtobufStream.h>
 #include <cstdint>
 #include <cstring>
 #include <memory>
@@ -12,9 +13,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define TCP_BUFFER_LENGTH UINT16_MAX
-
-class TCPServer {
+class TCPServer : public IProtobufStream {
   public:
     /**
      * Construct a TCPServer
@@ -33,17 +32,16 @@ class TCPServer {
      * Read data from socket.
      * @param buff The buffer on which the incoming data will be written.
      * @param length The length of the provided buffer.
-     * @param blocking Whether the call should block until some data is available.
      * @return The length of the data read.
      */
-    int read(char* buff, const uint16_t length, bool blocking);
+    bool receive(uint8_t* data, uint16_t length) override;
 
     /**
      * Send some data to the client.
      * @param buff The buffer containing the data to send.
      * @param length The length of the data on the buffer.
      */
-    void send(char* buff, const uint16_t length);
+    bool send(const uint8_t* data, uint16_t length) override;
 
     /**
      * Terminate a client connection.
@@ -54,7 +52,6 @@ class TCPServer {
     int m_serverFd, m_clientFd, m_port;
     int m_addressLength;
     struct sockaddr_in m_address;
-    char m_buffer[TCP_BUFFER_LENGTH];
     TCPServerMonitor m_monitor;
 
     /**

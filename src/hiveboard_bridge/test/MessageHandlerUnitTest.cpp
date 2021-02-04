@@ -14,7 +14,7 @@ int g_testValue1 = 0;
 int g_testValue2 = 12;
 
 class MessageHandlerFixture : public testing::Test {
-protected:
+  protected:
     // Declare some test callbacks
     CallbackFunction m_testFunction = [](CallbackArgs args) { g_testFunctionCalled = true; };
 
@@ -33,7 +33,7 @@ protected:
     FunctionCallRequestDTO* m_nonExistingFunctionCallRequestDto;
     RequestDTO* m_nonExistingRequestDto;
     MessageDTO* m_nonExistingMessageDto;
-    
+
     FunctionCallArgumentDTO* m_sideEffectArg1;
     FunctionCallArgumentDTO* m_sideEffectArg2;
     FunctionCallRequestDTO* m_sideEffectFunctionCallRequestDto;

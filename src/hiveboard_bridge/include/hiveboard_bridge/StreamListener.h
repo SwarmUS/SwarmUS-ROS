@@ -1,26 +1,27 @@
 #ifndef CATKIN_ROS_STREAMLISTENER_H
 #define CATKIN_ROS_STREAMLISTENER_H
 
-#include "MessageHandler.h"
-#include "TCPServer.h" // Todo replace this with pheromones?
-#include "ros/ros.h"
 #include <functional>
-#include <hivemind-host/MessageDTO.h>
-#include <mutex>
 #include <optional>
 #include <thread>
+#include "ros/ros.h"
+#include "IMessageHandler.h"
+#include <common/IProtobufStream.h>
+#include <hivemind-host/IHiveMindHostDeserializer.h>
+#include <hivemind-host/MessageDTO.h>
 
 class StreamListener {
   public:
-    StreamListener(int port, MessageHandler messageHandler);
+    StreamListener(IHiveMindHostDeserializer& deserializer, IMessageHandler& messageHandler);
     ~StreamListener();
 
-  private:
-    TCPServer m_socket; // This will be replaced.
+protected:
+    IHiveMindHostDeserializer& m_deserializer;
+    IMessageHandler& m_messageHandler;
     std::thread m_rcvThread;
-    MessageHandler m_messageHandler;
 
     void receiveThread();
+    void receiveThreadAction();
 };
 
 #endif // CATKIN_ROS_STREAMLISTENER_H

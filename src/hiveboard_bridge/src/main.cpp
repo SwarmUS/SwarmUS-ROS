@@ -9,6 +9,7 @@
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
+#include <hivemind-host/HiveMindHostDeserializer.h>
 #include <mutex>
 #include <optional>
 #include <thread>
@@ -30,34 +31,18 @@ int getTcpServerPort() {
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
 
-    //    int port = getTcpServerPort();
+    int port = getTcpServerPort();
+    TCPServer tcpServer(port);
+
+    ROS_INFO("Listening for incoming clients...");
+    tcpServer.listen();
+    ROS_INFO("Client connected.");
+
+    HiveMindHostDeserializer deserializer(tcpServer);
 
     MessageHandler messageHandler;
-    //    std::string functionNameStr = "TestFunctionCallRequestDTO";
-    //    std::function<void(std::array<FunctionCallArgumentDTO,
-    //    FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>)> testFunction = []() {
-    //        ROS_INFO("Test printing from a function pointer");
-    //    };
-    //    messageHandler.registerCallback(functionNameStr, testFunction);
 
-    FunctionCallRequestDTO functionCallRequestDto("TestFunctionCallRequestDTO", nullptr, 0);
-    RequestDTO requestDto(1, functionCallRequestDto);
-    MessageDTO m_messageDto(1, 2, requestDto);
-
-    //    const std::variant<std::monostate, RequestDTO>& request = m_messageDto.getMessage();
-    //    if (std::holds_alternative<RequestDTO>(request)) {
-    //        std::variant<std::monostate, FunctionCallRequestDTO> functionCallRequest =
-    //        std::get<RequestDTO>(request).getRequest();
-    //
-    //        if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {
-    //    ROS_INFO("Function name (main): %s",
-    //    std::get<FunctionCallRequestDTO>(functionCallRequestDto).getFunctionName());
-    //        }
-    //    }
-
-    messageHandler.handleMessage(m_messageDto);
-
-    //    StreamListener streamListener(port, messageHandler);
+    StreamListener(deserializer, messageHandler);
 
     ros::spin();
     return 0;

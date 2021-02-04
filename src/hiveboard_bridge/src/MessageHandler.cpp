@@ -32,8 +32,7 @@ bool MessageHandler::handleMessage(MessageDTO message) {
     return false;
 }
 
-void MessageHandler::registerCallback(std::string name,
-                                      CallbackFunction callback) {
+void MessageHandler::registerCallback(std::string name, CallbackFunction callback) {
     m_callbacks[name] = callback;
 }
 

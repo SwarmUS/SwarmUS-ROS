@@ -46,6 +46,7 @@ target_include_directories(hiveboard_bridge
 ## Testing ##
 #############
 
+# MessageHandlerUnitTest
 add_executable(MessageHandlerUnitTest
         test/MessageHandlerUnitTest.cpp
         src/MessageHandler.cpp)
@@ -53,6 +54,19 @@ add_executable(MessageHandlerUnitTest
 add_test(NAME MessageHandlerUnitTest COMMAND MessageHandlerUnitTest)
 
 target_link_libraries(MessageHandlerUnitTest
+        ${catkin_LIBRARIES}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        gmock_main
+        )
+
+# StreamListenerUnitTest
+add_executable(StreamListenerUnitTest
+        test/StreamListenerUnitTest.cpp
+        src/StreamListener.cpp)
+
+add_test(NAME StreamListenerUnitTest COMMAND StreamListenerUnitTest)
+
+target_link_libraries(StreamListenerUnitTest
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
         gmock_main

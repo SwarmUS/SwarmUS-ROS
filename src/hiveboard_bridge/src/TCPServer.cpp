@@ -2,7 +2,6 @@
 
 TCPServer::TCPServer(int port) {
     m_port = port;
-    bzero(m_buffer, TCP_BUFFER_LENGTH);
 
     init();
 }
@@ -48,25 +47,28 @@ void TCPServer::listen() {
     m_monitor.addConn(m_clientFd);
 }
 
-int TCPServer::read(char* buff, const uint16_t length, bool blocking) {
-    if (blocking) {
-        if (!m_monitor.waitIncoming(m_clientFd)) {
-            ROS_ERROR("TCP server error waiting for incoming data");
-        }
-    }
+bool TCPServer::receive(uint8_t* data, uint16_t length) {
+    int nbBytesReceived = ::recv(m_clientFd, data, length, MSG_WAITALL);
+    ROS_INFO("RECIEVED : %s", (char*)data);
 
-    int nbBytesRecieved = ::recv(m_clientFd, m_buffer, length, 0);
-
-    if (blocking && nbBytesRecieved == 0) { // Client disconnected
+    if (nbBytesReceived == 0) { // Client disconnected
+        ROS_WARN("TCP client disconnected");
         close();
+        return false;
     }
 
-    std::memcpy(buff, m_buffer, length);
+    if (nbBytesReceived == -1)
+        return false;
 
-    return nbBytesRecieved;
+    return true;
 }
 
-void TCPServer::send(char* buff, const uint16_t length) { ::send(m_clientFd, buff, length, 0); }
+bool TCPServer::send(const uint8_t* data, uint16_t length) {
+    if (::send(m_clientFd, data, length, 0) > -1)
+        return true;
+    else
+        return false;
+}
 
 void TCPServer::close() {
     ::close(m_clientFd);

@@ -1,7 +1,6 @@
 #include "hiveboard_bridge/MessageHandler.h"
 #include "hiveboard_bridge/StreamListener.h"
 #include "hiveboard_bridge/TCPServer.h"
-#include "hiveboard_bridge/TCPServerMonitor.h"
 #include "ros/ros.h"
 #include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>

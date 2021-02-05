@@ -26,7 +26,6 @@ include_directories(
 set(HIVEBOARD_BRIDGE_SOURCES
         src/main.cpp
         src/TCPServer.cpp
-        src/TCPServerMonitor.cpp
         src/StreamListener.cpp
         src/MessageHandler.cpp
         src/ReceiveThreadAction.cpp)

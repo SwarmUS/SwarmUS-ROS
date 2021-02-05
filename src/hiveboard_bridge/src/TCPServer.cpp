@@ -30,8 +30,6 @@ void TCPServer::init() {
     if (::bind(m_serverFd, (struct sockaddr*)&m_address, m_addressLength) < 0) {
         ROS_ERROR("TCP server binding failed");
     }
-
-    m_monitor.addServer(m_serverFd);
 }
 
 void TCPServer::listen() {
@@ -43,8 +41,6 @@ void TCPServer::listen() {
                                (socklen_t*)&m_addressLength)) < 0) {
         ROS_ERROR("TCP server accept failed");
     }
-
-    m_monitor.addConn(m_clientFd);
 }
 
 bool TCPServer::receive(uint8_t* data, uint16_t length) {
@@ -71,7 +67,5 @@ bool TCPServer::send(const uint8_t* data, uint16_t length) {
 
 void TCPServer::close() {
     ::close(m_clientFd);
-    m_monitor.removeConn(m_clientFd);
-
     ROS_WARN("TCP server: client disconnected");
 }

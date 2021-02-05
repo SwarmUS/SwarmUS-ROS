@@ -1,8 +1,6 @@
 #ifndef CATKIN_ROS_TCPSERVER_H
 #define CATKIN_ROS_TCPSERVER_H
 
-#include "ITCPServerMonitor.h"
-#include "TCPServerMonitor.h"
 #include "ros/ros.h"
 #include <common/IProtobufStream.h>
 #include <cstdint>
@@ -52,7 +50,6 @@ class TCPServer : public IProtobufStream {
     int m_serverFd, m_clientFd, m_port;
     int m_addressLength;
     struct sockaddr_in m_address;
-    TCPServerMonitor m_monitor;
 
     /**
      * Create and bind the socket.

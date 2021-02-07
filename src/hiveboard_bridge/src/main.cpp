@@ -1,6 +1,6 @@
 #include "hiveboard_bridge/MessageHandler.h"
-#include "hiveboard_bridge/ThreadWrapper.h"
 #include "hiveboard_bridge/TCPServer.h"
+#include "hiveboard_bridge/ThreadWrapper.h"
 #include "ros/ros.h"
 #include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>

@@ -1,7 +1,7 @@
 #include "hiveboard_bridge/ReceiveAction.h"
 
 ReceiveAction::ReceiveAction(IHiveMindHostDeserializer& deserializer,
-                                         IMessageHandler& messageHandler) :
+                             IMessageHandler& messageHandler) :
     m_deserializer(deserializer), m_messageHandler(messageHandler) {}
 
 void ReceiveAction::doAction() {

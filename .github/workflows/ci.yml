@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: |
           . ./devel/setup.sh
-          catkin_make
+          catkin_make_isolated
         working-directory: 'catkin_ws'
 
       - name: Unit Tests

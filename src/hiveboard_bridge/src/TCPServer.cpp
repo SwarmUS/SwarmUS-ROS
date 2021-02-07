@@ -49,13 +49,12 @@ bool TCPServer::receive(uint8_t* data, uint16_t length) {
     if (nbBytesReceived == 0) { // Client disconnected
         ROS_WARN("TCP client disconnected");
         close();
-        return false;
     }
 
-    if (nbBytesReceived == -1)
-        return false;
+    if (nbBytesReceived == length)
+        return true;
 
-    return true;
+    return false;
 }
 
 bool TCPServer::send(const uint8_t* data, uint16_t length) {

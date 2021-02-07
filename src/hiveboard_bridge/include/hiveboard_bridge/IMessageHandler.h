@@ -33,8 +33,9 @@ class IMessageHandler {
      * Register a callback
      * @param name Key of the callback
      * @param callback Callback function
+     * @returns True if an existing callback function was overwritten, false otherwise
      */
-    virtual void registerCallback(std::string name, CallbackFunction callback) = 0;
+    virtual bool registerCallback(std::string name, CallbackFunction callback) = 0;
 
     /**
      * Get an instance of a callback, if it exists.

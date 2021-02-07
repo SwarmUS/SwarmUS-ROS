@@ -10,7 +10,7 @@ class MessageHandler : public IMessageHandler {
 
     bool handleMessage(MessageDTO message) override;
 
-    void registerCallback(std::string name, CallbackFunction callback) override;
+    bool registerCallback(std::string name, CallbackFunction callback) override;
 
     std::optional<CallbackFunction> getCallback(std::string name) override;
 

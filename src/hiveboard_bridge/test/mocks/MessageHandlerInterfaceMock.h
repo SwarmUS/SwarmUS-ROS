@@ -11,7 +11,7 @@ class MessageHandlerInterfaceMock : public IMessageHandler {
 
     MOCK_METHOD(bool, handleMessage, (MessageDTO message), (override));
 
-    MOCK_METHOD(void, registerCallback, (std::string name, CallbackFunction callback), (override));
+    MOCK_METHOD(bool, registerCallback, (std::string name, CallbackFunction callback), (override));
 
     MOCK_METHOD(std::optional<CallbackFunction>, getCallback, (std::string name), (override));
 };

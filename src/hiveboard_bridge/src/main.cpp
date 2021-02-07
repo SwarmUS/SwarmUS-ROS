@@ -1,5 +1,5 @@
 #include "hiveboard_bridge/MessageHandler.h"
-#include "hiveboard_bridge/StreamListener.h"
+#include "hiveboard_bridge/ThreadWrapper.h"
 #include "hiveboard_bridge/TCPServer.h"
 #include "ros/ros.h"
 #include <functional>
@@ -40,9 +40,9 @@ int main(int argc, char** argv) {
     HiveMindHostDeserializer deserializer(tcpServer);
     MessageHandler messageHandler;
 
-    ReceiveThreadAction receiveThreadAction(deserializer, messageHandler);
+    ReceiveAction receiveAction(deserializer, messageHandler);
 
-    StreamListener streamListener(receiveThreadAction);
+    ThreadWrapper ThreadWrapper(receiveAction, 500);
 
     ros::spin();
     return 0;

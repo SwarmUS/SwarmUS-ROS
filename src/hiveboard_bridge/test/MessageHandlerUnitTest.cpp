@@ -7,14 +7,13 @@
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <optional>
-#include <ros/ros.h> // TODO remove this
 
 bool g_testFunctionCalled = false;
 int g_testValue1 = 0;
 int g_testValue2 = 12;
 
 class MessageHandlerFixture : public testing::Test {
-  protected:
+protected:
     // Declare some test callbacks
     CallbackFunction m_testFunction = [](CallbackArgs args) { g_testFunctionCalled = true; };
 
@@ -42,7 +41,7 @@ class MessageHandlerFixture : public testing::Test {
     MessageDTO* m_moveByMessageDto;
 
     void SetUp() override {
-        m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+
         m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback);
 
         g_testFunctionCalled = false;
@@ -51,7 +50,7 @@ class MessageHandlerFixture : public testing::Test {
 
         // Existing void  function
         m_functionCallRequestDto =
-            new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
+                new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
         m_requestDto = new RequestDTO(1, *m_functionCallRequestDto);
         m_messageDto = new MessageDTO(1, 2, *m_requestDto);
 
@@ -86,25 +85,36 @@ class MessageHandlerFixture : public testing::Test {
     }
 };
 
+TEST_F(MessageHandlerFixture, registerNewCallBackSuccess) {
+    ASSERT_FALSE(m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction));
+}
+
+TEST_F(MessageHandlerFixture, registerOverwriteCallbackSuccess) {
+    m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+    ASSERT_TRUE(m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction));
+}
+
 TEST_F(MessageHandlerFixture, testGetCallbackSuccess) {
-    ASSERT_TRUE(m_messageHandler.getCallback("TestFunctionCallRequestDTO"));
+m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+ASSERT_TRUE(m_messageHandler.getCallback("TestFunctionCallRequestDTO"));
 }
 
 TEST_F(MessageHandlerFixture, testGetCallbackFail) {
-    ASSERT_FALSE(m_messageHandler.getCallback("Nonexisting"));
+ASSERT_FALSE(m_messageHandler.getCallback("Nonexisting"));
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
-    ASSERT_TRUE(m_messageHandler.handleMessage(*m_messageDto));
-    ASSERT_TRUE(g_testFunctionCalled);
+m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+ASSERT_TRUE(m_messageHandler.handleMessage(*m_messageDto));
+ASSERT_TRUE(g_testFunctionCalled);
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
-    ASSERT_TRUE(m_messageHandler.handleMessage(*m_moveByMessageDto));
-    ASSERT_EQ(g_testValue1, 1);
-    ASSERT_EQ(g_testValue2, 7);
+ASSERT_TRUE(m_messageHandler.handleMessage(*m_moveByMessageDto));
+ASSERT_EQ(g_testValue1, 1);
+ASSERT_EQ(g_testValue2, 7);
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
-    ASSERT_FALSE(m_messageHandler.handleMessage(*m_nonExistingMessageDto));
+ASSERT_FALSE(m_messageHandler.handleMessage(*m_nonExistingMessageDto));
 }

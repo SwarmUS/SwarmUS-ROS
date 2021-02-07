@@ -1,15 +1,15 @@
+#ifndef HIVEBOARD_BRIDGE_RECEIVEACTION_H
+#define HIVEBOARD_BRIDGE_RECEIVEACTION_H
+
 #include "IMessageHandler.h"
 #include <hivemind-host/IHiveMindHostDeserializer.h>
-
-#ifndef HIVEBOARD_BRIDGE_RECEIVETHREADACTION_H
-#define HIVEBOARD_BRIDGE_RECEIVETHREADACTION_H
 
 /**
  * @brief A class that contains all the actions that must be done in a receive thread.
  */
-class ReceiveThreadAction {
+class ReceiveAction {
   public:
-    ReceiveThreadAction(IHiveMindHostDeserializer& deserializer, IMessageHandler& messageHandler);
+    ReceiveAction(IHiveMindHostDeserializer& deserializer, IMessageHandler& messageHandler);
 
     /**
      * Perform the actions.
@@ -21,4 +21,4 @@ class ReceiveThreadAction {
     IMessageHandler& m_messageHandler;
 };
 
-#endif // HIVEBOARD_BRIDGE_RECEIVETHREADACTION_H
+#endif // HIVEBOARD_BRIDGE_RECEIVEACTION_H

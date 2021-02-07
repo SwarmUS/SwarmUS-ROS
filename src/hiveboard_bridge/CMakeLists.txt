@@ -23,18 +23,31 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
 )
 
-set(HIVEBOARD_BRIDGE_SOURCES
-        src/main.cpp
-        src/TCPServer.cpp
-        src/StreamListener.cpp
-        src/MessageHandler.cpp
-        src/ReceiveThreadAction.cpp)
+# SwarmUS::ROS::Hiveboard::Bridge
+set(LIB_NAME "swarmus-ros-hiveboard-bridge")
+set(LIB_ALIAS "SwarmUS::ROS::Hiveboard::Bridge")
 
-add_executable(hiveboard_bridge ${HIVEBOARD_BRIDGE_SOURCES})
+set(HIVEBOARD_BRIDGE_SOURCES
+        src/TCPServer.cpp
+        src/ThreadWrapper.cpp
+        src/MessageHandler.cpp
+        src/ReceiveAction.cpp)
+
+add_library(${LIB_NAME} ${HIVEBOARD_BRIDGE_SOURCES})
+add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
+
+target_link_libraries(${LIB_NAME}
+        ${catkin_LIBRARIES}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        )
+
+# Main
+add_executable(hiveboard_bridge src/main.cpp)
 add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})
 target_link_libraries(hiveboard_bridge
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::ROS::Hiveboard::Bridge
         )
 
 target_include_directories(hiveboard_bridge
@@ -49,12 +62,13 @@ target_include_directories(hiveboard_bridge
 # MessageHandlerUnitTest
 add_executable(MessageHandlerUnitTest
         test/MessageHandlerUnitTest.cpp
-        src/MessageHandler.cpp)
+        )
 
 add_test(NAME MessageHandlerUnitTest COMMAND MessageHandlerUnitTest)
 
 target_link_libraries(MessageHandlerUnitTest
         ${catkin_LIBRARIES}
+        ${LIB_NAME}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
         gmock_main
         )
@@ -62,12 +76,13 @@ target_link_libraries(MessageHandlerUnitTest
 # StreamListenerUnitTest
 add_executable(ReceiveThreadActionUnitTest
         test/ReceiveThreadActionUnitTest.cpp
-        src/ReceiveThreadAction.cpp)
+        )
 
 add_test(NAME ReceiveThreadActionUnitTest COMMAND ReceiveThreadActionUnitTest)
 
 target_link_libraries(ReceiveThreadActionUnitTest
         ${catkin_LIBRARIES}
+        ${LIB_NAME}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
         gmock_main
         )

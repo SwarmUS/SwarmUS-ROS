@@ -29,11 +29,14 @@ bool MessageHandler::handleMessage(MessageDTO message) {
             }
         }
     }
+    ROS_WARN("Message not recognised");
     return false;
 }
 
-void MessageHandler::registerCallback(std::string name, CallbackFunction callback) {
+bool MessageHandler::registerCallback(std::string name, CallbackFunction callback) {
+    bool wasOverwritten = m_callbacks[name] != nullptr;
     m_callbacks[name] = callback;
+    return wasOverwritten;
 }
 
 std::optional<CallbackFunction> MessageHandler::getCallback(std::string name) {

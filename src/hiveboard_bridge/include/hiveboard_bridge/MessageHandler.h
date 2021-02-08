@@ -12,7 +12,7 @@ class MessageHandler : public IMessageHandler {
 
     bool registerCallback(std::string name, CallbackFunction callback) override;
 
-    std::optional<CallbackFunction> getCallback(std::string name) override;
+    std::optional<CallbackFunction> getCallback(const std::string& name) override;
 
   private:
     CallbackMap m_callbacks;

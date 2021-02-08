@@ -10,14 +10,14 @@
 #include <thread>
 
 /**
- * A class that listens on a stream and performs some actions when messages arrive
+ * A class that wraps a receive thread and performs some actions
  */
 class ThreadWrapper {
   public:
     /**
      * Construct a ThreadWrapper object
      * @param ReceiveAction The action to be performed in the receive thread
-     * \param sleepTimeMs The sleep time between each cycle of the receive thread
+     * @param sleepTimeMs The sleep time between each cycle of the receive thread
      */
     ThreadWrapper(ReceiveAction ReceiveAction, int sleepTimeMs);
 

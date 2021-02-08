@@ -21,7 +21,7 @@ bool MessageHandler::handleMessage(MessageDTO message) {
 
             // Call the right callback
             if (callback) {
-                callback.value()(functionArgs);
+                callback.value()(functionArgs, argsLength);
                 return true;
             } else {
                 ROS_WARN("Function name \"%s\" was not registered as a callback",
@@ -39,7 +39,7 @@ bool MessageHandler::registerCallback(std::string name, CallbackFunction callbac
     return wasOverwritten;
 }
 
-std::optional<CallbackFunction> MessageHandler::getCallback(std::string name) {
+std::optional<CallbackFunction> MessageHandler::getCallback(const std::string& name) {
     auto callback = m_callbacks.find(name);
     if (callback != m_callbacks.end()) {
         return callback->second;

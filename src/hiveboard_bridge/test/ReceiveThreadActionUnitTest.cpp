@@ -40,7 +40,7 @@ TEST_F(ReceiveActionUnitFixture, receiveValidMessage) {
         .WillOnce(testing::Return(*m_messageVariant));
     EXPECT_CALL(m_messageHandler, handleMessage(testing::_)).WillOnce(testing::Return(true));
 
-    m_receiveAction->doAction();
+    m_receiveAction->fetchAndProcessMessage();
 }
 
 TEST_F(ReceiveActionUnitFixture, receiveNoMessage) {
@@ -48,5 +48,5 @@ TEST_F(ReceiveActionUnitFixture, receiveNoMessage) {
         .WillOnce(testing::Return(m_messageVariantEmpty));
     EXPECT_CALL(m_messageHandler, handleMessage(testing::_)).Times(0);
 
-    m_receiveAction->doAction();
+    m_receiveAction->fetchAndProcessMessage();
 }

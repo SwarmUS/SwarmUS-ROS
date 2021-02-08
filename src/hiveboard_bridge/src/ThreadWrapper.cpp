@@ -7,14 +7,14 @@ ThreadWrapper::ThreadWrapper(ReceiveAction receiveAction, int sleepTimeMs) :
 
 ThreadWrapper::~ThreadWrapper() {
     if (m_rcvThread.joinable()) {
-        m_rcvThread.join();
         m_threadShouldRun = false;
+        m_rcvThread.join();
     }
 }
 
 void ThreadWrapper::receiveThread() {
     while (m_threadShouldRun) {
-        m_receiveAction.doAction();
+        m_receiveAction.fetchAndProcessMessage();
         std::this_thread::sleep_for(std::chrono::milliseconds(m_sleepTimeMs));
     }
 }

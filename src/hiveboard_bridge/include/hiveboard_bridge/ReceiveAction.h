@@ -5,7 +5,7 @@
 #include <hivemind-host/IHiveMindHostDeserializer.h>
 
 /**
- * @brief A class that contains all the actions that must be done in a receive thread.
+ * @brief A class that contains all the actions that must be done to fetch and process a message.
  */
 class ReceiveAction {
   public:
@@ -14,7 +14,7 @@ class ReceiveAction {
     /**
      * Perform the actions.
      */
-    void doAction();
+    void fetchAndProcessMessage();
 
   private:
     IHiveMindHostDeserializer& m_deserializer;

@@ -51,10 +51,7 @@ bool TCPServer::receive(uint8_t* data, uint16_t length) {
         close();
     }
 
-    if (nbBytesReceived == length)
-        return true;
-
-    return false;
+    return nbBytesReceived == length;
 }
 
 bool TCPServer::send(const uint8_t* data, uint16_t length) {

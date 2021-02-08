@@ -15,7 +15,7 @@
 typedef std::array<FunctionCallArgumentDTO,
                    FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
     CallbackArgs;
-typedef std::function<void(CallbackArgs)> CallbackFunction;
+typedef std::function<void(CallbackArgs, int)> CallbackFunction;
 typedef std::unordered_map<std::string, CallbackFunction> CallbackMap;
 
 class IMessageHandler {
@@ -42,7 +42,7 @@ class IMessageHandler {
      * @param name Key under which the callback was registered
      * @return The callback function if it exists.
      */
-    virtual std::optional<CallbackFunction> getCallback(std::string name) = 0;
+    virtual std::optional<CallbackFunction> getCallback(const std::string& name) = 0;
 };
 
 #endif // HIVEBOARD_BRIDGE_IMESSAGEHANDLER_H

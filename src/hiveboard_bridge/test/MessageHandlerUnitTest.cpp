@@ -8,18 +8,20 @@
 #include <hivemind-host/RequestDTO.h>
 #include <optional>
 
-bool g_testFunctionCalled = false;
-int g_testValue1 = 0;
-int g_testValue2 = 12;
-
 class MessageHandlerFixture : public testing::Test {
   protected:
-    // Declare some test callbacks
-    CallbackFunction m_testFunction = [](CallbackArgs args) { g_testFunctionCalled = true; };
+    bool m_testFunctionCalled = false;
+    int m_testValue1 = 0;
+    int m_testValue2 = 12;
 
-    CallbackFunction m_moveByTestCallback = [](CallbackArgs args) {
-        g_testValue1 += std::get<int64_t>(args[0].getArgument());
-        g_testValue2 -= std::get<int64_t>(args[1].getArgument());
+    // Declare some test callbacks
+    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength) {
+        m_testFunctionCalled = true;
+    };
+
+    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength) {
+        m_testValue1 += std::get<int64_t>(args[0].getArgument());
+        m_testValue2 -= std::get<int64_t>(args[1].getArgument());
     };
 
     MessageHandler m_messageHandler;
@@ -43,10 +45,6 @@ class MessageHandlerFixture : public testing::Test {
     void SetUp() override {
 
         m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback);
-
-        g_testFunctionCalled = false;
-        g_testValue1 = 0;
-        g_testValue2 = 12;
 
         // Existing void  function
         m_functionCallRequestDto =
@@ -106,13 +104,13 @@ TEST_F(MessageHandlerFixture, testGetCallbackFail) {
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
     ASSERT_TRUE(m_messageHandler.handleMessage(*m_messageDto));
-    ASSERT_TRUE(g_testFunctionCalled);
+    ASSERT_TRUE(m_testFunctionCalled);
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
     ASSERT_TRUE(m_messageHandler.handleMessage(*m_moveByMessageDto));
-    ASSERT_EQ(g_testValue1, 1);
-    ASSERT_EQ(g_testValue2, 7);
+    ASSERT_EQ(m_testValue1, 1);
+    ASSERT_EQ(m_testValue2, 7);
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {

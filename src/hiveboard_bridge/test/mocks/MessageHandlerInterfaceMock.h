@@ -13,7 +13,10 @@ class MessageHandlerInterfaceMock : public IMessageHandler {
 
     MOCK_METHOD(bool, registerCallback, (std::string name, CallbackFunction callback), (override));
 
-    MOCK_METHOD(std::optional<CallbackFunction>, getCallback, (std::string name), (override));
+    MOCK_METHOD(std::optional<CallbackFunction>,
+                getCallback,
+                (const std::string& name),
+                (override));
 };
 
 #endif // HIVEBOARD_BRIDGE_MESSAGEHANDLERINTERFACEMOCK_H

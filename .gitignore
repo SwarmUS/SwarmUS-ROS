@@ -1,2 +1,6 @@
 .idea/
 .vscode/
+build/
+devel/
+*.pyc
+src/hiveboard_bridge/cmake-build-debug

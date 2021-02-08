@@ -1,6 +1,17 @@
+#include "hiveboard_bridge/MessageHandler.h"
 #include "hiveboard_bridge/TCPServer.h"
-#include "hiveboard_bridge/TCPServerMonitor.h"
+#include "hiveboard_bridge/ThreadWrapper.h"
 #include "ros/ros.h"
+#include <functional>
+#include <hivemind-host/FunctionCallArgumentDTO.h>
+#include <hivemind-host/FunctionCallRequestDTO.h>
+#include <hivemind-host/FunctionCallResponseDTO.h>
+#include <hivemind-host/HiveMindHostDeserializer.h>
+#include <hivemind-host/MessageDTO.h>
+#include <hivemind-host/RequestDTO.h>
+#include <mutex>
+#include <optional>
+#include <thread>
 
 #define DEFAULT_TCP_SERVER_PORT 8080
 
@@ -20,29 +31,19 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
 
     int port = getTcpServerPort();
-    TCPServer socket(port);
+    TCPServer tcpServer(port);
 
     ROS_INFO("Listening for incoming clients...");
-    socket.listen();
+    tcpServer.listen();
     ROS_INFO("Client connected.");
 
-    char sendValue[] = "Hello world from ROS!";
-    socket.send(sendValue, strlen(sendValue));
-    ROS_INFO("Sent a message from server to client");
+    HiveMindHostDeserializer deserializer(tcpServer);
+    MessageHandler messageHandler;
 
-    char buf[10] = "";
-    char okBuf[3] = "Ok";
-    int i = 0;
-    while (true) {
-        ROS_INFO("%d", i++);
+    ReceiveAction receiveAction(deserializer, messageHandler);
 
-        bzero(buf, 10);
-        socket.read(buf, 10, true);
-        ROS_INFO("Data: %s", buf);
-        socket.send(okBuf, 3);
-    }
+    ThreadWrapper ThreadWrapper(receiveAction, 500);
 
     ros::spin();
-
     return 0;
 }

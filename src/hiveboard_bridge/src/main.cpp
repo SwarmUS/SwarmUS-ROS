@@ -9,11 +9,13 @@
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
-#include <mutex>
 #include <optional>
 #include <thread>
+#include <chrono>
+#include "swarmus_ros_navigation/MoveByMessage.h"
 
 #define DEFAULT_TCP_SERVER_PORT 8080
+#define DEFAULT_ROBOT_NAME "pioneer_0"
 
 int getTcpServerPort() {
     int port;
@@ -27,8 +29,24 @@ int getTcpServerPort() {
     return port;
 }
 
+std::string getRobotName() {
+    std::string robotName;
+
+    if (!ros::param::get("~ROBOT_NAME", robotName)) {
+        ROS_INFO("No ROBOT_NAME parameter was given. Using default value %s", DEFAULT_ROBOT_NAME);
+        robotName = DEFAULT_ROBOT_NAME;
+    }
+
+    return robotName;
+}
+
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
+    ros::NodeHandle nodeHandle;
+    ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(
+            getRobotName() + "/navigation/moveBy", 1000
+            );
+    ros::Subscriber sub;
 
     int port = getTcpServerPort();
     TCPServer tcpServer(port);
@@ -40,9 +58,28 @@ int main(int argc, char** argv) {
     HiveMindHostDeserializer deserializer(tcpServer);
     MessageHandler messageHandler;
 
+    // Register callbacks
+    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
+        swarmus_ros_navigation::MoveByMessage moveByMessage;
+        moveByMessage.distance_x = std::get<int64_t>(args[0].getArgument());
+        moveByMessage.distance_y = std::get<int64_t>(args[1].getArgument());
+
+        // Publish on moveby
+        moveByPublisher.publish(moveByMessage);
+
+        // Send ack/response over TCP
+    };
+
+    messageHandler.registerCallback("moveBy", moveByCallback);
+
     ReceiveAction receiveAction(deserializer, messageHandler);
 
-    ThreadWrapper ThreadWrapper(receiveAction, 500);
+    while (true) {
+        receiveAction.fetchAndProcessMessage();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+
+//    ThreadWrapper ThreadWrapper(receiveAction, 500);
 
     ros::spin();
     return 0;

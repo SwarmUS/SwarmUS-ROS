@@ -5,6 +5,7 @@ set (CMAKE_CXX_STANDARD 17)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  swarmus_ros_navigation
 )
 
 catkin_package(

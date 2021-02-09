@@ -87,3 +87,14 @@ target_link_libraries(ReceiveThreadActionUnitTest
         SwarmUS::Propolis::Pheromones::HiveMind::Host
         gmock_main
         )
+
+# Integration testing
+add_executable(SocketToMoveByIntegrationTest
+        test/SocketToMoveByIntegrationTest.cpp
+        )
+
+target_link_libraries(SocketToMoveByIntegrationTest
+        ${catkin_LIBRARIES}
+        ${LIB_NAME}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+)

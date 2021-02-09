@@ -7,6 +7,7 @@
 #include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
+#include <hivemind-host/HiveMindHostSerializer.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <optional>
@@ -56,6 +57,7 @@ int main(int argc, char** argv) {
     ROS_INFO("Client connected.");
 
     HiveMindHostDeserializer deserializer(tcpServer);
+    HiveMindHostSerializer serializer(tcpServer);
     MessageHandler messageHandler;
 
     // Register callbacks
@@ -68,6 +70,7 @@ int main(int argc, char** argv) {
         moveByPublisher.publish(moveByMessage);
 
         // Send ack/response over TCP
+
     };
 
     messageHandler.registerCallback("moveBy", moveByCallback);

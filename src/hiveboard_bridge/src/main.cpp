@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
     ros::NodeHandle nodeHandle;
 
-    std::string robotName = ros::param::param("~ROBOT_NAME", (std::string) "pioneer_0");
+    std::string robotName = ros::param::param("~ROBOT_NAME", std::string("pioneer_0"));
     ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(
         robotName + "/navigation/moveBy", 1000);
 

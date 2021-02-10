@@ -10,6 +10,7 @@ class ReceiveActionUnitFixture : public testing::Test {
     ReceiveAction* m_receiveAction;
 
     FunctionCallRequestDTO* m_functionCallRequestDto;
+    UserCallRequestDTO* m_userCallRequestDto;
     RequestDTO* m_requestDto;
     MessageDTO* m_messageDto;
     std::variant<std::monostate, MessageDTO>* m_messageVariant;
@@ -18,7 +19,9 @@ class ReceiveActionUnitFixture : public testing::Test {
     void SetUp() {
         m_functionCallRequestDto =
             new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
-        m_requestDto = new RequestDTO(1, *m_functionCallRequestDto);
+        m_userCallRequestDto =
+            new UserCallRequestDTO(UserCallDestinationDTO::HOST, *m_functionCallRequestDto);
+        m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
         m_messageDto = new MessageDTO(1, 2, *m_requestDto);
         m_messageVariant = new std::variant<std::monostate, MessageDTO>(*m_messageDto);
 
@@ -27,6 +30,7 @@ class ReceiveActionUnitFixture : public testing::Test {
 
     void TearDown() {
         delete m_functionCallRequestDto;
+        delete m_userCallRequestDto;
         delete m_requestDto;
         delete m_messageDto;
         delete m_messageVariant;

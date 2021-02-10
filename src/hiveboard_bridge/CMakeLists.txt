@@ -5,6 +5,7 @@ set (CMAKE_CXX_STANDARD 17)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  swarmus_ros_navigation
 )
 
 catkin_package(
@@ -29,7 +30,6 @@ set(LIB_ALIAS "SwarmUS::ROS::Hiveboard::Bridge")
 
 set(HIVEBOARD_BRIDGE_SOURCES
         src/TCPServer.cpp
-        src/ThreadWrapper.cpp
         src/MessageHandler.cpp
         src/ReceiveAction.cpp)
 
@@ -86,3 +86,14 @@ target_link_libraries(ReceiveThreadActionUnitTest
         SwarmUS::Propolis::Pheromones::HiveMind::Host
         gmock_main
         )
+
+# Integration testing
+add_executable(SocketToMoveByIntegrationTest
+        test/SocketToMoveByIntegrationTest.cpp
+        )
+
+target_link_libraries(SocketToMoveByIntegrationTest
+        ${catkin_LIBRARIES}
+        ${LIB_NAME}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+)

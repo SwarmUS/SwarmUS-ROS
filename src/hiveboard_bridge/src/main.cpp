@@ -3,8 +3,6 @@
 #include "hiveboard_bridge/TCPServer.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
-#include <chrono>
-#include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
@@ -12,7 +10,6 @@
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/ResponseDTO.h>
 #include <optional>
-#include <thread>
 
 constexpr uint8_t RATE_HZ{2};
 
@@ -47,7 +44,12 @@ int main(int argc, char** argv) {
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
 
-        // TODO Send ack/response over TCP
+        // Send ack/response
+        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "moveBy OK");
+        UserCallResponseDTO userCallResponse(UserCallDestinationDTO::BUZZ, functionCallResponse);
+        ResponseDTO response(1, userCallResponse);
+        MessageDTO responseMessage(1, 42, response);
+        serializer.serializeToStream(responseMessage);
     };
 
     messageHandler.registerCallback("moveBy", moveByCallback);

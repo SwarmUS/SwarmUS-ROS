@@ -3,15 +3,13 @@
 #include <chrono>
 #include <common/IProtobufStream.h>
 #include <cstdint>
-#include <cstring>
+#include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 #include <netinet/in.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <thread>
-#include <unistd.h>
 
 class TCPClient : public IProtobufStream {
   public:
@@ -21,7 +19,7 @@ class TCPClient : public IProtobufStream {
         struct sockaddr_in serv_addr;
 
         serv_addr.sin_family = AF_INET;
-        serv_addr.sin_port = htons(8080);
+        serv_addr.sin_port = htons(8081);
 
         // Convert IPv4 and IPv6 addresses from text to binary form
         if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
@@ -58,6 +56,7 @@ int main(int argc, char** argv) {
     TCPClient tcpClient;
     tcpClient.connect();
     HiveMindHostSerializer serializer(tcpClient);
+    HiveMindHostDeserializer deserializer(tcpClient);
 
     // Create a moveBy function call wrapped in a message
     FunctionCallArgumentDTO moveByX((float)1);
@@ -69,10 +68,28 @@ int main(int argc, char** argv) {
     MessageDTO moveByMessageDTO(1, 2, moveByRequestDTO);
 
     // Send the message over TCP to the bridge
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
     while (true) {
         serializer.serializeToStream(moveByMessageDTO);
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    }
 
-    // listen to the navigation topic to see if the right command was published
+        // Listen for a response
+        MessageDTO message = std::get<MessageDTO>(deserializer.deserializeFromStream());
+        ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
+        UserCallResponseDTO userCallResponse =
+            std::get<UserCallResponseDTO>(response.getResponse());
+        FunctionCallResponseDTO functionCallResponse =
+            std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+        GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+        GenericResponseStatusDTO status = genericResponse.getStatus();
+        std::string details = genericResponse.getDetails();
+        ROS_INFO("RESPONSE FROM HOST: \n"
+                 "\tResponse status: %d\n"
+                 "\tDetails: %s",
+                 status, details.c_str());
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+#pragma clang diagnostic pop
 }

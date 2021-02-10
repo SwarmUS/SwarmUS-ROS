@@ -6,7 +6,6 @@ MessageHandler::~MessageHandler() {}
 
 bool MessageHandler::handleMessage(MessageDTO message) {
     // Message
-//    std::variant<std::monostate, RequestDTO> request = message.getMessage();
     auto request = message.getMessage();
 
     // Request

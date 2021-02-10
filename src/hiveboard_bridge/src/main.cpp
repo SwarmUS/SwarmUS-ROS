@@ -1,6 +1,6 @@
 #include "hiveboard_bridge/MessageHandler.h"
 #include "hiveboard_bridge/TCPServer.h"
-#include "hiveboard_bridge/ThreadWrapper.h"
+#include "hiveboard_bridge/ReceiveAction.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <chrono>
@@ -18,6 +18,7 @@
 
 #define DEFAULT_TCP_SERVER_PORT 8080
 #define DEFAULT_ROBOT_NAME "pioneer_0"
+static const uint8_t RATE_HZ{2};
 
 int getTcpServerPort() {
     int port;
@@ -71,21 +72,20 @@ int main(int argc, char** argv) {
         moveByPublisher.publish(moveByMessage);
 
         // TODO Send ack/response over TCP
-        //        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "Move
-        //        by OK"); ResponseDTO response(1, functionCallResponse);
     };
 
     messageHandler.registerCallback("moveBy", moveByCallback);
 
     ReceiveAction receiveAction(deserializer, messageHandler);
 
-    while (true) {
+    ros::Rate loopRate(RATE_HZ);
+    while (ros::ok()) {
+        ros::spinOnce();
+
         receiveAction.fetchAndProcessMessage();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        loopRate.sleep();
     }
 
-    //    ThreadWrapper ThreadWrapper(receiveAction, 500);
-
-    ros::spin();
     return 0;
 }

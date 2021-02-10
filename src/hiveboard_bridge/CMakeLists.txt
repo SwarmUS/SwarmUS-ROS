@@ -30,7 +30,6 @@ set(LIB_ALIAS "SwarmUS::ROS::Hiveboard::Bridge")
 
 set(HIVEBOARD_BRIDGE_SOURCES
         src/TCPServer.cpp
-        src/ThreadWrapper.cpp
         src/MessageHandler.cpp
         src/ReceiveAction.cpp)
 

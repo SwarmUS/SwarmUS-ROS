@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 
     // Create a moveBy function call wrapped in a message
     FunctionCallArgumentDTO moveByX((float)1);
-    FunctionCallArgumentDTO moveByY((int64_t)1);
+    FunctionCallArgumentDTO moveByY((float)1);
     FunctionCallArgumentDTO args[2] = {moveByX, moveByY};
     FunctionCallRequestDTO moveByFunctionCallRequestDTO("moveBy", args, 2);
     UserCallRequestDTO userCallRequest(UserCallDestinationDTO::HOST, moveByFunctionCallRequestDTO);

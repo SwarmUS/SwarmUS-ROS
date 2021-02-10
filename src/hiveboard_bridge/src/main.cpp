@@ -6,54 +6,30 @@
 #include <chrono>
 #include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <hivemind-host/MessageDTO.h>
-#include <hivemind-host/RequestDTO.h>
 #include <hivemind-host/ResponseDTO.h>
 #include <optional>
 #include <thread>
 
-#define DEFAULT_TCP_SERVER_PORT 8080
-#define DEFAULT_ROBOT_NAME "pioneer_0"
-static const uint8_t RATE_HZ{2};
-
-int getTcpServerPort() {
-    int port;
-
-    if (!ros::param::get("~TCP_SERVER_PORT", port)) {
-        ROS_INFO("No TCP_SERVER_PORT param was given. Using default value %d",
-                 DEFAULT_TCP_SERVER_PORT);
-        port = DEFAULT_TCP_SERVER_PORT;
-    }
-
-    return port;
-}
-
-std::string getRobotName() {
-    std::string robotName;
-
-    if (!ros::param::get("~ROBOT_NAME", robotName)) {
-        ROS_INFO("No ROBOT_NAME parameter was given. Using default value %s", DEFAULT_ROBOT_NAME);
-        robotName = DEFAULT_ROBOT_NAME;
-    }
-
-    return robotName;
-}
+constexpr uint8_t RATE_HZ{2};
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
     ros::NodeHandle nodeHandle;
+
+    std::string robotName = ros::param::param("~ROBOT_NAME", (std::string) "pioneer_0");
     ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(
-        getRobotName() + "/navigation/moveBy", 1000);
+        robotName + "/navigation/moveBy", 1000);
+
     ros::Subscriber sub;
 
-    int port = getTcpServerPort();
+    int port = ros::param::param("~TCP_SERVER_PORT", 8080);
     TCPServer tcpServer(port);
 
-    ROS_INFO("Listening for incoming clients...");
+    ROS_INFO("Listening for incoming clients on port %d...", port);
     tcpServer.listen();
     ROS_INFO("Client connected.");
 
@@ -66,7 +42,7 @@ int main(int argc, char** argv) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());
-        moveByMessage.distance_y = std::get<int64_t>(args[1].getArgument());
+        moveByMessage.distance_y = std::get<float>(args[1].getArgument());
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);

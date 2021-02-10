@@ -1,24 +1,21 @@
 #include "ros/ros.h"
-#include <hivemind-host/HiveMindHostSerializer.h>
+#include <arpa/inet.h>
+#include <chrono>
 #include <common/IProtobufStream.h>
 #include <cstdint>
 #include <cstring>
+#include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 #include <netinet/in.h>
-#include <arpa/inet.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <unistd.h>
 #include <thread>
-#include <chrono>
+#include <unistd.h>
 
-class TCPClient: public IProtobufStream {
-public:
-    TCPClient() {
-        m_clientFd = ::socket(AF_INET, SOCK_STREAM, 0);
-    }
+class TCPClient : public IProtobufStream {
+  public:
+    TCPClient() { m_clientFd = ::socket(AF_INET, SOCK_STREAM, 0); }
 
     int connect() {
         struct sockaddr_in serv_addr;
@@ -27,13 +24,12 @@ public:
         serv_addr.sin_port = htons(8080);
 
         // Convert IPv4 and IPv6 addresses from text to binary form
-        if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)
-        {
+        if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
             printf("\nInvalid address/ Address not supported \n");
             return -1;
         }
 
-        ::connect(m_clientFd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+        ::connect(m_clientFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
     }
 
     bool receive(uint8_t* data, uint16_t length) override {
@@ -49,7 +45,7 @@ public:
             return false;
     }
 
-private:
+  private:
     int m_clientFd;
 };
 
@@ -64,11 +60,12 @@ int main(int argc, char** argv) {
     HiveMindHostSerializer serializer(tcpClient);
 
     // Create a moveBy function call wrapped in a message
-    FunctionCallArgumentDTO moveByX(1);
-    FunctionCallArgumentDTO moveByY(2);
+    FunctionCallArgumentDTO moveByX((float) 1);
+    FunctionCallArgumentDTO moveByY((int64_t) 1);
     FunctionCallArgumentDTO args[2] = {moveByX, moveByY};
     FunctionCallRequestDTO moveByFunctionCallRequestDTO("moveBy", args, 2);
-    RequestDTO moveByRequestDTO(1, moveByFunctionCallRequestDTO);
+    UserCallRequestDTO userCallRequest(UserCallDestinationDTO::HOST, moveByFunctionCallRequestDTO);
+    RequestDTO moveByRequestDTO(1, userCallRequest);
     MessageDTO moveByMessageDTO(1, 2, moveByRequestDTO);
 
     // Send the message over TCP to the bridge
@@ -78,5 +75,4 @@ int main(int argc, char** argv) {
     }
 
     // listen to the navigation topic to see if the right command was published
-
 }

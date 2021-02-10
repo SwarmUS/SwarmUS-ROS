@@ -2,6 +2,8 @@
 #include "hiveboard_bridge/TCPServer.h"
 #include "hiveboard_bridge/ThreadWrapper.h"
 #include "ros/ros.h"
+#include "swarmus_ros_navigation/MoveByMessage.h"
+#include <chrono>
 #include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -10,10 +12,9 @@
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
+#include <hivemind-host/ResponseDTO.h>
 #include <optional>
 #include <thread>
-#include <chrono>
-#include "swarmus_ros_navigation/MoveByMessage.h"
 
 #define DEFAULT_TCP_SERVER_PORT 8080
 #define DEFAULT_ROBOT_NAME "pioneer_0"
@@ -45,8 +46,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
     ros::NodeHandle nodeHandle;
     ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(
-            getRobotName() + "/navigation/moveBy", 1000
-            );
+        getRobotName() + "/navigation/moveBy", 1000);
     ros::Subscriber sub;
 
     int port = getTcpServerPort();
@@ -63,14 +63,16 @@ int main(int argc, char** argv) {
     // Register callbacks
     CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
-        moveByMessage.distance_x = std::get<int64_t>(args[0].getArgument());
+
+        moveByMessage.distance_x = std::get<float>(args[0].getArgument());
         moveByMessage.distance_y = std::get<int64_t>(args[1].getArgument());
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
 
-        // Send ack/response over TCP
-
+        // TODO Send ack/response over TCP
+        //        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "Move
+        //        by OK"); ResponseDTO response(1, functionCallResponse);
     };
 
     messageHandler.registerCallback("moveBy", moveByCallback);
@@ -82,7 +84,7 @@ int main(int argc, char** argv) {
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
-//    ThreadWrapper ThreadWrapper(receiveAction, 500);
+    //    ThreadWrapper ThreadWrapper(receiveAction, 500);
 
     ros::spin();
     return 0;

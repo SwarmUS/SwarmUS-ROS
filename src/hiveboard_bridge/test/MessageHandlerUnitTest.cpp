@@ -6,6 +6,7 @@
 #include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
+#include <hivemind-host/UserCallRequestDTO.h>
 #include <optional>
 
 class MessageHandlerFixture : public testing::Test {
@@ -21,23 +22,26 @@ class MessageHandlerFixture : public testing::Test {
 
     CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength) {
         m_testValue1 += std::get<int64_t>(args[0].getArgument());
-        m_testValue2 -= std::get<int64_t>(args[1].getArgument());
+        m_testValue2 -= std::get<float>(args[1].getArgument());
     };
 
     MessageHandler m_messageHandler;
 
     // Declare some test messages
     FunctionCallRequestDTO* m_functionCallRequestDto;
+    UserCallRequestDTO* m_userCallRequestDto;
     RequestDTO* m_requestDto;
     MessageDTO* m_messageDto;
 
     FunctionCallRequestDTO* m_nonExistingFunctionCallRequestDto;
+    UserCallRequestDTO* m_nonExistingUserCallRequestDto;
     RequestDTO* m_nonExistingRequestDto;
     MessageDTO* m_nonExistingMessageDto;
 
     FunctionCallArgumentDTO* m_sideEffectArg1;
     FunctionCallArgumentDTO* m_sideEffectArg2;
     FunctionCallRequestDTO* m_sideEffectFunctionCallRequestDto;
+    UserCallRequestDTO* m_sideEffectUserCallRequestDto;
     RequestDTO* m_sideEffectRequestDto;
 
     MessageDTO* m_moveByMessageDto;
@@ -49,35 +53,44 @@ class MessageHandlerFixture : public testing::Test {
         // Existing void  function
         m_functionCallRequestDto =
             new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
-        m_requestDto = new RequestDTO(1, *m_functionCallRequestDto);
+        m_userCallRequestDto =
+            new UserCallRequestDTO(UserCallDestinationDTO::HOST, *m_functionCallRequestDto);
+        m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
         m_messageDto = new MessageDTO(1, 2, *m_requestDto);
 
         // Nonexisting void function
         m_nonExistingFunctionCallRequestDto = new FunctionCallRequestDTO("NonExisting", nullptr, 0);
-        m_nonExistingRequestDto = new RequestDTO(1, *m_nonExistingFunctionCallRequestDto);
+        m_nonExistingUserCallRequestDto = new UserCallRequestDTO(
+            UserCallDestinationDTO::HOST, *m_nonExistingFunctionCallRequestDto);
+        m_nonExistingRequestDto = new RequestDTO(1, *m_nonExistingUserCallRequestDto);
         m_nonExistingMessageDto = new MessageDTO(1, 2, *m_nonExistingRequestDto);
 
         // Testing a callback with side effects
-        m_sideEffectArg1 = new FunctionCallArgumentDTO(1);
-        m_sideEffectArg2 = new FunctionCallArgumentDTO(5);
+        m_sideEffectArg1 = new FunctionCallArgumentDTO((int64_t)1);
+        m_sideEffectArg2 = new FunctionCallArgumentDTO((float)5);
         FunctionCallArgumentDTO args[2] = {*m_sideEffectArg1, *m_sideEffectArg2};
         m_sideEffectFunctionCallRequestDto = new FunctionCallRequestDTO("MoveBy", args, 2);
-        m_sideEffectRequestDto = new RequestDTO(1, *m_sideEffectFunctionCallRequestDto);
+        m_sideEffectUserCallRequestDto = new UserCallRequestDTO(
+            UserCallDestinationDTO::HOST, *m_sideEffectFunctionCallRequestDto);
+        m_sideEffectRequestDto = new RequestDTO(1, *m_sideEffectUserCallRequestDto);
         m_moveByMessageDto = new MessageDTO(1, 2, *m_sideEffectRequestDto);
     }
 
     void TearDown() override {
         delete m_functionCallRequestDto;
+        delete m_userCallRequestDto;
         delete m_requestDto;
         delete m_messageDto;
 
         delete m_nonExistingFunctionCallRequestDto;
+        delete m_nonExistingUserCallRequestDto;
         delete m_nonExistingRequestDto;
         delete m_nonExistingMessageDto;
 
         delete m_sideEffectArg1;
         delete m_sideEffectArg2;
         delete m_sideEffectFunctionCallRequestDto;
+        delete m_sideEffectUserCallRequestDto;
         delete m_sideEffectRequestDto;
         delete m_moveByMessageDto;
     }

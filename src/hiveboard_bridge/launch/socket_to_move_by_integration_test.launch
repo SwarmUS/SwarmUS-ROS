@@ -1,8 +1,13 @@
 <?xml version="1.0" ?>
 <launch>
+    <include file="$(find swarmus_ros_simulation)/launch/multirobot_empty.launch"/>
+    <include file="$(find swarmus_ros_navigation)/launch/navigation.launch"/>
+
     <node pkg="hiveboard_bridge" type="hiveboard_bridge" name="hiveboard_bridge" output="screen">
         <param name="TCP_SERVER_PORT" type="int" value="8080"/>
         <param name="ROBOT_NAME" type="str" value="pioneer_0"/>
     </node>
+
     <node pkg="hiveboard_bridge" type="SocketToMoveByIntegrationTest" name="hiveboard_bridge_integration_test" output="screen"/>
+
 </launch>

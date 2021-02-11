@@ -24,11 +24,10 @@ class MessageHandlerFixture : public testing::Test {
         m_testFunctionCalled = true;
     };
 
-    CallbackFunction m_moveByTestCallback =
-        [&](CallbackArgs args, int argsLength) {
-            m_testValue1 += std::get<int64_t>(args[0].getArgument());
-            m_testValue2 -= std::get<float>(args[1].getArgument());
-        };
+    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength) {
+        m_testValue1 += std::get<int64_t>(args[0].getArgument());
+        m_testValue2 -= std::get<float>(args[1].getArgument());
+    };
 
     MessageHandler m_messageHandler;
 

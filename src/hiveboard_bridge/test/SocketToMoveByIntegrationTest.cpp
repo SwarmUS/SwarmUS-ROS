@@ -68,8 +68,6 @@ int main(int argc, char** argv) {
     MessageDTO moveByMessageDTO(1, 2, moveByRequestDTO);
 
     // Send the message over TCP to the bridge
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
     while (true) {
         serializer.serializeToStream(moveByMessageDTO);
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -91,5 +89,4 @@ int main(int argc, char** argv) {
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
-#pragma clang diagnostic pop
 }

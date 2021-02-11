@@ -12,6 +12,7 @@
 #include <optional>
 
 constexpr uint8_t RATE_HZ{2};
+constexpr uint32_t compoundId{1}; // TODO find a way for the HiveBoard and the robot to share this ID
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
@@ -35,7 +36,7 @@ int main(int argc, char** argv) {
     MessageHandler messageHandler;
 
     // Register callbacks
-    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
+    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());
@@ -45,10 +46,10 @@ int main(int argc, char** argv) {
         moveByPublisher.publish(moveByMessage);
 
         // Send ack/response
-        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "moveBy OK");
+        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "");
         UserCallResponseDTO userCallResponse(UserCallDestinationDTO::BUZZ, functionCallResponse);
-        ResponseDTO response(1, userCallResponse);
-        MessageDTO responseMessage(1, 42, response);
+        ResponseDTO response(ctx.expectedResponseId, userCallResponse);
+        MessageDTO responseMessage(compoundId, ctx.compoundSourceId, response);
         serializer.serializeToStream(responseMessage);
     };
 

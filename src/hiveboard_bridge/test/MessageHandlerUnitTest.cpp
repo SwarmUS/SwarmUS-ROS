@@ -14,15 +14,24 @@ class MessageHandlerFixture : public testing::Test {
     bool m_testFunctionCalled = false;
     int m_testValue1 = 0;
     int m_testValue2 = 12;
+    uint32_t m_testcompoundSourceId = 0;
+    uint32_t m_testCompoundDestinationId = 0;
+    UserCallDestinationDTO m_testModuleDestinationId = UserCallDestinationDTO::UNKNOWN;
+    uint32_t m_testExpectedResponseId = 0;
 
     // Declare some test callbacks
-    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength) {
+    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
         m_testFunctionCalled = true;
     };
 
-    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength) {
+    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
         m_testValue1 += std::get<int64_t>(args[0].getArgument());
         m_testValue2 -= std::get<float>(args[1].getArgument());
+
+        m_testcompoundSourceId = ctx.compoundSourceId;
+        m_testCompoundDestinationId = ctx.compoundDestinationId;
+        m_testModuleDestinationId = ctx.moduleDestinationId;
+        m_testExpectedResponseId = ctx.expectedResponseId;
     };
 
     MessageHandler m_messageHandler;
@@ -56,14 +65,14 @@ class MessageHandlerFixture : public testing::Test {
         m_userCallRequestDto =
             new UserCallRequestDTO(UserCallDestinationDTO::HOST, *m_functionCallRequestDto);
         m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
-        m_messageDto = new MessageDTO(1, 2, *m_requestDto);
+        m_messageDto = new MessageDTO(99, 2, *m_requestDto);
 
         // Nonexisting void function
         m_nonExistingFunctionCallRequestDto = new FunctionCallRequestDTO("NonExisting", nullptr, 0);
         m_nonExistingUserCallRequestDto = new UserCallRequestDTO(
             UserCallDestinationDTO::HOST, *m_nonExistingFunctionCallRequestDto);
         m_nonExistingRequestDto = new RequestDTO(1, *m_nonExistingUserCallRequestDto);
-        m_nonExistingMessageDto = new MessageDTO(1, 2, *m_nonExistingRequestDto);
+        m_nonExistingMessageDto = new MessageDTO(99, 2, *m_nonExistingRequestDto);
 
         // Testing a callback with side effects
         m_sideEffectArg1 = new FunctionCallArgumentDTO((int64_t)1);
@@ -73,7 +82,7 @@ class MessageHandlerFixture : public testing::Test {
         m_sideEffectUserCallRequestDto = new UserCallRequestDTO(
             UserCallDestinationDTO::HOST, *m_sideEffectFunctionCallRequestDto);
         m_sideEffectRequestDto = new RequestDTO(1, *m_sideEffectUserCallRequestDto);
-        m_moveByMessageDto = new MessageDTO(1, 2, *m_sideEffectRequestDto);
+        m_moveByMessageDto = new MessageDTO(99, 2, *m_sideEffectRequestDto);
     }
 
     void TearDown() override {
@@ -124,6 +133,10 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
     ASSERT_TRUE(m_messageHandler.handleMessage(*m_moveByMessageDto));
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);
+    ASSERT_EQ(m_testcompoundSourceId, 99);
+    ASSERT_EQ(m_testCompoundDestinationId, 2);
+    ASSERT_EQ(m_testModuleDestinationId, UserCallDestinationDTO::HOST);
+    ASSERT_EQ(m_testExpectedResponseId, 1);
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {

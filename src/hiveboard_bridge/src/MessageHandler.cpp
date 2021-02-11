@@ -37,14 +37,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 
                 // Call the right callback
                 if (callback) {
-                    CallbackContext ctx;
-                    ctx.compoundSourceId = message.getSourceId();
-                    ctx.compoundDestinationId = message.getDestinationId();
-                    ctx.moduleDestinationId =
-                        std::get_if<UserCallRequestDTO>(&userCallRequest)->getDestination();
-                    ctx.expectedResponseId = std::get_if<RequestDTO>(&request)->getId();
-
-                    callback.value()(functionArgs, argsLength, ctx);
+                    callback.value()(functionArgs, argsLength);
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
                     responseStatus = GenericResponseStatusDTO::Unknown;

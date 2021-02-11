@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
     MessageHandler messageHandler;
 
     // Register callbacks
-    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
+    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());

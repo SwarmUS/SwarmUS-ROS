@@ -20,19 +20,14 @@ class MessageHandlerFixture : public testing::Test {
     uint32_t m_testExpectedResponseId = 0;
 
     // Declare some test callbacks
-    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
+    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength) {
         m_testFunctionCalled = true;
     };
 
     CallbackFunction m_moveByTestCallback =
-        [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
+        [&](CallbackArgs args, int argsLength) {
             m_testValue1 += std::get<int64_t>(args[0].getArgument());
             m_testValue2 -= std::get<float>(args[1].getArgument());
-
-            m_testcompoundSourceId = ctx.compoundSourceId;
-            m_testCompoundDestinationId = ctx.compoundDestinationId;
-            m_testModuleDestinationId = ctx.moduleDestinationId;
-            m_testExpectedResponseId = ctx.expectedResponseId;
         };
 
     MessageHandler m_messageHandler;
@@ -158,10 +153,6 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
 
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);
-    ASSERT_EQ(m_testcompoundSourceId, 99);
-    ASSERT_EQ(m_testCompoundDestinationId, 2);
-    ASSERT_EQ(m_testModuleDestinationId, UserCallDestinationDTO::HOST);
-    ASSERT_EQ(m_testExpectedResponseId, 1);
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {

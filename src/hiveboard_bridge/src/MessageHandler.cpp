@@ -31,7 +31,14 @@ bool MessageHandler::handleMessage(MessageDTO message) {
 
                 // Call the right callback
                 if (callback) {
-                    callback.value()(functionArgs, argsLength);
+                    CallbackContext ctx;
+                    ctx.compoundSourceId = message.getSourceId();
+                    ctx.compoundDestinationId = message.getDestinationId();
+                    ctx.moduleDestinationId =
+                        std::get_if<UserCallRequestDTO>(&userCallRequest)->getDestination();
+                    ctx.expectedResponseId = std::get_if<RequestDTO>(&request)->getId();
+
+                    callback.value()(functionArgs, argsLength, ctx);
                     return true;
                 } else {
                     ROS_WARN("Function name \"%s\" was not registered as a callback",

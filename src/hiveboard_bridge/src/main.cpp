@@ -3,8 +3,6 @@
 #include "hiveboard_bridge/TCPServer.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
-#include <chrono>
-#include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
@@ -12,9 +10,10 @@
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/ResponseDTO.h>
 #include <optional>
-#include <thread>
 
 constexpr uint8_t RATE_HZ{2};
+constexpr uint32_t compoundId{
+    1}; // TODO find a way for the HiveBoard and the robot to share this ID
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
@@ -38,7 +37,7 @@ int main(int argc, char** argv) {
     MessageHandler messageHandler;
 
     // Register callbacks
-    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
+    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());
@@ -47,7 +46,12 @@ int main(int argc, char** argv) {
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
 
-        // TODO Send ack/response over TCP
+        // Send ack/response
+        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "");
+        UserCallResponseDTO userCallResponse(UserCallDestinationDTO::BUZZ, functionCallResponse);
+        ResponseDTO response(ctx.expectedResponseId, userCallResponse);
+        MessageDTO responseMessage(compoundId, ctx.compoundSourceId, response);
+        serializer.serializeToStream(responseMessage);
     };
 
     messageHandler.registerCallback("moveBy", moveByCallback);

@@ -1,11 +1,14 @@
+#include "hiveboard_bridge/MessageUtils.h"
 #include "hiveboard_bridge/ReceiveAction.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
+#include "mocks/HiveMindHostSerializerInterfaceMock.h"
 #include "mocks/MessageHandlerInterfaceMock.h"
 #include <gmock/gmock.h>
 
 class ReceiveActionUnitFixture : public testing::Test {
   protected:
     HiveMindHostDeserializerInterfaceMock m_deserializer;
+    HiveMindHostSerializerInterfaceMock m_serializer;
     MessageHandlerInterfaceMock m_messageHandler;
     ReceiveAction* m_receiveAction;
 
@@ -25,7 +28,7 @@ class ReceiveActionUnitFixture : public testing::Test {
         m_messageDto = new MessageDTO(1, 2, *m_requestDto);
         m_messageVariant = new std::variant<std::monostate, MessageDTO>(*m_messageDto);
 
-        m_receiveAction = new ReceiveAction(m_deserializer, m_messageHandler);
+        m_receiveAction = new ReceiveAction(m_deserializer, m_serializer, m_messageHandler);
     }
 
     void TearDown() {
@@ -42,7 +45,11 @@ class ReceiveActionUnitFixture : public testing::Test {
 TEST_F(ReceiveActionUnitFixture, receiveValidMessage) {
     EXPECT_CALL(m_deserializer, deserializeFromStream())
         .WillOnce(testing::Return(*m_messageVariant));
-    EXPECT_CALL(m_messageHandler, handleMessage(testing::_)).WillOnce(testing::Return(true));
+
+    MessageDTO responseMessage = MessageUtils::createResponseMessage(
+        1, 1, 1, UserCallDestinationDTO::UNKNOWN, GenericResponseStatusDTO::Ok, "");
+    EXPECT_CALL(m_messageHandler, handleMessage(testing::_))
+        .WillOnce(testing::Return(responseMessage));
 
     m_receiveAction->fetchAndProcessMessage();
 }

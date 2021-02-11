@@ -2,13 +2,14 @@
 #define CATKIN_ROS_MESSAGEHANDLER_H
 
 #include "IMessageHandler.h"
+#include "hiveboard_bridge/MessageUtils.h"
 
 class MessageHandler : public IMessageHandler {
   public:
     MessageHandler();
     ~MessageHandler();
 
-    bool handleMessage(MessageDTO message) override;
+    MessageDTO handleMessage(MessageDTO message) override;
 
     bool registerCallback(std::string name, CallbackFunction callback) override;
 

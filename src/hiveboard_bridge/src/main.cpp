@@ -45,18 +45,11 @@ int main(int argc, char** argv) {
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
-
-        // Send ack/response
-        FunctionCallResponseDTO functionCallResponse(GenericResponseStatusDTO::Ok, "");
-        UserCallResponseDTO userCallResponse(UserCallDestinationDTO::BUZZ, functionCallResponse);
-        ResponseDTO response(ctx.expectedResponseId, userCallResponse);
-        MessageDTO responseMessage(compoundId, ctx.compoundSourceId, response);
-        serializer.serializeToStream(responseMessage);
     };
 
     messageHandler.registerCallback("moveBy", moveByCallback);
 
-    ReceiveAction receiveAction(deserializer, messageHandler);
+    ReceiveAction receiveAction(deserializer, serializer, messageHandler);
 
     ros::Rate loopRate(RATE_HZ);
     while (ros::ok()) {

@@ -3,13 +3,16 @@
 
 #include "IMessageHandler.h"
 #include <hivemind-host/IHiveMindHostDeserializer.h>
+#include <hivemind-host/IHiveMindHostSerializer.h>
 
 /**
  * @brief A class that contains all the actions that must be done to fetch and process a message.
  */
 class ReceiveAction {
   public:
-    ReceiveAction(IHiveMindHostDeserializer& deserializer, IMessageHandler& messageHandler);
+    ReceiveAction(IHiveMindHostDeserializer& deserializer,
+                  IHiveMindHostSerializer& serializer,
+                  IMessageHandler& messageHandler);
 
     /**
      * Perform the actions.
@@ -18,6 +21,7 @@ class ReceiveAction {
 
   private:
     IHiveMindHostDeserializer& m_deserializer;
+    IHiveMindHostSerializer& m_serializer;
     IMessageHandler& m_messageHandler;
 };
 

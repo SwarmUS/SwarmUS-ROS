@@ -126,12 +126,36 @@ TEST_F(MessageHandlerFixture, testGetCallbackFail) {
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    ASSERT_TRUE(m_messageHandler.handleMessage(*m_messageDto));
+    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_messageDto);
+    ASSERT_EQ(responseMessage.getSourceId(), 2);
+    ASSERT_EQ(responseMessage.getDestinationId(), 99);
+
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    ASSERT_EQ(response.getId(), 1);
+
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
+
     ASSERT_TRUE(m_testFunctionCalled);
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
-    ASSERT_TRUE(m_messageHandler.handleMessage(*m_moveByMessageDto));
+    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_moveByMessageDto);
+    ASSERT_EQ(responseMessage.getSourceId(), 2);
+    ASSERT_EQ(responseMessage.getDestinationId(), 99);
+
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    ASSERT_EQ(response.getId(), 1);
+
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
+
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);
     ASSERT_EQ(m_testcompoundSourceId, 99);
@@ -141,5 +165,16 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
-    ASSERT_FALSE(m_messageHandler.handleMessage(*m_nonExistingMessageDto));
+    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
+    ASSERT_EQ(responseMessage.getSourceId(), 2);
+    ASSERT_EQ(responseMessage.getDestinationId(), 99);
+
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    ASSERT_EQ(response.getId(), 1);
+
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Unknown);
 }

@@ -34,9 +34,10 @@ class IMessageHandler {
     /**
      * Parse a message and execute the appropriate callback.
      * @param message the message to parse.
-     * @return True if the appropriate callback was found and executed, false otherwise
+     * @return A message containing the appropriate acknowlege (with appropriate errors if
+     * necessary)
      */
-    virtual bool handleMessage(MessageDTO message) = 0;
+    virtual MessageDTO handleMessage(MessageDTO message) = 0;
 
     /**
      * Register a callback

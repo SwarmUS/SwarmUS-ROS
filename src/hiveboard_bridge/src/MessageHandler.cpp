@@ -34,7 +34,8 @@ bool MessageHandler::handleMessage(MessageDTO message) {
                     CallbackContext ctx;
                     ctx.compoundSourceId = message.getSourceId();
                     ctx.compoundDestinationId = message.getDestinationId();
-                    ctx.moduleDestinationId = std::get_if<UserCallRequestDTO>(&userCallRequest)->getDestination();
+                    ctx.moduleDestinationId =
+                        std::get_if<UserCallRequestDTO>(&userCallRequest)->getDestination();
                     ctx.expectedResponseId = std::get_if<RequestDTO>(&request)->getId();
 
                     callback.value()(functionArgs, argsLength, ctx);

@@ -31,6 +31,7 @@ set(LIB_ALIAS "SwarmUS::ROS::Hiveboard::Bridge")
 set(HIVEBOARD_BRIDGE_SOURCES
         src/TCPServer.cpp
         src/MessageHandler.cpp
+        src/MessageUtils.cpp
         src/ReceiveAction.cpp)
 
 add_library(${LIB_NAME} ${HIVEBOARD_BRIDGE_SOURCES})

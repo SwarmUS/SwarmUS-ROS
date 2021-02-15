@@ -9,7 +9,7 @@ class MessageHandlerInterfaceMock : public IMessageHandler {
   public:
     ~MessageHandlerInterfaceMock() = default;
 
-    MOCK_METHOD(bool, handleMessage, (MessageDTO message), (override));
+    MOCK_METHOD(MessageDTO, handleMessage, (MessageDTO message), (override));
 
     MOCK_METHOD(bool, registerCallback, (std::string name, CallbackFunction callback), (override));
 

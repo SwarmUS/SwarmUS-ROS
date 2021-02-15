@@ -16,14 +16,7 @@ typedef std::array<FunctionCallArgumentDTO,
                    FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
     CallbackArgs;
 
-typedef struct {
-    uint32_t compoundSourceId;
-    uint32_t compoundDestinationId;
-    UserCallDestinationDTO moduleDestinationId;
-    uint32_t expectedResponseId;
-} CallbackContext;
-
-typedef std::function<void(CallbackArgs, int, CallbackContext)> CallbackFunction;
+typedef std::function<void(CallbackArgs, int)> CallbackFunction;
 
 typedef std::unordered_map<std::string, CallbackFunction> CallbackMap;
 
@@ -34,9 +27,10 @@ class IMessageHandler {
     /**
      * Parse a message and execute the appropriate callback.
      * @param message the message to parse.
-     * @return True if the appropriate callback was found and executed, false otherwise
+     * @return A message containing the appropriate acknowlege (with appropriate errors if
+     * necessary)
      */
-    virtual bool handleMessage(MessageDTO message) = 0;
+    virtual MessageDTO handleMessage(MessageDTO message) = 0;
 
     /**
      * Register a callback

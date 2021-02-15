@@ -16,24 +16,18 @@ class MessageHandlerFixture : public testing::Test {
     int m_testValue2 = 12;
     uint32_t m_testcompoundSourceId = 0;
     uint32_t m_testCompoundDestinationId = 0;
-    UserCallDestinationDTO m_testModuleDestinationId = UserCallDestinationDTO::UNKNOWN;
+    UserCallTargetDTO m_testModuleDestinationId = UserCallTargetDTO::UNKNOWN;
     uint32_t m_testExpectedResponseId = 0;
 
     // Declare some test callbacks
-    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
+    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength) {
         m_testFunctionCalled = true;
     };
 
-    CallbackFunction m_moveByTestCallback =
-        [&](CallbackArgs args, int argsLength, CallbackContext ctx) {
-            m_testValue1 += std::get<int64_t>(args[0].getArgument());
-            m_testValue2 -= std::get<float>(args[1].getArgument());
-
-            m_testcompoundSourceId = ctx.compoundSourceId;
-            m_testCompoundDestinationId = ctx.compoundDestinationId;
-            m_testModuleDestinationId = ctx.moduleDestinationId;
-            m_testExpectedResponseId = ctx.expectedResponseId;
-        };
+    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength) {
+        m_testValue1 += std::get<int64_t>(args[0].getArgument());
+        m_testValue2 -= std::get<float>(args[1].getArgument());
+    };
 
     MessageHandler m_messageHandler;
 
@@ -63,15 +57,15 @@ class MessageHandlerFixture : public testing::Test {
         // Existing void  function
         m_functionCallRequestDto =
             new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
-        m_userCallRequestDto =
-            new UserCallRequestDTO(UserCallDestinationDTO::HOST, *m_functionCallRequestDto);
+        m_userCallRequestDto = new UserCallRequestDTO(
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_functionCallRequestDto);
         m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
         m_messageDto = new MessageDTO(99, 2, *m_requestDto);
 
         // Nonexisting void function
         m_nonExistingFunctionCallRequestDto = new FunctionCallRequestDTO("NonExisting", nullptr, 0);
         m_nonExistingUserCallRequestDto = new UserCallRequestDTO(
-            UserCallDestinationDTO::HOST, *m_nonExistingFunctionCallRequestDto);
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_nonExistingFunctionCallRequestDto);
         m_nonExistingRequestDto = new RequestDTO(1, *m_nonExistingUserCallRequestDto);
         m_nonExistingMessageDto = new MessageDTO(99, 2, *m_nonExistingRequestDto);
 
@@ -81,7 +75,7 @@ class MessageHandlerFixture : public testing::Test {
         FunctionCallArgumentDTO args[2] = {*m_sideEffectArg1, *m_sideEffectArg2};
         m_sideEffectFunctionCallRequestDto = new FunctionCallRequestDTO("MoveBy", args, 2);
         m_sideEffectUserCallRequestDto = new UserCallRequestDTO(
-            UserCallDestinationDTO::HOST, *m_sideEffectFunctionCallRequestDto);
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_sideEffectFunctionCallRequestDto);
         m_sideEffectRequestDto = new RequestDTO(1, *m_sideEffectUserCallRequestDto);
         m_moveByMessageDto = new MessageDTO(99, 2, *m_sideEffectRequestDto);
     }
@@ -126,20 +120,57 @@ TEST_F(MessageHandlerFixture, testGetCallbackFail) {
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    ASSERT_TRUE(m_messageHandler.handleMessage(*m_messageDto));
+    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_messageDto);
+    ASSERT_EQ(responseMessage.getSourceId(), 2);
+    ASSERT_EQ(responseMessage.getDestinationId(), 99);
+
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    ASSERT_EQ(response.getId(), 1);
+
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    ASSERT_EQ(userCallResponse.getDestination(), UserCallTargetDTO::BUZZ);
+
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
+
     ASSERT_TRUE(m_testFunctionCalled);
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
-    ASSERT_TRUE(m_messageHandler.handleMessage(*m_moveByMessageDto));
+    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_moveByMessageDto);
+    ASSERT_EQ(responseMessage.getSourceId(), 2);
+    ASSERT_EQ(responseMessage.getDestinationId(), 99);
+
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    ASSERT_EQ(response.getId(), 1);
+
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    ASSERT_EQ(userCallResponse.getDestination(), UserCallTargetDTO::BUZZ);
+
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
+
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);
-    ASSERT_EQ(m_testcompoundSourceId, 99);
-    ASSERT_EQ(m_testCompoundDestinationId, 2);
-    ASSERT_EQ(m_testModuleDestinationId, UserCallDestinationDTO::HOST);
-    ASSERT_EQ(m_testExpectedResponseId, 1);
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
-    ASSERT_FALSE(m_messageHandler.handleMessage(*m_nonExistingMessageDto));
+    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
+    ASSERT_EQ(responseMessage.getSourceId(), 2);
+    ASSERT_EQ(responseMessage.getDestinationId(), 99);
+
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    ASSERT_EQ(response.getId(), 1);
+
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    ASSERT_EQ(userCallResponse.getDestination(), UserCallTargetDTO::BUZZ);
+
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Unknown);
 }

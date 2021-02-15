@@ -63,7 +63,8 @@ int main(int argc, char** argv) {
     FunctionCallArgumentDTO moveByY((float)1);
     FunctionCallArgumentDTO args[2] = {moveByX, moveByY};
     FunctionCallRequestDTO moveByFunctionCallRequestDTO("moveBy", args, 2);
-    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST, moveByFunctionCallRequestDTO);
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST,
+                                       moveByFunctionCallRequestDTO);
     RequestDTO moveByRequestDTO(1, userCallRequest);
     MessageDTO moveByMessageDTO(1, 2, moveByRequestDTO);
 

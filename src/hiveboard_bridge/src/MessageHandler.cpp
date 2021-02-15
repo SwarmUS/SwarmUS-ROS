@@ -24,7 +24,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
             std::variant<std::monostate, FunctionCallRequestDTO> functionCallRequest =
                 std::get<UserCallRequestDTO>(userCallRequest).getRequest();
-                sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
+            sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
             // FunctionCallRequest
             if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {

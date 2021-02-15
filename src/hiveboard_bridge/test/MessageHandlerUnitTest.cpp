@@ -57,15 +57,15 @@ class MessageHandlerFixture : public testing::Test {
         // Existing void  function
         m_functionCallRequestDto =
             new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
-        m_userCallRequestDto =
-            new UserCallRequestDTO(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_functionCallRequestDto);
+        m_userCallRequestDto = new UserCallRequestDTO(
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_functionCallRequestDto);
         m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
         m_messageDto = new MessageDTO(99, 2, *m_requestDto);
 
         // Nonexisting void function
         m_nonExistingFunctionCallRequestDto = new FunctionCallRequestDTO("NonExisting", nullptr, 0);
         m_nonExistingUserCallRequestDto = new UserCallRequestDTO(
-                UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_nonExistingFunctionCallRequestDto);
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_nonExistingFunctionCallRequestDto);
         m_nonExistingRequestDto = new RequestDTO(1, *m_nonExistingUserCallRequestDto);
         m_nonExistingMessageDto = new MessageDTO(99, 2, *m_nonExistingRequestDto);
 
@@ -75,7 +75,7 @@ class MessageHandlerFixture : public testing::Test {
         FunctionCallArgumentDTO args[2] = {*m_sideEffectArg1, *m_sideEffectArg2};
         m_sideEffectFunctionCallRequestDto = new FunctionCallRequestDTO("MoveBy", args, 2);
         m_sideEffectUserCallRequestDto = new UserCallRequestDTO(
-                UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_sideEffectFunctionCallRequestDto);
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_sideEffectFunctionCallRequestDto);
         m_sideEffectRequestDto = new RequestDTO(1, *m_sideEffectUserCallRequestDto);
         m_moveByMessageDto = new MessageDTO(99, 2, *m_sideEffectRequestDto);
     }

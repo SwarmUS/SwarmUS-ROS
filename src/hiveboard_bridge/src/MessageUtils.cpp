@@ -7,7 +7,8 @@ MessageDTO MessageUtils::createResponseMessage(uint32_t responseId,
                                                GenericResponseStatusDTO status,
                                                std::string ackMessage) {
     FunctionCallResponseDTO functionCallResponse(status, ackMessage.c_str());
-    UserCallResponseDTO userCallResponse(UserCallTargetDTO::HOST, moduleDestination, functionCallResponse);
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::HOST, moduleDestination,
+                                         functionCallResponse);
     ResponseDTO response(responseId, userCallResponse);
     MessageDTO responseMessage(msgSourceId, msgDestinationId, response);
 

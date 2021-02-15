@@ -22,8 +22,8 @@ class ReceiveActionUnitFixture : public testing::Test {
     void SetUp() {
         m_functionCallRequestDto =
             new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
-        m_userCallRequestDto =
-            new UserCallRequestDTO(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_functionCallRequestDto);
+        m_userCallRequestDto = new UserCallRequestDTO(
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_functionCallRequestDto);
         m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
         m_messageDto = new MessageDTO(1, 2, *m_requestDto);
         m_messageVariant = new std::variant<std::monostate, MessageDTO>(*m_messageDto);
@@ -43,8 +43,7 @@ class ReceiveActionUnitFixture : public testing::Test {
 };
 
 TEST_F(ReceiveActionUnitFixture, receiveValidMessage) {
-    EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_))
-        .WillOnce(testing::Return(true));
+    EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).WillOnce(testing::Return(true));
 
     MessageDTO responseMessage = MessageUtils::createResponseMessage(
         1, 1, 1, UserCallTargetDTO::HOST, GenericResponseStatusDTO::Ok, "");
@@ -55,8 +54,7 @@ TEST_F(ReceiveActionUnitFixture, receiveValidMessage) {
 }
 
 TEST_F(ReceiveActionUnitFixture, receiveNoMessage) {
-    EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_))
-        .WillOnce(testing::Return(false));
+    EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).WillOnce(testing::Return(false));
     EXPECT_CALL(m_messageHandler, handleMessage(testing::_)).Times(0);
 
     m_receiveAction->fetchAndProcessMessage();

@@ -6,10 +6,10 @@ ReceiveAction::ReceiveAction(IHiveMindHostDeserializer& deserializer,
     m_deserializer(deserializer), m_serializer(serializer), m_messageHandler(messageHandler) {}
 
 void ReceiveAction::fetchAndProcessMessage() {
-    std::variant<std::monostate, MessageDTO> message = m_deserializer.deserializeFromStream();
-    if (std::holds_alternative<MessageDTO>(message)) {
+    MessageDTO message;
+    if (m_deserializer.deserializeFromStream(message)) {
         // Execute the action
-        MessageDTO responseMessage = m_messageHandler.handleMessage(std::get<MessageDTO>(message));
+        MessageDTO responseMessage = m_messageHandler.handleMessage(message);
 
         // Send the ack/nack message
         m_serializer.serializeToStream(responseMessage);

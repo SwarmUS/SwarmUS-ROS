@@ -9,6 +9,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
     uint32_t msgSourceId = message.getSourceId();
     uint32_t msgDestinationId = message.getDestinationId();
     uint32_t requestId = 0;
+    UserCallTargetDTO sourceModule = UserCallTargetDTO::UNKNOWN;
 
     // Message
     auto request = message.getMessage();
@@ -23,6 +24,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
             std::variant<std::monostate, FunctionCallRequestDTO> functionCallRequest =
                 std::get<UserCallRequestDTO>(userCallRequest).getRequest();
+                sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
             // FunctionCallRequest
             if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {
@@ -53,7 +55,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
     }
 
     return MessageUtils::createResponseMessage(requestId, msgDestinationId, msgSourceId,
-                                               UserCallDestinationDTO::BUZZ, responseStatus, "");
+                                               sourceModule, responseStatus, "");
 }
 
 bool MessageHandler::registerCallback(std::string name, CallbackFunction callback) {

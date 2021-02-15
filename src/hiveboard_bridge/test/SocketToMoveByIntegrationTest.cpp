@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
     FunctionCallArgumentDTO moveByY((float)1);
     FunctionCallArgumentDTO args[2] = {moveByX, moveByY};
     FunctionCallRequestDTO moveByFunctionCallRequestDTO("moveBy", args, 2);
-    UserCallRequestDTO userCallRequest(UserCallDestinationDTO::HOST, moveByFunctionCallRequestDTO);
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST, moveByFunctionCallRequestDTO);
     RequestDTO moveByRequestDTO(1, userCallRequest);
     MessageDTO moveByMessageDTO(1, 2, moveByRequestDTO);
 
@@ -73,7 +73,8 @@ int main(int argc, char** argv) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
         // Listen for a response
-        MessageDTO message = std::get<MessageDTO>(deserializer.deserializeFromStream());
+        MessageDTO message;
+        deserializer.deserializeFromStream(message);
         ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
         UserCallResponseDTO userCallResponse =
             std::get<UserCallResponseDTO>(response.getResponse());

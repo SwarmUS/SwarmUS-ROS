@@ -16,7 +16,7 @@ class MessageHandlerFixture : public testing::Test {
     int m_testValue2 = 12;
     uint32_t m_testcompoundSourceId = 0;
     uint32_t m_testCompoundDestinationId = 0;
-    UserCallDestinationDTO m_testModuleDestinationId = UserCallDestinationDTO::UNKNOWN;
+    UserCallTargetDTO m_testModuleDestinationId = UserCallTargetDTO::UNKNOWN;
     uint32_t m_testExpectedResponseId = 0;
 
     // Declare some test callbacks
@@ -58,14 +58,14 @@ class MessageHandlerFixture : public testing::Test {
         m_functionCallRequestDto =
             new FunctionCallRequestDTO("TestFunctionCallRequestDTO", nullptr, 0);
         m_userCallRequestDto =
-            new UserCallRequestDTO(UserCallDestinationDTO::HOST, *m_functionCallRequestDto);
+            new UserCallRequestDTO(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_functionCallRequestDto);
         m_requestDto = new RequestDTO(1, *m_userCallRequestDto);
         m_messageDto = new MessageDTO(99, 2, *m_requestDto);
 
         // Nonexisting void function
         m_nonExistingFunctionCallRequestDto = new FunctionCallRequestDTO("NonExisting", nullptr, 0);
         m_nonExistingUserCallRequestDto = new UserCallRequestDTO(
-            UserCallDestinationDTO::HOST, *m_nonExistingFunctionCallRequestDto);
+                UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_nonExistingFunctionCallRequestDto);
         m_nonExistingRequestDto = new RequestDTO(1, *m_nonExistingUserCallRequestDto);
         m_nonExistingMessageDto = new MessageDTO(99, 2, *m_nonExistingRequestDto);
 
@@ -75,7 +75,7 @@ class MessageHandlerFixture : public testing::Test {
         FunctionCallArgumentDTO args[2] = {*m_sideEffectArg1, *m_sideEffectArg2};
         m_sideEffectFunctionCallRequestDto = new FunctionCallRequestDTO("MoveBy", args, 2);
         m_sideEffectUserCallRequestDto = new UserCallRequestDTO(
-            UserCallDestinationDTO::HOST, *m_sideEffectFunctionCallRequestDto);
+                UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, *m_sideEffectFunctionCallRequestDto);
         m_sideEffectRequestDto = new RequestDTO(1, *m_sideEffectUserCallRequestDto);
         m_moveByMessageDto = new MessageDTO(99, 2, *m_sideEffectRequestDto);
     }
@@ -128,6 +128,8 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     ASSERT_EQ(response.getId(), 1);
 
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    ASSERT_EQ(userCallResponse.getDestination(), UserCallTargetDTO::BUZZ);
+
     FunctionCallResponseDTO functionCallResponse =
         std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
@@ -145,6 +147,8 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
     ASSERT_EQ(response.getId(), 1);
 
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    ASSERT_EQ(userCallResponse.getDestination(), UserCallTargetDTO::BUZZ);
+
     FunctionCallResponseDTO functionCallResponse =
         std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
@@ -163,6 +167,8 @@ TEST_F(MessageHandlerFixture, testHandleMessageFail) {
     ASSERT_EQ(response.getId(), 1);
 
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    ASSERT_EQ(userCallResponse.getDestination(), UserCallTargetDTO::BUZZ);
+
     FunctionCallResponseDTO functionCallResponse =
         std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();

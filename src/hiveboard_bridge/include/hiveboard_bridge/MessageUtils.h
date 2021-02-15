@@ -23,7 +23,7 @@ namespace MessageUtils {
     MessageDTO createResponseMessage(uint32_t responseId,
                                      uint32_t msgSourceId,
                                      uint32_t msgDestinationId,
-                                     UserCallDestinationDTO moduleDestination,
+                                     UserCallTargetDTO moduleDestination,
                                      GenericResponseStatusDTO status,
                                      std::string ackMessage);
 } // namespace MessageUtils

@@ -52,7 +52,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
         ROS_WARN("Message handling failed");
     }
 
-    return MessageUtils::createResponseMessage(requestId, msgSourceId, msgDestinationId,
+    return MessageUtils::createResponseMessage(requestId, msgDestinationId, msgSourceId,
                                                UserCallDestinationDTO::BUZZ, responseStatus, "");
 }
 

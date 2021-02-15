@@ -9,8 +9,7 @@ MessageDTO MessageUtils::createResponseMessage(uint32_t responseId,
     FunctionCallResponseDTO functionCallResponse(status, ackMessage.c_str());
     UserCallResponseDTO userCallResponse(moduleDestination, functionCallResponse);
     ResponseDTO response(responseId, userCallResponse);
-    MessageDTO responseMessage(msgDestinationId, msgSourceId,
-                               response); // Swap source and destination for a response
+    MessageDTO responseMessage(msgSourceId, msgDestinationId, response);
 
     return responseMessage;
 }

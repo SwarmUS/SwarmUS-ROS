@@ -1,0 +1,3 @@
+# Rule to remap the serial port of the robotclaw to be "roboclaw"
+#
+SUBSYSTEM=="tty",ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2404", ACTION=="add", SYMLINK+="roboclaw"

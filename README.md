@@ -78,6 +78,7 @@ rosdep install --from-paths src --ignore-src -r -y
 cd ~/catkin_ws && catkin_cmake
 ```
 NOTE: the `install dependencies.sh` and `set_udev_rules.sh` scripts will only work on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
+If the Realsense packages can't be installed with the `apt-get install`command, follow the [librealsense source installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md)
 ## Running unit tests
 
 Unit tests are run via Catkin :

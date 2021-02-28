@@ -14,7 +14,6 @@ SwarmUS-ROS contains all the ROS packages developed for the SwarmUS project. It 
 SwarmUS-ROS
 ├── contrib
 │   └── HiveMind
-│   └── mpu6050
 │   └── realsense
 │   └── roboclaw
 │   └── rplidar
@@ -73,12 +72,23 @@ git clone https://github.com/SwarmUS/SwarmUS-ROS.git
 cd SwarmUS-ROS
 git submodule update --init --recursive
 sh scripts/install_dependencies.sh
-sh scripts/set_udev_rules.sh
 rosdep install --from-paths src --ignore-src -r -y
-cd ~/catkin_ws && catkin_cmake
+cd ~/catkin_ws && catkin_make_isolated
+sh scripts/set_udev_rules.sh
 ```
-NOTE: the `install dependencies.sh` and `set_udev_rules.sh` scripts will only work on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
-If the Realsense packages can't be installed with the `apt-get install`command, follow the [librealsense source installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md)
+NOTE: 
+
+- The `install dependencies.sh` and `set_udev_rules.sh` scripts will only work on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
+
+  - If the Realsense packages can't be installed with the `apt-get install`command, follow the [librealsense source installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md). This might take some time since you will be building from the source code.
+
+- `catkin_make_isolated` is used instead of `catkin_make` because there is a conflict when the Hivemind code and the hiveboard_bridge node are built since they both share the same code. You will need to source the devel_isolated setup whenever you build new packages with `catkin_make_isolated`. You can add the command to the .bashrc for more convenience : 
+
+  ```
+  echo "source ~/catkin_ws/devel_isolated/setup.bash" >> ~/.bashrc
+  source ~/.bashrc
+  ```
+
 ## Running unit tests
 
 Unit tests are run via Catkin :

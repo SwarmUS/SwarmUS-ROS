@@ -1,11 +1,13 @@
 <?xml version="1.0" ?>
 <launch>
+    <arg name="robot_name" default="pioneer_0"/>
+
     <include file="$(find swarmus_ros_navigation)/launch/navigation.launch"/>
     <include file="$(find swarmus_ros_simulation)/launch/slam_simulation.launch"/>
 
     <node pkg="hiveboard_bridge" type="hiveboard_bridge" name="hiveboard_bridge" output="screen">
         <param name="TCP_SERVER_PORT" type="int" value="8080"/>
-        <param name="ROBOT_NAME" type="str" value="pioneer_0"/>
+        <param name="ROBOT_NAME" type="str" value="$(arg robot_name)"/>
     </node>
 
     <node name="hive_mind" pkg="hive_mind" type="hive_mind"  output="screen" >

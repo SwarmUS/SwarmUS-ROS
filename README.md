@@ -74,6 +74,8 @@ git submodule update --init --recursive
 sh scripts/install_dependencies.sh
 rosdep install --from-paths src --ignore-src -r -y
 cd ~/catkin_ws && catkin_make_isolated
+echo "source ~/catkin_ws/devel_isolated/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 sh scripts/set_udev_rules.sh
 ```
 NOTE: 

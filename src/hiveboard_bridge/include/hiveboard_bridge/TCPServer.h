@@ -2,7 +2,8 @@
 #define CATKIN_ROS_TCPSERVER_H
 
 #include "ros/ros.h"
-#include <common/IProtobufStream.h>
+#include "hiveboard_bridge/ITCPServer.h"
+//#include <common/IProtobufStream.h>
 #include <cstdint>
 #include <cstring>
 #include <memory>
@@ -10,8 +11,11 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <functional>
 
-class TCPServer : public IProtobufStream {
+typedef std::function<void()> Hook;
+
+class TCPServer : public ITCPServer {
   public:
     /**
      * Construct a TCPServer
@@ -44,12 +48,33 @@ class TCPServer : public IProtobufStream {
     /**
      * Terminate a client connection.
      */
-    void close();
+    void close() override;
+
+    /**
+     * See if the server has a client connected
+     * @return true if the TCP server has a client connected.
+     */
+    bool isClientConnected() override;
+
+    /**
+     * Register a callback to be run when a TCP connection is established with a client HiveBoard
+     * @param callback The function to be run
+     */
+    void onConnect(Hook hook) override;
+
+    /**
+     * Register a callback to be run as soon as the TCP Server notices that the connection was lost.
+     * @param callback The function to be run
+     */
+    void onDisconnect(Hook hook) override;
 
   private:
     int m_serverFd, m_clientFd, m_port;
     int m_addressLength;
     struct sockaddr_in m_address;
+    bool m_isClientConnected = false;
+    std::function<void()> m_onConnect;
+    std::function<void()> m_onDisonnect;
 
     /**
      * Create and bind the socket.

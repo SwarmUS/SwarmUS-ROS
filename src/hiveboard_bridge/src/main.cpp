@@ -1,14 +1,10 @@
+#include "hiveboard_bridge/HiveBoardBridge.h"
+#include "hiveboard_bridge/HiveBoardBridgeFactory.h"
 #include "hiveboard_bridge/MessageHandler.h"
-#include "hiveboard_bridge/ReceiveAction.h"
-#include "hiveboard_bridge/TCPServer.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
-#include <hivemind-host/MessageDTO.h>
-#include <hivemind-host/ResponseDTO.h>
 #include <optional>
 
 constexpr uint8_t RATE_HZ{2};
@@ -26,15 +22,7 @@ int main(int argc, char** argv) {
     ros::Subscriber sub;
 
     int port = ros::param::param("~TCP_SERVER_PORT", 8080);
-    TCPServer tcpServer(port);
-
-    ROS_INFO("Listening for incoming clients on port %d...", port);
-    tcpServer.listen();
-    ROS_INFO("Client connected.");
-
-    HiveMindHostDeserializer deserializer(tcpServer);
-    HiveMindHostSerializer serializer(tcpServer);
-    MessageHandler messageHandler;
+    HiveBoardBridge bridge = HiveBoardBridgeFactory::createHiveBoardBridge(port);
 
     // Register callbacks
     CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
@@ -47,15 +35,22 @@ int main(int argc, char** argv) {
         moveByPublisher.publish(moveByMessage);
     };
 
-    messageHandler.registerCallback("moveBy", moveByCallback);
+    // Register hooks
+    bridge.onConnect([]() {
+        ROS_INFO("Client connected.");
+    });
 
-    ReceiveAction receiveAction(deserializer, serializer, messageHandler);
+    bridge.onDisconnect([]() {
+        ROS_INFO("onDisconnect Hook");
+    });
+
+    bridge.registerCustomAction("moveBy", moveByCallback);
 
     ros::Rate loopRate(RATE_HZ);
     while (ros::ok()) {
         ros::spinOnce();
 
-        receiveAction.fetchAndProcessMessage();
+        bridge.spin();
 
         loopRate.sleep();
     }

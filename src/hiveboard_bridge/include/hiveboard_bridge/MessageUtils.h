@@ -1,5 +1,5 @@
-#ifndef HIVEBOARD_BRIDGE_MESSAGEUTILS_H
-#define HIVEBOARD_BRIDGE_MESSAGEUTILS_H
+#ifndef HIVEMIND_BRIDGE_MESSAGEUTILS_H
+#define HIVEMIND_BRIDGE_MESSAGEUTILS_H
 
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/MessageDTO.h>
@@ -28,4 +28,4 @@ namespace MessageUtils {
                                      std::string ackMessage);
 } // namespace MessageUtils
 
-#endif // HIVEBOARD_BRIDGE_MESSAGEUTILS_H
+#endif // HIVEMIND_BRIDGE_MESSAGEUTILS_H

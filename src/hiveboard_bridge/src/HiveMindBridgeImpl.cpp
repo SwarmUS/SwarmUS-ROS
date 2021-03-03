@@ -1,11 +1,11 @@
 #include "hiveboard_bridge/HiveMindBridgeImpl.h"
 
-HiveBoardBridgeImpl::HiveBoardBridgeImpl(ITCPServer& tcpServer,
+HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                          IHiveMindHostSerializer& serializer,
                                          IHiveMindHostDeserializer& deserializer) :
     m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer) {}
 
-void HiveBoardBridgeImpl::spin() {
+void HiveMindBridgeImpl::spin() {
     if (m_tcpServer.isClientConnected()) {
         MessageDTO message;
         if (m_deserializer.deserializeFromStream(message)) {
@@ -22,12 +22,12 @@ void HiveBoardBridgeImpl::spin() {
     }
 }
 
-void HiveBoardBridgeImpl::onConnect(std::function<void()> hook) { m_tcpServer.onConnect(hook); }
+void HiveMindBridgeImpl::onConnect(std::function<void()> hook) { m_tcpServer.onConnect(hook); }
 
-void HiveBoardBridgeImpl::onDisconnect(std::function<void()> hook) {
+void HiveMindBridgeImpl::onDisconnect(std::function<void()> hook) {
     m_tcpServer.onDisconnect(hook);
 }
 
-bool HiveBoardBridgeImpl::registerCustomAction(std::string name, CallbackFunction callback) {
+bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction callback) {
     return m_messageHandler.registerCallback(name, callback);
 }

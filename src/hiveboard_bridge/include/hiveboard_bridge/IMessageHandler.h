@@ -1,5 +1,5 @@
-#ifndef HIVEBOARD_BRIDGE_IMESSAGEHANDLER_H
-#define HIVEBOARD_BRIDGE_IMESSAGEHANDLER_H
+#ifndef HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
+#define HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 
 #include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
@@ -48,4 +48,4 @@ class IMessageHandler {
     virtual std::optional<CallbackFunction> getCallback(const std::string& name) = 0;
 };
 
-#endif // HIVEBOARD_BRIDGE_IMESSAGEHANDLER_H
+#endif // HIVEMIND_BRIDGE_IMESSAGEHANDLER_H

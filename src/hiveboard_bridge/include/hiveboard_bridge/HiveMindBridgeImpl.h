@@ -1,5 +1,5 @@
-#ifndef HIVEBOARD_BRIDGE_HIVEBOARDBRIDGEIMPL_H
-#define HIVEBOARD_BRIDGE_HIVEBOARDBRIDGEIMPL_H
+#ifndef HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H
+#define HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H
 
 #include "hiveboard_bridge/IHiveMindBridge.h"
 #include "hiveboard_bridge/MessageHandler.h"
@@ -8,15 +8,15 @@
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 
-class HiveBoardBridgeImpl : public IHiveBoardBridge {
+class HiveMindBridgeImpl : public IHiveMindBridge {
   public:
     /**
-     * Construct a HiveBoard Bridge object by injecting already-initialised objects.
+     * Construct a HiveMind Bridge object by injecting already-initialised objects.
      * @param tcpServer A TCPServer to be used
      * @param serializer A HiveMindHostSerializer to be used
      * @param deserializer A HiveMindHostDeserializer to be used
      */
-    HiveBoardBridgeImpl(ITCPServer& tcpServer,
+    HiveMindBridgeImpl(ITCPServer& tcpServer,
                         IHiveMindHostSerializer& serializer,
                         IHiveMindHostDeserializer& deserializer);
 
@@ -35,4 +35,4 @@ class HiveBoardBridgeImpl : public IHiveBoardBridge {
     MessageHandler m_messageHandler;
 };
 
-#endif // HIVEBOARD_BRIDGE_HIVEBOARDBRIDGEIMPL_H
+#endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H

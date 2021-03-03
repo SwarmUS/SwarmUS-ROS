@@ -1,5 +1,5 @@
-#ifndef HIVEBOARD_BRIDGE_HIVEBOARDBRIDGE_H
-#define HIVEBOARD_BRIDGE_HIVEBOARDBRIDGE_H
+#ifndef HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H
+#define HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H
 #include "hiveboard_bridge/HiveMindBridgeImpl.h"
 #include "hiveboard_bridge/IHiveMindBridge.h"
 #include "hiveboard_bridge/MessageHandler.h"
@@ -8,13 +8,13 @@
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 
-class HiveBoardBridge : public IHiveBoardBridge {
+class HiveMindBridge : public IHiveMindBridge {
   public:
     /**
-     * Construct a HiveBoardBridge
+     * Construct a HiveMindBridge
      * @param tcpPort The port that the TCP server should listen to
      */
-    HiveBoardBridge(int tcpPort);
+    HiveMindBridge(int tcpPort);
 
     void spin();
 
@@ -25,10 +25,10 @@ class HiveBoardBridge : public IHiveBoardBridge {
     bool registerCustomAction(std::string name, CallbackFunction callback);
 
   private:
-    std::unique_ptr<HiveBoardBridgeImpl> m_bridge;
+    std::unique_ptr<HiveMindBridgeImpl> m_bridge;
     TCPServer m_tcpServer;
     HiveMindHostDeserializer m_deserializer;
     HiveMindHostSerializer m_serializer;
 };
 
-#endif // HIVEBOARD_BRIDGE_HIVEBOARDBRIDGE_H
+#endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H

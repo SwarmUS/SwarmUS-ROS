@@ -1,5 +1,5 @@
-#ifndef HIVEBOARD_BRIDGE_ITCPSERVER_H
-#define HIVEBOARD_BRIDGE_ITCPSERVER_H
+#ifndef HIVEMIND_BRIDGE_ITCPSERVER_H
+#define HIVEMIND_BRIDGE_ITCPSERVER_H
 
 #include <common/IProtobufStream.h>
 #include <functional>
@@ -39,7 +39,7 @@ class ITCPServer : public IProtobufStream {
     virtual bool isClientConnected() = 0;
 
     /**
-     * Register a callback to be run when a TCP connection is established with a client HiveBoard
+     * Register a callback to be run when a TCP connection is established with a client HiveMind
      * @param callback The function to be run
      */
     virtual void onConnect(std::function<void()> hook) = 0;
@@ -51,4 +51,4 @@ class ITCPServer : public IProtobufStream {
     virtual void onDisconnect(std::function<void()> hook) = 0;
 };
 
-#endif // HIVEBOARD_BRIDGE_ITCPSERVER_H
+#endif // HIVEMIND_BRIDGE_ITCPSERVER_H

@@ -1,16 +1,16 @@
 #include "hiveboard_bridge/HiveMindBridge.h"
 
-HiveBoardBridge::HiveBoardBridge(int tcpPort) :
+HiveMindBridge::HiveMindBridge(int tcpPort) :
     m_tcpServer(tcpPort), m_deserializer(m_tcpServer), m_serializer(m_tcpServer) {
-    m_bridge = std::make_unique<HiveBoardBridgeImpl>(m_tcpServer, m_serializer, m_deserializer);
+    m_bridge = std::make_unique<HiveMindBridgeImpl>(m_tcpServer, m_serializer, m_deserializer);
 }
 
-void HiveBoardBridge::spin() { m_bridge->spin(); }
+void HiveMindBridge::spin() { m_bridge->spin(); }
 
-void HiveBoardBridge::onConnect(std::function<void()> hook) { m_bridge->onConnect(hook); }
+void HiveMindBridge::onConnect(std::function<void()> hook) { m_bridge->onConnect(hook); }
 
-void HiveBoardBridge::onDisconnect(std::function<void()> hook) { m_bridge->onDisconnect(hook); }
+void HiveMindBridge::onDisconnect(std::function<void()> hook) { m_bridge->onDisconnect(hook); }
 
-bool HiveBoardBridge::registerCustomAction(std::string name, CallbackFunction callback) {
+bool HiveMindBridge::registerCustomAction(std::string name, CallbackFunction callback) {
     return m_bridge->registerCustomAction(name, callback);
 }

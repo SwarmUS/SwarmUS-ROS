@@ -7,7 +7,7 @@
 
 constexpr uint8_t RATE_HZ{2};
 constexpr uint32_t compoundId{
-    1}; // TODO find a way for the HiveBoard and the robot to share this ID
+    1}; // TODO find a way for the HiveMind and the robot to share this ID
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     ros::Subscriber sub;
 
     int port = ros::param::param("~TCP_SERVER_PORT", 8080);
-    HiveBoardBridge bridge(port);
+    HiveMindBridge bridge(port);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {

@@ -1,15 +1,15 @@
-#ifndef HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H
-#define HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H
+#ifndef HIVEMIND_BRIDGE_IHIVEMINDBRIDGE_H
+#define HIVEMIND_BRIDGE_IHIVEMINDBRIDGE_H
 
 #include "IMessageHandler.h"
 #include <string.h>
 
 /**
- * The HiveBoardBridge is the main entrypoint to the bridge's library. It includes everything
+ * The HiveMindBridge is the main entrypoint to the bridge's library. It includes everything
  * necessary to define a custom swarm API and provides some hooks to control the robot when some
- * usual events occur, such as connection or disconnection of a HiveBoard.
+ * usual events occur, such as connection or disconnection of a HiveMind.
  */
-class IHiveBoardBridge {
+class IHiveMindBridge {
   public:
     /**
      * Spin the bridge's applicative loop
@@ -17,7 +17,7 @@ class IHiveBoardBridge {
     virtual void spin() = 0;
 
     /**
-     * Register a callback to be run when a TCP connection is established with a client HiveBoard
+     * Register a callback to be run when a TCP connection is established with a client HiveMind
      * @param callback The function to be run
      */
     virtual void onConnect(std::function<void()> hook) = 0;
@@ -38,4 +38,4 @@ class IHiveBoardBridge {
     virtual bool registerCustomAction(std::string name, CallbackFunction callback) = 0;
 };
 
-#endif // HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H
+#endif // HIVEMIND_BRIDGE_IHIVEMINDBRIDGE_H

@@ -54,7 +54,7 @@ class TCPServer : public ITCPServer {
     bool isClientConnected() override;
 
     /**
-     * Register a callback to be run when a TCP connection is established with a client HiveBoard
+     * Register a callback to be run when a TCP connection is established with a client HiveMind
      * @param callback The function to be run
      */
     void onConnect(std::function<void()> hook) override;

@@ -9,7 +9,7 @@ InterLocalization::InterLocalization() {
         "interlocalization_grid", 1000);
     m_polygonPub = m_nodeHandle.advertise<geometry_msgs::PolygonStamped>("PolygonStamped", 1000);
 
-    ROS_INFO("HiveBoard initialization of: %s", m_robotName.c_str());
+    ROS_INFO("HiveMind initialization of: %s", m_robotName.c_str());
 }
 
 float InterLocalization::getDistanceFrom(float x, float y) { return sqrt(pow(x, 2) + pow(y, 2)); }

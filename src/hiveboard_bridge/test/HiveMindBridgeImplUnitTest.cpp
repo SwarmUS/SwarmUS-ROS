@@ -4,38 +4,38 @@
 #include "mocks/TCPServerInterfaceMock.h"
 #include <gmock/gmock.h>
 
-class HiveBoardBridgeImplUnitFixture : public testing::Test {
+class HiveMindBridgeImplUnitFixture : public testing::Test {
   protected:
     TCPServerInterfaceMock m_tcpServer;
     HiveMindHostDeserializerInterfaceMock m_deserializer;
     HiveMindHostSerializerInterfaceMock m_serializer;
-    HiveBoardBridgeImpl* m_hiveboardBridge;
+    HiveMindBridgeImpl* m_hivemindBridge;
 
     void SetUp() {
-        m_hiveboardBridge = new HiveBoardBridgeImpl(m_tcpServer, m_serializer, m_deserializer);
+        m_hivemindBridge = new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer);
     }
 
-    void TearDown() { delete m_hiveboardBridge; }
+    void TearDown() { delete m_hivemindBridge; }
 };
 
-TEST_F(HiveBoardBridgeImplUnitFixture, spinReceiveValidMessage) {
+TEST_F(HiveMindBridgeImplUnitFixture, spinReceiveValidMessage) {
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(true));
     EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).WillOnce(testing::Return(true));
     EXPECT_CALL(m_serializer, serializeToStream(testing::_));
 
-    m_hiveboardBridge->spin();
+    m_hivemindBridge->spin();
 }
 
-TEST_F(HiveBoardBridgeImplUnitFixture, spinReceiveNoMessage) {
+TEST_F(HiveMindBridgeImplUnitFixture, spinReceiveNoMessage) {
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(true));
     EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).WillOnce(testing::Return(false));
 
-    m_hiveboardBridge->spin();
+    m_hivemindBridge->spin();
 }
 
-TEST_F(HiveBoardBridgeImplUnitFixture, spinClientDisconnected) {
+TEST_F(HiveMindBridgeImplUnitFixture, spinClientDisconnected) {
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(false));
     EXPECT_CALL(m_tcpServer, listen());
 
-    m_hiveboardBridge->spin();
+    m_hivemindBridge->spin();
 }

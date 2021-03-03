@@ -90,7 +90,7 @@ NOTE:
   - If the Realsense packages can't be installed with the `apt-get install`command from the`install dependencies.sh` script , you might need to get the udev config directly from the [librealsense repo](https://github.com/IntelRealSense/librealsense). Run the following command from the Swarmus-ROS directory to clone the librealsense and set the udev rules: 
 
     ```
-    sh /scripts/setup_librealsense.sh
+    sh scripts/setup_librealsense.sh
     ```
 
     If  you need the Realsense SDK follow the [librealsense source installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md). This might take some time since you will be building from the source code.

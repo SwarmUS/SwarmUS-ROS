@@ -5,8 +5,6 @@ on: [push, pull_request]
 jobs:
   build-native:
     runs-on: ubuntu-20.04
-    env:
-      DEBIAN_FRONTEND=noninteractive
     container:
       image: swarmus/embedded
     steps:
@@ -30,6 +28,7 @@ jobs:
         run: |
           rosdep update
           apt update
+          export DEBIAN_FRONTEND=noninteractive
           rosdep install --from-paths src --ignore-src -r -y
         working-directory: 'catkin_ws'
 

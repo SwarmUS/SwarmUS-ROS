@@ -1,9 +1,8 @@
-#include "hiveboard_bridge/HiveBoardBridge.h"
+#include "hiveboard_bridge/HiveMindBridge.h"
 #include "hiveboard_bridge/MessageHandler.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallResponseDTO.h>
 #include <optional>
 
 constexpr uint8_t RATE_HZ{2};

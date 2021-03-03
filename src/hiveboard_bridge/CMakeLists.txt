@@ -32,8 +32,8 @@ set(HIVEBOARD_BRIDGE_SOURCES
         src/TCPServer.cpp
         src/MessageHandler.cpp
         src/MessageUtils.cpp
-        src/HiveBoardBridge.cpp
-        src/HiveBoardBridgeImpl.cpp)
+        src/HiveMindBridge.cpp
+        src/HiveMindBridgeImpl.cpp)
 
 add_library(${LIB_NAME} STATIC ${HIVEBOARD_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -75,14 +75,14 @@ target_link_libraries(MessageHandlerUnitTest
         gmock_main
         )
 
-# HiveBoardBridgeUnitTest
-add_executable(HiveBoardBridgeImplUnitTest
-        test/HiveBoardBridgeImplUnitTest.cpp
+# HiveMindBridgeImplUnitTest
+add_executable(HiveMindBridgeImplUnitTest
+        test/HiveMindBridgeImplUnitTest.cpp
         )
 
-add_test(NAME HiveBoardBridgeImplUnitTest COMMAND HiveBoardBridgeImplUnitTest)
+add_test(NAME HiveMindBridgeImplUnitTest COMMAND HiveMindBridgeImplUnitTest)
 
-target_link_libraries(HiveBoardBridgeImplUnitTest
+target_link_libraries(HiveMindBridgeImplUnitTest
         ${catkin_LIBRARIES}
         ${LIB_NAME}
         SwarmUS::Propolis::Pheromones::HiveMind::Host

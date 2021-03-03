@@ -33,6 +33,8 @@ void TCPServer::init() {
 }
 
 void TCPServer::listen() {
+    ROS_INFO("Listening for incoming clients on port %d...", m_port);
+
     if (::listen(m_serverFd, 1) < 0) {
         ROS_ERROR("TCP server listen failed");
     }
@@ -40,6 +42,12 @@ void TCPServer::listen() {
     if ((m_clientFd = ::accept(m_serverFd, (struct sockaddr*)&m_address,
                                (socklen_t*)&m_addressLength)) < 0) {
         ROS_ERROR("TCP server accept failed");
+        m_isClientConnected = false;
+    } else {
+        if (m_onConnect) {
+            m_onConnect();
+        }
+        m_isClientConnected = true;
     }
 }
 
@@ -48,6 +56,10 @@ bool TCPServer::receive(uint8_t* data, uint16_t length) {
 
     if (nbBytesReceived == 0) { // Client disconnected
         ROS_WARN("TCP client disconnected");
+        if (m_onDisonnect) {
+            m_onDisonnect();
+        }
+        m_isClientConnected = false;
         close();
     }
 
@@ -65,3 +77,9 @@ void TCPServer::close() {
     ::close(m_clientFd);
     ROS_WARN("TCP server: client disconnected");
 }
+
+bool TCPServer::isClientConnected() { return m_isClientConnected; }
+
+void TCPServer::onConnect(std::function<void()> hook) { m_onConnect = hook; }
+
+void TCPServer::onDisconnect(std::function<void()> hook) { m_onDisonnect = hook; }

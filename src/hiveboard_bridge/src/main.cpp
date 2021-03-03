@@ -1,14 +1,9 @@
+#include "hiveboard_bridge/HiveBoardBridge.h"
 #include "hiveboard_bridge/MessageHandler.h"
-#include "hiveboard_bridge/ReceiveAction.h"
-#include "hiveboard_bridge/TCPServer.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
-#include <hivemind-host/MessageDTO.h>
-#include <hivemind-host/ResponseDTO.h>
 #include <optional>
 
 constexpr uint8_t RATE_HZ{2};
@@ -26,17 +21,9 @@ int main(int argc, char** argv) {
     ros::Subscriber sub;
 
     int port = ros::param::param("~TCP_SERVER_PORT", 8080);
-    TCPServer tcpServer(port);
+    HiveBoardBridge bridge(port);
 
-    ROS_INFO("Listening for incoming clients on port %d...", port);
-    tcpServer.listen();
-    ROS_INFO("Client connected.");
-
-    HiveMindHostDeserializer deserializer(tcpServer);
-    HiveMindHostSerializer serializer(tcpServer);
-    MessageHandler messageHandler;
-
-    // Register callbacks
+    // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
@@ -46,16 +33,18 @@ int main(int argc, char** argv) {
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
     };
+    bridge.registerCustomAction("moveBy", moveByCallback);
 
-    messageHandler.registerCallback("moveBy", moveByCallback);
+    // Register event hooks
+    bridge.onConnect([]() { ROS_INFO("Client connected."); });
 
-    ReceiveAction receiveAction(deserializer, serializer, messageHandler);
+    bridge.onDisconnect([]() { ROS_INFO("Client disconnected."); });
 
     ros::Rate loopRate(RATE_HZ);
     while (ros::ok()) {
         ros::spinOnce();
 
-        receiveAction.fetchAndProcessMessage();
+        bridge.spin();
 
         loopRate.sleep();
     }

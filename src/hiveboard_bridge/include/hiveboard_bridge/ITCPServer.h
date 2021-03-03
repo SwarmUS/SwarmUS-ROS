@@ -2,6 +2,7 @@
 #define HIVEBOARD_BRIDGE_ITCPSERVER_H
 
 #include <common/IProtobufStream.h>
+#include <functional>
 
 class ITCPServer : public IProtobufStream {
   public:

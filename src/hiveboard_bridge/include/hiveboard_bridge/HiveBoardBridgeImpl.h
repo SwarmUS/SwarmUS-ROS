@@ -1,13 +1,14 @@
 #ifndef HIVEBOARD_BRIDGE_HIVEBOARDBRIDGEIMPL_H
 #define HIVEBOARD_BRIDGE_HIVEBOARDBRIDGEIMPL_H
 
+#include "hiveboard_bridge/IHiveBoardBridge.h"
 #include "hiveboard_bridge/MessageHandler.h"
 #include "hiveboard_bridge/TCPServer.h"
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 
-class HiveBoardBridgeImpl {
+class HiveBoardBridgeImpl : public IHiveBoardBridge {
   public:
     /**
      * Construct a HiveBoard Bridge object by injecting already-initialised objects.

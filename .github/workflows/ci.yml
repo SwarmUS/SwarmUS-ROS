@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   build-native:
     runs-on: ubuntu-20.04
+    env:
+      DEBIAN_FRONTEND=noninteractive
     container:
       image: swarmus/embedded
     steps:

@@ -2,7 +2,7 @@
 #define CATKIN_ROS_MESSAGEHANDLER_H
 
 #include "IMessageHandler.h"
-#include "hiveboard_bridge/MessageUtils.h"
+#include "hive_mind_bridge/MessageUtils.h"
 
 class MessageHandler : public IMessageHandler {
   public:

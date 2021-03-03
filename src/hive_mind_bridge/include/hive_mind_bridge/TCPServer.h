@@ -1,7 +1,7 @@
 #ifndef CATKIN_ROS_TCPSERVER_H
 #define CATKIN_ROS_TCPSERVER_H
 
-#include "hiveboard_bridge/ITCPServer.h"
+#include "hive_mind_bridge/ITCPServer.h"
 #include "ros/ros.h"
 #include <cstdint>
 #include <cstring>

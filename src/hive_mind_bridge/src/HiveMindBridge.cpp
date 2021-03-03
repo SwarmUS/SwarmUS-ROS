@@ -1,4 +1,4 @@
-#include "hiveboard_bridge/HiveMindBridge.h"
+#include "hive_mind_bridge/HiveMindBridge.h"
 
 HiveMindBridge::HiveMindBridge(int tcpPort) :
     m_tcpServer(tcpPort), m_deserializer(m_tcpServer), m_serializer(m_tcpServer) {

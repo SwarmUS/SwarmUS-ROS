@@ -1,4 +1,4 @@
-#include "hiveboard_bridge/HiveMindBridgeImpl.h"
+#include "hive_mind_bridge/HiveMindBridgeImpl.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/HiveMindHostSerializerInterfaceMock.h"
 #include "mocks/TCPServerInterfaceMock.h"

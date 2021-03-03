@@ -1,9 +1,9 @@
 #ifndef HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H
 #define HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H
-#include "hiveboard_bridge/HiveMindBridgeImpl.h"
-#include "hiveboard_bridge/IHiveMindBridge.h"
-#include "hiveboard_bridge/MessageHandler.h"
-#include "hiveboard_bridge/TCPServer.h"
+#include "hive_mind_bridge/HiveMindBridgeImpl.h"
+#include "hive_mind_bridge/IHiveMindBridge.h"
+#include "hive_mind_bridge/MessageHandler.h"
+#include "hive_mind_bridge/TCPServer.h"
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>

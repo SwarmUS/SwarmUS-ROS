@@ -1,7 +1,7 @@
 #ifndef HIVEMIND_BRIDGE_TCPSERVERINTERFACEMOCK_H
 #define HIVEMIND_BRIDGE_TCPSERVERINTERFACEMOCK_H
 
-#include "hiveboard_bridge/ITCPServer.h"
+#include "hive_mind_bridge/ITCPServer.h"
 #include <gmock/gmock.h>
 
 class TCPServerInterfaceMock : public ITCPServer {

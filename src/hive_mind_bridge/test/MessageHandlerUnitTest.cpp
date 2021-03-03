@@ -1,4 +1,4 @@
-#include "hiveboard_bridge/MessageHandler.h"
+#include "hive_mind_bridge/MessageHandler.h"
 
 #include <functional>
 #include <gmock/gmock.h>

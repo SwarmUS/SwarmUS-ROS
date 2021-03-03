@@ -1,4 +1,4 @@
-#include "hiveboard_bridge/TCPServer.h"
+#include "hive_mind_bridge/TCPServer.h"
 
 TCPServer::TCPServer(int port) {
     m_port = port;

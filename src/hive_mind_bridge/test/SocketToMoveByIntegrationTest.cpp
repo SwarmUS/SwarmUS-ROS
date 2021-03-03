@@ -48,7 +48,7 @@ class TCPClient : public IProtobufStream {
 };
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "hiveboard_bridge_tester");
+    ros::init(argc, argv, "hive_mind_bridge_tester");
 
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 

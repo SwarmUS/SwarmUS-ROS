@@ -1,4 +1,4 @@
-#include "hiveboard_bridge/MessageUtils.h"
+#include "hive_mind_bridge/MessageUtils.h"
 
 MessageDTO MessageUtils::createResponseMessage(uint32_t responseId,
                                                uint32_t msgSourceId,

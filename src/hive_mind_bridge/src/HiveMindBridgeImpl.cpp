@@ -1,4 +1,4 @@
-#include "hiveboard_bridge/HiveMindBridgeImpl.h"
+#include "hive_mind_bridge/HiveMindBridgeImpl.h"
 
 HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,

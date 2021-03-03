@@ -1,14 +1,14 @@
 #ifndef HIVEBOARD_BRIDGE_HIVEBOARDBRIDGE_H
 #define HIVEBOARD_BRIDGE_HIVEBOARDBRIDGE_H
-#include "hiveboard_bridge/IHiveBoardBridge.h"
 #include "hiveboard_bridge/HiveBoardBridgeImpl.h"
+#include "hiveboard_bridge/IHiveBoardBridge.h"
 #include "hiveboard_bridge/MessageHandler.h"
 #include "hiveboard_bridge/TCPServer.h"
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 
-class HiveBoardBridge : public IHiveBoardBridge{
+class HiveBoardBridge : public IHiveBoardBridge {
   public:
     /**
      * Construct a HiveBoardBridge

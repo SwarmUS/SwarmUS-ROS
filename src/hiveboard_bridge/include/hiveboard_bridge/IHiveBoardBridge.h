@@ -1,8 +1,8 @@
 #ifndef HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H
 #define HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H
 
-#include <string.h>
 #include "IMessageHandler.h"
+#include <string.h>
 
 /**
  * The HiveBoardBridge is the main entrypoint to the bridge's library. It includes everything
@@ -10,7 +10,7 @@
  * usual events occur, such as connection or disconnection of a HiveBoard.
  */
 class IHiveBoardBridge {
-public:
+  public:
     /**
      * Spin the bridge's applicative loop
      */
@@ -38,4 +38,4 @@ public:
     virtual bool registerCustomAction(std::string name, CallbackFunction callback) = 0;
 };
 
-#endif //HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H
+#endif // HIVEBOARD_BRIDGE_IHIVEBOARDBRIDGE_H

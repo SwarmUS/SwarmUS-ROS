@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>hiveboard_bridge</name>
+  <name>hive_mind_bridge</name>
   <version>0.0.0</version>
   <description>The interface used to interact with a HiveBoard</description>
 

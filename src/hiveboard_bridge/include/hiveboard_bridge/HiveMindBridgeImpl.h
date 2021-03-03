@@ -17,8 +17,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
      * @param deserializer A HiveMindHostDeserializer to be used
      */
     HiveMindBridgeImpl(ITCPServer& tcpServer,
-                        IHiveMindHostSerializer& serializer,
-                        IHiveMindHostDeserializer& deserializer);
+                       IHiveMindHostSerializer& serializer,
+                       IHiveMindHostDeserializer& deserializer);
 
     void spin();
 

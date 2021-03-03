@@ -1,8 +1,8 @@
 #include "hiveboard_bridge/HiveMindBridgeImpl.h"
 
 HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
-                                         IHiveMindHostSerializer& serializer,
-                                         IHiveMindHostDeserializer& deserializer) :
+                                       IHiveMindHostSerializer& serializer,
+                                       IHiveMindHostDeserializer& deserializer) :
     m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer) {}
 
 void HiveMindBridgeImpl::spin() {

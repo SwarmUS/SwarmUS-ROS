@@ -6,8 +6,7 @@
 #include <optional>
 
 constexpr uint8_t RATE_HZ{2};
-constexpr uint32_t compoundId{
-    1}; // TODO find a way for the HiveMind and the robot to share this ID
+constexpr uint32_t compoundId{1}; // TODO find a way for the HiveMind and the robot to share this ID
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hiveboard_bridge");

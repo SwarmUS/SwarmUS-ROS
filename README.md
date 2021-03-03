@@ -14,7 +14,6 @@ SwarmUS-ROS contains all the ROS packages developed for the SwarmUS project. It 
 SwarmUS-ROS
 ├── contrib
 │   └── HiveMind
-│   └── mpu6050
 │   └── realsense
 │   └── roboclaw
 │   └── rplidar
@@ -23,6 +22,9 @@ SwarmUS-ROS
 ├── README.md
 ├── scripts
 │    ├── install_dependencies.sh
+│    ├── setup_librealsense.sh
+│    ├── set_udev_rules.sh
+│    └── 40-swarmus_pioneer.rules
 ├── src
 │   ├── hiveboard_bridge
 │   ├── swarmus_example_pkg
@@ -35,7 +37,7 @@ SwarmUS-ROS
     ├── config.py
     ├── contrib
     ├── format.py
-    ├── generate_doc.py
+    └── generate_doc.py
 ```
 
 This repo contains a `contrib` folder which refers to external code that needs to be included as source.
@@ -70,11 +72,31 @@ cd ~/catkin_ws/src
 git clone https://github.com/SwarmUS/SwarmUS-ROS.git
 cd SwarmUS-ROS
 git submodule update --init --recursive
-sh scripts/install dependencies.sh
+
+sh scripts/install_dependencies.sh
 rosdep install --from-paths src --ignore-src -r -y
-cd ~/catkin_ws && catkin_cmake
+
+cd ~/catkin_ws && catkin_make_isolated
+
+echo "source ~/catkin_ws/devel_isolated/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
+sh scripts/set_udev_rules.sh
 ```
-NOTE: the `install dependencies.sh` script will only works on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
+NOTE: 
+
+- The `install dependencies.sh` and `set_udev_rules.sh` scripts will only work on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
+
+  - If the Realsense packages can't be installed with the `apt-get install`command from the`install dependencies.sh` script , you might need to get the udev config directly from the [librealsense repo](https://github.com/IntelRealSense/librealsense). Run the following command from the Swarmus-ROS directory to clone the librealsense and set the udev rules: 
+
+    ```
+    sh scripts/setup_librealsense.sh
+    ```
+
+    If  you need the Realsense SDK follow the [librealsense source installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md). This might take some time since you will be building from the source code.
+
+- `catkin_make_isolated` is used instead of `catkin_make` because there is a conflict when the Hivemind code and the hiveboard_bridge node are built since they both share the same code. You will need to source the devel_isolated setup whenever you build new packages with `catkin_make_isolated`.
+
 ## Running unit tests
 
 Unit tests are run via Catkin :

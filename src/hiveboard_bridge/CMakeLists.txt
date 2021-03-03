@@ -32,9 +32,8 @@ set(HIVEBOARD_BRIDGE_SOURCES
         src/TCPServer.cpp
         src/MessageHandler.cpp
         src/MessageUtils.cpp
-        src/ReceiveAction.cpp
         src/HiveBoardBridge.cpp
-        src/HiveBoardBridgeFactory.cpp)
+        src/HiveBoardBridgeImpl.cpp)
 
 add_library(${LIB_NAME} STATIC ${HIVEBOARD_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -76,28 +75,14 @@ target_link_libraries(MessageHandlerUnitTest
         gmock_main
         )
 
-# StreamListenerUnitTest
-add_executable(ReceiveThreadActionUnitTest
-        test/ReceiveThreadActionUnitTest.cpp
-        )
-
-add_test(NAME ReceiveThreadActionUnitTest COMMAND ReceiveThreadActionUnitTest)
-
-target_link_libraries(ReceiveThreadActionUnitTest
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones::HiveMind::Host
-        gmock_main
-        )
-
 # HiveBoardBridgeUnitTest
-add_executable(HiveBoardBridgeUnitTest
-        test/HiveBoardBridgeUnitTest.cpp
+add_executable(HiveBoardBridgeImplUnitTest
+        test/HiveBoardBridgeImplUnitTest.cpp
         )
 
-add_test(NAME HiveBoardBridgeUnitTest COMMAND HiveBoardBridgeUnitTest)
+add_test(NAME HiveBoardBridgeImplUnitTest COMMAND HiveBoardBridgeImplUnitTest)
 
-target_link_libraries(HiveBoardBridgeUnitTest
+target_link_libraries(HiveBoardBridgeImplUnitTest
         ${catkin_LIBRARIES}
         ${LIB_NAME}
         SwarmUS::Propolis::Pheromones::HiveMind::Host

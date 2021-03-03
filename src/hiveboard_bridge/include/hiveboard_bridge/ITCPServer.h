@@ -3,10 +3,8 @@
 
 #include <common/IProtobufStream.h>
 
-typedef std::function<void()> Hook;
-
 class ITCPServer : public IProtobufStream {
-public:
+  public:
     /**
      * Start listening for incoming client connections and accept one client. This is blocking until
      * a client connects.
@@ -43,13 +41,13 @@ public:
      * Register a callback to be run when a TCP connection is established with a client HiveBoard
      * @param callback The function to be run
      */
-    virtual void onConnect(Hook hook) = 0;
+    virtual void onConnect(std::function<void()> hook) = 0;
 
     /**
      * Register a callback to be run as soon as the TCP Server notices that the connection was lost.
      * @param callback The function to be run
      */
-    virtual void onDisconnect(Hook hook) = 0;
+    virtual void onDisconnect(std::function<void()> hook) = 0;
 };
 
-#endif //HIVEBOARD_BRIDGE_ITCPSERVER_H
+#endif // HIVEBOARD_BRIDGE_ITCPSERVER_H

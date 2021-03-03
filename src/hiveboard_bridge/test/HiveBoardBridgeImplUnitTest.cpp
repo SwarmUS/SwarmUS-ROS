@@ -1,35 +1,41 @@
-#include <gmock/gmock.h>
+#include "hiveboard_bridge/HiveBoardBridgeImpl.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/HiveMindHostSerializerInterfaceMock.h"
 #include "mocks/TCPServerInterfaceMock.h"
-#include "hiveboard_bridge/HiveBoardBridge.h"
+#include <gmock/gmock.h>
 
-class HiveBoardBridgeUnitFixture : public testing::Test {
-protected:
+class HiveBoardBridgeImplUnitFixture : public testing::Test {
+  protected:
     TCPServerInterfaceMock m_tcpServer;
     HiveMindHostDeserializerInterfaceMock m_deserializer;
     HiveMindHostSerializerInterfaceMock m_serializer;
-    HiveBoardBridge* m_hiveboardBridge;
+    HiveBoardBridgeImpl* m_hiveboardBridge;
 
     void SetUp() {
-        m_hiveboardBridge = new HiveBoardBridge(m_tcpServer, m_serializer, m_deserializer);
+        m_hiveboardBridge = new HiveBoardBridgeImpl(m_tcpServer, m_serializer, m_deserializer);
     }
 
-    void TearDown() {
-        delete m_hiveboardBridge;
-    }
+    void TearDown() { delete m_hiveboardBridge; }
 };
 
-TEST_F(HiveBoardBridgeUnitFixture, spinReceiveValidMessage) {
+TEST_F(HiveBoardBridgeImplUnitFixture, spinReceiveValidMessage) {
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(true));
     EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).WillOnce(testing::Return(true));
+    EXPECT_CALL(m_serializer, serializeToStream(testing::_));
 
     m_hiveboardBridge->spin();
 }
 
-TEST_F(HiveBoardBridgeUnitFixture, spinReceiveNoMessage) {
+TEST_F(HiveBoardBridgeImplUnitFixture, spinReceiveNoMessage) {
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(true));
     EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).WillOnce(testing::Return(false));
+
+    m_hiveboardBridge->spin();
+}
+
+TEST_F(HiveBoardBridgeImplUnitFixture, spinClientDisconnected) {
+    EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(false));
+    EXPECT_CALL(m_tcpServer, listen());
 
     m_hiveboardBridge->spin();
 }

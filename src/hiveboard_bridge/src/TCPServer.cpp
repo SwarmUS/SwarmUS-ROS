@@ -44,7 +44,9 @@ void TCPServer::listen() {
         ROS_ERROR("TCP server accept failed");
         m_isClientConnected = false;
     } else {
-        m_onConnect();
+        if (m_onConnect) {
+            m_onConnect();
+        }
         m_isClientConnected = true;
     }
 }
@@ -54,7 +56,9 @@ bool TCPServer::receive(uint8_t* data, uint16_t length) {
 
     if (nbBytesReceived == 0) { // Client disconnected
         ROS_WARN("TCP client disconnected");
-        m_onDisonnect();
+        if (m_onDisonnect) {
+            m_onDisonnect();
+        }
         m_isClientConnected = false;
         close();
     }
@@ -76,10 +80,6 @@ void TCPServer::close() {
 
 bool TCPServer::isClientConnected() { return m_isClientConnected; }
 
-void TCPServer::onConnect(Hook hook) {
-    m_onConnect = hook;
-}
+void TCPServer::onConnect(std::function<void()> hook) { m_onConnect = hook; }
 
-void TCPServer::onDisconnect(Hook hook) {
-    m_onDisonnect = hook;
-}
+void TCPServer::onDisconnect(std::function<void()> hook) { m_onDisonnect = hook; }

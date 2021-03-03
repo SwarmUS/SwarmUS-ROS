@@ -1,19 +1,16 @@
 #ifndef CATKIN_ROS_TCPSERVER_H
 #define CATKIN_ROS_TCPSERVER_H
 
-#include "ros/ros.h"
 #include "hiveboard_bridge/ITCPServer.h"
-//#include <common/IProtobufStream.h>
+#include "ros/ros.h"
 #include <cstdint>
 #include <cstring>
+#include <functional>
 #include <memory>
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <functional>
-
-typedef std::function<void()> Hook;
 
 class TCPServer : public ITCPServer {
   public:
@@ -60,13 +57,13 @@ class TCPServer : public ITCPServer {
      * Register a callback to be run when a TCP connection is established with a client HiveBoard
      * @param callback The function to be run
      */
-    void onConnect(Hook hook) override;
+    void onConnect(std::function<void()> hook) override;
 
     /**
      * Register a callback to be run as soon as the TCP Server notices that the connection was lost.
      * @param callback The function to be run
      */
-    void onDisconnect(Hook hook) override;
+    void onDisconnect(std::function<void()> hook) override;
 
   private:
     int m_serverFd, m_clientFd, m_port;

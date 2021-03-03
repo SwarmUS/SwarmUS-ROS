@@ -1,5 +1,4 @@
 #include "hiveboard_bridge/HiveBoardBridge.h"
-#include "hiveboard_bridge/HiveBoardBridgeFactory.h"
 #include "hiveboard_bridge/MessageHandler.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
@@ -22,9 +21,9 @@ int main(int argc, char** argv) {
     ros::Subscriber sub;
 
     int port = ros::param::param("~TCP_SERVER_PORT", 8080);
-    HiveBoardBridge bridge = HiveBoardBridgeFactory::createHiveBoardBridge(port);
+    HiveBoardBridge bridge(port);
 
-    // Register callbacks
+    // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
@@ -34,17 +33,12 @@ int main(int argc, char** argv) {
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
     };
-
-    // Register hooks
-    bridge.onConnect([]() {
-        ROS_INFO("Client connected.");
-    });
-
-    bridge.onDisconnect([]() {
-        ROS_INFO("onDisconnect Hook");
-    });
-
     bridge.registerCustomAction("moveBy", moveByCallback);
+
+    // Register event hooks
+    bridge.onConnect([]() { ROS_INFO("Client connected."); });
+
+    bridge.onDisconnect([]() { ROS_INFO("Client disconnected."); });
 
     ros::Rate loopRate(RATE_HZ);
     while (ros::ok()) {

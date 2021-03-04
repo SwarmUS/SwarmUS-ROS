@@ -28,7 +28,6 @@ jobs:
         run: |
           rosdep update
           apt update
-          export DEBIAN_FRONTEND=noninteractive
           rosdep install --from-paths src --ignore-src -r -y
         working-directory: 'catkin_ws'
 

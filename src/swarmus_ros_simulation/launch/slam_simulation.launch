@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<launch>
+    <!-- Arguments-->
+    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="robot_name" default="pioneer_0"/>
+
+    <!--Remap pioneers_0's camera topics to RTAB-Map -->
+    <remap to="rgb/camera_info" from="/$(arg robot_name)/camera_ir/camera_info"/>
+    <remap to="depth/image" from="/$(arg robot_name)/camera_ir/depth/image_raw"/>
+    <remap to="rgb/image" from="/$(arg robot_name)/camera_ir/image_raw"/>
+    <remap to="scan" from="/$(arg robot_name)/scan"/>
+
+    <!-- Launch a Gazebo world with walls and stuff -->
+    <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
+
+    <!--Spawn a Pioneer with a camera-->
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="$(arg robot_name)"/>
+        <arg name="robot_name" value="$(arg robot_name)"/>
+    </include>
+
+    <!--Launch RTAB-Map-->
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
+        <param name="frame_id" type="string" value="$(arg robot_name)/base_link"/>
+        <param name="odom_frame_id" type="string" value="$(arg robot_name)/odom"/>
+
+        <param name="subscribe_depth" type="bool" value="true"/>
+        <param name="subscribe_scan" type="bool" value="true"/>
+    </node>
+
+    <!--Launch RTAB-Map viz-->
+    <node name="rtabmapviz" pkg="rtabmap_ros" type="rtabmapviz"/>
+
+    <!--Launch RVIZ-->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/pioneer_0_config.rviz" />
+</launch>

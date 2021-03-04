@@ -24,18 +24,18 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
 )
 
-# SwarmUS::ROS::Hiveboard::Bridge
-set(LIB_NAME "swarmus-ros-hiveboard-bridge")
-set(LIB_ALIAS "SwarmUS::ROS::Hiveboard::Bridge")
+# SwarmUS::ROS::HiveMind::Bridge
+set(LIB_NAME "swarmus-ros-hivemind-bridge")
+set(LIB_ALIAS "SwarmUS::ROS::HiveMind::Bridge")
 
-set(HIVEBOARD_BRIDGE_SOURCES
+set(HIVEMIND_BRIDGE_SOURCES
         src/TCPServer.cpp
         src/MessageHandler.cpp
         src/MessageUtils.cpp
         src/HiveMindBridge.cpp
         src/HiveMindBridgeImpl.cpp)
 
-add_library(${LIB_NAME} STATIC ${HIVEBOARD_BRIDGE_SOURCES})
+add_library(${LIB_NAME} STATIC ${HIVEMIND_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 
 target_link_libraries(${LIB_NAME}
@@ -44,15 +44,15 @@ target_link_libraries(${LIB_NAME}
         )
 
 # Main
-add_executable(hiveboard_bridge src/main.cpp)
-add_dependencies(hiveboard_bridge ${catkin_EXPORTED_TARGETS})
-target_link_libraries(hiveboard_bridge
+add_executable(hive_mind_bridge src/main.cpp)
+add_dependencies(hive_mind_bridge ${catkin_EXPORTED_TARGETS})
+target_link_libraries(hive_mind_bridge
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
-        SwarmUS::ROS::Hiveboard::Bridge
+        SwarmUS::ROS::HiveMind::Bridge
         )
 
-target_include_directories(hiveboard_bridge
+target_include_directories(hive_mind_bridge
         PUBLIC include
         PRIVATE ${catkin_INCLUDE_DIRS}
         )

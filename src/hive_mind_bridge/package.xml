@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hive_mind_bridge</name>
+  <version>0.0.0</version>
+  <description>The interface used to interact with a HiveBoard</description>
+
+  <maintainer email="swarmus@usherbrooke.ca">SwarmUS</maintainer>
+
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>swarmus_ros_navigation</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>swarmus_ros_navigation</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>swarmus_ros_navigation</exec_depend>
+
+  <export>
+  </export>
+</package>

@@ -41,7 +41,7 @@ jobs:
         run: |
           . ../../devel_isolated/setup.sh
           ctest -V
-        working-directory: 'catkin_ws/build_isolated/hiveboard_bridge'
+        working-directory: 'catkin_ws/build_isolated/hive_mind_bridge'
       
       - name: Check Format
         run: |

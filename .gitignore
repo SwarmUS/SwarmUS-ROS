@@ -4,3 +4,4 @@ build/
 devel/
 *.pyc
 src/hiveboard_bridge/cmake-build-debug
+/src/hive_mind_bridge/cmake-build-debug/

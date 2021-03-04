@@ -1,7 +1,7 @@
 #include "swarmus_ros_simulation/interCommunication.h"
 
 InterCommunication::InterCommunication() {
-    ROS_INFO("HiveBoard communication initialization");
+    ROS_INFO("HiveMind communication initialization");
 
     m_robotName = Simulation::getParamRobotName();
 

@@ -3,6 +3,8 @@
   xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:arg name="prefix" default="p_swarmus"/>
   <xacro:arg name="color" default="DepthMapVS"/>
+  <xacro:arg name="camera_type" default="d435i"/>
+  <xacro:property name="camera_type" value="$(arg camera_type)"/>
 
   <link name="$(arg prefix)/base_footprint" />
   <link name="$(arg prefix)/base_link" />
@@ -267,7 +269,6 @@
     </plugin>
   </gazebo>
 
-
   <gazebo reference="$(arg prefix)/rplidar">
       <sensor name="laser" type="ray">
         <pose>0.01 0 0.0175 0 -0 0</pose>
@@ -301,13 +302,18 @@
 
   <gazebo reference="$(arg prefix)/kinect_ros_link">
     <sensor name="camera" type="depth">
-      <update_rate>20</update_rate>
+      <update_rate>30</update_rate>
       <camera>
-        <horizontal_fov>1.047198</horizontal_fov>
+        <xacro:if value="${camera_type == 'd435i'}">
+          <horizontal_fov>1.117</horizontal_fov> <!-- 64 deg field of view of the RGDB sensor used since its smaller than the depth FOV-->
+        </xacro:if>
+        <xacro:if value="${camera_type == 'd455'}">
+          <horizontal_fov>1.501</horizontal_fov> <!-- 86 deg field of view of the depth sensor used- since its smaller than the RGBD value-->
+        </xacro:if>
         <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
+            <width>1280</width>
+            <height>720</height>
+            <format>R8G8B8</format>
         </image>
         <clip>
           <near>0.05</near>
@@ -319,17 +325,23 @@
         <baseline>0.2</baseline>
         <alwaysOn>true</alwaysOn>
         <!-- Keep this zero, update_rate in the parent <sensor> tag
- will control the frame rate. -->
+will control the frame rate. -->
         <updateRate>0.0</updateRate>
         <cameraName>camera_ir</cameraName>
         <!--imageTopicName>/camera/color/image_raw</imageTopicName>
- <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
- <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
- <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
- <pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
+<cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
+<depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+<depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
+<pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
+        <xacro:if value="${camera_type == 'd435i'}">
+          <pointCloudCutoff>0.3</pointCloudCutoff>
+          <pointCloudCutoffMax>3</pointCloudCutoffMax>
+        </xacro:if>
+        <xacro:if value="${camera_type == 'd455'}">
+          <pointCloudCutoff>0.6</pointCloudCutoff>
+          <pointCloudCutoffMax>6</pointCloudCutoffMax>
+        </xacro:if>
         <frameName>kinect_optical_ros_link</frameName>
-        <pointCloudCutoff>1.2</pointCloudCutoff>
-        <pointCloudCutoffMax>3.5</pointCloudCutoffMax>
         <distortionK1>0</distortionK1>
         <distortionK2>0</distortionK2>
         <distortionK3>0</distortionK3>

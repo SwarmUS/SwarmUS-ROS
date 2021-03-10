@@ -3,6 +3,9 @@
     <arg name="ns" />
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="robot_name" default="pioneer"/>
+
+    <arg name="camera_type" default="d455"/>
+
     <arg name="robot_pos_x" default="0.0"/>
     <arg name="robot_pos_y" default="0.0"/>
     <arg name="robot_pos_z" default="1.0"/>
@@ -11,7 +14,7 @@
     <arg name="yaw" default="0"/>
 
     <group ns="$(arg ns)">
-        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name)" />
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type)"/>
         
         <!-- push robot_description to factory and spawn robot in gazebo -->
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_pos_x) -y $(arg robot_pos_y) -z $(arg robot_pos_z) 

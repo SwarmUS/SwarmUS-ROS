@@ -100,12 +100,6 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
     </inertial>
-    <collision name="collision">
-      <origin rpy="0 0 0" xyz="0 0 0.03599"/>
-      <geometry>
-        <box size="0.073000 0.276000 0.072000"/>
-      </geometry>
-    </collision>
     <visual name="visual">
       <origin rpy="0 0 0" xyz="0 0 0.03599"/>
       <geometry>
@@ -212,7 +206,7 @@
   <joint name="rplidar_joint" type="fixed">
     <child link="$(arg prefix)/rplidar"/>
     <parent link="$(arg prefix)/chassis" />
-    <origin rpy="0 0 0" xyz="0 0 0.21"/>
+    <origin rpy="0 0 0" xyz="0.02378 0 0.19709"/>
   </joint>
 
   <joint name="hiveboard_joint" type="fixed">

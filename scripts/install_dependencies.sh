@@ -24,7 +24,11 @@ sudo apt-get update && apt-get install -y \
     zip \
     protobuf-compiler \
     python3-protobuf \
-    python3-rosdep2 \
+    python3-rosdep \
+    python3-rosinstall \
+    python3-rosinstall-generator \
+    python3-wstool \
+    build-essential \
     librealsense2-dkms \
     librealsense2-utils \
     librealsense2-dev \

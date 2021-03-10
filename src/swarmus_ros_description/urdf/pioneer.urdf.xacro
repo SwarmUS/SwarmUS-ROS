@@ -173,7 +173,6 @@
     <child link="$(arg prefix)/chassis" />
   </joint>
 
-
   <joint name="left_wheel_hinge" type="continuous">
     <parent link="$(arg prefix)/chassis"/>
     <child link="$(arg prefix)/left_wheel"/>
@@ -201,7 +200,7 @@
   <joint name="kinect_joint" type="fixed">
     <child link="$(arg prefix)/kinect_ros_link" />
     <parent link="$(arg prefix)/chassis" />
-    <origin rpy="0 0 0" xyz="0.20 0 0.11"/>
+    <origin rpy="0 -0.174553 0" xyz="0.18059 0 0.16048"/>
   </joint>
 
   <joint name="kinect_optical_joint" type="fixed">

@@ -26,6 +26,12 @@ namespace MessageUtils {
                                      UserCallTargetDTO moduleDestination,
                                      GenericResponseStatusDTO status,
                                      std::string ackMessage);
+
+    MessageDTO createFunctionListLengthResponseMessage(uint32_t responseId,
+                                                       uint32_t msgSourceId,
+                                                       uint32_t msgDestinationId,
+                                                       UserCallTargetDTO moduleDestination,
+                                                       uint32_t length);
 } // namespace MessageUtils
 
 #endif // HIVEMIND_BRIDGE_MESSAGEUTILS_H

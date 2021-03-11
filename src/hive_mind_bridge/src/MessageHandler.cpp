@@ -4,6 +4,23 @@ MessageHandler::MessageHandler() {}
 
 MessageHandler::~MessageHandler() {}
 
+MessageDTO MessageHandler::handleFunctionListLengthRequest(uint32_t requestId,
+                                                           uint32_t msgDestinationId,
+                                                           uint32_t msgSourceId,
+                                                           UserCallTargetDTO sourceModule) {
+
+    uint32_t length = m_callbackNames.size();
+
+    return MessageUtils::createFunctionListLengthResponseMessage(requestId, msgDestinationId, msgSourceId, sourceModule, length);
+}
+
+MessageDTO MessageHandler::handleFunctionDescriptionRequest(uint32_t requestId,
+                                                            uint32_t msgDestinationId,
+                                                            uint32_t msgSourceId,
+                                                            UserCallTargetDTO sourceModule) {
+
+}
+
 MessageDTO MessageHandler::handleMessage(MessageDTO message) {
     GenericResponseStatusDTO responseStatus = GenericResponseStatusDTO::BadRequest;
     uint32_t msgSourceId = message.getSourceId();
@@ -16,15 +33,12 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 
     // Request
     if (std::holds_alternative<RequestDTO>(request)) {
-        std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO, SwarmApiRequestDTO>
-            userCallRequest = std::get<RequestDTO>(request).getRequest();
+        auto userCallRequest = std::get<RequestDTO>(request).getRequest();
         requestId = std::get<RequestDTO>(request).getId();
 
         // UserCallRequest
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
-            const std::variant<std::monostate, FunctionCallRequestDTO, FunctionListLengthRequestDTO,
-                               FunctionDescriptionRequestDTO>
-                functionCallRequest = std::get<UserCallRequestDTO>(userCallRequest).getRequest();
+            const auto functionCallRequest = std::get<UserCallRequestDTO>(userCallRequest).getRequest();
             sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
             // FunctionCallRequest
@@ -47,6 +61,13 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
                     ROS_WARN("Function name \"%s\" was not registered as a callback",
                              functionName.c_str());
                 }
+            // FunctionListLengthRequest
+            } else if (std::holds_alternative<FunctionListLengthRequestDTO>(functionCallRequest)) {
+                // TODO change the return statement for something more std
+                return handleFunctionListLengthRequest(requestId, msgDestinationId, msgSourceId, sourceModule);
+            // FunctionDescriptionRequest
+            } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
+                handleFunctionDescriptionRequest(requestId, msgDestinationId, msgSourceId, sourceModule);
             }
         }
     }
@@ -62,6 +83,8 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 bool MessageHandler::registerCallback(std::string name, CallbackFunction callback) {
     bool wasOverwritten = m_callbacks[name] != nullptr;
     m_callbacks[name] = callback;
+    m_callbackNames.push_back(name);
+
     return wasOverwritten;
 }
 

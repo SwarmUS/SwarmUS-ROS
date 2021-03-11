@@ -174,3 +174,25 @@ TEST_F(MessageHandlerFixture, testHandleMessageFail) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Unknown);
 }
+
+TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
+    // Given
+    FunctionListLengthRequestDTO functionListLengthRequest;
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST, functionListLengthRequest);
+    RequestDTO request(42, userCallRequest);
+    MessageDTO incomingMessage(0, 0, request);
+
+    m_messageHandler.registerCallback("TestFunctionCallRequestDTO1", m_testFunction);
+    m_messageHandler.registerCallback("TestFunctionCallRequestDTO2", m_testFunction);
+    m_messageHandler.registerCallback("TestFunctionCallRequestDTO3", m_testFunction);
+
+    // When
+    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+
+    // Then
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionListLengthResponseDTO functionListLengthResponse = std::get<FunctionListLengthResponseDTO>(userCallResponse.getResponse());
+
+    ASSERT_EQ(functionListLengthResponse.getLength(), 4);
+}

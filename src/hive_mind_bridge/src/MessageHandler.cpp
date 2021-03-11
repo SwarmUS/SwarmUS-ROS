@@ -16,14 +16,15 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 
     // Request
     if (std::holds_alternative<RequestDTO>(request)) {
-        std::variant<std::monostate, UserCallRequestDTO> userCallRequest =
-            std::get<RequestDTO>(request).getRequest();
+        std::variant<std::monostate, UserCallRequestDTO, HiveMindApiRequestDTO, SwarmApiRequestDTO>
+            userCallRequest = std::get<RequestDTO>(request).getRequest();
         requestId = std::get<RequestDTO>(request).getId();
 
         // UserCallRequest
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
-            std::variant<std::monostate, FunctionCallRequestDTO> functionCallRequest =
-                std::get<UserCallRequestDTO>(userCallRequest).getRequest();
+            const std::variant<std::monostate, FunctionCallRequestDTO, FunctionListLengthRequestDTO,
+                               FunctionDescriptionRequestDTO>
+                functionCallRequest = std::get<UserCallRequestDTO>(userCallRequest).getRequest();
             sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
             // FunctionCallRequest

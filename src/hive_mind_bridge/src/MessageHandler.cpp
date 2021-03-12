@@ -22,13 +22,22 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
     UserCallTargetDTO sourceModule,
     FunctionDescriptionRequestDTO functionDescriptionRequest) {
 
-    std::string name = m_callbackNames[functionDescriptionRequest.getIndex()];
+    uint32_t index = functionDescriptionRequest.getIndex();
+    if (index > m_callbackNames.size()) {
+        return MessageUtils::createResponseMessage(
+            requestId, msgDestinationId, msgSourceId, sourceModule,
+            GenericResponseStatusDTO::BadRequest, "Index out of bounds.");
+    }
+
+    // m_callbacks and m_callbackNames grow together: the latter is a lookup table for the former.
+    // No need to check if the name exists in m_callbacks.
+    std::string name = m_callbackNames[index];
     UserCallbackFunctionWrapper cb = m_callbacks[name];
 
     std::vector<FunctionDescriptionArgumentDTO> args;
     CallbackArgsManifest manifest = cb.getManifest();
-    for (auto i : manifest) {
-        FunctionDescriptionArgumentDTO argument(i.getName().c_str(), i.getType());
+    for (auto arg : manifest) {
+        FunctionDescriptionArgumentDTO argument(arg.getName().c_str(), arg.getType());
         args.push_back(argument);
     }
 

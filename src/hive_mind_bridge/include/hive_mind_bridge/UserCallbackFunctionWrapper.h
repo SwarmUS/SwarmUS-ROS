@@ -1,7 +1,7 @@
 #ifndef HIVE_MIND_BRIDGE_USERCALLBACKFUNCTIONWRAPPER_H
 #define HIVE_MIND_BRIDGE_USERCALLBACKFUNCTIONWRAPPER_H
 
-#include "hive_mind_bridge/UserCallbackArgumentWrapper.h"
+#include "hive_mind_bridge/UserCallbackArgumentDescription.h"
 #include <functional>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -14,7 +14,7 @@ typedef std::array<FunctionCallArgumentDTO,
 
 typedef std::function<void(CallbackArgs, int)> CallbackFunction;
 
-typedef std::vector<UserCallbackArgumentWrapper> CallbackArgsManifest;
+typedef std::vector<UserCallbackArgumentDescription> CallbackArgsManifest;
 
 class UserCallbackFunctionWrapper {
   public:

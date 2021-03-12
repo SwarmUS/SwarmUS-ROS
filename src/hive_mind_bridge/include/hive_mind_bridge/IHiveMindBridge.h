@@ -44,7 +44,7 @@ class IHiveMindBridge {
 
     /**
      * Register a custom action that this robot can accomplish.This is meant to be used with
-     * functions that do NOT require arguments. With functions rquiring arguments, use
+     * functions that do NOT require arguments. With functions requiring arguments, use
      * registerCustomAction(string, CallbackFunction, manifest).
      * @param name The name of the action (must match across the swarm components)
      * @param callback The function to be run. This is where the custom robot behaviour is meant to

@@ -53,9 +53,9 @@ class MessageHandlerFixture : public testing::Test {
 
     void SetUp() override {
         m_moveByTestCallbackManifest.push_back(
-            UserCallbackArgumentWrapper("x", FunctionDescriptionArgumentTypeDTO::Int));
+            UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Int));
         m_moveByTestCallbackManifest.push_back(
-            UserCallbackArgumentWrapper("y", FunctionDescriptionArgumentTypeDTO::Float));
+            UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
         m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback,
                                           m_moveByTestCallbackManifest);
 
@@ -257,4 +257,26 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
 
     ASSERT_EQ(functionDescription.getArgumentsLength(), 0);
     ASSERT_STREQ(functionDescription.getFunctionName(), "TestFunctionCallRequestDTO1");
+}
+
+TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
+    // Given
+    FunctionDescriptionRequestDTO functionDescriptionRequest(99); // out of bounds!
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST,
+                                       functionDescriptionRequest);
+    RequestDTO request(42, userCallRequest);
+    MessageDTO incomingMessage(0, 0, request);
+
+    // When
+    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+
+    // Then
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::BadRequest);
+    ASSERT_STREQ(genericResponse.getDetails(), "Index out of bounds.");
 }

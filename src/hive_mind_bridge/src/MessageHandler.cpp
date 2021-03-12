@@ -1,3 +1,4 @@
+#include <future>
 #include "hive_mind_bridge/MessageHandler.h"
 
 MessageHandler::MessageHandler() {}
@@ -81,7 +82,7 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 
                 // Call the right callback
                 if (callback) {
-                    callback.value()(functionArgs, argsLength);
+                    std::async(callback.value(), functionArgs, argsLength);
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
                     responseStatus = GenericResponseStatusDTO::Unknown;

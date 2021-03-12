@@ -27,7 +27,7 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(uint32_t requestId,
     std::vector<FunctionDescriptionArgumentDTO> args;
     CallbackArgsManifest manifest = cb.getManifest();
     for (auto i : manifest) {
-        FunctionDescriptionArgumentDTO argument(i.first.c_str(), i.second);
+        FunctionDescriptionArgumentDTO argument(i.getName().c_str(), i.getType());
         args.push_back(argument);
     }
 

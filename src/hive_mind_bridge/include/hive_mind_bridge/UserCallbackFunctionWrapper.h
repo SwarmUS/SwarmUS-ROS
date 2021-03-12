@@ -4,6 +4,7 @@
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
+#include "hive_mind_bridge/UserCallbackArgumentWrapper.h"
 #include <functional>
 #include <unordered_map>
 
@@ -13,7 +14,8 @@ typedef std::array<FunctionCallArgumentDTO,
 
 typedef std::function<void(CallbackArgs, int)> CallbackFunction;
 
-typedef std::unordered_map<std::string, FunctionDescriptionArgumentTypeDTO> CallbackArgsManifest;
+//typedef std::unordered_map<std::string, FunctionDescriptionArgumentTypeDTO> CallbackArgsManifest;
+typedef std::vector<UserCallbackArgumentWrapper> CallbackArgsManifest;
 
 class UserCallbackFunctionWrapper {
   public:

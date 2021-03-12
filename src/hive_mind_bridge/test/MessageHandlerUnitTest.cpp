@@ -52,8 +52,8 @@ class MessageHandlerFixture : public testing::Test {
     MessageDTO* m_moveByMessageDto;
 
     void SetUp() override {
-        m_moveByTestCallbackManifest["y"] = FunctionDescriptionArgumentTypeDTO::Float;
-        m_moveByTestCallbackManifest["x"] = FunctionDescriptionArgumentTypeDTO::Int;
+        m_moveByTestCallbackManifest.push_back(UserCallbackArgumentWrapper("x", FunctionDescriptionArgumentTypeDTO::Int));
+        m_moveByTestCallbackManifest.push_back(UserCallbackArgumentWrapper("y", FunctionDescriptionArgumentTypeDTO::Float));
         m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback, m_moveByTestCallbackManifest);
 
         // Existing void  function

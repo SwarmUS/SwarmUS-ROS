@@ -31,7 +31,13 @@ int main(int argc, char** argv) {
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
     };
-    bridge.registerCustomAction("moveBy", moveByCallback);
+
+    CallbackArgsManifest moveByManifest;
+    moveByManifest.push_back(
+        UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Float));
+    moveByManifest.push_back(
+        UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
+    bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
     // Register event hooks
     bridge.onConnect([]() { ROS_INFO("Client connected."); });

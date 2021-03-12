@@ -11,6 +11,12 @@ void HiveMindBridge::onConnect(std::function<void()> hook) { m_bridge->onConnect
 
 void HiveMindBridge::onDisconnect(std::function<void()> hook) { m_bridge->onDisconnect(hook); }
 
+bool HiveMindBridge::registerCustomAction(std::string name,
+                                          CallbackFunction callback,
+                                          CallbackArgsManifest manifest) {
+    return m_bridge->registerCustomAction(name, callback, manifest);
+}
+
 bool HiveMindBridge::registerCustomAction(std::string name, CallbackFunction callback) {
     return m_bridge->registerCustomAction(name, callback);
 }

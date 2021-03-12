@@ -4,6 +4,49 @@ MessageHandler::MessageHandler() {}
 
 MessageHandler::~MessageHandler() {}
 
+MessageDTO MessageHandler::handleFunctionListLengthRequest(uint32_t requestId,
+                                                           uint32_t msgDestinationId,
+                                                           uint32_t msgSourceId,
+                                                           UserCallTargetDTO sourceModule) {
+
+    uint32_t length = m_callbackNames.size();
+
+    return MessageUtils::createFunctionListLengthResponseMessage(requestId, msgDestinationId,
+                                                                 msgSourceId, sourceModule, length);
+}
+
+MessageDTO MessageHandler::handleFunctionDescriptionRequest(
+    uint32_t requestId,
+    uint32_t msgDestinationId,
+    uint32_t msgSourceId,
+    UserCallTargetDTO sourceModule,
+    FunctionDescriptionRequestDTO functionDescriptionRequest) {
+
+    uint32_t index = functionDescriptionRequest.getIndex();
+    if (index > m_callbackNames.size()) {
+        return MessageUtils::createResponseMessage(
+            requestId, msgDestinationId, msgSourceId, sourceModule,
+            GenericResponseStatusDTO::BadRequest, "Index out of bounds.");
+    }
+
+    // m_callbacks and m_callbackNames grow together: the latter is a lookup table for the former.
+    // No need to check if the name exists in m_callbacks.
+    std::string name = m_callbackNames[index];
+    UserCallbackFunctionWrapper cb = m_callbacks[name];
+
+    std::vector<FunctionDescriptionArgumentDTO> args;
+    CallbackArgsManifest manifest = cb.getManifest();
+    for (auto arg : manifest) {
+        FunctionDescriptionArgumentDTO argument(arg.getName().c_str(), arg.getType());
+        args.push_back(argument);
+    }
+
+    FunctionDescriptionDTO functionDescription(name.c_str(), args.data(), args.size());
+
+    return MessageUtils::createFunctionDescriptionResponseMessage(
+        requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
+}
+
 MessageDTO MessageHandler::handleMessage(MessageDTO message) {
     GenericResponseStatusDTO responseStatus = GenericResponseStatusDTO::BadRequest;
     uint32_t msgSourceId = message.getSourceId();
@@ -16,13 +59,12 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 
     // Request
     if (std::holds_alternative<RequestDTO>(request)) {
-        std::variant<std::monostate, UserCallRequestDTO> userCallRequest =
-            std::get<RequestDTO>(request).getRequest();
+        auto userCallRequest = std::get<RequestDTO>(request).getRequest();
         requestId = std::get<RequestDTO>(request).getId();
 
         // UserCallRequest
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
-            std::variant<std::monostate, FunctionCallRequestDTO> functionCallRequest =
+            const auto functionCallRequest =
                 std::get<UserCallRequestDTO>(userCallRequest).getRequest();
             sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
@@ -46,6 +88,15 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
                     ROS_WARN("Function name \"%s\" was not registered as a callback",
                              functionName.c_str());
                 }
+                // FunctionListLengthRequest
+            } else if (std::holds_alternative<FunctionListLengthRequestDTO>(functionCallRequest)) {
+                return handleFunctionListLengthRequest(requestId, msgDestinationId, msgSourceId,
+                                                       sourceModule);
+                // FunctionDescriptionRequest
+            } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
+                return handleFunctionDescriptionRequest(
+                    requestId, msgDestinationId, msgSourceId, sourceModule,
+                    std::get<FunctionDescriptionRequestDTO>(functionCallRequest));
             }
         }
     }
@@ -59,15 +110,31 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 }
 
 bool MessageHandler::registerCallback(std::string name, CallbackFunction callback) {
-    bool wasOverwritten = m_callbacks[name] != nullptr;
-    m_callbacks[name] = callback;
+    CallbackArgsManifest manifest;
+    return registerCallback(name, callback, manifest);
+}
+
+bool MessageHandler::registerCallback(std::string name,
+                                      CallbackFunction callback,
+                                      CallbackArgsManifest manifest) {
+    bool wasOverwritten = false;
+    auto existing = m_callbacks.find(name);
+
+    if (existing != m_callbacks.end()) {
+        wasOverwritten = true;
+    }
+
+    UserCallbackFunctionWrapper cb(callback, manifest);
+    m_callbacks[name] = cb;
+    m_callbackNames.push_back(name);
+
     return wasOverwritten;
 }
 
 std::optional<CallbackFunction> MessageHandler::getCallback(const std::string& name) {
     auto callback = m_callbacks.find(name);
     if (callback != m_callbacks.end()) {
-        return callback->second;
+        return callback->second.getFunction();
     }
 
     return {};

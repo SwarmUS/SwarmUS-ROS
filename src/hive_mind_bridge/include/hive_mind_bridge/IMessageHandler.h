@@ -1,7 +1,7 @@
 #ifndef HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 #define HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 
-#include <functional>
+#include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/FunctionCallResponseDTO.h>
@@ -9,16 +9,9 @@
 #include <hivemind-host/RequestDTO.h>
 #include <optional>
 #include <ros/ros.h>
-#include <unordered_map>
 #include <variant>
 
-typedef std::array<FunctionCallArgumentDTO,
-                   FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
-    CallbackArgs;
-
-typedef std::function<void(CallbackArgs, int)> CallbackFunction;
-
-typedef std::unordered_map<std::string, CallbackFunction> CallbackMap;
+typedef std::unordered_map<std::string, UserCallbackFunctionWrapper> CallbackMap;
 
 class IMessageHandler {
   public:
@@ -39,6 +32,17 @@ class IMessageHandler {
      * @returns True if an existing callback function was overwritten, false otherwise
      */
     virtual bool registerCallback(std::string name, CallbackFunction callback) = 0;
+
+    /**
+     * Register a callback
+     * @param name Key of the callback
+     * @param callback Callback function
+     * @param manifest A list describing the callback's expected arguments name and type
+     * @returns True if an existing callback function was overwritten, false otherwise
+     */
+    virtual bool registerCallback(std::string name,
+                                  CallbackFunction callback,
+                                  CallbackArgsManifest manifest) = 0;
 
     /**
      * Get an instance of a callback, if it exists.

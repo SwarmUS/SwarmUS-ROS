@@ -39,7 +39,8 @@ MessageDTO MessageUtils::createFunctionDescriptionResponseMessage(
     FunctionDescriptionDTO functionDescription) {
 
     FunctionDescriptionResponseDTO functionDescriptionResponse(functionDescription);
-    UserCallResponseDTO userCallResponse(UserCallTargetDTO::HOST, moduleDestination, functionDescriptionResponse);
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::HOST, moduleDestination,
+                                         functionDescriptionResponse);
     ResponseDTO response(responseId, userCallResponse);
     MessageDTO responseMessage(msgSourceId, msgDestinationId, response);
 

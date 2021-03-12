@@ -28,6 +28,12 @@ void HiveMindBridgeImpl::onDisconnect(std::function<void()> hook) {
     m_tcpServer.onDisconnect(hook);
 }
 
+bool HiveMindBridgeImpl::registerCustomAction(std::string name,
+                                              CallbackFunction callback,
+                                              CallbackArgsManifest manifest) {
+    return m_messageHandler.registerCallback(name, callback, manifest);
+}
+
 bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction callback) {
     return m_messageHandler.registerCallback(name, callback);
 }

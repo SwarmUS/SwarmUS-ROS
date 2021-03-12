@@ -3,11 +3,11 @@
 #include <gmock/gmock.h>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
+#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
+#include <hivemind-host/FunctionDescriptionRequestDTO.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <hivemind-host/UserCallRequestDTO.h>
-#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
-#include <hivemind-host/FunctionDescriptionRequestDTO.h>
 
 class MessageHandlerFixture : public testing::Test {
   protected:
@@ -52,9 +52,12 @@ class MessageHandlerFixture : public testing::Test {
     MessageDTO* m_moveByMessageDto;
 
     void SetUp() override {
-        m_moveByTestCallbackManifest.push_back(UserCallbackArgumentWrapper("x", FunctionDescriptionArgumentTypeDTO::Int));
-        m_moveByTestCallbackManifest.push_back(UserCallbackArgumentWrapper("y", FunctionDescriptionArgumentTypeDTO::Float));
-        m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback, m_moveByTestCallbackManifest);
+        m_moveByTestCallbackManifest.push_back(
+            UserCallbackArgumentWrapper("x", FunctionDescriptionArgumentTypeDTO::Int));
+        m_moveByTestCallbackManifest.push_back(
+            UserCallbackArgumentWrapper("y", FunctionDescriptionArgumentTypeDTO::Float));
+        m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback,
+                                          m_moveByTestCallbackManifest);
 
         // Existing void  function
         m_functionCallRequestDto =
@@ -216,8 +219,9 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
     ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
     FunctionDescriptionResponseDTO functionDescriptionResponse =
-            std::get<FunctionDescriptionResponseDTO>(userCallResponse.getResponse());
-    FunctionDescriptionDTO functionDescription = std::get<FunctionDescriptionDTO>(functionDescriptionResponse.getResponse());
+        std::get<FunctionDescriptionResponseDTO>(userCallResponse.getResponse());
+    FunctionDescriptionDTO functionDescription =
+        std::get<FunctionDescriptionDTO>(functionDescriptionResponse.getResponse());
 
     ASSERT_EQ(functionDescription.getArgumentsLength(), 2);
     ASSERT_STREQ(functionDescription.getFunctionName(), "MoveBy");
@@ -228,4 +232,29 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
 
     ASSERT_STREQ(args[1].getArgumentName(), "y");
     ASSERT_EQ(args[1].getArgumentType(), FunctionDescriptionArgumentTypeDTO::Float);
+}
+
+TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
+    m_messageHandler.registerCallback("TestFunctionCallRequestDTO1", m_testFunction);
+
+    // Given
+    FunctionDescriptionRequestDTO functionDescriptionRequest(1); // Testing 'MoveBy'
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST,
+                                       functionDescriptionRequest);
+    RequestDTO request(42, userCallRequest);
+    MessageDTO incomingMessage(0, 0, request);
+
+    // When
+    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+
+    // Then
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionDescriptionResponseDTO functionDescriptionResponse =
+        std::get<FunctionDescriptionResponseDTO>(userCallResponse.getResponse());
+    FunctionDescriptionDTO functionDescription =
+        std::get<FunctionDescriptionDTO>(functionDescriptionResponse.getResponse());
+
+    ASSERT_EQ(functionDescription.getArgumentsLength(), 0);
+    ASSERT_STREQ(functionDescription.getFunctionName(), "TestFunctionCallRequestDTO1");
 }

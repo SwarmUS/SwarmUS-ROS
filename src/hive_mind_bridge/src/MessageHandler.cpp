@@ -15,11 +15,12 @@ MessageDTO MessageHandler::handleFunctionListLengthRequest(uint32_t requestId,
                                                                  msgSourceId, sourceModule, length);
 }
 
-MessageDTO MessageHandler::handleFunctionDescriptionRequest(uint32_t requestId,
-                                                            uint32_t msgDestinationId,
-                                                            uint32_t msgSourceId,
-                                                            UserCallTargetDTO sourceModule,
-                                                            FunctionDescriptionRequestDTO functionDescriptionRequest) {
+MessageDTO MessageHandler::handleFunctionDescriptionRequest(
+    uint32_t requestId,
+    uint32_t msgDestinationId,
+    uint32_t msgSourceId,
+    UserCallTargetDTO sourceModule,
+    FunctionDescriptionRequestDTO functionDescriptionRequest) {
 
     std::string name = m_callbackNames[functionDescriptionRequest.getIndex()];
     UserCallbackFunctionWrapper cb = m_callbacks[name];
@@ -33,8 +34,8 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(uint32_t requestId,
 
     FunctionDescriptionDTO functionDescription(name.c_str(), args.data(), args.size());
 
-    return MessageUtils::createFunctionDescriptionResponseMessage(requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
-
+    return MessageUtils::createFunctionDescriptionResponseMessage(
+        requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
 }
 
 MessageDTO MessageHandler::handleMessage(MessageDTO message) {
@@ -86,8 +87,9 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
                 // FunctionDescriptionRequest
             } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
                 // TODO change the return statement for something more std
-                return handleFunctionDescriptionRequest(requestId, msgDestinationId, msgSourceId,
-                                                 sourceModule, std::get<FunctionDescriptionRequestDTO>(functionCallRequest));
+                return handleFunctionDescriptionRequest(
+                    requestId, msgDestinationId, msgSourceId, sourceModule,
+                    std::get<FunctionDescriptionRequestDTO>(functionCallRequest));
             }
         }
     }
@@ -105,7 +107,9 @@ bool MessageHandler::registerCallback(std::string name, CallbackFunction callbac
     return registerCallback(name, callback, manifest);
 }
 
-bool MessageHandler::registerCallback(std::string name, CallbackFunction callback, CallbackArgsManifest manifest) {
+bool MessageHandler::registerCallback(std::string name,
+                                      CallbackFunction callback,
+                                      CallbackArgsManifest manifest) {
     bool wasOverwritten = false;
     auto existing = m_callbacks.find(name);
 

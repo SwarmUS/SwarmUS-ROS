@@ -29,7 +29,23 @@ class IHiveMindBridge {
     virtual void onDisconnect(std::function<void()> hook) = 0;
 
     /**
-     * Register a custom action that this robot can accomplish.
+     * Register a custom action that this robot can accomplish. This is meant to be used with
+     * functions that require arguments (specified in manifest). With void functions, use
+     * registerCustomAction(string, CallbackFunction).
+     * @param name The name of the action (must match across the swarm components)
+     * @param callback The function to be run. This is where the custom robot behaviour is meant to
+     * be defined.
+     * @param manifest A list describing the callback's expected arguments name and type
+     * @return True if an existing callback function was overwritten, false otherwise
+     */
+    virtual bool registerCustomAction(std::string name,
+                                      CallbackFunction callback,
+                                      CallbackArgsManifest manifest) = 0;
+
+    /**
+     * Register a custom action that this robot can accomplish.This is meant to be used with
+     * functions that do NOT require arguments. With functions rquiring arguments, use
+     * registerCustomAction(string, CallbackFunction, manifest).
      * @param name The name of the action (must match across the swarm components)
      * @param callback The function to be run. This is where the custom robot behaviour is meant to
      * be defined.

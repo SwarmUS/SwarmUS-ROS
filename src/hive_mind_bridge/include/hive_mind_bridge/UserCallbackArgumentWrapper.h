@@ -1,6 +1,9 @@
 #ifndef HIVE_MIND_BRIDGE_USERCALLBACKARGUMENTWRAPPER_H
 #define HIVE_MIND_BRIDGE_USERCALLBACKARGUMENTWRAPPER_H
 
+#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
+#include <string>
+
 class UserCallbackArgumentWrapper {
   public:
     UserCallbackArgumentWrapper() = default;

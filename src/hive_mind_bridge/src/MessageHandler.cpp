@@ -81,12 +81,10 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
                 }
                 // FunctionListLengthRequest
             } else if (std::holds_alternative<FunctionListLengthRequestDTO>(functionCallRequest)) {
-                // TODO change the return statement for something more std
                 return handleFunctionListLengthRequest(requestId, msgDestinationId, msgSourceId,
                                                        sourceModule);
                 // FunctionDescriptionRequest
             } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
-                // TODO change the return statement for something more std
                 return handleFunctionDescriptionRequest(
                     requestId, msgDestinationId, msgSourceId, sourceModule,
                     std::get<FunctionDescriptionRequestDTO>(functionCallRequest));

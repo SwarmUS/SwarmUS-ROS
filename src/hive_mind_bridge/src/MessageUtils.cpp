@@ -15,15 +15,31 @@ MessageDTO MessageUtils::createResponseMessage(uint32_t responseId,
     return responseMessage;
 }
 
-MessageDTO MessageUtils::createFunctionListLengthResponseMessage(uint32_t responseId,
-                                                   uint32_t msgSourceId,
-                                                   uint32_t msgDestinationId,
-                                                   UserCallTargetDTO moduleDestination,
-                                                   uint32_t length) {
+MessageDTO MessageUtils::createFunctionListLengthResponseMessage(
+    uint32_t responseId,
+    uint32_t msgSourceId,
+    uint32_t msgDestinationId,
+    UserCallTargetDTO moduleDestination,
+    uint32_t length) {
 
     FunctionListLengthResponseDTO functionListLengthResponse(length);
     UserCallResponseDTO userCallResponse(UserCallTargetDTO::HOST, moduleDestination,
                                          functionListLengthResponse);
+    ResponseDTO response(responseId, userCallResponse);
+    MessageDTO responseMessage(msgSourceId, msgDestinationId, response);
+
+    return responseMessage;
+}
+
+MessageDTO MessageUtils::createFunctionDescriptionResponseMessage(
+    uint32_t responseId,
+    uint32_t msgSourceId,
+    uint32_t msgDestinationId,
+    UserCallTargetDTO moduleDestination,
+    FunctionDescriptionDTO functionDescription) {
+
+    FunctionDescriptionResponseDTO functionDescriptionResponse(functionDescription);
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::HOST, moduleDestination, functionDescriptionResponse);
     ResponseDTO response(responseId, userCallResponse);
     MessageDTO responseMessage(msgSourceId, msgDestinationId, response);
 

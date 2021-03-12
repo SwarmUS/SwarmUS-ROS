@@ -1,13 +1,13 @@
 #include "hive_mind_bridge/MessageHandler.h"
 
-#include <functional>
 #include <gmock/gmock.h>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <hivemind-host/UserCallRequestDTO.h>
-#include <optional>
+#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
+#include <hivemind-host/FunctionDescriptionRequestDTO.h>
 
 class MessageHandlerFixture : public testing::Test {
   protected:
@@ -28,6 +28,7 @@ class MessageHandlerFixture : public testing::Test {
         m_testValue1 += std::get<int64_t>(args[0].getArgument());
         m_testValue2 -= std::get<float>(args[1].getArgument());
     };
+    CallbackArgsManifest m_moveByTestCallbackManifest;
 
     MessageHandler m_messageHandler;
 
@@ -51,8 +52,9 @@ class MessageHandlerFixture : public testing::Test {
     MessageDTO* m_moveByMessageDto;
 
     void SetUp() override {
-
-        m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback);
+        m_moveByTestCallbackManifest["y"] = FunctionDescriptionArgumentTypeDTO::Float;
+        m_moveByTestCallbackManifest["x"] = FunctionDescriptionArgumentTypeDTO::Int;
+        m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback, m_moveByTestCallbackManifest);
 
         // Existing void  function
         m_functionCallRequestDto =
@@ -178,7 +180,8 @@ TEST_F(MessageHandlerFixture, testHandleMessageFail) {
 TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
     // Given
     FunctionListLengthRequestDTO functionListLengthRequest;
-    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST, functionListLengthRequest);
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST,
+                                       functionListLengthRequest);
     RequestDTO request(42, userCallRequest);
     MessageDTO incomingMessage(0, 0, request);
 
@@ -192,7 +195,37 @@ TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
     // Then
     ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
-    FunctionListLengthResponseDTO functionListLengthResponse = std::get<FunctionListLengthResponseDTO>(userCallResponse.getResponse());
+    FunctionListLengthResponseDTO functionListLengthResponse =
+        std::get<FunctionListLengthResponseDTO>(userCallResponse.getResponse());
 
     ASSERT_EQ(functionListLengthResponse.getLength(), 4);
+}
+
+TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
+    // Given
+    FunctionDescriptionRequestDTO functionDescriptionRequest(0); // Testing 'MoveBy'
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::UNKNOWN, UserCallTargetDTO::HOST,
+                                       functionDescriptionRequest);
+    RequestDTO request(42, userCallRequest);
+    MessageDTO incomingMessage(0, 0, request);
+
+    // When
+    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+
+    // Then
+    ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionDescriptionResponseDTO functionDescriptionResponse =
+            std::get<FunctionDescriptionResponseDTO>(userCallResponse.getResponse());
+    FunctionDescriptionDTO functionDescription = std::get<FunctionDescriptionDTO>(functionDescriptionResponse.getResponse());
+
+    ASSERT_EQ(functionDescription.getArgumentsLength(), 2);
+    ASSERT_STREQ(functionDescription.getFunctionName(), "MoveBy");
+
+    auto args = functionDescription.getArguments();
+    ASSERT_STREQ(args[0].getArgumentName(), "x");
+    ASSERT_EQ(args[0].getArgumentType(), FunctionDescriptionArgumentTypeDTO::Int);
+
+    ASSERT_STREQ(args[1].getArgumentName(), "y");
+    ASSERT_EQ(args[1].getArgumentType(), FunctionDescriptionArgumentTypeDTO::Float);
 }

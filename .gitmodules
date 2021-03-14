@@ -13,3 +13,6 @@
 	path = contrib/roboclaw
 	url = https://github.com/SwarmUS/roboclaw
 	branch = master
+[submodule "contrib/realsense-ros"]
+	path = contrib/realsense-ros
+	url = https://github.com/SwarmUS/realsense-ros.git

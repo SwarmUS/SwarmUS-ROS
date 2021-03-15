@@ -5,9 +5,9 @@
     <arg name="robot_name" default="pioneer_0"/>
 
     <!--Remap pioneers_0's camera topics to RTAB-Map -->
-    <remap to="rgb/camera_info" from="/$(arg robot_name)/camera_ir/camera_info"/>
-    <remap to="depth/image" from="/$(arg robot_name)/camera_ir/depth/image_raw"/>
-    <remap to="rgb/image" from="/$(arg robot_name)/camera_ir/image_raw"/>
+    <remap to="rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
+    <remap to="depth/image" from="/$(arg robot_name)/camera/depth/image_rect_raw"/>
+    <remap to="rgb/image" from="/$(arg robot_name)/camera/color/image_raw"/>
     <remap to="scan" from="/$(arg robot_name)/scan"/>
 
     <!-- Launch a Gazebo world with walls and stuff -->

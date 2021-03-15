@@ -5,11 +5,10 @@
 	path = contrib/rplidar
 	url = https://github.com/Slamtec/rplidar_ros
 	tag = 1.7.0
-[submodule "contrib/realsense"]
-	path = contrib/realsense
-	url = https://github.com/IntelRealSense/realsense-ros
-	tag = 2.2.21
 [submodule "contrib/roboclaw"]
 	path = contrib/roboclaw
 	url = https://github.com/SwarmUS/roboclaw
 	branch = master
+[submodule "contrib/realsense-ros"]
+	path = contrib/realsense-ros
+	url = https://github.com/LuAPi/realsense-ros.git

@@ -98,7 +98,7 @@
     <xacro:include filename="$(find realsense2_description)/urdf/_d455.urdf.xacro"/>
     
     <xacro:sensor_d455 parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="${is_simulation}">
-      <origin xyz="0.16773 0 0.14602" rpy="0 -0.174553 0"/>
+      <origin xyz="0.16822 0 0.14357" rpy="0 -0.174553 0"/>
     </xacro:sensor_d455>
   </xacro:if>
 

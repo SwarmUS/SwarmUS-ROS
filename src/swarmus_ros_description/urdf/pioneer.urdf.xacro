@@ -2,8 +2,6 @@
 <robot name="pioneer_swarmus"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
-
   <xacro:arg name="prefix" default="p_swarmus"/>
   <xacro:arg name="color" default="DepthMapVS"/>
   <xacro:arg name="camera_type" default="d435i"/>
@@ -86,9 +84,21 @@
     </visual>
   </link>
 
-  <xacro:sensor_d435i parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
-    <origin xyz="0.16773 0 0.14602" rpy="0 -0.174553 0"/>
-  </xacro:sensor_d435i>
+  <xacro:if value="${camera_type == 'd435i'}">
+    <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
+
+    <xacro:sensor_d435i parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+      <origin xyz="0.16773 0 0.14602" rpy="0 -0.174553 0"/>
+    </xacro:sensor_d435i>
+  </xacro:if>
+  
+  <xacro:if value="${camera_type == 'd455'}">
+    <xacro:include filename="$(find realsense2_description)/urdf/_d455.urdf.xacro"/>
+    
+    <xacro:sensor_d455 parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+      <origin xyz="0.16773 0 0.14602" rpy="0 -0.174553 0"/>
+    </xacro:sensor_d455>
+  </xacro:if>
 
   <link name="$(arg prefix)/rplidar">
     <inertial>
@@ -285,11 +295,11 @@
 will control the frame rate. -->
         <updateRate>0.0</updateRate>
         <cameraName>camera</cameraName>
-        <!--imageTopicName>/camera/color/image_raw</imageTopicName>
-<cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
-<depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
-<depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
-<pointCloudTopicName>/camera/depth/points</pointCloudTopicName-->
+        <imageTopicName>color/image_raw</imageTopicName>
+        <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
+        <depthImageTopicName>depth/image_rect_raw</depthImageTopicName>
+        <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+        <pointCloudTopicName>depth/color/points</pointCloudTopicName>
         <xacro:if value="${camera_type == 'd435i'}">
           <pointCloudCutoff>0.3</pointCloudCutoff>
           <pointCloudCutoffMax>3</pointCloudCutoffMax>

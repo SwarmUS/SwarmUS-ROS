@@ -6,7 +6,9 @@
   <xacro:arg name="color" default="DepthMapVS"/>
   <xacro:arg name="camera_type" default="d435i"/>
   <xacro:property name="camera_type" value="$(arg camera_type)"/>
-  <xacro:arg name="use_nominal_extrinsics" default="true" />
+  
+  <xacro:arg name="is_simulation" default="false"/>
+  <xacro:property name="is_simulation" value="$(arg is_simulation)"/>
 
   <link name="$(arg prefix)/base_footprint" />
   <link name="$(arg prefix)/base_link" />
@@ -87,7 +89,7 @@
   <xacro:if value="${camera_type == 'd435i'}">
     <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
-    <xacro:sensor_d435i parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <xacro:sensor_d435i parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="${is_simulation}">
       <origin xyz="0.16773 0 0.14602" rpy="0 -0.174553 0"/>
     </xacro:sensor_d435i>
   </xacro:if>
@@ -95,7 +97,7 @@
   <xacro:if value="${camera_type == 'd455'}">
     <xacro:include filename="$(find realsense2_description)/urdf/_d455.urdf.xacro"/>
     
-    <xacro:sensor_d455 parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <xacro:sensor_d455 parent="$(arg prefix)/chassis" name="$(arg prefix)/camera" use_nominal_extrinsics="${is_simulation}">
       <origin xyz="0.16773 0 0.14602" rpy="0 -0.174553 0"/>
     </xacro:sensor_d455>
   </xacro:if>
@@ -209,137 +211,138 @@
     <!-- material>Gazebo/$(arg color)</material-->
   </gazebo>
 
-  <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
-  </gazebo>
+  <xacro:if value="${is_simulation}">
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+    </gazebo>
 
-  <gazebo>
-    <plugin name="differential_drive" filename="libgazebo_ros_diff_drive.so">
-      <commandTopic>cmd_vel</commandTopic>
-      <odometryTopic>odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
-      <odometrySource>world</odometrySource>
-      <publishOdomTF>true</publishOdomTF>
-      <robotBaseFrame>base_footprint</robotBaseFrame>
-      <publishWheelTF>false</publishWheelTF>
-      <publishTf>true</publishTf>
-      <publishWheelJointState>true</publishWheelJointState>
-      <legacyMode>false</legacyMode>
-      <updateRate>50</updateRate>
-      <leftJoint>left_wheel_hinge</leftJoint>
-      <rightJoint>right_wheel_hinge</rightJoint>
-      <wheelSeparation>0.34</wheelSeparation>
-      <wheelDiameter>0.22</wheelDiameter>
-      <wheelAcceleration>1</wheelAcceleration>
-      <wheelTorque>10</wheelTorque>
-      <rosDebugLevel>true</rosDebugLevel>
-    </plugin>
-  </gazebo>
+    <gazebo>
+      <plugin name="differential_drive" filename="libgazebo_ros_diff_drive.so">
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <odometrySource>world</odometrySource>
+        <publishOdomTF>true</publishOdomTF>
+        <robotBaseFrame>base_footprint</robotBaseFrame>
+        <publishWheelTF>false</publishWheelTF>
+        <publishTf>true</publishTf>
+        <publishWheelJointState>true</publishWheelJointState>
+        <legacyMode>false</legacyMode>
+        <updateRate>50</updateRate>
+        <leftJoint>left_wheel_hinge</leftJoint>
+        <rightJoint>right_wheel_hinge</rightJoint>
+        <wheelSeparation>0.34</wheelSeparation>
+        <wheelDiameter>0.22</wheelDiameter>
+        <wheelAcceleration>1</wheelAcceleration>
+        <wheelTorque>10</wheelTorque>
+        <rosDebugLevel>true</rosDebugLevel>
+      </plugin>
+    </gazebo>
 
-  <gazebo reference="$(arg prefix)/rplidar">
-      <sensor name="laser" type="ray">
-        <pose>0.01 0 0.0175 0 -0 0</pose>
-        <ray>
-          <scan>
-            <horizontal>
-              <!-- Specs from racecar's rplidar -->
-              <samples>360</samples>
-              <resolution>1</resolution>
-              <min_angle>-3.12413907051</min_angle>
-              <max_angle>3.12413907051</max_angle>
-            </horizontal>
-          </scan>
-          <range>
-            <min>0.15</min>
-            <max>12</max>
-            <resolution>0.01</resolution>
-          </range>
-        </ray>
-        <plugin name="laser" filename="libRayPlugin.so" />
-        <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+    <gazebo reference="$(arg prefix)/rplidar">
+        <sensor name="laser" type="ray">
+          <pose>0.01 0 0.0175 0 -0 0</pose>
+          <ray>
+            <scan>
+              <horizontal>
+                <!-- Specs from racecar's rplidar -->
+                <samples>360</samples>
+                <resolution>1</resolution>
+                <min_angle>-3.12413907051</min_angle>
+                <max_angle>3.12413907051</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.15</min>
+              <max>12</max>
+              <resolution>0.01</resolution>
+            </range>
+          </ray>
+          <plugin name="laser" filename="libRayPlugin.so" />
+          <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
+            <robotNamespace>$(arg prefix)</robotNamespace>
+            <topicName>scan</topicName>
+            <frameName>rplidar</frameName>
+          </plugin>
+          <always_on>1</always_on>
+          <update_rate>10</update_rate>
+          <visualize>false</visualize>
+        </sensor>
+    </gazebo>
+
+    <gazebo reference="$(arg prefix)/camera_depth_frame">
+      <sensor name="camera" type="depth">
+        <update_rate>30</update_rate>
+        <camera>
+          <xacro:if value="${camera_type == 'd435i'}">
+            <horizontal_fov>1.117</horizontal_fov> <!-- 64 deg field of view of the RGDB sensor used since its smaller than the depth FOV-->
+          </xacro:if>
+          <xacro:if value="${camera_type == 'd455'}">
+            <horizontal_fov>1.501</horizontal_fov> <!-- 86 deg field of view of the depth sensor used- since its smaller than the RGBD value-->
+          </xacro:if>
+          <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>20</far>
+          </clip>
+        </camera>
+        <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
           <robotNamespace>$(arg prefix)</robotNamespace>
-          <topicName>scan</topicName>
-          <frameName>rplidar</frameName>
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <!-- Keep this zero, update_rate in the parent <sensor> tag will control the frame rate. -->
+          <updateRate>0.0</updateRate>
+          <cameraName>camera</cameraName>
+          <imageTopicName>color/image_raw</imageTopicName>
+          <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>depth/image_rect_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+          <xacro:if value="${camera_type == 'd435i'}">
+            <pointCloudCutoff>0.3</pointCloudCutoff>
+            <pointCloudCutoffMax>3</pointCloudCutoffMax>
+          </xacro:if>
+          <xacro:if value="${camera_type == 'd455'}">
+            <pointCloudCutoff>0.6</pointCloudCutoff>
+            <pointCloudCutoffMax>6</pointCloudCutoffMax>
+          </xacro:if>
+          <frameName>camera_depth_optical_frame</frameName>
+          <distortionK1>0</distortionK1>
+          <distortionK2>0</distortionK2>
+          <distortionK3>0</distortionK3>
+          <distortionT1>0</distortionT1>
+          <distortionT2>0</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
         </plugin>
-        <always_on>1</always_on>
-        <update_rate>10</update_rate>
-        <visualize>false</visualize>
       </sensor>
-  </gazebo>
+      <material>Gazebo/$(arg color)</material>
+    </gazebo>
 
-  <gazebo reference="$(arg prefix)/camera_depth_frame">
-    <sensor name="camera" type="depth">
-      <update_rate>30</update_rate>
-      <camera>
-        <xacro:if value="${camera_type == 'd435i'}">
-          <horizontal_fov>1.117</horizontal_fov> <!-- 64 deg field of view of the RGDB sensor used since its smaller than the depth FOV-->
-        </xacro:if>
-        <xacro:if value="${camera_type == 'd455'}">
-          <horizontal_fov>1.501</horizontal_fov> <!-- 86 deg field of view of the depth sensor used- since its smaller than the RGBD value-->
-        </xacro:if>
-        <image>
-            <width>1280</width>
-            <height>720</height>
-            <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.05</near>
-          <far>20</far>
-        </clip>
-      </camera>
-      <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
-        <robotNamespace>$(arg prefix)</robotNamespace>
-        <baseline>0.2</baseline>
+    <gazebo reference="$(arg prefix)/camera_accel_optical_frame">
+      <gravity>true</gravity>
+      <sensor name="imu_sensor" type="imu">
         <alwaysOn>true</alwaysOn>
-        <!-- Keep this zero, update_rate in the parent <sensor> tag
-will control the frame rate. -->
-        <updateRate>0.0</updateRate>
-        <cameraName>camera</cameraName>
-        <imageTopicName>color/image_raw</imageTopicName>
-        <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
-        <depthImageTopicName>depth/image_rect_raw</depthImageTopicName>
-        <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
-        <pointCloudTopicName>depth/color/points</pointCloudTopicName>
-        <xacro:if value="${camera_type == 'd435i'}">
-          <pointCloudCutoff>0.3</pointCloudCutoff>
-          <pointCloudCutoffMax>3</pointCloudCutoffMax>
-        </xacro:if>
-        <xacro:if value="${camera_type == 'd455'}">
-          <pointCloudCutoff>0.6</pointCloudCutoff>
-          <pointCloudCutoffMax>6</pointCloudCutoffMax>
-        </xacro:if>
-        <frameName>camera_depth_optical_frame</frameName>
-        <distortionK1>0</distortionK1>
-        <distortionK2>0</distortionK2>
-        <distortionK3>0</distortionK3>
-        <distortionT1>0</distortionT1>
-        <distortionT2>0</distortionT2>
-        <CxPrime>0</CxPrime>
-        <Cx>0</Cx>
-        <Cy>0</Cy>
-        <focalLength>0</focalLength>
-        <hackBaseline>0</hackBaseline>
-      </plugin>
-    </sensor>
-    <material>Gazebo/$(arg color)</material>
-  </gazebo>
-
-  <gazebo reference="$(arg prefix)/camera_accel_optical_frame">
-    <gravity>true</gravity>
-    <sensor name="imu_sensor" type="imu">
-      <alwaysOn>true</alwaysOn>
-      <update_rate>100</update_rate>
-      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-        <robotNamespace>$(arg prefix)</robotNamespace>
-        <topicName>camera/imu</topicName>
-        <bodyName>$(arg prefix)/camera_accel_optical_frame</bodyName>
-        <updateRateHZ>100</updateRateHZ>
-        <gaussianNoise>0.0</gaussianNoise>
-        <xyzOffset>0 0 0</xyzOffset>
-        <rpyOffset>0 0 0</rpyOffset>
-        <frameName>$(arg prefix)/camera_accel_optical_frame</frameName>
-        <initialOrientationAsReference>false</initialOrientationAsReference>
-      </plugin>
-    </sensor>
-  </gazebo>
+        <update_rate>100</update_rate>
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+          <robotNamespace>$(arg prefix)</robotNamespace>
+          <topicName>camera/imu</topicName>
+          <bodyName>$(arg prefix)/camera_accel_optical_frame</bodyName>
+          <updateRateHZ>100</updateRateHZ>
+          <gaussianNoise>0.0</gaussianNoise>
+          <xyzOffset>0 0 0</xyzOffset>
+          <rpyOffset>0 0 0</rpyOffset>
+          <frameName>$(arg prefix)/camera_accel_optical_frame</frameName>
+          <initialOrientationAsReference>false</initialOrientationAsReference>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:if>
 </robot>

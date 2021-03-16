@@ -6,15 +6,15 @@
     <arg name="camera_fps" default="30"/>
 
     <include file="$(find realsense2_camera)/launch/rs_camera.launch">
-        <arg name="device_type"         default="d435"/>
+        <arg name="device_type"         default="d455"/>
         <arg name="camera"              default="camera"/>  <!-- Used as the group and tf prefixes -->
 
         <arg name="depth_width"         default="1280"/>
         <arg name="depth_height"        default="720"/>
         <arg name="enable_depth"        default="true"/>
 
-        <arg name="color_width"         default="1920"/>
-        <arg name="color_height"        default="1080"/>
+        <arg name="color_width"         default="1280"/>
+        <arg name="color_height"        default="800"/>
         <arg name="enable_color"        default="true"/>
 
         <arg name="depth_fps"           default="$(arg camera_fps)"/>

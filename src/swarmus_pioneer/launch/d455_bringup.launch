@@ -3,18 +3,18 @@
     <!--remap from="/camera/aligned_depth_to_color/image_raw" to="/camera/depth_registered/image_raw" /-->
     <!--remap from="/camera/depth/color/points" to="/pointcloud" /-->
     <arg name="robot_name" default="pioneer_0"/>
-    <arg name="camera_fps" default="30"/>
+    <arg name="camera_fps" default="15"/>
 
     <include file="$(find realsense2_camera)/launch/rs_camera.launch">
         <arg name="device_type"         default="d455"/>
         <arg name="camera"              default="camera"/>  <!-- Used as the group and tf prefixes -->
 
-        <arg name="depth_width"         default="1280"/>
-        <arg name="depth_height"        default="720"/>
+        <arg name="depth_width"         default="640"/>
+        <arg name="depth_height"        default="480"/>
         <arg name="enable_depth"        default="true"/>
 
-        <arg name="color_width"         default="1280"/>
-        <arg name="color_height"        default="800"/>
+        <arg name="color_width"         default="640"/>
+        <arg name="color_height"        default="480"/>
         <arg name="enable_color"        default="true"/>
 
         <arg name="depth_fps"           default="$(arg camera_fps)"/>

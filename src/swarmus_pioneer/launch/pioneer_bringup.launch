@@ -3,7 +3,7 @@
     <arg name="robot_name" default="pioneer_0"/>
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="camera_type" default="d455"/>
-    <arg name="camera_fps" default="30"/>
+    <arg name="camera_fps" default="15"/>
 
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
@@ -16,11 +16,11 @@
 
         <!-- Intel RealSense D435i -->
         <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i')">
-            <arg name="camera_fps" value="30"/>
+            <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 
         <include file="$(find swarmus_pioneer)/launch/d455_bringup.launch"  if="$(eval camera_type == 'd455')">
-            <arg name="camera_fps" value="30"/>
+            <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 
         <!-- Lidar -->

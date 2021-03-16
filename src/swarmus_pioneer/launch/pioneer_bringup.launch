@@ -1,24 +1,37 @@
 <?xml version="1.0" ?>
 <launch>
+    <arg name="robot_name" default="pioneer_0"/>
+    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="camera_type" default="d435i"/>
 
-    <!-- Roboclaw -->
-    <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
-        <!-- TODO: set roboclaw config -->
-        <param name="~serial_port"  value="/dev/roboclaw"/>
-        <param name="~baudrate"     value="115200"/>
-        <param name="~roboclaws"    value="1"/>
-    </node>
+    <group ns="$(arg robot_name)">
+        <!-- Roboclaw -->
+        <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
+            <!-- TODO: set roboclaw config -->
+            <param name="~serial_port"  value="/dev/roboclaw"/>
+            <param name="~baudrate"     value="115200"/>
+            <param name="~roboclaws"    value="1"/>
+        </node>
 
-    <!-- Intel RealSense D455 -->
-    <!-- TODO: determine a lot of stuff for camera. Looking at you Étienne. -->
+        <!-- Intel RealSense D435i -->
+        <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch"/>
 
-    <!-- Lidar -->
-    <node pkg="rplidar_ros" type="rplidarNode" name="rplidar_node" output="screen">
-        <param name="serial_port"         type="string" value="/dev/rplidar"/>
-        <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
-        <param name="frame_id"            type="string" value="laser"/>
-        <param name="inverted"            type="bool"   value="false"/>
-        <param name="angle_compensate"    type="bool"   value="true"/>
-    </node>
+        <!-- Lidar -->
+        <node pkg="rplidar_ros" type="rplidarNode" name="rplidar_node" output="screen">
+            <param name="serial_port"         type="string" value="/dev/rplidar"/>
+            <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
+            <param name="frame_id"            type="string" value="laser"/>
+            <param name="inverted"            type="bool"   value="false"/>
+            <param name="angle_compensate"    type="bool"   value="true"/>
+        </node>
 
+        <!-- Robot state publisher to publish TF-->
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=false"/>
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <!--remap from="/joint_states" to="$(arg robot_name)/joint_states"/-->
+        </node>
+
+    </group>
 </launch>

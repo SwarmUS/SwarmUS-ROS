@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+build/
+devel/
+*.pyc
+src/hiveboard_bridge/cmake-build-debug
+/src/hive_mind_bridge/cmake-build-debug/
+
+src/swarmus_simple_swarm/cmake-build-debug/CMakeFiles/

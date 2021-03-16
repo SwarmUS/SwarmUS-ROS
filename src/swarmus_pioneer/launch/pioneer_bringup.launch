@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<launch>
+
+    <!-- Roboclaw -->
+    <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
+        <!-- TODO: set roboclaw config -->
+        <param name="~serial_port"  value="/dev/roboclaw"/>
+        <param name="~baudrate"     value="115200"/>
+        <param name="~roboclaws"    value="1"/>
+    </node>
+
+    <!-- Intel RealSense D455 -->
+    <!-- TODO: determine a lot of stuff for camera. Looking at you Étienne. -->
+
+    <!-- Lidar -->
+    <node pkg="rplidar_ros" type="rplidarNode" name="rplidar_node" output="screen">
+        <param name="serial_port"         type="string" value="/dev/rplidar"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
+        <param name="frame_id"            type="string" value="laser"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+</launch>

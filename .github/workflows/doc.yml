@@ -1,0 +1,47 @@
+name: Publish Documentation
+
+on:
+    push:
+      branches: [ master ]
+
+jobs:
+  build-native:
+    runs-on: ubuntu-20.04
+    container:
+      image: swarmus/embedded
+    steps:
+      - name: Create catkin_ws
+        run: |
+          mkdir -p catkin_ws/src
+          cd catkin_ws
+          . /opt/ros/$ROS_DISTRO/setup.sh
+          catkin_make
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: 'catkin_ws/src/SwarmUS-ROS'
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+        working-directory: 'catkin_ws/src/SwarmUS-ROS'
+
+      - name: Generate Documentation
+        run: |
+          . ./devel/setup.sh
+          python src/SwarmUS-ROS/tools/generate_doc.py doc
+        working-directory: 'catkin_ws'
+
+      - name: Prepare Publish Step
+        run: |
+          apt-get update && apt-get install -y rsync
+
+      - name: Publish Documentation
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: catkin_ws/doc
+          TARGET_FOLDER: docs
+          CLEAN: true
+          SINGLE_COMMIT: true

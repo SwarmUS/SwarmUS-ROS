@@ -1,0 +1,40 @@
+
+TrajectoryPlannerROS:
+  # Robot configuration parameters
+  max_vel_x: 0.3
+  min_vel_x: 0.05
+  acc_lim_x: 0.3
+  escape_vel: -0.1
+
+  max_vel_theta: 0.5
+  min_vel_theta: -0.5
+  min_in_place_vel_theta: 0.2
+  acc_lim_theta: 0.8
+
+  holonomic_robot: false
+  
+  # Goal tolerance parameters
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.05
+  latch_xy_goal_tolerance: true
+  
+  # Foward simulation parameters
+  sim_time: 1.0
+  sim_granularity: 0.025
+  angular_sim_granularity: 0.025
+  vx_samples: 3
+  vtheta_samples: 20
+  controller_frequency: 20.0
+
+ # Trajectory scoring parameters
+ # cost = pdist_scale * (dist_trajectoryEnd_to_path) + gdist_scale * (dist_trajectoryEnd_to_localGoal) + occdist_sclae * (maximum obstacle cost along the trajectory cost (0-254))
+  meter_scoring: true
+  pdist_scale: 4
+  gdist_scale: 1
+  occdist_scale: 0.5
+  heading_lookahead: 0.7
+  
+  heading_scoring: false
+
+  # Osciillation prevention parameters
+  oscillation_reset_dist: 0.1

@@ -32,7 +32,7 @@ jobs:
         run: |
           . /opt/ros/$ROS_DISTRO/setup.sh
           apt-get update && apt-get install -y python2 libmagic-dev
-          wget https://bootstrap.pypa.io/2.7/get-pip.py
+          wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
           python2 get-pip.py
           pip2 --version
           pip2 install haros

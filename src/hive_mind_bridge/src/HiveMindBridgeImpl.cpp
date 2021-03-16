@@ -10,10 +10,10 @@ void HiveMindBridgeImpl::spin() {
         MessageDTO message;
         if (m_deserializer.deserializeFromStream(message)) {
             // Execute the action
-            MessageDTO responseMessage = m_messageHandler.handleMessage(message);
+            MessageHandlerResult result = m_messageHandler.handleMessage(message);
 
             // Send the ack/nack message
-            m_serializer.serializeToStream(responseMessage);
+            m_serializer.serializeToStream(result.getResponse());
         } else {
             ROS_WARN("The received bytes do not contain a valid message.");
         }

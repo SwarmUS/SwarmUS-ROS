@@ -125,7 +125,9 @@ TEST_F(MessageHandlerFixture, testGetCallbackFail) {
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_messageDto);
+    MessageHandlerResult result = m_messageHandler.handleMessage(*m_messageDto);
+    MessageDTO responseMessage = result.getResponse();
+
     ASSERT_EQ(responseMessage.getSourceId(), 2);
     ASSERT_EQ(responseMessage.getDestinationId(), 99);
 
@@ -139,12 +141,16 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
         std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
+
+    result.getReturnValues().wait();
 
     ASSERT_TRUE(m_testFunctionCalled);
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
-    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_moveByMessageDto);
+    MessageHandlerResult result = m_messageHandler.handleMessage(*m_moveByMessageDto);
+    MessageDTO responseMessage = result.getResponse();
+
     ASSERT_EQ(responseMessage.getSourceId(), 2);
     ASSERT_EQ(responseMessage.getDestinationId(), 99);
 
@@ -158,13 +164,17 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
         std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
+
+    result.getReturnValues().wait();
 
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
-    MessageDTO responseMessage = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
+    MessageHandlerResult result = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
+    MessageDTO responseMessage = result.getResponse();
+
     ASSERT_EQ(responseMessage.getSourceId(), 2);
     ASSERT_EQ(responseMessage.getDestinationId(), 99);
 
@@ -193,9 +203,10 @@ TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO3", m_testFunction);
 
     // When
-    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
+    MessageDTO responseMessage = result.getResponse();
     ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
     FunctionListLengthResponseDTO functionListLengthResponse =
@@ -213,9 +224,10 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
+    MessageDTO responseMessage = result.getResponse();
     ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
     FunctionDescriptionResponseDTO functionDescriptionResponse =
@@ -245,9 +257,10 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
+    MessageDTO responseMessage = result.getResponse();
     ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
     FunctionDescriptionResponseDTO functionDescriptionResponse =
@@ -268,9 +281,10 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageDTO responseMessage = m_messageHandler.handleMessage(incomingMessage);
+    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
+    MessageDTO responseMessage = result.getResponse();
     ResponseDTO response = std::get<ResponseDTO>(responseMessage.getMessage());
     UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
 

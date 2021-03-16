@@ -48,12 +48,14 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
         requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
 }
 
-MessageDTO MessageHandler::handleMessage(MessageDTO message) {
+MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
     GenericResponseStatusDTO responseStatus = GenericResponseStatusDTO::BadRequest;
     uint32_t msgSourceId = message.getSourceId();
     uint32_t msgDestinationId = message.getDestinationId();
     uint32_t requestId = 0;
     UserCallTargetDTO sourceModule = UserCallTargetDTO::UNKNOWN;
+
+    MessageHandlerResult result;
 
     // Message
     auto request = message.getMessage();
@@ -82,32 +84,38 @@ MessageDTO MessageHandler::handleMessage(MessageDTO message) {
 
                 // Call the right callback
                 if (callback) {
-                    std::async(callback.value(), functionArgs, argsLength);
+                    std::future<std::optional<CallbackArgs>> ret = std::async(callback.value(), functionArgs, argsLength);
+
+                    result.setReturnValues(std::move(ret));
+
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
                     responseStatus = GenericResponseStatusDTO::Unknown;
                     ROS_WARN("Function name \"%s\" was not registered as a callback",
                              functionName.c_str());
                 }
+
+                result.setResponse(MessageUtils::createResponseMessage(requestId, msgDestinationId, msgSourceId,
+                                                                       sourceModule, responseStatus, ""));
+
                 // FunctionListLengthRequest
             } else if (std::holds_alternative<FunctionListLengthRequestDTO>(functionCallRequest)) {
-                return handleFunctionListLengthRequest(requestId, msgDestinationId, msgSourceId,
-                                                       sourceModule);
+                result.setResponse(handleFunctionListLengthRequest(requestId, msgDestinationId, msgSourceId,
+                                                                   sourceModule));
                 // FunctionDescriptionRequest
             } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
-                return handleFunctionDescriptionRequest(
-                    requestId, msgDestinationId, msgSourceId, sourceModule,
-                    std::get<FunctionDescriptionRequestDTO>(functionCallRequest));
+                result.setResponse(handleFunctionDescriptionRequest(
+                        requestId, msgDestinationId, msgSourceId, sourceModule,
+                        std::get<FunctionDescriptionRequestDTO>(functionCallRequest)));
             }
         }
     }
+// todo do something with this
+//    if (responseStatus != GenericResponseStatusDTO::Ok) {
+//        ROS_WARN("Message handling failed");
+//    }
 
-    if (responseStatus != GenericResponseStatusDTO::Ok) {
-        ROS_WARN("Message handling failed");
-    }
-
-    return MessageUtils::createResponseMessage(requestId, msgDestinationId, msgSourceId,
-                                               sourceModule, responseStatus, "");
+    return result;
 }
 
 bool MessageHandler::registerCallback(std::string name, CallbackFunction callback) {

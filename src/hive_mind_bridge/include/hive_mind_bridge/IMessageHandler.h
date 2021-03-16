@@ -10,6 +10,7 @@
 #include <optional>
 #include <ros/ros.h>
 #include <variant>
+#include "MessageHandlerResult.h"
 
 typedef std::unordered_map<std::string, UserCallbackFunctionWrapper> CallbackMap;
 
@@ -23,7 +24,7 @@ class IMessageHandler {
      * @return A message containing the appropriate acknowlege (with appropriate errors if
      * necessary)
      */
-    virtual MessageDTO handleMessage(MessageDTO message) = 0;
+    virtual MessageHandlerResult handleMessage(MessageDTO message) = 0;
 
     /**
      * Register a callback

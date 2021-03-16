@@ -9,7 +9,7 @@ class MessageHandler : public IMessageHandler {
     MessageHandler();
     ~MessageHandler();
 
-    MessageDTO handleMessage(MessageDTO message) override;
+    MessageHandlerResult handleMessage(MessageDTO message) override;
 
     bool registerCallback(std::string name, CallbackFunction callback) override;
 

@@ -35,7 +35,8 @@ set(HIVEMIND_BRIDGE_SOURCES
         src/HiveMindBridge.cpp
         src/HiveMindBridgeImpl.cpp
         src/UserCallbackFunctionWrapper.cpp
-        src/UserCallbackArgumentDescription.cpp)
+        src/UserCallbackArgumentDescription.cpp
+        src/MessageHandlerResult.cpp)
 
 add_library(${LIB_NAME} STATIC ${HIVEMIND_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

@@ -12,7 +12,7 @@ typedef std::array<FunctionCallArgumentDTO,
                    FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>
     CallbackArgs;
 
-typedef std::function<void(CallbackArgs, int)> CallbackFunction;
+typedef std::function<std::optional<CallbackArgs>(CallbackArgs, int)> CallbackFunction;
 
 typedef std::vector<UserCallbackArgumentDescription> CallbackArgsManifest;
 

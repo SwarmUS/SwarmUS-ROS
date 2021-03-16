@@ -26,7 +26,7 @@
 
         <arg name="filters"                   default="pointcloud"/>
         <arg name="enable_pointcloud"         default="false"/>
-        <arg name="pointcloud_texture_stream" default="RS2_STREAM_COLOR"/>
+        <arg name="pointcloud_texture_stream" default="RS2_STREAM_ANY"/>
         <arg name="pointcloud_texture_index"  default="0"/>
         <arg name="allow_no_texture_points"   default="false"/>
         <arg name="ordered_pc"                default="false"/>

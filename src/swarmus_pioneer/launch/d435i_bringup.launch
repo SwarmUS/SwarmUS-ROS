@@ -9,12 +9,12 @@
         <arg name="device_type"         default="d435"/>
         <arg name="camera"              default="camera"/>  <!-- Used as the group and tf prefixes -->
 
-        <arg name="depth_width"         default="1280"/>
-        <arg name="depth_height"        default="720"/>
+        <arg name="depth_width"         default="640"/>
+        <arg name="depth_height"        default="480"/>
         <arg name="enable_depth"        default="true"/>
 
-        <arg name="color_width"         default="1920"/>
-        <arg name="color_height"        default="1080"/>
+        <arg name="depth_width"         default="640"/>
+        <arg name="depth_height"        default="480"/>
         <arg name="enable_color"        default="true"/>
 
         <arg name="depth_fps"           default="$(arg camera_fps)"/>
@@ -26,7 +26,7 @@
 
         <arg name="filters"                   default="pointcloud"/>
         <arg name="enable_pointcloud"         default="false"/>
-        <arg name="pointcloud_texture_stream" default="RS2_STREAM_COLOR"/>
+        <arg name="pointcloud_texture_stream" default="RS2_STREAM_ANY"/> <!-- Set to RS2_STREAM_ANY to have colored pointcloud-->
         <arg name="pointcloud_texture_index"  default="0"/>
         <arg name="allow_no_texture_points"   default="false"/>
         <arg name="ordered_pc"                default="false"/>

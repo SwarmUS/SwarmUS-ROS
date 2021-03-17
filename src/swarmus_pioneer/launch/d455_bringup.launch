@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<launch>
+    <!--remap from="/camera/aligned_depth_to_color/image_raw" to="/camera/depth_registered/image_raw" /-->
+    <!--remap from="/camera/depth/color/points" to="/pointcloud" /-->
+    <arg name="robot_name" default="pioneer_0"/>
+    <arg name="camera_fps" default="15"/>
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="device_type"         default="d455"/>
+        <arg name="camera"              default="camera"/>  <!-- Used as the group and tf prefixes -->
+
+        <arg name="depth_width"         default="640"/>
+        <arg name="depth_height"        default="480"/>
+        <arg name="enable_depth"        default="true"/>
+
+        <arg name="color_width"         default="640"/>
+        <arg name="color_height"        default="480"/>
+        <arg name="enable_color"        default="true"/>
+
+        <arg name="depth_fps"           default="$(arg camera_fps)"/>
+        <arg name="color_fps"           default="$(arg camera_fps)"/>
+        <arg name="gyro_fps"            default="200"/>
+        <arg name="accel_fps"           default="250"/>
+        <arg name="enable_gyro"         default="true"/>
+        <arg name="enable_accel"        default="true"/>
+
+        <arg name="filters"                   default="pointcloud"/>
+        <arg name="enable_pointcloud"         default="false"/>
+        <arg name="pointcloud_texture_stream" default="RS2_STREAM_ANY"/>
+        <arg name="pointcloud_texture_index"  default="0"/>
+        <arg name="allow_no_texture_points"   default="false"/>
+        <arg name="ordered_pc"                default="false"/>
+
+        <arg name="enable_sync"               default="true"/>
+        <arg name="align_depth"               default="true"/>
+
+        <arg name="publish_tf"                default="true"/>
+        <arg name="tf_publish_rate"           default="0"/>
+        <arg name="tf_prefix"                 default="$(arg robot_name)/camera"/>
+
+        <!--arg name="odom_frame_id"                 default="camera_"/-->
+
+        <arg name="clip_distance"             default="-2"/> <!-- Negative value means that there will be no cliping-->
+        <arg name="linear_accel_cov"          default="0.01"/>
+        <arg name="initial_reset"             default="false"/>
+        <arg name="unite_imu_method"          default="linear_interpolation"/>
+        <arg name="topic_odom_in"             default="odom_in"/>
+        <arg name="calib_odom_file"           default=""/>
+        <arg name="publish_odom_tf"           default="true"/>
+    </include>
+</launch>

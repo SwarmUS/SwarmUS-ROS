@@ -80,7 +80,7 @@
     <exec_depend>roboclaw</exec_depend>
     <exec_depend>rplidar_ros</exec_depend>
     <exec_depend>realsense2_camera</exec_depend>
-
+    <exec_depend>realsense2_description</exec_depend>
 
     <!-- The export tag contains other, unspecified, tags -->
     <export>

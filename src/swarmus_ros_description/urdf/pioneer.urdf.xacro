@@ -179,7 +179,7 @@
   <joint name="rplidar_joint" type="fixed">
     <child link="$(arg prefix)/rplidar"/>
     <parent link="$(arg prefix)/chassis" />
-    <origin rpy="0 0 ${M_PI/4}" xyz="0.02378 0 0.19709"/>
+    <origin rpy="0 0 ${-M_PI*3/4}" xyz="0.02378 0 0.19709"/>
   </joint>
 
   <joint name="hiveboard_joint" type="fixed">

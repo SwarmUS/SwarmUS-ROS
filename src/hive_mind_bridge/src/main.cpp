@@ -5,7 +5,7 @@
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <optional>
 
-constexpr uint8_t RATE_HZ{2};
+constexpr uint8_t RATE_HZ{10};
 constexpr uint32_t compoundId{1}; // TODO find a way for the HiveMind and the robot to share this ID
 
 int main(int argc, char** argv) {
@@ -30,6 +30,10 @@ int main(int argc, char** argv) {
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
+
+        std::this_thread::sleep_for(std::chrono::seconds (2));
+
+        ROS_INFO("CALLBACK WILL RETURN JUST NOW");
 
         return {};
     };

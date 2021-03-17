@@ -84,9 +84,12 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
 
                 // Call the right callback
                 if (callback) {
-                    std::future<std::optional<CallbackArgs>> ret = std::async(callback.value(), functionArgs, argsLength);
+                    std::shared_future<std::optional<CallbackArgs>> ret = std::async(std::launch::async, callback.value(), functionArgs, argsLength).share();
 
-                    result.setReturnValues(std::move(ret));
+//                    result.setReturnValues(std::move(ret));
+                    result.setReturnValues(ret);
+
+                    ROS_WARN("ORIGINAL FUTURE : %d", ret.valid());
 
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
@@ -110,11 +113,6 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
             }
         }
     }
-// todo do something with this
-//    if (responseStatus != GenericResponseStatusDTO::Ok) {
-//        ROS_WARN("Message handling failed");
-//    }
-
     return result;
 }
 

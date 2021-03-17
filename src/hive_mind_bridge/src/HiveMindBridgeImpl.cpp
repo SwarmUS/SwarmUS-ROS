@@ -8,15 +8,39 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
 void HiveMindBridgeImpl::spin() {
     if (m_tcpServer.isClientConnected()) {
         MessageDTO message;
+        if (m_deserializerFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+
+        } else {
+            m_deserializerFuture = std::async(std::launch::async, m_deserializer.deserializeFromStream, message);
+        }
         if (m_deserializer.deserializeFromStream(message)) {
             // Execute the action
-            MessageHandlerResult result = m_messageHandler.handleMessage(message);
+            result = m_messageHandler.handleMessage(message);
 
             // Send the ack/nack message
             m_serializer.serializeToStream(result.getResponse());
+
+
         } else {
             ROS_WARN("The received bytes do not contain a valid message.");
         }
+
+        // Check if return values are ready
+        // todo put this in a queue to manage more than one at a time.
+        ROS_INFO("Checking callback status...");
+
+        ROS_WARN("SPIN FUTURE : %d", result.getReturnValues().valid());
+        std::future_status status = result.getReturnValues().wait_for(std::chrono::microseconds (1));
+        ROS_INFO("Done.");
+        if (status == std::future_status::ready) {
+            // create msg with apropriate request
+            ROS_INFO("CALLBACK HAS RETURNED");
+
+            // send msg.
+        }
+
+        ROS_INFO("After expected return");
+
     } else {
         m_tcpServer.listen();
     }

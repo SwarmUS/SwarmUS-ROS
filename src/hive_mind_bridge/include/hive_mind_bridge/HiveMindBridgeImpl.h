@@ -38,6 +38,9 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     IHiveMindHostDeserializer& m_deserializer;
     IHiveMindHostSerializer& m_serializer;
     MessageHandler m_messageHandler;
+
+    std::future<bool> m_deserializerFuture;
+    MessageHandlerResult result; // todo change this
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H

@@ -89,6 +89,9 @@ int main(int argc, char** argv) {
                  "\tDetails: %s",
                  status, details.c_str());
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+//        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        break;
     }
+
+    std::this_thread::sleep_for(std::chrono::seconds(20));
 }

@@ -27,7 +27,7 @@ function(propolis_fetch_populate)
         FetchContent_Populate(${PROPOLIS})
 
         list(APPEND CMAKE_MODULE_PATH ${${PROPOLIS_L}_SOURCE_DIR}/cmake/)
-        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src ${${PROPOLIS_L}_BINARY_DIR})
+        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/pheromones ${${PROPOLIS_L}_BINARY_DIR})
     endif()
 
 endfunction()

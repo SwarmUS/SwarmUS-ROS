@@ -8,6 +8,9 @@
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
+#include "hive_mind_bridge/ThreadSafeQueue.h"
+#include <thread>
+#include <mutex>
 
 class HiveMindBridgeImpl : public IHiveMindBridge {
   public:
@@ -39,8 +42,14 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     IHiveMindHostSerializer& m_serializer;
     MessageHandler m_messageHandler;
 
-    std::future<bool> m_deserializerFuture;
+    ThreadSafeQueue<MessageDTO> m_inboundQueue;
+    std::unique_ptr<std::thread> m_inboundThread;
+    std::mutex m_mutex;
+
     MessageHandlerResult result; // todo change this
+
+    void inboundThread();
+    bool isTCPClientConnected();
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H

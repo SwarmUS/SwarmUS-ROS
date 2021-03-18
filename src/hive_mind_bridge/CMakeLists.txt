@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.13)
 project(hive_mind_bridge)
 set (CMAKE_CXX_STANDARD 17)
 
@@ -44,8 +44,7 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 target_link_libraries(${LIB_NAME}
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
-        SwarmUS::Propolis::OS::Common
-        SwarmUS::Propolis::OS::POSIX
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
         )
 
 # Main
@@ -95,14 +94,12 @@ target_link_libraries(HiveMindBridgeImplUnitTest
         )
 
 # Integration testing
-#add_executable(SocketToMoveByIntegrationTest
-#        test/SocketToMoveByIntegrationTest.cpp
-#        )
-#
-#target_link_libraries(SocketToMoveByIntegrationTest
-#        ${catkin_LIBRARIES}
-#        ${LIB_NAME}
-#        SwarmUS::Propolis::Pheromones::HiveMind::Host
-#        SwarmUS::Propolis::OS::Common
-#        SwarmUS::Propolis::OS::POSIX
-#)
+add_executable(SocketToMoveByIntegrationTest
+        test/SocketToMoveByIntegrationTest.cpp
+        )
+
+target_link_libraries(SocketToMoveByIntegrationTest
+        ${catkin_LIBRARIES}
+        ${LIB_NAME}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+)

@@ -13,15 +13,15 @@ public:
 
     void setResponse(MessageDTO message);
 
-    void setReturnValues(std::shared_future<std::optional<CallbackArgs>> returnValues);
+    void setFuture(std::shared_future<std::optional<CallbackArgs>> future);
 
     MessageDTO getResponse();
 
-    std::shared_future<std::optional<CallbackArgs>> getReturnValues();
+    std::shared_future<std::optional<CallbackArgs>> getFuture();
 
 private:
     MessageDTO m_responseMessage;
-    std::shared_future<std::optional<CallbackArgs>> m_returnValues;
+    std::shared_future<std::optional<CallbackArgs>> m_future;
 };
 
 #endif //HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H

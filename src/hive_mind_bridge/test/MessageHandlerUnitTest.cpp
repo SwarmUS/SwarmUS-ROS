@@ -142,7 +142,7 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
 
-    result.getReturnValues().wait();
+    result.getFuture().wait();
 
     ASSERT_TRUE(m_testFunctionCalled);
 }
@@ -165,7 +165,7 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
 
-    result.getReturnValues().wait();
+    result.getFuture().wait();
 
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);

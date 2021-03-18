@@ -13,6 +13,8 @@ void HiveMindBridgeImpl::inboundThread() {
             m_inboundQueue.push(message);
         }
     }
+
+    ROS_INFO("inbound thread will terminate");
 }
 
 bool HiveMindBridgeImpl::isTCPClientConnected() {
@@ -28,30 +30,30 @@ void HiveMindBridgeImpl::spin() {
             result = m_messageHandler.handleMessage(m_inboundQueue.front());
             m_inboundQueue.pop();
 
+            m_futuresQueue.push_back(result.getFuture());
+
             // Send the ack/nack message
             m_serializer.serializeToStream(result.getResponse());
         }
 
-        // Check if return values are ready
-//        // todo put this in a queue to manage more than one at a time.
-//        ROS_INFO("Checking callback status...");
-//
-//        ROS_WARN("SPIN FUTURE : %d", result.getReturnValues().valid());
-//        std::future_status status = result.getReturnValues().wait_for(std::chrono::microseconds (1));
-//        ROS_INFO("Done.");
-//        if (status == std::future_status::ready) {
-//            // create msg with apropriate request
-//            ROS_INFO("CALLBACK HAS RETURNED");
-//
-//            // send msg.
-//        }
+        for (auto item : m_futuresQueue) {
+            if (item.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+                // create msg with apropriate request
+                ROS_INFO("CALLBACK HAS RETURNED");
 
-//        ROS_INFO("After expected return");
+                // send msg.
 
+                m_futuresQueue.pop_front();
+            }
+        }
     } else {
+        if (m_inboundThread.joinable()) {
+            m_inboundThread.join();
+        }
+
         m_tcpServer.listen();
 
-        m_inboundThread = std::make_unique<std::thread>(std::thread(&HiveMindBridgeImpl::inboundThread, this));
+        m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
     }
 }
 

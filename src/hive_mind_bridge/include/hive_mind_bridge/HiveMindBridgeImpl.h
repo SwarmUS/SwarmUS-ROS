@@ -11,6 +11,7 @@
 #include "hive_mind_bridge/ThreadSafeQueue.h"
 #include <thread>
 #include <mutex>
+#include <deque>
 
 class HiveMindBridgeImpl : public IHiveMindBridge {
   public:
@@ -43,10 +44,12 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     MessageHandler m_messageHandler;
 
     ThreadSafeQueue<MessageDTO> m_inboundQueue;
-    std::unique_ptr<std::thread> m_inboundThread;
+    std::thread m_inboundThread;
     std::mutex m_mutex;
 
     MessageHandlerResult result; // todo change this
+
+    std::deque<std::shared_future<std::optional<CallbackArgs>>> m_futuresQueue;
 
     void inboundThread();
     bool isTCPClientConnected();

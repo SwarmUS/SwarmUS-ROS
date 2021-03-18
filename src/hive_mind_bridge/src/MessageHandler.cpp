@@ -87,6 +87,10 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
                     std::shared_future<std::optional<CallbackArgs>> ret = std::async(std::launch::async, callback.value(), functionArgs, argsLength).share();
                     result.setFuture(ret);
 
+                    result.setMessageSourceId(msgSourceId);
+                    result.setMessageDestinationId(msgDestinationId);
+                    result.setSourceModule(sourceModule);
+
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
                     responseStatus = GenericResponseStatusDTO::Unknown;

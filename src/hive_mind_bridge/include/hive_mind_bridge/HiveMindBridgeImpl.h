@@ -47,12 +47,11 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     std::thread m_inboundThread;
     std::mutex m_mutex;
 
-    MessageHandlerResult result; // todo change this
-
-    std::deque<std::shared_future<std::optional<CallbackArgs>>> m_futuresQueue;
+    std::deque<MessageHandlerResult> m_resultQueue;
 
     void inboundThread();
     bool isTCPClientConnected();
+    void sendReturn(MessageHandlerResult result);
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H

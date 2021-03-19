@@ -3,7 +3,7 @@
 HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,
                                        IHiveMindHostDeserializer& deserializer,
-                                       ThreadSafeQueue<MessageDTO>& queue) :
+                                       IThreadSafeQueue<MessageDTO>& queue) :
     m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer), m_inboundQueue(queue) {}
 
 void HiveMindBridgeImpl::spin() {

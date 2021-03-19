@@ -3,9 +3,10 @@
 
 #include <mutex>
 #include <queue>
+#include "IThreadSafeQueue.h"
 
 template <class T>
-class ThreadSafeQueue {
+class ThreadSafeQueue : public IThreadSafeQueue<T>{
   public:
     ThreadSafeQueue() {}
 

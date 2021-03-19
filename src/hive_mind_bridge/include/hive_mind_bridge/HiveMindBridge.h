@@ -4,6 +4,7 @@
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/TCPServer.h"
+#include "hive_mind_bridge/ThreadSafeQueue.h"
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>

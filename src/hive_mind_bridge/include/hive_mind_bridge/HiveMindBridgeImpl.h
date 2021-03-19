@@ -5,7 +5,7 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/MessageHandlerResult.h"
 #include "hive_mind_bridge/TCPServer.h"
-#include "hive_mind_bridge/ThreadSafeQueue.h"
+#include "hive_mind_bridge/IThreadSafeQueue.h"
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
@@ -24,7 +24,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     HiveMindBridgeImpl(ITCPServer& tcpServer,
                        IHiveMindHostSerializer& serializer,
                        IHiveMindHostDeserializer& deserializer,
-                       ThreadSafeQueue<MessageDTO>& inboundQueue);
+                       IThreadSafeQueue<MessageDTO>& inboundQueue);
 
     void spin();
 
@@ -44,7 +44,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     IHiveMindHostSerializer& m_serializer;
     MessageHandler m_messageHandler;
 
-    ThreadSafeQueue<MessageDTO>& m_inboundQueue;
+    IThreadSafeQueue<MessageDTO>& m_inboundQueue;
     std::thread m_inboundThread;
     std::mutex m_mutex;
 

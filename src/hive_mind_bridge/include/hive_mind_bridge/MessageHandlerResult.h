@@ -1,14 +1,13 @@
 #ifndef HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
 #define HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
 
-#include <hivemind-host/MessageDTO.h>
-#include <future>
-#include <optional>
 #include "UserCallbackFunctionWrapper.h"
+#include <future>
+#include <hivemind-host/MessageDTO.h>
+#include <optional>
 
 class MessageHandlerResult {
-public:
-
+  public:
     MessageHandlerResult() = default;
 
     void setResponse(MessageDTO message);
@@ -20,6 +19,8 @@ public:
     void setMessageDestinationId(uint32_t id);
 
     void setSourceModule(UserCallTargetDTO target);
+
+    void setCallbackName(std::string name);
 
     MessageDTO getResponse();
 
@@ -33,7 +34,7 @@ public:
 
     UserCallTargetDTO getSourceModule();
 
-private:
+  private:
     std::string m_callbackName;
     MessageDTO m_responseMessage; // The acknowledge message to send as soon as possible
     std::shared_future<std::optional<CallbackArgs>> m_future;
@@ -43,4 +44,4 @@ private:
     UserCallTargetDTO m_sourceModule;
 };
 
-#endif //HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
+#endif // HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H

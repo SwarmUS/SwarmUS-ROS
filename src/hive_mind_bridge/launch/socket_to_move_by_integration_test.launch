@@ -5,7 +5,6 @@
         <param name="ROBOT_NAME" type="str" value="pioneer_0"/>
     </node>
 
-    <node pkg="hive_mind_bridge" type="SocketToMoveByIntegrationTest" name="hive_mind_bridge_integration_test"/>
-<!--    todo put output screen here-->
+    <node pkg="hive_mind_bridge" type="SocketToMoveByIntegrationTest" name="hive_mind_bridge_integration_test" output="screen"/>
 
 </launch>

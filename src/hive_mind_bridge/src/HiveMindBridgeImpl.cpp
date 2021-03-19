@@ -3,8 +3,7 @@
 HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,
                                        IHiveMindHostDeserializer& deserializer) :
-    m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer) {
-}
+    m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer) {}
 
 void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
@@ -73,12 +72,12 @@ void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
     // Send a return only if there is a return value
     if (argsOpt.has_value()) {
         CallbackArgs args = argsOpt.value();
-        MessageDTO returnMessage = MessageUtils::createFunctionCallRequest(result.getMessageDestinationId(), // swap source and dest since we return to the sender
-                                                result.getMessageSourceId(),
-                                                99, // TODO what should I put here?
-                                                result.getSourceModule(), // swap source and dest since we return to the sender
-                                                result.getReturnCallbackName(),
-                                                args);
+        MessageDTO returnMessage = MessageUtils::createFunctionCallRequest(
+            result.getMessageDestinationId(), // swap source and dest since we return to the sender
+            result.getMessageSourceId(),
+            99, // TODO what should I put here?
+            result.getSourceModule(), // swap source and dest since we return to the sender
+            result.getReturnCallbackName(), args);
 
         m_serializer.serializeToStream(returnMessage);
     } else {

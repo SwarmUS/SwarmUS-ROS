@@ -73,7 +73,6 @@ class TCPServer : public ITCPServer {
     std::function<void()> m_onConnect;
     std::function<void()> m_onDisonnect;
 
-
     /**
      * Create and bind the socket.
      */

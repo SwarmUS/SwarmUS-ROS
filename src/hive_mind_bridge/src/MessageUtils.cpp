@@ -47,21 +47,29 @@ MessageDTO MessageUtils::createFunctionDescriptionResponseMessage(
     return responseMessage;
 }
 
-uint8_t MessageUtils::createFunctionCallArguments(CallbackArgs args, FunctionCallArgumentDTO* functionCallArgument) {
-    functionCallArgument = args.data();
-    return args.size();
+MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
+                                                   uint32_t msgDestinationId,
+                                                   uint32_t requestId,
+                                                   UserCallTargetDTO moduleDestination,
+                                                   std::string callbackName,
+                                                   CallbackArgs args) {
+    FunctionCallRequestDTO functionCallRequest(callbackName.c_str(), args.data(), args.size());
+
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::HOST, moduleDestination,
+                                       functionCallRequest);
+    RequestDTO RequestDTO(1, userCallRequest);
+    MessageDTO message(1, 2, RequestDTO);
+
+    return message;
 }
 
 MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
-                                     uint32_t msgDestinationId,
-                                     uint32_t requestId,
-                                     UserCallTargetDTO moduleDestination,
-                                     std::string callbackName,
-                                     CallbackArgs args) {
-    FunctionCallArgumentDTO *functionCallArgument;
-    uint8_t size = createFunctionCallArguments(args, functionCallArgument);
+                                                   uint32_t msgDestinationId,
+                                                   uint32_t requestId,
+                                                   UserCallTargetDTO moduleDestination,
+                                                   std::string callbackName) {
 
-    FunctionCallRequestDTO functionCallRequest(callbackName.c_str(), functionCallArgument, size);
+    FunctionCallRequestDTO functionCallRequest(callbackName.c_str(), nullptr, 0);
 
     UserCallRequestDTO userCallRequest(UserCallTargetDTO::HOST, moduleDestination,
                                        functionCallRequest);

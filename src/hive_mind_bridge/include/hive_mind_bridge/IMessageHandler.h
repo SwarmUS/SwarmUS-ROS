@@ -1,6 +1,7 @@
 #ifndef HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 #define HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 
+#include "MessageHandlerResult.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -10,7 +11,6 @@
 #include <optional>
 #include <ros/ros.h>
 #include <variant>
-#include "MessageHandlerResult.h"
 
 typedef std::unordered_map<std::string, UserCallbackFunctionWrapper> CallbackMap;
 

@@ -1,5 +1,5 @@
-#include <future>
 #include "hive_mind_bridge/MessageHandler.h"
+#include <future>
 
 MessageHandler::MessageHandler() {}
 
@@ -84,9 +84,11 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
 
                 // Call the right callback
                 if (callback) {
-                    std::shared_future<std::optional<CallbackArgs>> ret = std::async(std::launch::async, callback.value(), functionArgs, argsLength).share();
+                    std::shared_future<std::optional<CallbackArgs>> ret =
+                        std::async(std::launch::async, callback.value(), functionArgs, argsLength)
+                            .share();
                     result.setFuture(ret);
-
+                    result.setCallbackName(functionName);
                     result.setMessageSourceId(msgSourceId);
                     result.setMessageDestinationId(msgDestinationId);
                     result.setSourceModule(sourceModule);
@@ -98,18 +100,18 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
                              functionName.c_str());
                 }
 
-                result.setResponse(MessageUtils::createResponseMessage(requestId, msgDestinationId, msgSourceId,
-                                                                       sourceModule, responseStatus, ""));
+                result.setResponse(MessageUtils::createResponseMessage(
+                    requestId, msgDestinationId, msgSourceId, sourceModule, responseStatus, ""));
 
                 // FunctionListLengthRequest
             } else if (std::holds_alternative<FunctionListLengthRequestDTO>(functionCallRequest)) {
-                result.setResponse(handleFunctionListLengthRequest(requestId, msgDestinationId, msgSourceId,
-                                                                   sourceModule));
+                result.setResponse(handleFunctionListLengthRequest(requestId, msgDestinationId,
+                                                                   msgSourceId, sourceModule));
                 // FunctionDescriptionRequest
             } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
                 result.setResponse(handleFunctionDescriptionRequest(
-                        requestId, msgDestinationId, msgSourceId, sourceModule,
-                        std::get<FunctionDescriptionRequestDTO>(functionCallRequest)));
+                    requestId, msgDestinationId, msgSourceId, sourceModule,
+                    std::get<FunctionDescriptionRequestDTO>(functionCallRequest)));
             }
         }
     }

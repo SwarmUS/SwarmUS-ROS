@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
     HiveMindBridge bridge(port);
 
     // Register custom actions
-    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) -> CallbackArgs {
+    CallbackFunction moveByCallback = [&](CallbackArgs args,
+                                          int argsLength) -> std::optional<CallbackArgs> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());
@@ -31,7 +32,7 @@ int main(int argc, char** argv) {
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
 
-        std::this_thread::sleep_for(std::chrono::seconds (2));
+        std::this_thread::sleep_for(std::chrono::seconds(2));
 
         ROS_INFO("CALLBACK WILL RETURN JUST NOW");
 
@@ -45,30 +46,18 @@ int main(int argc, char** argv) {
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
-    CallbackFunction getPosition = [&](CallbackArgs args, int argsLength) -> CallbackArgs  {
-        // Go get the values elsewhere...
-        int64_t x = 1;
-        float y = 2.0;
+    CallbackFunction getStatus = [&](CallbackArgs args,
+                                     int argsLength) -> std::optional<CallbackArgs> {
+        // todo This remains to be implemented.
+        int64_t isRobotOk = 1;
 
         CallbackArgs returnArgs;
-        returnArgs[1] = FunctionCallArgumentDTO(x);
-        returnArgs[2] = FunctionCallArgumentDTO(y);
+        returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
 
+        ROS_INFO("RETURNING FROM GET STATUS");
         return returnArgs;
     };
-    bridge.registerCustomAction("getPosition", getPosition);
-
-    CallbackFunction getPositionReturn = [&](CallbackArgs args, int argsLength) -> CallbackArgs  {
-        // What to do when we receive a position.
-        ROS_INFO("RECEIVED A POSITION: (%d, %f)", std::get<int64_t>(args[0].getArgument()), std::get<float>(args[1].getArgument()));
-
-        return {};
-    };
-
-    CallbackArgsManifest  getPositionReturnManifest;
-    getPositionReturnManifest.push_back(UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Int));
-    getPositionReturnManifest.push_back(UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
-    bridge.registerCustomAction("getPositionReturn", getPositionReturn, getPositionReturnManifest);
+    bridge.registerCustomAction("getStatus", getStatus);
 
     // Register event hooks
     bridge.onConnect([]() { ROS_INFO("Client connected."); });

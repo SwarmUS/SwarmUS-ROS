@@ -1,45 +1,31 @@
 #include "hive_mind_bridge/MessageHandlerResult.h"
 
-void MessageHandlerResult::setResponse(MessageDTO message) {
-    m_responseMessage = message;
-}
+void MessageHandlerResult::setResponse(MessageDTO message) { m_responseMessage = message; }
 
 void MessageHandlerResult::setFuture(std::shared_future<std::optional<CallbackArgs>> future) {
     m_future = future;
 }
 
-MessageDTO MessageHandlerResult::getResponse() {
-    return m_responseMessage;
-}
+MessageDTO MessageHandlerResult::getResponse() { return m_responseMessage; }
 
 std::shared_future<std::optional<CallbackArgs>> MessageHandlerResult::getFuture() {
     return m_future;
 }
 
-std::string MessageHandlerResult::getReturnCallbackName() {
-    return m_callbackName + "Return";
+void MessageHandlerResult::setCallbackName(std::string name) {
+    m_callbackName = name;
 }
 
-void MessageHandlerResult::setMessageSourceId(uint32_t id) {
-    m_msgSourceId = id;
-}
+std::string MessageHandlerResult::getReturnCallbackName() { return m_callbackName + "Return"; }
 
-void MessageHandlerResult::setMessageDestinationId(uint32_t id) {
-    m_msgDestinationId = id;
-}
+void MessageHandlerResult::setMessageSourceId(uint32_t id) { m_msgSourceId = id; }
 
-void MessageHandlerResult::setSourceModule(UserCallTargetDTO target) {
-    m_sourceModule = target;
-}
+void MessageHandlerResult::setMessageDestinationId(uint32_t id) { m_msgDestinationId = id; }
 
-uint32_t MessageHandlerResult::getMessageSourceId() {
-    return m_msgSourceId;
-}
+void MessageHandlerResult::setSourceModule(UserCallTargetDTO target) { m_sourceModule = target; }
 
-uint32_t MessageHandlerResult::getMessageDestinationId() {
-    return m_msgDestinationId;
-}
+uint32_t MessageHandlerResult::getMessageSourceId() { return m_msgSourceId; }
 
-UserCallTargetDTO MessageHandlerResult::getSourceModule() {
-    return m_sourceModule;
-}
+uint32_t MessageHandlerResult::getMessageDestinationId() { return m_msgDestinationId; }
+
+UserCallTargetDTO MessageHandlerResult::getSourceModule() { return m_sourceModule; }

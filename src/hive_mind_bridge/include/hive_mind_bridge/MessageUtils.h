@@ -1,11 +1,11 @@
 #ifndef HIVEMIND_BRIDGE_MESSAGEUTILS_H
 #define HIVEMIND_BRIDGE_MESSAGEUTILS_H
 
+#include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <hivemind-host/FunctionCallResponseDTO.h>
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/ResponseDTO.h>
 #include <hivemind-host/UserCallResponseDTO.h>
-#include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 
 /**
  * Utilitary functions for message creation
@@ -47,7 +47,11 @@ namespace MessageUtils {
                                          std::string callbackName,
                                          CallbackArgs args);
 
-    uint8_t createFunctionCallArguments(CallbackArgs args, FunctionCallArgumentDTO* functionCallArgument);
+    MessageDTO createFunctionCallRequest(uint32_t msgSourceId,
+                                         uint32_t msgDestinationId,
+                                         uint32_t requestId,
+                                         UserCallTargetDTO moduleDestination,
+                                         std::string callbackName);
 
 } // namespace MessageUtils
 

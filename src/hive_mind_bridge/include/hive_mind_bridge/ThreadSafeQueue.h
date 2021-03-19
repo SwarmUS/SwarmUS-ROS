@@ -1,12 +1,12 @@
 #ifndef HIVE_MIND_BRIDGE_THREADSAFEQUEUE_H
 #define HIVE_MIND_BRIDGE_THREADSAFEQUEUE_H
 
-#include <queue>
 #include <mutex>
+#include <queue>
 
-template<class T>
+template <class T>
 class ThreadSafeQueue {
-public:
+  public:
     ThreadSafeQueue() {}
 
     void push(const T& item) {
@@ -39,9 +39,9 @@ public:
         return m_queue.empty();
     }
 
-private:
+  private:
     std::mutex m_mutex;
     std::queue<T> m_queue;
 };
 
-#endif //HIVE_MIND_BRIDGE_THREADSAFEQUEUE_H
+#endif // HIVE_MIND_BRIDGE_THREADSAFEQUEUE_H

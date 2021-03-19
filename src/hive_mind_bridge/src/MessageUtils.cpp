@@ -57,8 +57,8 @@ MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
 
     UserCallRequestDTO userCallRequest(UserCallTargetDTO::HOST, moduleDestination,
                                        functionCallRequest);
-    RequestDTO RequestDTO(1, userCallRequest);
-    MessageDTO message(1, 2, RequestDTO);
+    RequestDTO RequestDTO(requestId, userCallRequest);
+    MessageDTO message(msgSourceId, msgDestinationId, RequestDTO);
 
     return message;
 }
@@ -73,8 +73,8 @@ MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
 
     UserCallRequestDTO userCallRequest(UserCallTargetDTO::HOST, moduleDestination,
                                        functionCallRequest);
-    RequestDTO RequestDTO(1, userCallRequest);
-    MessageDTO message(1, 2, RequestDTO);
+    RequestDTO RequestDTO(requestId, userCallRequest);
+    MessageDTO message(msgSourceId, msgDestinationId, RequestDTO);
 
     return message;
 }

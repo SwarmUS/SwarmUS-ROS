@@ -34,8 +34,6 @@ int main(int argc, char** argv) {
 
         std::this_thread::sleep_for(std::chrono::seconds(2));
 
-        ROS_INFO("CALLBACK WILL RETURN JUST NOW");
-
         return {};
     };
 
@@ -54,7 +52,6 @@ int main(int argc, char** argv) {
         CallbackArgs returnArgs;
         returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
 
-        ROS_INFO("RETURNING FROM GET STATUS");
         return returnArgs;
     };
     bridge.registerCustomAction("getStatus", getStatus);

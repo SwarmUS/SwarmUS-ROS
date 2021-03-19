@@ -33,6 +33,7 @@ class HiveMindBridge : public IHiveMindBridge {
     TCPServer m_tcpServer;
     HiveMindHostDeserializer m_deserializer;
     HiveMindHostSerializer m_serializer;
+    ThreadSafeQueue<MessageDTO> m_inboundQueue;
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H

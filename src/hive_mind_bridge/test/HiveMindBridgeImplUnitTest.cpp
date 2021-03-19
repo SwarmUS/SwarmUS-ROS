@@ -10,9 +10,10 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
     HiveMindHostDeserializerInterfaceMock m_deserializer;
     HiveMindHostSerializerInterfaceMock m_serializer;
     HiveMindBridgeImpl* m_hivemindBridge;
+    ThreadSafeQueue<MessageDTO> queue;
 
     void SetUp() {
-        m_hivemindBridge = new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer);
+        m_hivemindBridge = new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer, queue);
     }
 
     void TearDown() { delete m_hivemindBridge; }

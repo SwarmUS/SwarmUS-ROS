@@ -2,8 +2,9 @@
 
 HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,
-                                       IHiveMindHostDeserializer& deserializer) :
-    m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer) {}
+                                       IHiveMindHostDeserializer& deserializer,
+                                       ThreadSafeQueue<MessageDTO>& queue) :
+    m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer), m_inboundQueue(queue) {}
 
 void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
@@ -80,7 +81,5 @@ void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
             result.getReturnCallbackName(), args);
 
         m_serializer.serializeToStream(returnMessage);
-    } else {
-        ROS_INFO("NOP");
     }
 }

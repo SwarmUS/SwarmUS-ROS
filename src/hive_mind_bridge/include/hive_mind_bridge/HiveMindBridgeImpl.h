@@ -23,7 +23,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
      */
     HiveMindBridgeImpl(ITCPServer& tcpServer,
                        IHiveMindHostSerializer& serializer,
-                       IHiveMindHostDeserializer& deserializer);
+                       IHiveMindHostDeserializer& deserializer,
+                       ThreadSafeQueue<MessageDTO>& inboundQueue);
 
     void spin();
 
@@ -43,7 +44,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     IHiveMindHostSerializer& m_serializer;
     MessageHandler m_messageHandler;
 
-    ThreadSafeQueue<MessageDTO> m_inboundQueue;
+    ThreadSafeQueue<MessageDTO>& m_inboundQueue;
     std::thread m_inboundThread;
     std::mutex m_mutex;
 

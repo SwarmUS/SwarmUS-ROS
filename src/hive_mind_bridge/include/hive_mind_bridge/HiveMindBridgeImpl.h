@@ -2,10 +2,10 @@
 #define HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H
 
 #include "hive_mind_bridge/IHiveMindBridge.h"
+#include "hive_mind_bridge/IThreadSafeQueue.h"
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/MessageHandlerResult.h"
 #include "hive_mind_bridge/TCPServer.h"
-#include "hive_mind_bridge/IThreadSafeQueue.h"
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>

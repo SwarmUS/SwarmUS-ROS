@@ -3,7 +3,7 @@
 
 template <class T>
 class IThreadSafeQueue {
-public:
+  public:
     virtual void push(const T& item) = 0;
 
     virtual void pop() = 0;
@@ -17,4 +17,4 @@ public:
     virtual bool empty() = 0;
 };
 
-#endif //HIVE_MIND_BRIDGE_ITHREADSAFEQUEUE_H
+#endif // HIVE_MIND_BRIDGE_ITHREADSAFEQUEUE_H

@@ -13,7 +13,10 @@ class MessageHandlerInterfaceMock : public IMessageHandler {
 
     MOCK_METHOD(bool, registerCallback, (std::string name, CallbackFunction callback), (override));
 
-    MOCK_METHOD(bool, registerCallback, (std::string name, CallbackFunction callback, CallbackArgsManifest manifest), (override));
+    MOCK_METHOD(bool,
+                registerCallback,
+                (std::string name, CallbackFunction callback, CallbackArgsManifest manifest),
+                (override));
 
     MOCK_METHOD(std::optional<CallbackFunction>,
                 getCallback,

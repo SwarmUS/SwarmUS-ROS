@@ -1,12 +1,12 @@
 #ifndef HIVE_MIND_BRIDGE_THREADSAFEQUEUE_H
 #define HIVE_MIND_BRIDGE_THREADSAFEQUEUE_H
 
+#include "IThreadSafeQueue.h"
 #include <mutex>
 #include <queue>
-#include "IThreadSafeQueue.h"
 
 template <class T>
-class ThreadSafeQueue : public IThreadSafeQueue<T>{
+class ThreadSafeQueue : public IThreadSafeQueue<T> {
   public:
     ThreadSafeQueue() {}
 

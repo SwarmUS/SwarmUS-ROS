@@ -5,7 +5,11 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostDeserializer& deserializer,
                                        IMessageHandler& messageHandler,
                                        IThreadSafeQueue<MessageDTO>& queue) :
-    m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer), m_messageHandler(messageHandler), m_inboundQueue(queue) {}
+    m_tcpServer(tcpServer),
+    m_serializer(serializer),
+    m_deserializer(deserializer),
+    m_messageHandler(messageHandler),
+    m_inboundQueue(queue) {}
 
 void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {

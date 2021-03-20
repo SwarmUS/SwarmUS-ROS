@@ -72,7 +72,6 @@ int main(int argc, char** argv) {
     MessageDTO getRobotStatusMessage =
         MessageUtils::createFunctionCallRequest(1, 2, 99, UserCallTargetDTO::HOST, "getStatus");
 
-
     // Send getStatus request
     serializer.serializeToStream(getRobotStatusMessage);
 
@@ -81,9 +80,9 @@ int main(int argc, char** argv) {
     deserializer.deserializeFromStream(statusResponseMessage);
     ResponseDTO statusResponse = std::get<ResponseDTO>(statusResponseMessage.getMessage());
     UserCallResponseDTO statusUserCallResponse =
-            std::get<UserCallResponseDTO>(statusResponse.getResponse());
+        std::get<UserCallResponseDTO>(statusResponse.getResponse());
     FunctionCallResponseDTO statusFunctionCallResponse =
-            std::get<FunctionCallResponseDTO>(statusUserCallResponse.getResponse());
+        std::get<FunctionCallResponseDTO>(statusUserCallResponse.getResponse());
     GenericResponseDTO statusGenericResponse = statusFunctionCallResponse.getResponse();
     GenericResponseStatusDTO statusStatus = statusGenericResponse.getStatus();
     std::string statusDetails = statusGenericResponse.getDetails();
@@ -98,8 +97,10 @@ int main(int argc, char** argv) {
     MessageDTO statusReturnMessage;
     deserializer.deserializeFromStream(statusReturnMessage);
     RequestDTO statusReturnRequest = std::get<RequestDTO>(statusReturnMessage.getMessage());
-    UserCallRequestDTO statusReturnUserCallRequest = std::get<UserCallRequestDTO>(statusReturnRequest.getRequest());
-    FunctionCallRequestDTO statusReturnFunctionCallRequest = std::get<FunctionCallRequestDTO>(statusReturnUserCallRequest.getRequest());
+    UserCallRequestDTO statusReturnUserCallRequest =
+        std::get<UserCallRequestDTO>(statusReturnRequest.getRequest());
+    FunctionCallRequestDTO statusReturnFunctionCallRequest =
+        std::get<FunctionCallRequestDTO>(statusReturnUserCallRequest.getRequest());
     std::string statusReturnFunctionName = statusReturnFunctionCallRequest.getFunctionName();
     std::array statusReturnFunctionArgs = statusReturnFunctionCallRequest.getArguments();
     int64_t arg0 = std::get<int64_t>(statusReturnFunctionArgs[0].getArgument());
@@ -116,8 +117,7 @@ int main(int argc, char** argv) {
     MessageDTO message;
     deserializer.deserializeFromStream(message);
     ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
-    UserCallResponseDTO userCallResponse =
-        std::get<UserCallResponseDTO>(response.getResponse());
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
     FunctionCallResponseDTO functionCallResponse =
         std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();

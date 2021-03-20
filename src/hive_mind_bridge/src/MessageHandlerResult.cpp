@@ -12,9 +12,7 @@ std::shared_future<std::optional<CallbackArgs>> MessageHandlerResult::getFuture(
     return m_future;
 }
 
-void MessageHandlerResult::setCallbackName(std::string name) {
-    m_callbackName = name;
-}
+void MessageHandlerResult::setCallbackName(std::string name) { m_callbackName = name; }
 
 std::string MessageHandlerResult::getReturnCallbackName() { return m_callbackName + "Return"; }
 

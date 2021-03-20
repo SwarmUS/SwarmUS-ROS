@@ -5,8 +5,8 @@
 #include "hive_mind_bridge/IThreadSafeQueue.h"
 
 template <class T>
-class ThreadSafeQueueInterfaceMock : public IThreadSafeQueue<T>{
-public:
+class ThreadSafeQueueInterfaceMock : public IThreadSafeQueue<T> {
+  public:
     ~ThreadSafeQueueInterfaceMock() = default;
 
     MOCK_METHOD(void, push, (const T& item), (override));
@@ -22,4 +22,4 @@ public:
     MOCK_METHOD(bool, empty, (), (override));
 };
 
-#endif //HIVE_MIND_BRIDGE_THREADSAFEQUEUEINTERFACEMOCK_H
+#endif // HIVE_MIND_BRIDGE_THREADSAFEQUEUEINTERFACEMOCK_H

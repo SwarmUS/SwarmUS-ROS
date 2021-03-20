@@ -16,13 +16,15 @@ class MessageHandlerFixture : public testing::Test {
     int m_testValue2 = 12;
 
     // Declare some test callbacks
-    CallbackFunction m_testFunction = [&](CallbackArgs args, int argsLength) -> CallbackArgs {
+    CallbackFunction m_testFunction = [&](CallbackArgs args,
+                                          int argsLength) -> std::optional<CallbackArgs> {
         m_testFunctionCalled = true;
 
         return {};
     };
 
-    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args, int argsLength) -> CallbackArgs {
+    CallbackFunction m_moveByTestCallback = [&](CallbackArgs args,
+                                                int argsLength) -> std::optional<CallbackArgs> {
         m_testValue1 += std::get<int64_t>(args[0].getArgument());
         m_testValue2 -= std::get<float>(args[1].getArgument());
 

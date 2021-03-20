@@ -1,6 +1,7 @@
 #include "hive_mind_bridge/HiveMindBridgeImpl.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/HiveMindHostSerializerInterfaceMock.h"
+#include "mocks/MessageHandlerInterfaceMock.h"
 #include "mocks/TCPServerInterfaceMock.h"
 #include "mocks/ThreadSafeQueueInterfaceMock.h"
 #include <gmock/gmock.h>
@@ -12,9 +13,10 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
     HiveMindHostSerializerInterfaceMock m_serializer;
     HiveMindBridgeImpl* m_hivemindBridge;
     ThreadSafeQueueInterfaceMock<MessageDTO> m_queue;
+    MessageHandlerInterfaceMock m_messageHandler;
 
     void SetUp() {
-        m_hivemindBridge = new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer, m_queue);
+        m_hivemindBridge = new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer, m_messageHandler, m_queue);
     }
 
     void TearDown() { delete m_hivemindBridge; }

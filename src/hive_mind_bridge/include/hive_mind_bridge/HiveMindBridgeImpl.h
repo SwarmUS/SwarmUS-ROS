@@ -19,11 +19,14 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
      * Construct a HiveMind Bridge object by injecting already-initialised objects.
      * @param tcpServer A TCPServer to be used
      * @param serializer A HiveMindHostSerializer to be used
+     * @param messageHandler A MessageHandler to be used
      * @param deserializer A HiveMindHostDeserializer to be used
+     * @param inboundQueue A ThreadSafeQueue to be  used
      */
     HiveMindBridgeImpl(ITCPServer& tcpServer,
                        IHiveMindHostSerializer& serializer,
                        IHiveMindHostDeserializer& deserializer,
+                       IMessageHandler& messageHandler,
                        IThreadSafeQueue<MessageDTO>& inboundQueue);
 
     void spin();
@@ -42,7 +45,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     ITCPServer& m_tcpServer;
     IHiveMindHostDeserializer& m_deserializer;
     IHiveMindHostSerializer& m_serializer;
-    MessageHandler m_messageHandler;
+    IMessageHandler& m_messageHandler;
 
     IThreadSafeQueue<MessageDTO>& m_inboundQueue;
     std::thread m_inboundThread;

@@ -1,5 +1,5 @@
+#include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/MessageHandler.h"
-
 #include <gmock/gmock.h>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -17,14 +17,14 @@ class MessageHandlerFixture : public testing::Test {
 
     // Declare some test callbacks
     CallbackFunction m_testFunction = [&](CallbackArgs args,
-                                          int argsLength) -> std::optional<CallbackArgs> {
+                                          int argsLength) -> std::optional<CallbackReturn> {
         m_testFunctionCalled = true;
 
         return {};
     };
 
     CallbackFunction m_moveByTestCallback = [&](CallbackArgs args,
-                                                int argsLength) -> std::optional<CallbackArgs> {
+                                                int argsLength) -> std::optional<CallbackReturn> {
         m_testValue1 += std::get<int64_t>(args[0].getArgument());
         m_testValue2 -= std::get<float>(args[1].getArgument());
 
@@ -144,7 +144,7 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
 
-    result.getFuture().wait();
+    result.getCallbackReturnContext().wait();
 
     ASSERT_TRUE(m_testFunctionCalled);
 }
@@ -167,7 +167,7 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::Ok);
 
-    result.getFuture().wait();
+    result.getCallbackReturnContext().wait();
 
     ASSERT_EQ(m_testValue1, 1);
     ASSERT_EQ(m_testValue2, 7);

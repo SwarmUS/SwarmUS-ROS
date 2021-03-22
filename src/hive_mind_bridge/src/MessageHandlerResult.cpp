@@ -2,19 +2,18 @@
 
 void MessageHandlerResult::setResponse(MessageDTO message) { m_responseMessage = message; }
 
-void MessageHandlerResult::setFuture(std::shared_future<std::optional<CallbackArgs>> future) {
-    m_future = future;
+void MessageHandlerResult::setCallbackReturnContext(
+    std::shared_future<std::optional<CallbackReturn>> future) {
+    m_callbackReturnContext = future;
 }
 
 MessageDTO MessageHandlerResult::getResponse() { return m_responseMessage; }
 
-std::shared_future<std::optional<CallbackArgs>> MessageHandlerResult::getFuture() {
-    return m_future;
+std::shared_future<std::optional<CallbackReturn>> MessageHandlerResult::getCallbackReturnContext() {
+    return m_callbackReturnContext;
 }
 
 void MessageHandlerResult::setCallbackName(std::string name) { m_callbackName = name; }
-
-std::string MessageHandlerResult::getReturnCallbackName() { return m_callbackName + "Return"; }
 
 void MessageHandlerResult::setMessageSourceId(uint32_t id) { m_msgSourceId = id; }
 

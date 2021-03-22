@@ -49,11 +49,8 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
 }
 
 MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
-    GenericResponseStatusDTO responseStatus = GenericResponseStatusDTO::BadRequest;
     uint32_t msgSourceId = message.getSourceId();
     uint32_t msgDestinationId = message.getDestinationId();
-    uint32_t requestId = 0;
-    UserCallTargetDTO sourceModule = UserCallTargetDTO::UNKNOWN;
 
     MessageHandlerResult result;
 
@@ -63,13 +60,14 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
     // Request
     if (std::holds_alternative<RequestDTO>(request)) {
         auto userCallRequest = std::get<RequestDTO>(request).getRequest();
-        requestId = std::get<RequestDTO>(request).getId();
+        uint32_t requestId = std::get<RequestDTO>(request).getId();
 
         // UserCallRequest
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
             const auto functionCallRequest =
                 std::get<UserCallRequestDTO>(userCallRequest).getRequest();
-            sourceModule = std::get<UserCallRequestDTO>(userCallRequest).getSource();
+            UserCallTargetDTO sourceModule =
+                std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
             // FunctionCallRequest
             if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {
@@ -83,11 +81,12 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
                 auto callback = getCallback(functionName);
 
                 // Call the right callback
+                GenericResponseStatusDTO responseStatus = GenericResponseStatusDTO::BadRequest;
                 if (callback) {
-                    std::shared_future<std::optional<CallbackArgs>> ret =
+                    std::shared_future<std::optional<CallbackReturn>> ret =
                         std::async(std::launch::async, callback.value(), functionArgs, argsLength)
                             .share();
-                    result.setFuture(ret);
+                    result.setCallbackReturnContext(ret);
                     result.setCallbackName(functionName);
                     result.setMessageSourceId(msgSourceId);
                     result.setMessageDestinationId(msgDestinationId);

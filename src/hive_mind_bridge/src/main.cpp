@@ -1,3 +1,4 @@
+#include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/HiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
 #include "ros/ros.h"
@@ -23,7 +24,7 @@ int main(int argc, char** argv) {
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args,
-                                          int argsLength) -> std::optional<CallbackArgs> {
+                                          int argsLength) -> std::optional<CallbackReturn> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());
@@ -46,14 +47,16 @@ int main(int argc, char** argv) {
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
     CallbackFunction getStatus = [&](CallbackArgs args,
-                                     int argsLength) -> std::optional<CallbackArgs> {
+                                     int argsLength) -> std::optional<CallbackReturn> {
         // todo This remains to be implemented.
         int64_t isRobotOk = 1;
 
         CallbackArgs returnArgs;
         returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
 
-        return returnArgs;
+        CallbackReturn cbReturn("getStatusReturn", returnArgs);
+
+        return cbReturn;
     };
     bridge.registerCustomAction("getStatus", getStatus);
 

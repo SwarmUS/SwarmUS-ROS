@@ -1,6 +1,7 @@
 #ifndef HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H
 #define HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H
 
+#include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/IThreadSafeQueue.h"
 #include "hive_mind_bridge/MessageHandler.h"

@@ -1,18 +1,22 @@
 #ifndef HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
 #define HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
 
-#include "UserCallbackFunctionWrapper.h"
+#include "hive_mind_bridge/Callback.h"
+#include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <future>
 #include <hivemind-host/MessageDTO.h>
 #include <optional>
 
+/**
+ * A class that contains various data to be returned by the handling of an incoming message.
+ */
 class MessageHandlerResult {
   public:
     MessageHandlerResult() = default;
 
     void setResponse(MessageDTO message);
 
-    void setFuture(std::shared_future<std::optional<CallbackArgs>> future);
+    void setCallbackReturnContext(std::shared_future<std::optional<CallbackReturn>> future);
 
     void setMessageSourceId(uint32_t id);
 
@@ -24,9 +28,7 @@ class MessageHandlerResult {
 
     MessageDTO getResponse();
 
-    std::shared_future<std::optional<CallbackArgs>> getFuture();
-
-    std::string getReturnCallbackName();
+    std::shared_future<std::optional<CallbackReturn>> getCallbackReturnContext();
 
     uint32_t getMessageSourceId();
 
@@ -35,9 +37,9 @@ class MessageHandlerResult {
     UserCallTargetDTO getSourceModule();
 
   private:
-    std::string m_callbackName;
+    std::string m_callbackName; // The name of the callback called by a functionCallRequest
     MessageDTO m_responseMessage; // The acknowledge message to send as soon as possible
-    std::shared_future<std::optional<CallbackArgs>> m_future;
+    std::shared_future<std::optional<CallbackReturn>> m_callbackReturnContext;
 
     uint32_t m_msgSourceId;
     uint32_t m_msgDestinationId;

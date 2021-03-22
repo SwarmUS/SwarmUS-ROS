@@ -1,6 +1,7 @@
 #ifndef CATKIN_ROS_MESSAGEHANDLER_H
 #define CATKIN_ROS_MESSAGEHANDLER_H
 
+#include "Callback.h"
 #include "IMessageHandler.h"
 #include "hive_mind_bridge/MessageUtils.h"
 

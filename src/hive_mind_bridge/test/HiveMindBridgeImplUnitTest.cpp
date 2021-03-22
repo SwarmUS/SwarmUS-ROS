@@ -1,3 +1,4 @@
+#include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/HiveMindBridgeImpl.h"
 #include "mocks/HiveMindHostDeserializerInterfaceMock.h"
 #include "mocks/HiveMindHostSerializerInterfaceMock.h"
@@ -6,16 +7,17 @@
 #include "mocks/ThreadSafeQueueInterfaceMock.h"
 #include <gmock/gmock.h>
 
-std::function<std::optional<CallbackArgs>()> validCallbackWithInstantReturn =
-    []() -> std::optional<CallbackArgs> {
+std::function<std::optional<CallbackReturn>()> validCallbackWithInstantReturn =
+    []() -> std::optional<CallbackReturn> {
     CallbackArgs returnArgs;
     returnArgs[0] = FunctionCallArgumentDTO(1.0f);
 
-    return returnArgs;
+    CallbackReturn cbReturn("instantReturn", returnArgs);
+    return cbReturn;
 };
 
-std::function<std::optional<CallbackArgs>()> validCallbackWithoutInstantReturn =
-    []() -> std::optional<CallbackArgs> { return {}; };
+std::function<std::optional<CallbackReturn>()> validCallbackWithoutInstantReturn =
+    []() -> std::optional<CallbackReturn> { return {}; };
 
 class HiveMindBridgeImplUnitFixture : public testing::Test {
   protected:
@@ -40,7 +42,7 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
 
 TEST_F(HiveMindBridgeImplUnitFixture, spinInstantaneousCallback_WithReturn) {
     // Given
-    validResultWithReturn.setFuture(
+    validResultWithReturn.setCallbackReturnContext(
         std::async(std::launch::async, validCallbackWithInstantReturn).share());
     validResultWithReturn.setResponse(dummyResponseMessage);
     std::this_thread::sleep_for(
@@ -62,7 +64,7 @@ TEST_F(HiveMindBridgeImplUnitFixture, spinInstantaneousCallback_WithReturn) {
 
 TEST_F(HiveMindBridgeImplUnitFixture, spinInstantaneousCallback_WithoutReturn) {
     // Given
-    validResultWithReturn.setFuture(
+    validResultWithReturn.setCallbackReturnContext(
         std::async(std::launch::async, validCallbackWithoutInstantReturn).share());
     validResultWithReturn.setResponse(dummyResponseMessage);
     std::this_thread::sleep_for(

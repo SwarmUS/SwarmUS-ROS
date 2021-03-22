@@ -24,11 +24,14 @@ void HiveMindBridgeImpl::spin() {
             m_serializer.serializeToStream(result.getResponse());
         }
 
-        for (auto result : m_resultQueue) {
-            if (result.getFuture().wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
-                sendReturn(result);
+        for (auto result = m_resultQueue.begin(); result != m_resultQueue.end();) {
+            if (result->getCallbackReturnContext().wait_for(std::chrono::seconds(0)) ==
+                std::future_status::ready) {
+                sendReturn(*result);
 
-                m_resultQueue.pop_front();
+                m_resultQueue.erase(result);
+            } else {
+                result++;
             }
         }
     } else {
@@ -73,17 +76,17 @@ bool HiveMindBridgeImpl::isTCPClientConnected() {
 }
 
 void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
-    std::optional<CallbackArgs> argsOpt = result.getFuture().get();
+    std::optional<CallbackReturn> callbackReturnOpt = result.getCallbackReturnContext().get();
 
     // Send a return only if there is a return value
-    if (argsOpt.has_value()) {
-        CallbackArgs args = argsOpt.value();
+    if (callbackReturnOpt.has_value()) {
+        CallbackArgs args = callbackReturnOpt.value().getReturnArgs();
         MessageDTO returnMessage = MessageUtils::createFunctionCallRequest(
             result.getMessageDestinationId(), // swap source and dest since we return to the sender
             result.getMessageSourceId(),
             99, // TODO what should I put here?
             result.getSourceModule(), // swap source and dest since we return to the sender
-            result.getReturnCallbackName(), args);
+            callbackReturnOpt.value().getReturnFunctionName(), args);
 
         m_serializer.serializeToStream(returnMessage);
     }

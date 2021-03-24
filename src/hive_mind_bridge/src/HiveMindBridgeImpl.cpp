@@ -84,7 +84,7 @@ void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
         MessageDTO returnMessage = MessageUtils::createFunctionCallRequest(
             result.getMessageDestinationId(), // swap source and dest since we return to the sender
             result.getMessageSourceId(),
-            99, // TODO what should I put here?
+            MessageUtils::generateRandomId(),
             result.getSourceModule(), // swap source and dest since we return to the sender
             callbackReturnOpt.value().getReturnFunctionName(), args);
 

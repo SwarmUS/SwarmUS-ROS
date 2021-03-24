@@ -78,3 +78,7 @@ MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
 
     return message;
 }
+
+uint32_t MessageUtils::generateRandomId() {
+    return rand() % UINT32_MAX;
+}

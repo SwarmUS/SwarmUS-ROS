@@ -6,6 +6,8 @@
     <arg name="camera_fps" default="15"/>
 
     <group ns="$(arg robot_name)">
+        <remap from="motor_cmd_vel" to="cmd_vel"/>
+
         <!-- Roboclaw -->
         <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
             <param name="~serial_port"  value="/dev/roboclaw"/>

@@ -8,13 +8,10 @@
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
         <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
-            <!-- TODO: set roboclaw config -->
             <param name="~serial_port"  value="/dev/roboclaw"/>
             <param name="~baudrate"     value="115200"/>
             <param name="~roboclaws"    value="1"/>
         </node>
-        
-        <include file="roboclaw_single.launch"/>
 
         <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
             <param name="~roboclaws" value="1"/>

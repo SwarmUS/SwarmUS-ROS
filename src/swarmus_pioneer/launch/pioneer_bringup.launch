@@ -6,7 +6,6 @@
     <arg name="camera_fps" default="15"/>
 
     <group ns="$(arg robot_name)">
-        <remap from="motor_cmd_vel" to="cmd_vel"/>
 
         <!-- Roboclaw -->
         <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
@@ -19,7 +18,7 @@
             <param name="~roboclaws" value="1"/>
             <param name="~steps_per_meter" value="76008.542519038410"/>
             <param name="~base_width" value="0.32"/>
-            <param name="~swap_motors" value="false"/>
+            <param name="~swap_motors" value="true"/>
             <param name="~invert_motor_1" value="false"/>
             <param name="~invert_motor_2" value="false"/>
 

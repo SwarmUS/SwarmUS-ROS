@@ -83,8 +83,7 @@ void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
         CallbackArgs args = callbackReturnOpt.value().getReturnArgs();
         MessageDTO returnMessage = MessageUtils::createFunctionCallRequest(
             result.getMessageDestinationId(), // swap source and dest since we return to the sender
-            result.getMessageSourceId(),
-            MessageUtils::generateRandomId(),
+            result.getMessageSourceId(), MessageUtils::generateRandomId(),
             result.getSourceModule(), // swap source and dest since we return to the sender
             callbackReturnOpt.value().getReturnFunctionName(), args);
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.13)
 project(hive_mind_bridge)
 set (CMAKE_CXX_STANDARD 17)
 
@@ -35,7 +35,8 @@ set(HIVEMIND_BRIDGE_SOURCES
         src/HiveMindBridge.cpp
         src/HiveMindBridgeImpl.cpp
         src/UserCallbackFunctionWrapper.cpp
-        src/UserCallbackArgumentDescription.cpp)
+        src/UserCallbackArgumentDescription.cpp
+        src/MessageHandlerResult.cpp)
 
 add_library(${LIB_NAME} STATIC ${HIVEMIND_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

@@ -1,6 +1,7 @@
 #ifndef CATKIN_ROS_MESSAGEHANDLER_H
 #define CATKIN_ROS_MESSAGEHANDLER_H
 
+#include "Callback.h"
 #include "IMessageHandler.h"
 #include "hive_mind_bridge/MessageUtils.h"
 
@@ -9,7 +10,7 @@ class MessageHandler : public IMessageHandler {
     MessageHandler();
     ~MessageHandler();
 
-    MessageDTO handleMessage(MessageDTO message) override;
+    MessageHandlerResult handleMessage(MessageDTO message) override;
 
     bool registerCallback(std::string name, CallbackFunction callback) override;
 

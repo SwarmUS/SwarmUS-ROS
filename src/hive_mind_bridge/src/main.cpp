@@ -1,3 +1,4 @@
+#include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/HiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
 #include "ros/ros.h"
@@ -5,7 +6,7 @@
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <optional>
 
-constexpr uint8_t RATE_HZ{2};
+constexpr uint8_t RATE_HZ{10};
 constexpr uint32_t compoundId{1}; // TODO find a way for the HiveMind and the robot to share this ID
 
 int main(int argc, char** argv) {
@@ -22,7 +23,8 @@ int main(int argc, char** argv) {
     HiveMindBridge bridge(port);
 
     // Register custom actions
-    CallbackFunction moveByCallback = [&](CallbackArgs args, int argsLength) {
+    CallbackFunction moveByCallback = [&](CallbackArgs args,
+                                          int argsLength) -> std::optional<CallbackReturn> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         moveByMessage.distance_x = std::get<float>(args[0].getArgument());
@@ -30,6 +32,11 @@ int main(int argc, char** argv) {
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
+
+        std::this_thread::sleep_for(
+            std::chrono::seconds(2)); // Just to show that callbacks can be blocking
+
+        return {};
     };
 
     CallbackArgsManifest moveByManifest;
@@ -38,6 +45,20 @@ int main(int argc, char** argv) {
     moveByManifest.push_back(
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
+
+    CallbackFunction getStatus = [&](CallbackArgs args,
+                                     int argsLength) -> std::optional<CallbackReturn> {
+        // todo This remains to be implemented.
+        int64_t isRobotOk = 1;
+
+        CallbackArgs returnArgs;
+        returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
+
+        CallbackReturn cbReturn("getStatusReturn", returnArgs);
+
+        return cbReturn;
+    };
+    bridge.registerCustomAction("getStatus", getStatus);
 
     // Register event hooks
     bridge.onConnect([]() { ROS_INFO("Client connected."); });

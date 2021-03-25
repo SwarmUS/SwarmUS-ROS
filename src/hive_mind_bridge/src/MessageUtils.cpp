@@ -46,3 +46,37 @@ MessageDTO MessageUtils::createFunctionDescriptionResponseMessage(
 
     return responseMessage;
 }
+
+MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
+                                                   uint32_t msgDestinationId,
+                                                   uint32_t requestId,
+                                                   UserCallTargetDTO moduleDestination,
+                                                   std::string callbackName,
+                                                   CallbackArgs args) {
+    FunctionCallRequestDTO functionCallRequest(callbackName.c_str(), args.data(), args.size());
+
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::HOST, moduleDestination,
+                                       functionCallRequest);
+    RequestDTO RequestDTO(requestId, userCallRequest);
+    MessageDTO message(msgSourceId, msgDestinationId, RequestDTO);
+
+    return message;
+}
+
+MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
+                                                   uint32_t msgDestinationId,
+                                                   uint32_t requestId,
+                                                   UserCallTargetDTO moduleDestination,
+                                                   std::string callbackName) {
+
+    FunctionCallRequestDTO functionCallRequest(callbackName.c_str(), nullptr, 0);
+
+    UserCallRequestDTO userCallRequest(UserCallTargetDTO::HOST, moduleDestination,
+                                       functionCallRequest);
+    RequestDTO RequestDTO(requestId, userCallRequest);
+    MessageDTO message(msgSourceId, msgDestinationId, RequestDTO);
+
+    return message;
+}
+
+uint32_t MessageUtils::generateRandomId() { return rand() % UINT32_MAX; }

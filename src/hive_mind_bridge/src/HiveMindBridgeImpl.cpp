@@ -2,23 +2,46 @@
 
 HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,
-                                       IHiveMindHostDeserializer& deserializer) :
-    m_tcpServer(tcpServer), m_serializer(serializer), m_deserializer(deserializer) {}
+                                       IHiveMindHostDeserializer& deserializer,
+                                       IMessageHandler& messageHandler,
+                                       IThreadSafeQueue<MessageDTO>& queue) :
+    m_tcpServer(tcpServer),
+    m_serializer(serializer),
+    m_deserializer(deserializer),
+    m_messageHandler(messageHandler),
+    m_inboundQueue(queue) {}
 
 void HiveMindBridgeImpl::spin() {
-    if (m_tcpServer.isClientConnected()) {
-        MessageDTO message;
-        if (m_deserializer.deserializeFromStream(message)) {
+    if (isTCPClientConnected()) {
+        if (!m_inboundQueue.empty()) {
             // Execute the action
-            MessageDTO responseMessage = m_messageHandler.handleMessage(message);
+            MessageHandlerResult result = m_messageHandler.handleMessage(m_inboundQueue.front());
+            m_inboundQueue.pop();
+
+            m_resultQueue.push_back(result);
 
             // Send the ack/nack message
-            m_serializer.serializeToStream(responseMessage);
-        } else {
-            ROS_WARN("The received bytes do not contain a valid message.");
+            m_serializer.serializeToStream(result.getResponse());
+        }
+
+        for (auto result = m_resultQueue.begin(); result != m_resultQueue.end();) {
+            if (result->getCallbackReturnContext().wait_for(std::chrono::seconds(0)) ==
+                std::future_status::ready) {
+                sendReturn(*result);
+
+                m_resultQueue.erase(result);
+            } else {
+                result++;
+            }
         }
     } else {
+        if (m_inboundThread.joinable()) {
+            m_inboundThread.join();
+        }
+
         m_tcpServer.listen();
+
+        m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
     }
 }
 
@@ -36,4 +59,34 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name,
 
 bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction callback) {
     return m_messageHandler.registerCallback(name, callback);
+}
+
+void HiveMindBridgeImpl::inboundThread() {
+    while (isTCPClientConnected()) {
+        MessageDTO message;
+        if (m_deserializer.deserializeFromStream(message)) {
+            m_inboundQueue.push(message);
+        }
+    }
+}
+
+bool HiveMindBridgeImpl::isTCPClientConnected() {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_tcpServer.isClientConnected();
+}
+
+void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
+    std::optional<CallbackReturn> callbackReturnOpt = result.getCallbackReturnContext().get();
+
+    // Send a return only if there is a return value
+    if (callbackReturnOpt.has_value()) {
+        CallbackArgs args = callbackReturnOpt.value().getReturnArgs();
+        MessageDTO returnMessage = MessageUtils::createFunctionCallRequest(
+            result.getMessageDestinationId(), // swap source and dest since we return to the sender
+            result.getMessageSourceId(), MessageUtils::generateRandomId(),
+            result.getSourceModule(), // swap source and dest since we return to the sender
+            callbackReturnOpt.value().getReturnFunctionName(), args);
+
+        m_serializer.serializeToStream(returnMessage);
+    }
 }

@@ -1,3 +1,4 @@
+#include "hive_mind_bridge/MessageUtils.h"
 #include "ros/ros.h"
 #include <arpa/inet.h>
 #include <chrono>
@@ -68,27 +69,66 @@ int main(int argc, char** argv) {
     RequestDTO moveByRequestDTO(1, userCallRequest);
     MessageDTO moveByMessageDTO(1, 2, moveByRequestDTO);
 
-    // Send the message over TCP to the bridge
-    while (true) {
-        serializer.serializeToStream(moveByMessageDTO);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    MessageDTO getRobotStatusMessage =
+        MessageUtils::createFunctionCallRequest(1, 2, 99, UserCallTargetDTO::HOST, "getStatus");
 
-        // Listen for a response
-        MessageDTO message;
-        deserializer.deserializeFromStream(message);
-        ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
-        UserCallResponseDTO userCallResponse =
-            std::get<UserCallResponseDTO>(response.getResponse());
-        FunctionCallResponseDTO functionCallResponse =
-            std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
-        GenericResponseDTO genericResponse = functionCallResponse.getResponse();
-        GenericResponseStatusDTO status = genericResponse.getStatus();
-        std::string details = genericResponse.getDetails();
-        ROS_INFO("RESPONSE FROM HOST: \n"
-                 "\tResponse status: %d\n"
-                 "\tDetails: %s",
-                 status, details.c_str());
+    // Send getStatus request
+    serializer.serializeToStream(getRobotStatusMessage);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    }
+    // Listen for ack
+    MessageDTO statusResponseMessage;
+    deserializer.deserializeFromStream(statusResponseMessage);
+    ResponseDTO statusResponse = std::get<ResponseDTO>(statusResponseMessage.getMessage());
+    UserCallResponseDTO statusUserCallResponse =
+        std::get<UserCallResponseDTO>(statusResponse.getResponse());
+    FunctionCallResponseDTO statusFunctionCallResponse =
+        std::get<FunctionCallResponseDTO>(statusUserCallResponse.getResponse());
+    GenericResponseDTO statusGenericResponse = statusFunctionCallResponse.getResponse();
+    GenericResponseStatusDTO statusStatus = statusGenericResponse.getStatus();
+    std::string statusDetails = statusGenericResponse.getDetails();
+    ROS_INFO("RESPONSE FROM HOST (getStatus): \n"
+             "\tResponse status: %d\n"
+             "\tDetails: %s",
+             statusStatus, statusDetails.c_str());
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    // Lister for return
+    MessageDTO statusReturnMessage;
+    deserializer.deserializeFromStream(statusReturnMessage);
+    RequestDTO statusReturnRequest = std::get<RequestDTO>(statusReturnMessage.getMessage());
+    UserCallRequestDTO statusReturnUserCallRequest =
+        std::get<UserCallRequestDTO>(statusReturnRequest.getRequest());
+    FunctionCallRequestDTO statusReturnFunctionCallRequest =
+        std::get<FunctionCallRequestDTO>(statusReturnUserCallRequest.getRequest());
+    std::string statusReturnFunctionName = statusReturnFunctionCallRequest.getFunctionName();
+    std::array statusReturnFunctionArgs = statusReturnFunctionCallRequest.getArguments();
+    int64_t arg0 = std::get<int64_t>(statusReturnFunctionArgs[0].getArgument());
+
+    ROS_INFO("RESPONSE FROM HOST (%s): \n"
+             "\tPayload: %d",
+             statusReturnFunctionName.c_str(), arg0);
+
+    // Send moveBy request
+    serializer.serializeToStream(moveByMessageDTO);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    // Listen for a response
+    MessageDTO message;
+    deserializer.deserializeFromStream(message);
+    ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
+    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+    FunctionCallResponseDTO functionCallResponse =
+        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+    GenericResponseStatusDTO status = genericResponse.getStatus();
+    std::string details = genericResponse.getDetails();
+    ROS_INFO("RESPONSE FROM HOST (moveBy): \n"
+             "\tResponse status: %d\n"
+             "\tDetails: %s",
+             status, details.c_str());
+
+    // Listen for a return message
+    MessageDTO returnMessage;
+    deserializer.deserializeFromStream(returnMessage);
 }

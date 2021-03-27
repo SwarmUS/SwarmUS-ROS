@@ -117,7 +117,7 @@ bool HiveMindBridgeImpl::greet() {
             m_swarmAgentID = swarmAgentId.value();
             return true;
         }
-
-        return false;
     }
+
+    return false;
 }

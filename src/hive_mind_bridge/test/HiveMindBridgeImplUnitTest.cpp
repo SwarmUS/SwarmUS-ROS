@@ -83,3 +83,45 @@ TEST_F(HiveMindBridgeImplUnitFixture, spinInstantaneousCallback_WithoutReturn) {
 
     // Then
 }
+
+TEST_F(HiveMindBridgeImplUnitFixture, spinGreetSuccess) {
+    // Given
+
+    // When
+    testing::Sequence seq;
+    EXPECT_CALL(m_tcpServer, isClientConnected()).InSequence(seq).WillOnce(testing::Return(false));
+    EXPECT_CALL(m_tcpServer, listen()).Times(1);
+    EXPECT_CALL(m_tcpServer, isClientConnected()).InSequence(seq).WillOnce(testing::Return(true));
+    EXPECT_CALL(m_serializer, serializeToStream(testing::_)).Times(1);
+    EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).Times(1);
+    EXPECT_CALL(m_messageHandler, handleGreet(testing::_))
+        .WillOnce(testing::Return(std::optional<uint32_t>(42)));
+    EXPECT_CALL(m_tcpServer, isClientConnected())
+        .InSequence(seq)
+        .WillOnce(testing::Return(false)); // to make sure the thread ends
+
+    m_hivemindBridge->spin();
+
+    // Then
+    ASSERT_EQ(m_hivemindBridge->getSwarmAgentId(), 42);
+}
+
+TEST_F(HiveMindBridgeImplUnitFixture, spinGreetFail) {
+    // Given
+
+    // When
+    testing::Sequence seq;
+    EXPECT_CALL(m_tcpServer, isClientConnected()).InSequence(seq).WillOnce(testing::Return(false));
+    EXPECT_CALL(m_tcpServer, listen()).Times(1);
+    EXPECT_CALL(m_tcpServer, isClientConnected()).InSequence(seq).WillOnce(testing::Return(true));
+    EXPECT_CALL(m_serializer, serializeToStream(testing::_)).Times(1);
+    EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).Times(1);
+    EXPECT_CALL(m_messageHandler, handleGreet(testing::_))
+        .WillOnce(testing::Return(std::optional<uint32_t>()));
+    EXPECT_CALL(m_tcpServer, close());
+
+    m_hivemindBridge->spin();
+
+    // Then
+    ASSERT_EQ(m_hivemindBridge->getSwarmAgentId(), 0); // Default value
+}

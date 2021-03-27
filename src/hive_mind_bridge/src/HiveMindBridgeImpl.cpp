@@ -11,6 +11,12 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
     m_messageHandler(messageHandler),
     m_inboundQueue(queue) {}
 
+HiveMindBridgeImpl::~HiveMindBridgeImpl() {
+    if (m_inboundThread.joinable()) {
+        m_inboundThread.join();
+    }
+}
+
 void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
         if (!m_inboundQueue.empty()) {
@@ -41,7 +47,11 @@ void HiveMindBridgeImpl::spin() {
 
         m_tcpServer.listen();
 
-        m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
+        if (greet()) {
+            m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
+        } else {
+            m_tcpServer.close();
+        }
     }
 }
 
@@ -60,6 +70,8 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name,
 bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction callback) {
     return m_messageHandler.registerCallback(name, callback);
 }
+
+uint32_t HiveMindBridgeImpl::getSwarmAgentId() { return m_swarmAgentID; }
 
 void HiveMindBridgeImpl::inboundThread() {
     while (isTCPClientConnected()) {
@@ -89,4 +101,23 @@ void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
 
         m_serializer.serializeToStream(returnMessage);
     }
+}
+
+bool HiveMindBridgeImpl::greet() {
+    if (isTCPClientConnected()) {
+        MessageDTO message = MessageUtils::createGreetMessage();
+        m_serializer.serializeToStream(message);
+
+        MessageDTO greetResponse;
+        m_deserializer.deserializeFromStream(greetResponse);
+
+        std::optional<uint32_t> swarmAgentId = m_messageHandler.handleGreet(greetResponse);
+
+        if (swarmAgentId.has_value()) {
+            m_swarmAgentID = swarmAgentId.value();
+            return true;
+        }
+    }
+
+    return false;
 }

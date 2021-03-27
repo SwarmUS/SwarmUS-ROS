@@ -91,6 +91,12 @@ namespace MessageUtils {
                                          std::string callbackName);
 
     /**
+     * Create a greet message
+     * @return The created message
+     */
+    MessageDTO createGreetMessage();
+
+    /**
      * Returns a suitable value to use as a requestId;
      */
     uint32_t generateRandomId();

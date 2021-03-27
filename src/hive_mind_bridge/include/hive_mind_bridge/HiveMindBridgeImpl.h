@@ -30,6 +30,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
                        IMessageHandler& messageHandler,
                        IThreadSafeQueue<MessageDTO>& inboundQueue);
 
+    ~HiveMindBridgeImpl();
+
     void spin();
 
     void onConnect(std::function<void()> hook);
@@ -41,6 +43,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
                               CallbackArgsManifest manifest);
 
     bool registerCustomAction(std::string name, CallbackFunction callback);
+
+    uint32_t getSwarmAgentId();
 
   private:
     ITCPServer& m_tcpServer;
@@ -54,9 +58,12 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
 
     std::deque<MessageHandlerResult> m_resultQueue;
 
+    uint32_t m_swarmAgentID = 0;
+
     void inboundThread();
     bool isTCPClientConnected();
     void sendReturn(MessageHandlerResult result);
+    bool greet();
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGEIMPL_H

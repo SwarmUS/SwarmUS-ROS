@@ -118,9 +118,7 @@ TEST_F(HiveMindBridgeImplUnitFixture, spinGreetFail) {
     EXPECT_CALL(m_deserializer, deserializeFromStream(testing::_)).Times(1);
     EXPECT_CALL(m_messageHandler, handleGreet(testing::_))
         .WillOnce(testing::Return(std::optional<uint32_t>()));
-    EXPECT_CALL(m_tcpServer, isClientConnected())
-        .Times(0)
-        .InSequence(seq); // to assert that the thread is not started
+    EXPECT_CALL(m_tcpServer, close());
 
     m_hivemindBridge->spin();
 

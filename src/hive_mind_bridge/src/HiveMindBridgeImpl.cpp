@@ -49,6 +49,8 @@ void HiveMindBridgeImpl::spin() {
 
         if (greet()) {
             m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
+        } else {
+            m_tcpServer.close();
         }
     }
 }

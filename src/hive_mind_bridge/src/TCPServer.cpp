@@ -75,6 +75,7 @@ bool TCPServer::send(const uint8_t* data, uint16_t length) {
 
 void TCPServer::close() {
     ::close(m_clientFd);
+    m_isClientConnected = false;
     ROS_WARN("TCP server: client disconnected");
 }
 

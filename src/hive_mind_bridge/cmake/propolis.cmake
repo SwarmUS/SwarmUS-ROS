@@ -11,7 +11,7 @@ function(propolis_fetch_populate)
             ${PROJECT_NAME}_propolis
 
             GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-            GIT_TAG        100de12d5f51d50857f5faa64b9b0545b9162aac
+            GIT_TAG        286183f9c6a02d683b3ea5cbba3097a9c65e1095
             GIT_PROGRESS   TRUE
     )
 

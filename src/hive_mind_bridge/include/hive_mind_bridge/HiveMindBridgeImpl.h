@@ -44,7 +44,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
 
     bool registerCustomAction(std::string name, CallbackFunction callback);
 
-    uint32_t getSwarmId();
+    uint32_t getSwarmAgentId();
 
   private:
     ITCPServer& m_tcpServer;
@@ -58,7 +58,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
 
     std::deque<MessageHandlerResult> m_resultQueue;
 
-    uint32_t m_swarmID = 0; // Maybe rename this
+    uint32_t m_swarmAgentID = 0;
 
     void inboundThread();
     bool isTCPClientConnected();

@@ -27,9 +27,9 @@ class IMessageHandler {
     virtual MessageHandlerResult handleMessage(MessageDTO message) = 0;
 
     /**
-     * Parse a greet message and return the contained swarmId.
+     * Parse a greet message and return the contained swarmAgentId.
      * @param greetMessage The message to parse.
-     * @return The contained swarmId if the operation succeded.
+     * @return The contained swarmAgentId if the operation succeded.
      */
     virtual std::optional<uint32_t> handleGreet(MessageDTO greetMessage) = 0;
 

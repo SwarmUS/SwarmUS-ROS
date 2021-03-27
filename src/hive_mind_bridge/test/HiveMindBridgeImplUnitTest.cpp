@@ -103,7 +103,7 @@ TEST_F(HiveMindBridgeImplUnitFixture, spinGreetSuccess) {
     m_hivemindBridge->spin();
 
     // Then
-    ASSERT_EQ(m_hivemindBridge->getSwarmId(), 42);
+    ASSERT_EQ(m_hivemindBridge->getSwarmAgentId(), 42);
 }
 
 TEST_F(HiveMindBridgeImplUnitFixture, spinGreetFail) {
@@ -125,5 +125,5 @@ TEST_F(HiveMindBridgeImplUnitFixture, spinGreetFail) {
     m_hivemindBridge->spin();
 
     // Then
-    ASSERT_EQ(m_hivemindBridge->getSwarmId(), 0); // Default value
+    ASSERT_EQ(m_hivemindBridge->getSwarmAgentId(), 0); // Default value
 }

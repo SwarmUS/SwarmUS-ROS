@@ -69,7 +69,7 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction
     return m_messageHandler.registerCallback(name, callback);
 }
 
-uint32_t HiveMindBridgeImpl::getSwarmId() { return m_swarmID; }
+uint32_t HiveMindBridgeImpl::getSwarmAgentId() { return m_swarmAgentID; }
 
 void HiveMindBridgeImpl::inboundThread() {
     while (isTCPClientConnected()) {
@@ -109,10 +109,10 @@ bool HiveMindBridgeImpl::greet() {
         MessageDTO greetResponse;
         m_deserializer.deserializeFromStream(greetResponse);
 
-        std::optional<uint32_t> swarmId = m_messageHandler.handleGreet(greetResponse);
+        std::optional<uint32_t> swarmAgentId = m_messageHandler.handleGreet(greetResponse);
 
-        if (swarmId.has_value()) {
-            m_swarmID = swarmId.value();
+        if (swarmAgentId.has_value()) {
+            m_swarmAgentID = swarmAgentId.value();
             return true;
         }
 

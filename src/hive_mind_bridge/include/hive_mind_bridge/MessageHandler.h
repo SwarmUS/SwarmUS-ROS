@@ -12,6 +12,8 @@ class MessageHandler : public IMessageHandler {
 
     MessageHandlerResult handleMessage(MessageDTO message) override;
 
+    std::optional<uint32_t> handleGreet(MessageDTO greetMessage) override;
+
     bool registerCallback(std::string name, CallbackFunction callback) override;
 
     bool registerCallback(std::string name,

@@ -79,4 +79,9 @@ MessageDTO MessageUtils::createFunctionCallRequest(uint32_t msgSourceId,
     return message;
 }
 
+MessageDTO MessageUtils::createGreetMessage(uint32_t msgSourceId) {
+    GreetingDTO greeting(msgSourceId);
+    return MessageDTO(msgSourceId, msgSourceId, greeting);
+}
+
 uint32_t MessageUtils::generateRandomId() { return rand() % UINT32_MAX; }

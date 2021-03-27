@@ -22,6 +22,8 @@ class MessageHandlerInterfaceMock : public IMessageHandler {
                 getCallback,
                 (const std::string& name),
                 (override));
+
+    MOCK_METHOD(std::optional<uint32_t>, handleGreet, (MessageDTO message), (override));
 };
 
 #endif // HIVEMIND_BRIDGE_MESSAGEHANDLERINTERFACEMOCK_H

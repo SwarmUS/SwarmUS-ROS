@@ -91,6 +91,13 @@ namespace MessageUtils {
                                          std::string callbackName);
 
     /**
+     * Create a greet message
+     * @param msgSourceId The swarm id of this robot. If the ID is not set yet, the default value 0 should be sent.
+     * @return The created message
+     */
+    MessageDTO createGreetMessage(uint32_t msgSourceId = 0);
+
+    /**
      * Returns a suitable value to use as a requestId;
      */
     uint32_t generateRandomId();

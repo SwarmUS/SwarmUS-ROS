@@ -117,6 +117,16 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
     return result;
 }
 
+std::optional<uint32_t> MessageHandler::handleGreet(MessageDTO greetMessage) {
+    auto greeting = greetMessage.getMessage();
+
+    if (std::holds_alternative<GreetingDTO>(greeting)) {
+        return std::get<GreetingDTO>(greeting).getId();
+    }
+
+    return {};
+}
+
 bool MessageHandler::registerCallback(std::string name, CallbackFunction callback) {
     CallbackArgsManifest manifest;
     return registerCallback(name, callback, manifest);

@@ -19,12 +19,19 @@ class IMessageHandler {
     virtual ~IMessageHandler() = default;
 
     /**
-     * Parse a message and execute the appropriate callback.
+     * Parse a message and execute the appropriate callback or action.
      * @param message the message to parse.
      * @return A message containing the appropriate acknowlege (with appropriate errors if
      * necessary)
      */
     virtual MessageHandlerResult handleMessage(MessageDTO message) = 0;
+
+    /**
+     * Parse a greet message and return the contained swarmId.
+     * @param greetMessage The message to parse.
+     * @return The contained swarmId if the operation succeded.
+     */
+    virtual std::optional<uint32_t> handleGreet(MessageDTO greetMessage) = 0;
 
     /**
      * Register a callback

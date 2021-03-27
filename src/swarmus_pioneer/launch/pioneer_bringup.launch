@@ -25,6 +25,12 @@
             <param name="~var_pos_x" value="0.01"/>
             <param name="~var_pos_y" value="0.01"/>
             <param name="~var_theta_z" value="0.01"/>
+            
+            <!-- In m/s and rad/s-->
+            <param name="~max_linear_speed" value="0.30"/>
+            <param name="~max_angular_speed" value="1"/>
+
+            <param name="~tf_prefix" value="$(arg robot_name)"/>
         </node>
 
         <!-- Intel RealSense D435i -->

@@ -59,6 +59,13 @@ int main(int argc, char** argv) {
     HiveMindHostSerializer serializer(tcpClient);
     HiveMindHostDeserializer deserializer(tcpClient);
 
+    // Wait for a greet message
+    MessageDTO greetRequest;
+    deserializer.deserializeFromStream(greetRequest);
+
+    MessageDTO greetResponse(42, 42, GreetingDTO(42));
+    serializer.serializeToStream(greetResponse);
+
     // Create a moveBy function call wrapped in a message
     FunctionCallArgumentDTO moveByX((float)1);
     FunctionCallArgumentDTO moveByY((float)1);

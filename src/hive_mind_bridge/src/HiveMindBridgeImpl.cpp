@@ -69,9 +69,7 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction
     return m_messageHandler.registerCallback(name, callback);
 }
 
-uint32_t HiveMindBridgeImpl::getSwarmId() {
-    return m_swarmID;
-}
+uint32_t HiveMindBridgeImpl::getSwarmId() { return m_swarmID; }
 
 void HiveMindBridgeImpl::inboundThread() {
     while (isTCPClientConnected()) {

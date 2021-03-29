@@ -20,7 +20,7 @@ class TCPClient : public IProtobufStream {
         struct sockaddr_in serv_addr;
 
         serv_addr.sin_family = AF_INET;
-        serv_addr.sin_port = htons(8080);
+        serv_addr.sin_port = htons(5555);
 
         // Convert IPv4 and IPv6 addresses from text to binary form
         if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
@@ -116,26 +116,23 @@ int main(int argc, char** argv) {
              "\tPayload: %d",
              statusReturnFunctionName.c_str(), arg0);
 
-    // Send moveBy request
-    serializer.serializeToStream(moveByMessageDTO);
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    for (int i = 0; i < 5; i++) {
+        // Send moveBy request
+        serializer.serializeToStream(moveByMessageDTO);
 
-    // Listen for a response
-    MessageDTO message;
-    deserializer.deserializeFromStream(message);
-    ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
-    UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
-    FunctionCallResponseDTO functionCallResponse =
-        std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
-    GenericResponseDTO genericResponse = functionCallResponse.getResponse();
-    GenericResponseStatusDTO status = genericResponse.getStatus();
-    std::string details = genericResponse.getDetails();
-    ROS_INFO("RESPONSE FROM HOST (moveBy): \n"
-             "\tResponse status: %d\n"
-             "\tDetails: %s",
-             status, details.c_str());
-
-    // Listen for a return message
-    MessageDTO returnMessage;
-    deserializer.deserializeFromStream(returnMessage);
+        // Listen for a response
+        MessageDTO message;
+        deserializer.deserializeFromStream(message);
+        ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
+        UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+        FunctionCallResponseDTO functionCallResponse =
+                std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+        GenericResponseDTO genericResponse = functionCallResponse.getResponse();
+        GenericResponseStatusDTO status = genericResponse.getStatus();
+        std::string details = genericResponse.getDetails();
+        ROS_INFO("RESPONSE FROM HOST (moveBy): \n"
+                 "\tResponse status: %d\n"
+                 "\tDetails: %s",
+                 status, details.c_str());
+    }
 }

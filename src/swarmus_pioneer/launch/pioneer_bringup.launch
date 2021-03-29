@@ -61,5 +61,8 @@
             <!--remap from="/joint_states" to="$(arg robot_name)/joint_states"/-->
         </node>
 
+        <include file="$(find swarmus_pioneer)/launch/navigation_and_mapping.launch">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+        </include>
     </group>
 </launch>

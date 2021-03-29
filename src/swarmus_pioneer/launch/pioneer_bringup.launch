@@ -8,10 +8,31 @@
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
         <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
-            <!-- TODO: set roboclaw config -->
             <param name="~serial_port"  value="/dev/roboclaw"/>
             <param name="~baudrate"     value="115200"/>
             <param name="~roboclaws"    value="1"/>
+
+            <param name="~enc_publish_frequency" value="100"/>
+        </node>
+
+        <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
+            <param name="~roboclaws" value="1"/>
+            <param name="~steps_per_meter" value="76008.542519038410"/>
+            <param name="~base_width" value="0.32"/>
+            <param name="~swap_motors" value="true"/>
+            <param name="~invert_motor_1" value="false"/>
+            <param name="~invert_motor_2" value="false"/>
+
+            <param name="~var_pos_x" value="0.01"/>
+            <param name="~var_pos_y" value="0.01"/>
+            <param name="~var_theta_z" value="0.01"/>
+            
+            <!-- In m/s and rad/s-->
+            <param name="~max_linear_speed" value="0.3"/>
+            <param name="~max_linear_acceleration" value="0.6"/>
+            <param name="~max_angular_speed" value="1"/>
+
+            <param name="~tf_prefix" value="$(arg robot_name)"/>
         </node>
 
         <!-- Intel RealSense D435i -->

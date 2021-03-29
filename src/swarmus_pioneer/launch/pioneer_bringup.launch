@@ -12,6 +12,8 @@
             <param name="~serial_port"  value="/dev/roboclaw"/>
             <param name="~baudrate"     value="115200"/>
             <param name="~roboclaws"    value="1"/>
+
+            <param name="~enc_publish_frequency" value="100"/>
         </node>
 
         <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">

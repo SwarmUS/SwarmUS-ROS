@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="robot_name" default="pioneer_0"/>
+
+    <!-- Launch the bringup of the robot equiped with the d455-->
+    <include file="$(find swarmus_pioneer)/launch/pioneer_bringup.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="camera_type" value="d455"/>
+    </include>
+
+    <!-- Launch RTAB-MAP and the navigation stack -->
+    <include file="$(find swarmus_pioneer)/launch/navigation_and_mapping.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+    </include>
+
+    <!-- Launch SwarmUS package: HiveMindBridge-->
+    <include file="$(find swarmus_pioneer)/launch/swarm_bringup.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/> 
+    </include>
+</launch>

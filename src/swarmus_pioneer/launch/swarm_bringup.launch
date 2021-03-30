@@ -2,6 +2,6 @@
 <launch>
     <arg name="robot_name" default="pioneer_0"/>
 
-    <!-- Navigation stack -->
+    <!-- Hive mind bridge -->
     <include file="$(find hive_mind_bridge)/launch/hive_mind_bridge.launch"/>
 </launch>

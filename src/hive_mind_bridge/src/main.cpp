@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
 
     ros::Subscriber sub;
 
-    int port = ros::param::param("~TCP_SERVER_PORT", 8080);
+    int port = ros::param::param("~TCP_SERVER_PORT", 5555);
     HiveMindBridge bridge(port);
 
     // Register custom actions

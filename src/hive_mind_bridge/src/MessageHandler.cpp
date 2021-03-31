@@ -48,11 +48,11 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
         requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
 }
 
-MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
+InboundRequestHandle MessageHandler::handleMessage(MessageDTO message) {
     uint32_t msgSourceId = message.getSourceId();
     uint32_t msgDestinationId = message.getDestinationId();
 
-    MessageHandlerResult result;
+    InboundRequestHandle result;
 
     // Message
     auto request = message.getMessage();

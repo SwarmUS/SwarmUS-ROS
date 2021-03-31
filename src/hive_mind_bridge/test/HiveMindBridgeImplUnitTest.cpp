@@ -29,7 +29,7 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
     ThreadSafeQueueInterfaceMock<MessageDTO> m_outboundQueue;
     MessageHandlerInterfaceMock m_messageHandler;
 
-    MessageHandlerResult validResultWithReturn;
+    InboundRequestHandle validResultWithReturn;
     MessageDTO dummyResponseMessage = MessageUtils::createResponseMessage(
         1, 1, 1, UserCallTargetDTO::UNKNOWN, GenericResponseStatusDTO::Ok, "");
 

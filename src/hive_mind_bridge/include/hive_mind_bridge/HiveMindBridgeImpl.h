@@ -5,7 +5,7 @@
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/IThreadSafeQueue.h"
 #include "hive_mind_bridge/MessageHandler.h"
-#include "hive_mind_bridge/MessageHandlerResult.h"
+#include "hive_mind_bridge/InboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
@@ -61,14 +61,14 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     std::thread m_outboundThread;
     std::mutex m_mutex;
 
-    std::deque<MessageHandlerResult> m_resultQueue;
+    std::deque<InboundRequestHandle> m_resultQueue;
 
     uint32_t m_swarmAgentID = 0;
 
     void inboundThread();
     void outboundThread();
     bool isTCPClientConnected();
-    void sendReturn(MessageHandlerResult result);
+    void sendReturn(InboundRequestHandle result);
     bool greet();
 };
 

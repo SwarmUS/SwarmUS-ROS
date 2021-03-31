@@ -27,7 +27,7 @@ void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
         if (!m_inboundQueue.empty()) {
             // Execute the action
-            MessageHandlerResult result = m_messageHandler.handleMessage(m_inboundQueue.front());
+            InboundRequestHandle result = m_messageHandler.handleMessage(m_inboundQueue.front());
             m_inboundQueue.pop();
 
             m_resultQueue.push_back(result);
@@ -107,6 +107,12 @@ void HiveMindBridgeImpl::outboundThread() {
         if (!m_outboundQueue.empty()) {
             m_serializer.serializeToStream(m_outboundQueue.front());
             m_outboundQueue.pop();
+
+            // verify if front() has a corresponding response in handler
+
+            // if true : pop
+
+            // else do nothing (for now) : pushback the front element.
         }
     }
 }
@@ -116,7 +122,7 @@ bool HiveMindBridgeImpl::isTCPClientConnected() {
     return m_tcpServer.isClientConnected();
 }
 
-void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
+void HiveMindBridgeImpl::sendReturn(InboundRequestHandle result) {
     std::optional<CallbackReturn> callbackReturnOpt = result.getCallbackReturnContext().get();
 
     // Send a return only if there is a return value

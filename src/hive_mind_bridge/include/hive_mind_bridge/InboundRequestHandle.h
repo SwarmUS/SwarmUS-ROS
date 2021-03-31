@@ -1,5 +1,5 @@
-#ifndef HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
-#define HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
+#ifndef HIVE_MIND_BRIDGE_INBOUNDREQUESTHANDLE_H
+#define HIVE_MIND_BRIDGE_INBOUNDREQUESTHANDLE_H
 
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
@@ -10,9 +10,9 @@
 /**
  * A class that contains various data to be returned by the handling of an incoming message.
  */
-class MessageHandlerResult {
+class InboundRequestHandle {
   public:
-    MessageHandlerResult() = default;
+    InboundRequestHandle() = default;
 
     void setResponse(MessageDTO message);
 
@@ -46,4 +46,4 @@ class MessageHandlerResult {
     UserCallTargetDTO m_sourceModule;
 };
 
-#endif // HIVE_MIND_BRIDGE_MESSAGEHANDLERRESULT_H
+#endif // HIVE_MIND_BRIDGE_INBOUNDREQUESTHANDLE_H

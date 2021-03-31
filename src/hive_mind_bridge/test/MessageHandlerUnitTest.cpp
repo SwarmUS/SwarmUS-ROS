@@ -127,7 +127,7 @@ TEST_F(MessageHandlerFixture, testGetCallbackFail) {
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    MessageHandlerResult result = m_messageHandler.handleMessage(*m_messageDto);
+    InboundRequestHandle result = m_messageHandler.handleMessage(*m_messageDto);
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -150,7 +150,7 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
-    MessageHandlerResult result = m_messageHandler.handleMessage(*m_moveByMessageDto);
+    InboundRequestHandle result = m_messageHandler.handleMessage(*m_moveByMessageDto);
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -174,7 +174,7 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
-    MessageHandlerResult result = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
+    InboundRequestHandle result = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -205,7 +205,7 @@ TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO3", m_testFunction);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -226,7 +226,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -259,7 +259,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -283,7 +283,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result = m_messageHandler.handleMessage(incomingMessage);
 
     // Then
     MessageDTO responseMessage = result.getResponse();

@@ -28,21 +28,24 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
                        IHiveMindHostSerializer& serializer,
                        IHiveMindHostDeserializer& deserializer,
                        IMessageHandler& messageHandler,
-                       IThreadSafeQueue<MessageDTO>& inboundQueue);
+                       IThreadSafeQueue<MessageDTO>& inboundQueue,
+                       IThreadSafeQueue<MessageDTO>& outboundQueue);
 
     ~HiveMindBridgeImpl();
 
-    void spin();
+    void spin() override;
 
-    void onConnect(std::function<void()> hook);
+    void onConnect(std::function<void()> hook) override;
 
-    void onDisconnect(std::function<void()> hook);
+    void onDisconnect(std::function<void()> hook) override;
 
     bool registerCustomAction(std::string name,
                               CallbackFunction callback,
-                              CallbackArgsManifest manifest);
+                              CallbackArgsManifest manifest) override;
 
-    bool registerCustomAction(std::string name, CallbackFunction callback);
+    bool registerCustomAction(std::string name, CallbackFunction callback) override;
+
+    bool queueAndSend(MessageDTO message) override;
 
     uint32_t getSwarmAgentId();
 
@@ -54,6 +57,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
 
     IThreadSafeQueue<MessageDTO>& m_inboundQueue;
     std::thread m_inboundThread;
+    IThreadSafeQueue<MessageDTO>& m_outboundQueue;
+    std::thread m_outboundThread;
     std::mutex m_mutex;
 
     std::deque<MessageHandlerResult> m_resultQueue;
@@ -61,6 +66,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     uint32_t m_swarmAgentID = 0;
 
     void inboundThread();
+    void outboundThread();
     bool isTCPClientConnected();
     void sendReturn(MessageHandlerResult result);
     bool greet();

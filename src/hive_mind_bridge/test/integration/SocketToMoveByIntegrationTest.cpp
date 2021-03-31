@@ -1,52 +1,13 @@
 #include "hive_mind_bridge/MessageUtils.h"
 #include "ros/ros.h"
-#include <arpa/inet.h>
 #include <chrono>
-#include <common/IProtobufStream.h>
 #include <cstdint>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
-#include <netinet/in.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <thread>
-
-class TCPClient : public IProtobufStream {
-  public:
-    TCPClient() { m_clientFd = ::socket(AF_INET, SOCK_STREAM, 0); }
-
-    int connect() {
-        struct sockaddr_in serv_addr;
-
-        serv_addr.sin_family = AF_INET;
-        serv_addr.sin_port = htons(8080);
-
-        // Convert IPv4 and IPv6 addresses from text to binary form
-        if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
-            printf("\nInvalid address/ Address not supported \n");
-            return -1;
-        }
-
-        ::connect(m_clientFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
-    }
-
-    bool receive(uint8_t* data, uint16_t length) override {
-        int nbBytesReceived = ::recv(m_clientFd, data, length, MSG_WAITALL);
-
-        return nbBytesReceived == length;
-    }
-
-    bool send(const uint8_t* data, uint16_t length) override {
-        if (::send(m_clientFd, data, length, 0) > -1)
-            return true;
-        else
-            return false;
-    }
-
-  private:
-    int m_clientFd;
-};
+#include "utils/TCPClient.h"
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge_tester");

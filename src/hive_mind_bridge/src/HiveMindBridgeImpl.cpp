@@ -4,16 +4,22 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,
                                        IHiveMindHostDeserializer& deserializer,
                                        IMessageHandler& messageHandler,
-                                       IThreadSafeQueue<MessageDTO>& queue) :
+                                       IThreadSafeQueue<MessageDTO>& inboundQueue,
+                                       IThreadSafeQueue<MessageDTO>& outboundQueue) :
     m_tcpServer(tcpServer),
     m_serializer(serializer),
     m_deserializer(deserializer),
     m_messageHandler(messageHandler),
-    m_inboundQueue(queue) {}
+    m_inboundQueue(inboundQueue),
+    m_outboundQueue(outboundQueue) {}
 
 HiveMindBridgeImpl::~HiveMindBridgeImpl() {
     if (m_inboundThread.joinable()) {
         m_inboundThread.join();
+    }
+
+    if (m_outboundThread.joinable()) {
+        m_outboundThread.join();
     }
 }
 
@@ -45,10 +51,15 @@ void HiveMindBridgeImpl::spin() {
             m_inboundThread.join();
         }
 
+        if (m_outboundThread.joinable()) {
+            m_outboundThread.join();
+        }
+
         m_tcpServer.listen();
 
         if (greet()) {
             m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
+            m_outboundThread = std::thread(&HiveMindBridgeImpl::outboundThread, this);
         } else {
             m_tcpServer.close();
         }
@@ -71,6 +82,15 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction
     return m_messageHandler.registerCallback(name, callback);
 }
 
+bool HiveMindBridgeImpl::queueAndSend(MessageDTO message) {
+    if (isTCPClientConnected()) {
+        m_outboundQueue.push(message);
+        return true;
+    }
+
+    return false;
+}
+
 uint32_t HiveMindBridgeImpl::getSwarmAgentId() { return m_swarmAgentID; }
 
 void HiveMindBridgeImpl::inboundThread() {
@@ -78,6 +98,15 @@ void HiveMindBridgeImpl::inboundThread() {
         MessageDTO message;
         if (m_deserializer.deserializeFromStream(message)) {
             m_inboundQueue.push(message);
+        }
+    }
+}
+
+void HiveMindBridgeImpl::outboundThread() {
+    while (isTCPClientConnected()) {
+        if (!m_outboundQueue.empty()) {
+            m_serializer.serializeToStream(m_outboundQueue.front());
+            m_outboundQueue.pop();
         }
     }
 }

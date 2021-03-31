@@ -29,6 +29,8 @@ class HiveMindBridge : public IHiveMindBridge {
 
     bool registerCustomAction(std::string name, CallbackFunction callback);
 
+    bool queueAndSend(MessageDTO message);
+
   private:
     std::unique_ptr<HiveMindBridgeImpl> m_bridge;
     TCPServer m_tcpServer;
@@ -36,6 +38,7 @@ class HiveMindBridge : public IHiveMindBridge {
     HiveMindHostSerializer m_serializer;
     MessageHandler m_messageHandler;
     ThreadSafeQueue<MessageDTO> m_inboundQueue;
+    ThreadSafeQueue<MessageDTO> m_outboundQueue;
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H

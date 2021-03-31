@@ -1,0 +1,8 @@
+#ifndef HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
+#define HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
+
+class InboundResponseHandle {
+    InboundResponseHandle();
+};
+
+#endif //HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H

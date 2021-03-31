@@ -4,12 +4,13 @@
 #include "hive_mind_bridge/IMessageHandler.h"
 #include <gmock/gmock.h>
 #include <hivemind-host/MessageDTO.h>
+#include <variant>
 
 class MessageHandlerInterfaceMock : public IMessageHandler {
   public:
     ~MessageHandlerInterfaceMock() = default;
 
-    MOCK_METHOD(InboundRequestHandle, handleMessage, (MessageDTO message), (override));
+    MOCK_METHOD((std::variant<InboundRequestHandle, InboundResponseHandle>), handleMessage, (MessageDTO message), (override));
 
     MOCK_METHOD(bool, registerCallback, (std::string name, CallbackFunction callback), (override));
 

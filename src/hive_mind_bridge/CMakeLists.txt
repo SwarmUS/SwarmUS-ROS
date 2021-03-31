@@ -36,7 +36,8 @@ set(HIVEMIND_BRIDGE_SOURCES
         src/HiveMindBridgeImpl.cpp
         src/UserCallbackFunctionWrapper.cpp
         src/UserCallbackArgumentDescription.cpp
-        src/InboundRequestHandle.cpp test/integration/utils/TCPClient.h)
+        src/InboundRequestHandle.cpp
+        src/InboundResponseHandle.cpp)
 
 add_library(${LIB_NAME} STATIC ${HIVEMIND_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})

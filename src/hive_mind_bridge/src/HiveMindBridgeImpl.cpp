@@ -27,13 +27,17 @@ void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
         if (!m_inboundQueue.empty()) {
             // Execute the action
-            InboundRequestHandle result = m_messageHandler.handleMessage(m_inboundQueue.front());
+            auto vHandle = m_messageHandler.handleMessage(m_inboundQueue.front());
             m_inboundQueue.pop();
 
-            m_resultQueue.push_back(result);
+            if (std::holds_alternative<InboundRequestHandle>(vHandle)) {
+                InboundRequestHandle handle = std::get<InboundRequestHandle>(vHandle);
+                m_resultQueue.push_back(handle);
 
-            // Send the ack/nack message
-            m_serializer.serializeToStream(result.getResponse());
+                // Send the ack/nack message
+                m_serializer.serializeToStream(handle.getResponse());
+            }
+
         }
 
         for (auto result = m_resultQueue.begin(); result != m_resultQueue.end();) {

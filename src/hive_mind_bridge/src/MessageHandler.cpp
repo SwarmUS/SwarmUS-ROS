@@ -48,7 +48,7 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
         requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
 }
 
-InboundRequestHandle MessageHandler::handleMessage(MessageDTO message) {
+std::variant<InboundRequestHandle, InboundResponseHandle> MessageHandler::handleMessage(MessageDTO message) {
     uint32_t msgSourceId = message.getSourceId();
     uint32_t msgDestinationId = message.getDestinationId();
 

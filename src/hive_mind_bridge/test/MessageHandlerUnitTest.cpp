@@ -296,3 +296,51 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::BadRequest);
     ASSERT_STREQ(genericResponse.getDetails(), "Index out of bounds.");
 }
+
+TEST_F(MessageHandlerFixture, handleInboundUserCallResponse) {
+    // Given
+    GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "All good");
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, genericResponse);
+    ResponseDTO response(1, userCallResponse);
+    MessageDTO incomingMessage(0, 0, response);
+
+    // When
+    InboundResponseHandle responseHandle = std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+
+    // Then
+    ASSERT_EQ(responseHandle.getResponseId(), 1);
+    ASSERT_EQ(responseHandle.getResponseStatus(), GenericResponseStatusDTO::Ok);
+    ASSERT_STREQ(responseHandle.getStatusDetails().c_str(), "All good");
+}
+
+TEST_F(MessageHandlerFixture, handleInboundGenericResponse) {
+    // Given
+    GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "All good");
+    ResponseDTO response(1, genericResponse);
+    MessageDTO incomingMessage(0, 0, response);
+
+    // When
+    InboundResponseHandle responseHandle = std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+
+    // Then
+    ASSERT_EQ(responseHandle.getResponseId(), 1);
+    ASSERT_EQ(responseHandle.getResponseStatus(), GenericResponseStatusDTO::Ok);
+    ASSERT_STREQ(responseHandle.getStatusDetails().c_str(), "All good");
+}
+
+TEST_F(MessageHandlerFixture, handleInboundFunctionResponse) {
+    // Given
+    GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "All good");
+    FunctionCallResponseDTO functionCallResponse(genericResponse);
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, functionCallResponse);
+    ResponseDTO response(1, userCallResponse);
+    MessageDTO incomingMessage(0, 0, response);
+
+    // When
+    InboundResponseHandle responseHandle = std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+
+    // Then
+    ASSERT_EQ(responseHandle.getResponseId(), 1);
+    ASSERT_EQ(responseHandle.getResponseStatus(), GenericResponseStatusDTO::Ok);
+    ASSERT_STREQ(responseHandle.getStatusDetails().c_str(), "All good");
+}

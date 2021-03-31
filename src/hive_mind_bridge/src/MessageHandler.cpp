@@ -17,17 +17,17 @@ MessageDTO MessageHandler::handleFunctionListLengthRequest(uint32_t requestId,
 }
 
 MessageDTO MessageHandler::handleFunctionDescriptionRequest(
-    uint32_t requestId,
-    uint32_t msgDestinationId,
-    uint32_t msgSourceId,
-    UserCallTargetDTO sourceModule,
-    FunctionDescriptionRequestDTO functionDescriptionRequest) {
+        uint32_t requestId,
+        uint32_t msgDestinationId,
+        uint32_t msgSourceId,
+        UserCallTargetDTO sourceModule,
+        FunctionDescriptionRequestDTO functionDescriptionRequest) {
 
     uint32_t index = functionDescriptionRequest.getIndex();
     if (index > m_callbackNames.size()) {
         return MessageUtils::createResponseMessage(
-            requestId, msgDestinationId, msgSourceId, sourceModule,
-            GenericResponseStatusDTO::BadRequest, "Index out of bounds.");
+                requestId, msgDestinationId, msgSourceId, sourceModule,
+                GenericResponseStatusDTO::BadRequest, "Index out of bounds.");
     }
 
     // m_callbacks and m_callbackNames grow together: the latter is a lookup table for the former.
@@ -45,7 +45,7 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
     FunctionDescriptionDTO functionDescription(name.c_str(), args.data(), args.size());
 
     return MessageUtils::createFunctionDescriptionResponseMessage(
-        requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
+            requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
 }
 
 std::variant<InboundRequestHandle, InboundResponseHandle> MessageHandler::handleMessage(MessageDTO message) {
@@ -65,14 +65,14 @@ std::variant<InboundRequestHandle, InboundResponseHandle> MessageHandler::handle
         // UserCallRequest
         if (std::holds_alternative<UserCallRequestDTO>(userCallRequest)) {
             const auto functionCallRequest =
-                std::get<UserCallRequestDTO>(userCallRequest).getRequest();
+                    std::get<UserCallRequestDTO>(userCallRequest).getRequest();
             UserCallTargetDTO sourceModule =
-                std::get<UserCallRequestDTO>(userCallRequest).getSource();
+                    std::get<UserCallRequestDTO>(userCallRequest).getSource();
 
             // FunctionCallRequest
             if (std::holds_alternative<FunctionCallRequestDTO>(functionCallRequest)) {
                 FunctionCallRequestDTO function =
-                    std::get<FunctionCallRequestDTO>(functionCallRequest);
+                        std::get<FunctionCallRequestDTO>(functionCallRequest);
                 std::string functionName = function.getFunctionName();
                 CallbackArgs functionArgs = function.getArguments();
 
@@ -84,8 +84,8 @@ std::variant<InboundRequestHandle, InboundResponseHandle> MessageHandler::handle
                 GenericResponseStatusDTO responseStatus = GenericResponseStatusDTO::BadRequest;
                 if (callback) {
                     std::shared_future<std::optional<CallbackReturn>> ret =
-                        std::async(std::launch::async, callback.value(), functionArgs, argsLength)
-                            .share();
+                            std::async(std::launch::async, callback.value(), functionArgs, argsLength)
+                                    .share();
                     result.setCallbackReturnContext(ret);
                     result.setCallbackName(functionName);
                     result.setMessageSourceId(msgSourceId);
@@ -100,7 +100,7 @@ std::variant<InboundRequestHandle, InboundResponseHandle> MessageHandler::handle
                 }
 
                 result.setResponse(MessageUtils::createResponseMessage(
-                    requestId, msgDestinationId, msgSourceId, sourceModule, responseStatus, ""));
+                        requestId, msgDestinationId, msgSourceId, sourceModule, responseStatus, ""));
 
                 // FunctionListLengthRequest
             } else if (std::holds_alternative<FunctionListLengthRequestDTO>(functionCallRequest)) {
@@ -109,11 +109,43 @@ std::variant<InboundRequestHandle, InboundResponseHandle> MessageHandler::handle
                 // FunctionDescriptionRequest
             } else if (std::holds_alternative<FunctionDescriptionRequestDTO>(functionCallRequest)) {
                 result.setResponse(handleFunctionDescriptionRequest(
-                    requestId, msgDestinationId, msgSourceId, sourceModule,
-                    std::get<FunctionDescriptionRequestDTO>(functionCallRequest)));
+                        requestId, msgDestinationId, msgSourceId, sourceModule,
+                        std::get<FunctionDescriptionRequestDTO>(functionCallRequest)));
             }
         }
     }
+    else if (std::holds_alternative<ResponseDTO>(request)) {
+        ResponseDTO response = std::get<ResponseDTO>(request);
+        auto vResponse = response.getResponse();
+
+        if (std::holds_alternative<GenericResponseDTO>(vResponse)) {
+            GenericResponseDTO genericResponse = std::get<GenericResponseDTO>(vResponse);
+
+            return InboundResponseHandle(response.getId(), genericResponse.getStatus(), genericResponse.getDetails());
+        } else if (std::holds_alternative<UserCallResponseDTO>(vResponse)) {
+            UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(vResponse);
+
+            auto vUserCallResponse = userCallResponse.getResponse();
+            if (std::holds_alternative<GenericResponseDTO>(vUserCallResponse)) {
+                GenericResponseDTO genericResponse = std::get<GenericResponseDTO>(vUserCallResponse);
+
+                return InboundResponseHandle(response.getId(), genericResponse.getStatus(),
+                                             genericResponse.getDetails());
+            } else if (std::holds_alternative<FunctionCallResponseDTO>(vUserCallResponse)) {
+                FunctionCallResponseDTO functionCallResponse = std::get<FunctionCallResponseDTO>(vUserCallResponse);
+
+                return InboundResponseHandle(response.getId(), functionCallResponse.getResponse().getStatus(), functionCallResponse.getResponse().getDetails());
+            } else {
+                ROS_WARN("Cannot handle user call response : unknown user call response type");
+            }
+        } else {
+            ROS_WARN("Cannot handle response : unknown response type");
+        }
+    } else {
+        ROS_WARN("Cannot handle message : unknown message type");
+    }
+
+
     return result;
 }
 

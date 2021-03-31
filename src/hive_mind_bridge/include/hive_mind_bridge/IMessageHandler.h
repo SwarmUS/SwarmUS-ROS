@@ -25,7 +25,7 @@ class IMessageHandler {
      * @return A message containing the appropriate acknowlege (with appropriate errors if
      * necessary)
      */
-    virtual std::variant<InboundRequestHandle, InboundResponseHandle> handleMessage(MessageDTO message) = 0;
+    virtual std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> handleMessage(MessageDTO message) = 0;
 
     /**
      * Parse a greet message and return the contained swarmAgentId.

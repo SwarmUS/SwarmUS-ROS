@@ -2,8 +2,15 @@
 <launch>
     <arg name="robot_name" default="pioneer_0"/>
 
-    <!-- Navigation stack -->
-    <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
-        <arg name="robot_name" value="$(arg robot_name)"/>
-    </include>
+    <group ns="$(arg robot_name)">
+        <!-- Launch move_base and the navigation stack -->
+        <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+        </include>
+
+        <!-- Start the moveBy interface -->
+        <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
+            <param name="robot_name" type="string" value="$(arg robot_name)" />
+        </node>
+    </group>
 </launch>

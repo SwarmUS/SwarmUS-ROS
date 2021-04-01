@@ -17,8 +17,8 @@
 
         <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
             <param name="~roboclaws" value="1"/>
-            <param name="~steps_per_meter" value="76008.542519038410"/>
-            <param name="~base_width" value="0.32"/>
+            <param name="~steps_per_meter" value="77401.855111955000"/>
+            <param name="~base_width" value="0.322444444444444"/>
             <param name="~swap_motors" value="true"/>
             <param name="~invert_motor_1" value="false"/>
             <param name="~invert_motor_2" value="false"/>

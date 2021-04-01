@@ -2,6 +2,7 @@
 #define HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
 
 #include <hivemind-host/GenericResponseDTO.h>
+#include <string>
 
 class InboundResponseHandle {
   public:

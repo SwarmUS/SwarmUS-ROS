@@ -1,6 +1,8 @@
 #include <string>
 #include "hive_mind_bridge/InboundResponseHandle.h"
 
+InboundResponseHandle::InboundResponseHandle() {}
+
 InboundResponseHandle::InboundResponseHandle(uint32_t responseId, GenericResponseStatusDTO status, std::string details) :
     m_responseId(responseId),
     m_responseStatus(status),

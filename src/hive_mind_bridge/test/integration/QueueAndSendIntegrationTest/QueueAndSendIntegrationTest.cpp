@@ -28,7 +28,9 @@ int main(int argc, char** argv) {
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
     // Listen for a function call request
-    while (true) {
+    //while (true) {
+
+        // Listen for request
         MessageDTO message;
         deserializer.deserializeFromStream(message);
         RequestDTO request = std::get<RequestDTO>(message.getMessage());
@@ -38,6 +40,16 @@ int main(int argc, char** argv) {
 
         ROS_INFO("REQUEST FROM HOST (%s): \n", functionName.c_str());
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    }
+        // Send ack
+        GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "");
+        ResponseDTO response(request.getId(), genericResponse);
+        MessageDTO ackMessage(message.getDestinationId(), message.getSourceId(), response);
+        serializer.serializeToStream(ackMessage);
+
+        ROS_INFO("SENT ACK");
+
+        while (true) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
+    //}
 }

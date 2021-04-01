@@ -5,6 +5,8 @@
 
 class InboundResponseHandle {
 public:
+    InboundResponseHandle();
+
     InboundResponseHandle(uint32_t responseId, GenericResponseStatusDTO status, std::string details);
 
     uint32_t getResponseId() const;

@@ -5,7 +5,7 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostDeserializer& deserializer,
                                        IMessageHandler& messageHandler,
                                        IThreadSafeQueue<MessageDTO>& inboundQueue,
-                                       IThreadSafeQueue<MessageDTO>& outboundQueue) :
+                                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue) :
     m_tcpServer(tcpServer),
     m_serializer(serializer),
     m_deserializer(deserializer),
@@ -26,26 +26,27 @@ HiveMindBridgeImpl::~HiveMindBridgeImpl() {
 void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
         if (!m_inboundQueue.empty()) {
-            // Execute the action
             auto vHandle = m_messageHandler.handleMessage(m_inboundQueue.front());
             m_inboundQueue.pop();
 
             if (std::holds_alternative<InboundRequestHandle>(vHandle)) {
                 InboundRequestHandle handle = std::get<InboundRequestHandle>(vHandle);
-                m_resultQueue.push_back(handle);
+                m_inboundRequestsQueue.push_back(handle);
 
                 // Send the ack/nack message
                 m_serializer.serializeToStream(handle.getResponse());
+            } else if (std::holds_alternative<InboundResponseHandle>(vHandle)) {
+                InboundResponseHandle handle = std::get<InboundResponseHandle>(vHandle);
+                m_inboundResponsesMap[handle.getResponseId()] = handle;
             }
-
         }
 
-        for (auto result = m_resultQueue.begin(); result != m_resultQueue.end();) {
+        for (auto result = m_inboundRequestsQueue.begin(); result != m_inboundRequestsQueue.end();) {
             if (result->getCallbackReturnContext().wait_for(std::chrono::seconds(0)) ==
                 std::future_status::ready) {
                 sendReturn(*result);
 
-                m_resultQueue.erase(result);
+                m_inboundRequestsQueue.erase(result);
             } else {
                 result++;
             }
@@ -88,7 +89,8 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction
 
 bool HiveMindBridgeImpl::queueAndSend(MessageDTO message) {
     if (isTCPClientConnected()) {
-        m_outboundQueue.push(message);
+        OutboundRequestHandle handle(message);
+        m_outboundQueue.push(handle);
         return true;
     }
 
@@ -104,20 +106,46 @@ void HiveMindBridgeImpl::inboundThread() {
             m_inboundQueue.push(message);
         }
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(250));
 }
 
 void HiveMindBridgeImpl::outboundThread() {
     while (isTCPClientConnected()) {
         if (!m_outboundQueue.empty()) {
-            m_serializer.serializeToStream(m_outboundQueue.front());
-            m_outboundQueue.pop();
+            OutboundRequestHandle handle = m_outboundQueue.front();
 
-            // verify if front() has a corresponding response in handler
+            MessageDTO outboundMessage = handle.getMessage();
+            auto request = std::get_if<RequestDTO>(&outboundMessage.getMessage());
 
-            // if true : pop
+            if (request) {
+                // verify if the front value has a corresponding response handle
+                auto search = m_inboundResponsesMap.find(request->getId());
+                if (search != m_inboundResponsesMap.end()) {
+                    // Received a response for this request so we delete the request
+                    // TODO add some retry logic in case the response was not ok
+                    m_outboundQueue.pop();
+                    m_inboundResponsesMap.erase(search);
 
-            // else do nothing (for now) : pushback the front element.
+                    ROS_INFO("RECEIVED VALID RESPONSE");
+                } else {
+                    // Did not receive a response for this request. Was the request sent?
+                    if (handle.getState() == OutboundRequestState::READY) {
+                        m_serializer.serializeToStream(outboundMessage);
+                        handle.setState(OutboundRequestState::SENT);
+                    } else {
+                        // TODO add some retry logic after a timeout
+                    }
+
+                    m_outboundQueue.pop();
+                    m_outboundQueue.push(handle); // Cycle through the queue
+                }
+            } else {
+                ROS_WARN("Outbound queue contains an unsupported message");
+            }
         }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
 }
 

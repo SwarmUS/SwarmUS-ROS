@@ -7,6 +7,7 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/InboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
+#include "hive_mind_bridge/OutboundRequestHandle.h"
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
@@ -29,7 +30,7 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
                        IHiveMindHostDeserializer& deserializer,
                        IMessageHandler& messageHandler,
                        IThreadSafeQueue<MessageDTO>& inboundQueue,
-                       IThreadSafeQueue<MessageDTO>& outboundQueue);
+                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue);
 
     ~HiveMindBridgeImpl();
 
@@ -57,11 +58,12 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
 
     IThreadSafeQueue<MessageDTO>& m_inboundQueue;
     std::thread m_inboundThread;
-    IThreadSafeQueue<MessageDTO>& m_outboundQueue;
+    IThreadSafeQueue<OutboundRequestHandle>& m_outboundQueue;
     std::thread m_outboundThread;
     std::mutex m_mutex;
 
-    std::deque<InboundRequestHandle> m_resultQueue;
+    std::deque<InboundRequestHandle> m_inboundRequestsQueue;
+    std::unordered_map<uint32_t, InboundResponseHandle> m_inboundResponsesMap;
 
     uint32_t m_swarmAgentID = 0;
 

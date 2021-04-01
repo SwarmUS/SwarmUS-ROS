@@ -5,6 +5,7 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/TCPServer.h"
 #include "hive_mind_bridge/ThreadSafeQueue.h"
+#include "hive_mind_bridge/OutboundRequestHandle.h"
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
@@ -38,7 +39,7 @@ class HiveMindBridge : public IHiveMindBridge {
     HiveMindHostSerializer m_serializer;
     MessageHandler m_messageHandler;
     ThreadSafeQueue<MessageDTO> m_inboundQueue;
-    ThreadSafeQueue<MessageDTO> m_outboundQueue;
+    ThreadSafeQueue<OutboundRequestHandle> m_outboundQueue;
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H

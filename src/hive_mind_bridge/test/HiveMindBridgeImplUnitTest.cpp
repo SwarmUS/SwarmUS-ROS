@@ -26,7 +26,7 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
     HiveMindHostSerializerInterfaceMock m_serializer;
     HiveMindBridgeImpl* m_hivemindBridge;
     ThreadSafeQueueInterfaceMock<MessageDTO> m_inboundQueue;
-    ThreadSafeQueueInterfaceMock<MessageDTO> m_outboundQueue;
+    ThreadSafeQueueInterfaceMock<OutboundRequestHandle> m_outboundQueue;
     MessageHandlerInterfaceMock m_messageHandler;
 
     InboundRequestHandle validResultWithReturn;
@@ -149,4 +149,8 @@ TEST_F(HiveMindBridgeImplUnitFixture, queueAndSendFail) {
 
     // Then
     ASSERT_FALSE(actual);
+}
+
+TEST_F(HiveMindBridgeImplUnitFixture, receiveInboundResponse) {
+
 }

@@ -124,9 +124,10 @@ int main(int argc, char** argv) {
         MessageDTO message;
         deserializer.deserializeFromStream(message);
         ResponseDTO response = std::get<ResponseDTO>(message.getMessage());
-        UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
+        UserCallResponseDTO userCallResponse =
+            std::get<UserCallResponseDTO>(response.getResponse());
         FunctionCallResponseDTO functionCallResponse =
-                std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
+            std::get<FunctionCallResponseDTO>(userCallResponse.getResponse());
         GenericResponseDTO genericResponse = functionCallResponse.getResponse();
         GenericResponseStatusDTO status = genericResponse.getStatus();
         std::string details = genericResponse.getDetails();

@@ -10,7 +10,8 @@ class MessageHandler : public IMessageHandler {
     MessageHandler();
     ~MessageHandler();
 
-    std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> handleMessage(MessageDTO message) override;
+    std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> handleMessage(
+        MessageDTO message) override;
 
     std::optional<uint32_t> handleGreet(MessageDTO greetMessage) override;
 

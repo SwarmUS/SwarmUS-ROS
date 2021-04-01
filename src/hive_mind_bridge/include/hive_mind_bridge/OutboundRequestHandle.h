@@ -3,24 +3,23 @@
 
 #include <hivemind-host/MessageDTO.h>
 
-enum class OutboundRequestState {READY, SENT};
+enum class OutboundRequestState { READY, SENT };
 
 class OutboundRequestHandle {
-public:
+  public:
     OutboundRequestHandle(MessageDTO message);
 
     OutboundRequestState getState() const;
 
     void setState(OutboundRequestState mState);
 
-    const MessageDTO &getMessage() const;
+    const MessageDTO& getMessage() const;
 
-    void setMessage(const MessageDTO &mMessage);
+    void setMessage(const MessageDTO& mMessage);
 
-private:
+  private:
     OutboundRequestState m_state = OutboundRequestState::READY;
     MessageDTO m_message;
 };
 
-
-#endif //HIVE_MIND_BRIDGE_OUTBOUNDREQUESTHANDLE_H
+#endif // HIVE_MIND_BRIDGE_OUTBOUNDREQUESTHANDLE_H

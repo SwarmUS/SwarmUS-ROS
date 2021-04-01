@@ -34,8 +34,9 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
         1, 1, 1, UserCallTargetDTO::UNKNOWN, GenericResponseStatusDTO::Ok, "");
 
     void SetUp() {
-        m_hivemindBridge = new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer,
-                                                  m_messageHandler, m_inboundQueue, m_outboundQueue);
+        m_hivemindBridge =
+            new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer, m_messageHandler,
+                                   m_inboundQueue, m_outboundQueue);
     }
 
     void TearDown() { delete m_hivemindBridge; }
@@ -129,7 +130,8 @@ TEST_F(HiveMindBridgeImplUnitFixture, spinGreetFail) {
 
 TEST_F(HiveMindBridgeImplUnitFixture, queueAndSendSuccess) {
     // Given
-    MessageDTO msg = MessageUtils::createFunctionCallRequest(1 , 1, 1, UserCallTargetDTO::BUZZ, "someRemoteCallback");
+    MessageDTO msg = MessageUtils::createFunctionCallRequest(1, 1, 1, UserCallTargetDTO::BUZZ,
+                                                             "someRemoteCallback");
 
     // When
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(true));
@@ -141,7 +143,8 @@ TEST_F(HiveMindBridgeImplUnitFixture, queueAndSendSuccess) {
 
 TEST_F(HiveMindBridgeImplUnitFixture, queueAndSendFail) {
     // Given
-    MessageDTO msg = MessageUtils::createFunctionCallRequest(1 , 1, 1, UserCallTargetDTO::BUZZ, "someRemoteCallback");
+    MessageDTO msg = MessageUtils::createFunctionCallRequest(1, 1, 1, UserCallTargetDTO::BUZZ,
+                                                             "someRemoteCallback");
 
     // When
     EXPECT_CALL(m_tcpServer, isClientConnected()).WillOnce(testing::Return(false));
@@ -151,6 +154,4 @@ TEST_F(HiveMindBridgeImplUnitFixture, queueAndSendFail) {
     ASSERT_FALSE(actual);
 }
 
-TEST_F(HiveMindBridgeImplUnitFixture, receiveInboundResponse) {
-
-}
+TEST_F(HiveMindBridgeImplUnitFixture, receiveInboundResponse) {}

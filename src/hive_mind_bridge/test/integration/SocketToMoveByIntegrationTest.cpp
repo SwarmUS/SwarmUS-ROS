@@ -1,5 +1,6 @@
 #include "hive_mind_bridge/MessageUtils.h"
 #include "ros/ros.h"
+#include "utils/TCPClient.h"
 #include <chrono>
 #include <cstdint>
 #include <hivemind-host/HiveMindHostDeserializer.h>
@@ -7,7 +8,6 @@
 #include <memory>
 #include <string.h>
 #include <thread>
-#include "utils/TCPClient.h"
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge_tester");

@@ -1,13 +1,13 @@
 #ifndef HIVE_MIND_BRIDGE_TCPCLIENT_H
 #define HIVE_MIND_BRIDGE_TCPCLIENT_H
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <common/IProtobufStream.h>
 #include <arpa/inet.h>
+#include <common/IProtobufStream.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 
 class TCPClient : public IProtobufStream {
-public:
+  public:
     TCPClient() { m_clientFd = ::socket(AF_INET, SOCK_STREAM, 0); }
 
     int connect() {
@@ -38,8 +38,8 @@ public:
             return false;
     }
 
-private:
+  private:
     int m_clientFd;
 };
 
-#endif //HIVE_MIND_BRIDGE_TCPCLIENT_H
+#endif // HIVE_MIND_BRIDGE_TCPCLIENT_H

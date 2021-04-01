@@ -1,3 +1,4 @@
+#include "../utils/TCPClient.h"
 #include "ros/ros.h"
 #include <chrono>
 #include <hivemind-host/HiveMindHostDeserializer.h>
@@ -5,7 +6,6 @@
 #include <memory>
 #include <string.h>
 #include <thread>
-#include "../utils/TCPClient.h"
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge_tester");
@@ -32,7 +32,8 @@ int main(int argc, char** argv) {
     deserializer.deserializeFromStream(message);
     RequestDTO request = std::get<RequestDTO>(message.getMessage());
     UserCallRequestDTO userCallRequest = std::get<UserCallRequestDTO>(request.getRequest());
-    FunctionCallRequestDTO functionCallRequest = std::get<FunctionCallRequestDTO>(userCallRequest.getRequest());
+    FunctionCallRequestDTO functionCallRequest =
+        std::get<FunctionCallRequestDTO>(userCallRequest.getRequest());
     std::string functionName = functionCallRequest.getFunctionName();
 
     ROS_INFO("REQUEST FROM HOST (%s): \n", functionName.c_str());

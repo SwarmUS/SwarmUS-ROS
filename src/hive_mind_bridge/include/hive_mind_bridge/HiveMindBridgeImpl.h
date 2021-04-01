@@ -4,10 +4,10 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/IThreadSafeQueue.h"
-#include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/InboundRequestHandle.h"
-#include "hive_mind_bridge/TCPServer.h"
+#include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/OutboundRequestHandle.h"
+#include "hive_mind_bridge/TCPServer.h"
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>

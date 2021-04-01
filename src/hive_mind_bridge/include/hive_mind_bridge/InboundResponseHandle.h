@@ -1,13 +1,15 @@
 #ifndef HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
 #define HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
 
-#include  <hivemind-host/GenericResponseDTO.h>
+#include <hivemind-host/GenericResponseDTO.h>
 
 class InboundResponseHandle {
-public:
+  public:
     InboundResponseHandle();
 
-    InboundResponseHandle(uint32_t responseId, GenericResponseStatusDTO status, std::string details);
+    InboundResponseHandle(uint32_t responseId,
+                          GenericResponseStatusDTO status,
+                          std::string details);
 
     uint32_t getResponseId() const;
 
@@ -19,12 +21,12 @@ public:
 
     std::string getStatusDetails() const;
 
-    void setStatusDetails(const std::string &mStatusDetails);
+    void setStatusDetails(const std::string& mStatusDetails);
 
-private:
+  private:
     uint32_t m_responseId;
     GenericResponseStatusDTO m_responseStatus;
     std::string m_statusDetails;
 };
 
-#endif //HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
+#endif // HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H

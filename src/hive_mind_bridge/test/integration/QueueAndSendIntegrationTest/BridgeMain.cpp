@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
     while (ros::ok()) {
         ros::spinOnce();
 
-        bridge.queueAndSend(MessageUtils::createFunctionCallRequest(42, 42, 1, UserCallTargetDTO::UNKNOWN, "someRemoteCallback"));
+        bridge.queueAndSend(MessageUtils::createFunctionCallRequest(
+            42, 42, 1, UserCallTargetDTO::UNKNOWN, "someRemoteCallback"));
 
         bridge.spin();
 

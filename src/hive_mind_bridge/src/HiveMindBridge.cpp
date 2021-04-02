@@ -1,10 +1,14 @@
 #include "hive_mind_bridge/HiveMindBridge.h"
 
-HiveMindBridge::HiveMindBridge(int tcpPort) :
-    m_tcpServer(tcpPort), m_deserializer(m_tcpServer), m_serializer(m_tcpServer) {
+HiveMindBridge::HiveMindBridge(int tcpPort, ILogger& logger) :
+    m_tcpServer(tcpPort, logger),
+    m_deserializer(m_tcpServer),
+    m_serializer(m_tcpServer),
+    m_messageHandler(logger),
+    m_logger(logger) {
     m_bridge =
         std::make_unique<HiveMindBridgeImpl>(m_tcpServer, m_serializer, m_deserializer,
-                                             m_messageHandler, m_inboundQueue, m_outboundQueue);
+                                             m_messageHandler, m_inboundQueue, m_outboundQueue, m_logger);
 }
 
 void HiveMindBridge::spin() { m_bridge->spin(); }

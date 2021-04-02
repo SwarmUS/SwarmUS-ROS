@@ -4,10 +4,11 @@
 #include "Callback.h"
 #include "IMessageHandler.h"
 #include "hive_mind_bridge/MessageUtils.h"
+#include <cpp-common/ILogger.h>
 
 class MessageHandler : public IMessageHandler {
   public:
-    MessageHandler();
+    MessageHandler(ILogger& logger);
     ~MessageHandler();
 
     std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> handleMessage(
@@ -24,6 +25,7 @@ class MessageHandler : public IMessageHandler {
     std::optional<CallbackFunction> getCallback(const std::string& name) override;
 
   private:
+    ILogger& m_logger;
     CallbackMap m_callbacks;
     std::vector<std::string> m_callbackNames; // Association between callbacks' names and their id
 

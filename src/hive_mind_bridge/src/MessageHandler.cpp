@@ -1,7 +1,7 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include <future>
 
-MessageHandler::MessageHandler() {}
+MessageHandler::MessageHandler(ILogger& logger) : m_logger(logger) {}
 
 MessageHandler::~MessageHandler() {}
 

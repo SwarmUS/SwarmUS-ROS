@@ -5,13 +5,15 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostDeserializer& deserializer,
                                        IMessageHandler& messageHandler,
                                        IThreadSafeQueue<MessageDTO>& inboundQueue,
-                                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue) :
+                                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue,
+                                       ILogger& logger) :
     m_tcpServer(tcpServer),
     m_serializer(serializer),
     m_deserializer(deserializer),
     m_messageHandler(messageHandler),
     m_inboundQueue(inboundQueue),
-    m_outboundQueue(outboundQueue) {}
+    m_outboundQueue(outboundQueue),
+    m_logger(logger) {}
 
 HiveMindBridgeImpl::~HiveMindBridgeImpl() {
     if (m_inboundThread.joinable()) {

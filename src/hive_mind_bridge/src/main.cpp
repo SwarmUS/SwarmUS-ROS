@@ -10,7 +10,7 @@
 
 constexpr uint8_t RATE_HZ{10};
 
-class Logger : ILogger {
+class Logger : public ILogger {
 public:
     Logger() {}
 
@@ -72,9 +72,6 @@ private:
 };
 
 int main(int argc, char** argv) {
-    Logger logger;
-
-
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle;
 
@@ -85,7 +82,8 @@ int main(int argc, char** argv) {
     ros::Subscriber sub;
 
     int port = ros::param::param("~TCP_SERVER_PORT", 8080);
-    HiveMindBridge bridge(port);
+    Logger logger;
+    HiveMindBridge bridge(port, logger);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args,

@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cpp-common/ILogger.h>
 
 class TCPServer : public ITCPServer {
   public:
@@ -18,7 +19,7 @@ class TCPServer : public ITCPServer {
      * Construct a TCPServer
      * @param port Port to open the server to
      */
-    TCPServer(int port);
+    TCPServer(int port, ILogger& logger);
     ~TCPServer();
 
     /**
@@ -66,6 +67,7 @@ class TCPServer : public ITCPServer {
     void onDisconnect(std::function<void()> hook) override;
 
   private:
+    ILogger& m_logger;
     int m_serverFd, m_clientFd, m_port;
     int m_addressLength;
     struct sockaddr_in m_address;

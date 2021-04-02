@@ -1,6 +1,6 @@
 #include "hive_mind_bridge/TCPServer.h"
 
-TCPServer::TCPServer(int port) {
+TCPServer::TCPServer(int port, ILogger& logger) : m_logger(logger) {
     m_port = port;
 
     init();

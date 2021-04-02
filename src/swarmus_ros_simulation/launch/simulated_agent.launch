@@ -9,7 +9,7 @@
     <!-- The following arguments are used to the different parameters of each nodes. -->
 
     <!-- Generic parameters -->
-    <arg name="agent_id" type="int"  default="1"/>
+    <arg name="agent_id"   default="1"/>
 
     <!-- Navigation stack parameters -->
     <arg name="cmd_vel_topic" default="cmd_vel"/>
@@ -30,30 +30,33 @@
 
     <!-- Starting the nodes after arguments definition -->
     <!-- Bridge -->
-    <node pkg="hiveboard_bridge" type="hiveboard_bridge" name="hiveboard_bridge_$(arg agent_id)" output="screen">
+    <node pkg="hive_mind_bridge" type="hive_mind_bridge" name="hive_mind_bridge_$(arg agent_id)" output="screen">
         <param name="TCP_SERVER_PORT" type="int" value="$(arg connector_server_port)"/>
         <param name="ROBOT_NAME" type="str" value="$(arg connector_robot_name_prefix)"/>
     </node>
 
     <!-- HiveMind -->
-    <!--<node pkg="hive_mind" type="hive_mind"  name="hive_mind_$(arg agent_id)" output="screen" >
+    <node pkg="hive_mind" type="hive_mind"  name="hive_mind_$(arg agent_id)" output="screen" >
         <param name="board_uuid" value="$(arg hivemind_board_uuid)" />
 
         <param name="host_tcp_address" value="127.0.0.1" />
         <param name="host_tcp_port" type="int" value="$(arg hivemind_host_port)" />
 
-        &lt;!&ndash; Set port to 0 to disable server &ndash;&gt;
+        <!-- Set port to 0 to disable server -->
+        <param name="uart_mock_port" value="0" />
+
+        <!-- Set port to 0 to disable server -->
         <param name="remote_mock_port" type="int" value="$(arg hivemind_remote_port_mock)" />
 
         <param name="log_level" value="Debug" />
-    </node>-->
+    </node>
 
     <!-- HiveConnect -->
     <node pkg="hive_connect" type="hive_connect" name="hive_connect_$(arg agent_id)" output="screen" >
 
         <!-- BSP settings -->
         <param name="spi_mock_address" value="127.0.0.1" />
-        <param name="spi_mock_port" type="int" value="$(arg hiveconnect_spi_mock_port)" />
+        <param name="spi_mock_port" type="int" value="$(arg hive_connect_spi_mock_port)" />
 
         <!-- Network settings -->
         <param name="tcp_listen_port" type="int" value="$(arg hive_connect_listen_port)"/>

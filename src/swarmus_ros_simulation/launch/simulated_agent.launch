@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<!-- This launch files spawns the required nodes for a robot to be operational as a swarm agent. These include:
+    - The HiveMind connector node
+    - The HiveMind node itself
+    - The HiveConnect node
+    - The navigation stack mode
+-->
+<launch>
+    <!-- The following arguments are used to the different parameters of each nodes. -->
+
+    <!-- Generic parameters -->
+    <arg name="agent_id" type="int"  default="1"/>
+
+    <!-- Navigation stack parameters -->
+    <arg name="cmd_vel_topic" default="cmd_vel"/>
+    <arg name="odom_topic"    default="odom"/>
+
+    <!-- HiveMind Connector Node -->
+    <arg name="connector_server_port" default="$(eval 7000+arg('agent_id'))"/>
+    <arg name="connector_robot_name_prefix" default="pioneer_$(arg agent_id)"/>
+
+    <!-- HiveMind Node -->
+    <arg name="hivemind_board_uuid" default="$(arg agent_id)"/>
+    <arg name="hivemind_host_port" default="$(eval 7000 + arg('agent_id'))"/>
+    <arg name="hivemind_remote_port_mock" default="$(eval 8000 + arg('agent_id'))" />
+
+    <!-- HiveConnect Node -->
+    <arg name="hive_connect_spi_mock_port" default="$(eval 8000 + arg('agent_id'))"/>
+    <arg name="hive_connect_listen_port" default="$(eval 9000 + arg('agent_id'))"/>
+
+    <!-- Starting the nodes after arguments definition -->
+    <!-- Bridge -->
+    <node pkg="hiveboard_bridge" type="hiveboard_bridge" name="hiveboard_bridge_$(arg agent_id)" output="screen">
+        <param name="TCP_SERVER_PORT" type="int" value="$(arg connector_server_port)"/>
+        <param name="ROBOT_NAME" type="str" value="$(arg connector_robot_name_prefix)"/>
+    </node>
+
+    <!-- HiveMind -->
+    <!--<node pkg="hive_mind" type="hive_mind"  name="hive_mind_$(arg agent_id)" output="screen" >
+        <param name="board_uuid" value="$(arg hivemind_board_uuid)" />
+
+        <param name="host_tcp_address" value="127.0.0.1" />
+        <param name="host_tcp_port" type="int" value="$(arg hivemind_host_port)" />
+
+        &lt;!&ndash; Set port to 0 to disable server &ndash;&gt;
+        <param name="remote_mock_port" type="int" value="$(arg hivemind_remote_port_mock)" />
+
+        <param name="log_level" value="Debug" />
+    </node>-->
+
+    <!-- HiveConnect -->
+    <node pkg="hive_connect" type="hive_connect" name="hive_connect_$(arg agent_id)" output="screen" >
+
+        <!-- BSP settings -->
+        <param name="spi_mock_address" value="127.0.0.1" />
+        <param name="spi_mock_port" type="int" value="$(arg hiveconnect_spi_mock_port)" />
+
+        <!-- Network settings -->
+        <param name="tcp_listen_port" type="int" value="$(arg hive_connect_listen_port)"/>
+    </node>
+</launch>

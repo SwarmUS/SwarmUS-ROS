@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     Logger logger;
 
     // Create a TCP socket client
-    TCPClient tcpClient;
+    TCPClient tcpClient(8080);
     tcpClient.connect();
     HiveMindHostSerializer serializer(tcpClient);
     HiveMindHostDeserializer deserializer(tcpClient);

@@ -12,5 +12,10 @@
         <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
             <param name="robot_name" type="string" value="$(arg robot_name)" />
         </node>
+
+        <!-- Launch RTAB-Map-->
+        <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+        </include>
     </group>
 </launch>

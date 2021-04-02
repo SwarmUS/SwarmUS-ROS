@@ -1,39 +1,26 @@
-#include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/HiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
-#include "ros/ros.h"
-#include "swarmus_ros_navigation/MoveByMessage.h"
 #include "../../utils/Logger.h"
-#include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <cpp-common/ILogger.h>
-#include <optional>
-
-constexpr uint8_t RATE_HZ{1};
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "hive_mind_bridge");
-    ros::NodeHandle nodeHandle;
-
-    std::string robotName = ros::param::param("~ROBOT_NAME", std::string("pioneer_0"));
-    int port = ros::param::param("~TCP_SERVER_PORT", 8080);
+    int port = 8080;
     Logger logger;
     HiveMindBridge bridge(port, logger);
 
     // Register event hooks
-    bridge.onConnect([]() { ROS_INFO("Client connected."); });
+    bridge.onConnect([&]() { logger.log(LogLevel::Info, "Client connected."); });
 
-    bridge.onDisconnect([]() { ROS_INFO("Client disconnected."); });
+    bridge.onDisconnect([&]() { logger.log(LogLevel::Info, "Client disconnected."); });
 
-    ros::Rate loopRate(RATE_HZ);
-    while (ros::ok()) {
-        ros::spinOnce();
+    while (true) {
 
         bridge.queueAndSend(MessageUtils::createFunctionCallRequest(
             42, 42, 1, UserCallTargetDTO::UNKNOWN, "someRemoteCallback"));
 
         bridge.spin();
 
-        loopRate.sleep();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     return 0;

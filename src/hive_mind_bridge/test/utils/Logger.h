@@ -4,6 +4,7 @@
 #include <cpp-common/ILogger.h>
 #include <cstdarg>
 #include <cstdio>
+#include <string>
 
 class Logger : public ILogger {
 public:
@@ -46,16 +47,16 @@ public:
     void flush(LogLevel level) {
         switch (level) {
             case LogLevel::Debug :
-                printf("[DEBUG] %s", m_accumulatedString.c_str());
+                printf("[DEBUG] %s\n", m_accumulatedString.c_str());
                 break;
             case LogLevel::Info :
-                printf("[INFO] %s", m_accumulatedString.c_str());
+                printf("[INFO] %s\n", m_accumulatedString.c_str());
                 break;
             case LogLevel::Warn :
-                printf("[WARN] %s", m_accumulatedString.c_str());
+                printf("[WARN] %s\n", m_accumulatedString.c_str());
                 break;
             case LogLevel::Error :
-                printf("[ERROR] %s", m_accumulatedString.c_str());
+                printf("[ERROR] %s\n", m_accumulatedString.c_str());
                 break;
         }
 

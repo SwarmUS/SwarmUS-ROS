@@ -10,13 +10,13 @@
 
 class TCPClient : public IProtobufStream {
   public:
-    TCPClient() { m_clientFd = ::socket(AF_INET, SOCK_STREAM, 0); }
+    TCPClient(int port) : m_port(port) { m_clientFd = ::socket(AF_INET, SOCK_STREAM, 0); }
 
     int connect() {
         struct sockaddr_in serv_addr;
 
         serv_addr.sin_family = AF_INET;
-        serv_addr.sin_port = htons(8080);
+        serv_addr.sin_port = htons(m_port);
 
         // Convert IPv4 and IPv6 addresses from text to binary form
         if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
@@ -42,6 +42,7 @@ class TCPClient : public IProtobufStream {
 
   private:
     int m_clientFd;
+    int m_port;
 };
 
 #endif // HIVE_MIND_BRIDGE_TCPCLIENT_H

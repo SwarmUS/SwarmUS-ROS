@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <cstdio>
 
 class TCPClient : public IProtobufStream {
   public:

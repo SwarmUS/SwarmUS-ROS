@@ -96,7 +96,8 @@ std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> Messag
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
                     responseStatus = GenericResponseStatusDTO::Unknown;
-                    m_logger.log(LogLevel::Warn, "Function name \"%s\" was not registered as a callback",
+                    m_logger.log(LogLevel::Warn,
+                                 "Function name \"%s\" was not registered as a callback",
                                  functionName.c_str());
                 }
 
@@ -142,7 +143,8 @@ std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> Messag
                                              functionCallResponse.getResponse().getStatus(),
                                              functionCallResponse.getResponse().getDetails());
             } else {
-                m_logger.log(LogLevel::Warn, "Cannot handle user call response : unknown user call response type");
+                m_logger.log(LogLevel::Warn,
+                             "Cannot handle user call response : unknown user call response type");
                 return {};
             }
         } else {

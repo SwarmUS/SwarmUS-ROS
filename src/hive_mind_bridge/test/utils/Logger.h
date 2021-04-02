@@ -7,7 +7,7 @@
 #include <string>
 
 class Logger : public ILogger {
-public:
+  public:
     Logger() {}
 
     LogRet log(LogLevel level, const char* format, ...) override {
@@ -41,30 +41,29 @@ public:
         m_accumulatedString = m_accumulatedString + tmpStr;
 
         return retValue;
-
     }
 
     void flush(LogLevel level) {
         switch (level) {
-            case LogLevel::Debug :
-                printf("[DEBUG] %s\n", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Info :
-                printf("[INFO] %s\n", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Warn :
-                printf("[WARN] %s\n", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Error :
-                printf("[ERROR] %s\n", m_accumulatedString.c_str());
-                break;
+        case LogLevel::Debug:
+            printf("[DEBUG] %s\n", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Info:
+            printf("[INFO] %s\n", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Warn:
+            printf("[WARN] %s\n", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Error:
+            printf("[ERROR] %s\n", m_accumulatedString.c_str());
+            break;
         }
 
         m_accumulatedString = "";
     }
 
-private:
+  private:
     std::string m_accumulatedString;
 };
 
-#endif //HIVE_MIND_BRIDGE_LOGGER_H
+#endif // HIVE_MIND_BRIDGE_LOGGER_H

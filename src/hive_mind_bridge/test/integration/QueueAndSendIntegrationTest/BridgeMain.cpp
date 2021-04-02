@@ -1,6 +1,6 @@
+#include "../../utils/Logger.h"
 #include "hive_mind_bridge/HiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
-#include "../../utils/Logger.h"
 #include <cpp-common/ILogger.h>
 
 int main(int argc, char** argv) {

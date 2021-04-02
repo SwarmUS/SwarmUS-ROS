@@ -8,10 +8,10 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/OutboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
+#include <cpp-common/ILogger.h>
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
-#include <cpp-common/ILogger.h>
 #include <memory>
 #include <mutex>
 #include <thread>

@@ -1,5 +1,5 @@
-#include "../../utils/TCPClient.h"
 #include "../../utils/Logger.h"
+#include "../../utils/TCPClient.h"
 #include <chrono>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>

@@ -3,15 +3,15 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
-#include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <cpp-common/ILogger.h>
-#include <optional>
 #include <cstdarg>
+#include <hivemind-host/FunctionCallArgumentDTO.h>
+#include <optional>
 
 constexpr uint8_t RATE_HZ{10};
 
 class Logger : public ILogger {
-public:
+  public:
     Logger() {}
 
     LogRet log(LogLevel level, const char* format, ...) override {
@@ -45,29 +45,28 @@ public:
         m_accumulatedString = m_accumulatedString + tmpStr;
 
         return retValue;
-
     }
 
     void flush(LogLevel level) {
         switch (level) {
-            case LogLevel::Debug :
-                ROS_DEBUG("%s", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Info :
-                ROS_INFO("%s", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Warn :
-                ROS_WARN("%s", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Error :
-                ROS_ERROR("%s", m_accumulatedString.c_str());
-                break;
+        case LogLevel::Debug:
+            ROS_DEBUG("%s", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Info:
+            ROS_INFO("%s", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Warn:
+            ROS_WARN("%s", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Error:
+            ROS_ERROR("%s", m_accumulatedString.c_str());
+            break;
         }
 
         m_accumulatedString = "";
     }
 
-private:
+  private:
     std::string m_accumulatedString;
 };
 

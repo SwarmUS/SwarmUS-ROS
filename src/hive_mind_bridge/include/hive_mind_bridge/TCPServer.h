@@ -2,6 +2,7 @@
 #define HIVE_MIND_BRIDGE_TCPSERVER_H
 
 #include "hive_mind_bridge/ITCPServer.h"
+#include <cpp-common/ILogger.h>
 #include <cstdint>
 #include <cstring>
 #include <functional>
@@ -10,7 +11,6 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <cpp-common/ILogger.h>
 
 class TCPServer : public ITCPServer {
   public:

@@ -1,5 +1,6 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/MessageHandler.h"
+#include "utils/Logger.h"
 #include <gmock/gmock.h>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -8,7 +9,6 @@
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <hivemind-host/UserCallRequestDTO.h>
-#include "utils/Logger.h"
 
 class MessageHandlerFixture : public testing::Test {
   protected:
@@ -62,7 +62,7 @@ class MessageHandlerFixture : public testing::Test {
         m_moveByTestCallbackManifest.push_back(
             UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
         m_messageHandler->registerCallback("MoveBy", m_moveByTestCallback,
-                                          m_moveByTestCallbackManifest);
+                                           m_moveByTestCallbackManifest);
 
         // Existing void  function
         m_functionCallRequestDto =

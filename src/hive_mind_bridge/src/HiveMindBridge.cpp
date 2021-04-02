@@ -6,9 +6,9 @@ HiveMindBridge::HiveMindBridge(int tcpPort, ILogger& logger) :
     m_serializer(m_tcpServer),
     m_messageHandler(logger),
     m_logger(logger) {
-    m_bridge =
-        std::make_unique<HiveMindBridgeImpl>(m_tcpServer, m_serializer, m_deserializer,
-                                             m_messageHandler, m_inboundQueue, m_outboundQueue, m_logger);
+    m_bridge = std::make_unique<HiveMindBridgeImpl>(m_tcpServer, m_serializer, m_deserializer,
+                                                    m_messageHandler, m_inboundQueue,
+                                                    m_outboundQueue, m_logger);
 }
 
 void HiveMindBridge::spin() { m_bridge->spin(); }

@@ -1,5 +1,5 @@
-#ifndef CATKIN_ROS_MESSAGEHANDLER_H
-#define CATKIN_ROS_MESSAGEHANDLER_H
+#ifndef HIVE_MIND_BRIDGE_MESSAGEHANDLER_H
+#define HIVE_MIND_BRIDGE_MESSAGEHANDLER_H
 
 #include "Callback.h"
 #include "IMessageHandler.h"
@@ -42,4 +42,4 @@ class MessageHandler : public IMessageHandler {
         FunctionDescriptionRequestDTO functionDescriptionRequest);
 };
 
-#endif // CATKIN_ROS_MESSAGEHANDLER_H
+#endif // HIVE_MIND_BRIDGE_MESSAGEHANDLER_H

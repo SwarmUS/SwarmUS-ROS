@@ -1,8 +1,7 @@
-#ifndef CATKIN_ROS_TCPSERVER_H
-#define CATKIN_ROS_TCPSERVER_H
+#ifndef HIVE_MIND_BRIDGE_TCPSERVER_H
+#define HIVE_MIND_BRIDGE_TCPSERVER_H
 
 #include "hive_mind_bridge/ITCPServer.h"
-#include "ros/ros.h"
 #include <cstdint>
 #include <cstring>
 #include <functional>
@@ -81,4 +80,4 @@ class TCPServer : public ITCPServer {
     void init();
 };
 
-#endif // CATKIN_ROS_TCPSERVER_H
+#endif // HIVE_MIND_BRIDGE_TCPSERVER_H

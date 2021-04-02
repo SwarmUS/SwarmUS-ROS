@@ -10,7 +10,6 @@
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <optional>
-#include <ros/ros.h>
 #include <variant>
 
 typedef std::unordered_map<std::string, UserCallbackFunctionWrapper> CallbackMap;

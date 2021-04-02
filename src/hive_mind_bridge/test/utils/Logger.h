@@ -2,6 +2,8 @@
 #define HIVE_MIND_BRIDGE_LOGGER_H
 
 #include <cpp-common/ILogger.h>
+#include <cstdarg>
+#include <cstdio>
 
 class Logger : public ILogger {
 public:
@@ -44,16 +46,16 @@ public:
     void flush(LogLevel level) {
         switch (level) {
             case LogLevel::Debug :
-                ROS_DEBUG("%s", m_accumulatedString.c_str());
+                printf("[DEBUG] %s", m_accumulatedString.c_str());
                 break;
             case LogLevel::Info :
-                ROS_INFO("%s", m_accumulatedString.c_str());
+                printf("[INFO] %s", m_accumulatedString.c_str());
                 break;
             case LogLevel::Warn :
-                ROS_WARN("%s", m_accumulatedString.c_str());
+                printf("[WARN] %s", m_accumulatedString.c_str());
                 break;
             case LogLevel::Error :
-                ROS_ERROR("%s", m_accumulatedString.c_str());
+                printf("[ERROR] %s", m_accumulatedString.c_str());
                 break;
         }
 

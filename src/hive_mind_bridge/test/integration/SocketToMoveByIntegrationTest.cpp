@@ -1,6 +1,6 @@
 #include "hive_mind_bridge/MessageUtils.h"
 #include "ros/ros.h"
-#include "utils/TCPClient.h"
+#include "../utils/TCPClient.h"
 #include <chrono>
 #include <cstdint>
 #include <hivemind-host/HiveMindHostDeserializer.h>

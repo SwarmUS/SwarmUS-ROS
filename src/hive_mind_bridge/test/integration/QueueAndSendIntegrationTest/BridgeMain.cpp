@@ -3,7 +3,9 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
+#include "../../utils/Logger.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
+#include <cpp-common/ILogger.h>
 #include <optional>
 
 constexpr uint8_t RATE_HZ{1};
@@ -14,8 +16,8 @@ int main(int argc, char** argv) {
 
     std::string robotName = ros::param::param("~ROBOT_NAME", std::string("pioneer_0"));
     int port = ros::param::param("~TCP_SERVER_PORT", 8080);
-
-    HiveMindBridge bridge(port);
+    Logger logger;
+    HiveMindBridge bridge(port, logger);
 
     // Register event hooks
     bridge.onConnect([]() { ROS_INFO("Client connected."); });

@@ -48,11 +48,12 @@ MessageDTO MessageHandler::handleFunctionDescriptionRequest(
         requestId, msgDestinationId, msgSourceId, sourceModule, functionDescription);
 }
 
-MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
+std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> MessageHandler::
+    handleMessage(MessageDTO message) {
     uint32_t msgSourceId = message.getSourceId();
     uint32_t msgDestinationId = message.getDestinationId();
 
-    MessageHandlerResult result;
+    InboundRequestHandle result;
 
     // Message
     auto request = message.getMessage();
@@ -113,8 +114,45 @@ MessageHandlerResult MessageHandler::handleMessage(MessageDTO message) {
                     std::get<FunctionDescriptionRequestDTO>(functionCallRequest)));
             }
         }
+        return result;
+    } else if (std::holds_alternative<ResponseDTO>(request)) {
+        ResponseDTO response = std::get<ResponseDTO>(request);
+        auto vResponse = response.getResponse();
+
+        if (std::holds_alternative<GenericResponseDTO>(vResponse)) {
+            GenericResponseDTO genericResponse = std::get<GenericResponseDTO>(vResponse);
+
+            return InboundResponseHandle(response.getId(), genericResponse.getStatus(),
+                                         genericResponse.getDetails());
+        } else if (std::holds_alternative<UserCallResponseDTO>(vResponse)) {
+            UserCallResponseDTO userCallResponse = std::get<UserCallResponseDTO>(vResponse);
+
+            auto vUserCallResponse = userCallResponse.getResponse();
+            if (std::holds_alternative<GenericResponseDTO>(vUserCallResponse)) {
+                GenericResponseDTO genericResponse =
+                    std::get<GenericResponseDTO>(vUserCallResponse);
+
+                return InboundResponseHandle(response.getId(), genericResponse.getStatus(),
+                                             genericResponse.getDetails());
+            } else if (std::holds_alternative<FunctionCallResponseDTO>(vUserCallResponse)) {
+                FunctionCallResponseDTO functionCallResponse =
+                    std::get<FunctionCallResponseDTO>(vUserCallResponse);
+
+                return InboundResponseHandle(response.getId(),
+                                             functionCallResponse.getResponse().getStatus(),
+                                             functionCallResponse.getResponse().getDetails());
+            } else {
+                ROS_WARN("Cannot handle user call response : unknown user call response type");
+                return {};
+            }
+        } else {
+            ROS_WARN("Cannot handle response : unknown response type");
+            return {};
+        }
+    } else {
+        ROS_WARN("Cannot handle message : unknown message type");
+        return {};
     }
-    return result;
 }
 
 std::optional<uint32_t> MessageHandler::handleGreet(MessageDTO greetMessage) {

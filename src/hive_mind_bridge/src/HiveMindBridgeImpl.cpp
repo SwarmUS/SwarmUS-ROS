@@ -4,38 +4,50 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostSerializer& serializer,
                                        IHiveMindHostDeserializer& deserializer,
                                        IMessageHandler& messageHandler,
-                                       IThreadSafeQueue<MessageDTO>& queue) :
+                                       IThreadSafeQueue<MessageDTO>& inboundQueue,
+                                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue) :
     m_tcpServer(tcpServer),
     m_serializer(serializer),
     m_deserializer(deserializer),
     m_messageHandler(messageHandler),
-    m_inboundQueue(queue) {}
+    m_inboundQueue(inboundQueue),
+    m_outboundQueue(outboundQueue) {}
 
 HiveMindBridgeImpl::~HiveMindBridgeImpl() {
     if (m_inboundThread.joinable()) {
         m_inboundThread.join();
+    }
+
+    if (m_outboundThread.joinable()) {
+        m_outboundThread.join();
     }
 }
 
 void HiveMindBridgeImpl::spin() {
     if (isTCPClientConnected()) {
         if (!m_inboundQueue.empty()) {
-            // Execute the action
-            MessageHandlerResult result = m_messageHandler.handleMessage(m_inboundQueue.front());
+            auto vHandle = m_messageHandler.handleMessage(m_inboundQueue.front());
             m_inboundQueue.pop();
 
-            m_resultQueue.push_back(result);
+            if (std::holds_alternative<InboundRequestHandle>(vHandle)) {
+                InboundRequestHandle handle = std::get<InboundRequestHandle>(vHandle);
+                m_inboundRequestsQueue.push_back(handle);
 
-            // Send the ack/nack message
-            m_serializer.serializeToStream(result.getResponse());
+                // Send the ack/nack message
+                m_serializer.serializeToStream(handle.getResponse());
+            } else if (std::holds_alternative<InboundResponseHandle>(vHandle)) {
+                InboundResponseHandle handle = std::get<InboundResponseHandle>(vHandle);
+                m_inboundResponsesMap[handle.getResponseId()] = handle;
+            }
         }
 
-        for (auto result = m_resultQueue.begin(); result != m_resultQueue.end();) {
+        for (auto result = m_inboundRequestsQueue.begin();
+             result != m_inboundRequestsQueue.end();) {
             if (result->getCallbackReturnContext().wait_for(std::chrono::seconds(0)) ==
                 std::future_status::ready) {
                 sendReturn(*result);
 
-                m_resultQueue.erase(result);
+                m_inboundRequestsQueue.erase(result);
             } else {
                 result++;
             }
@@ -45,10 +57,15 @@ void HiveMindBridgeImpl::spin() {
             m_inboundThread.join();
         }
 
+        if (m_outboundThread.joinable()) {
+            m_outboundThread.join();
+        }
+
         m_tcpServer.listen();
 
         if (greet()) {
             m_inboundThread = std::thread(&HiveMindBridgeImpl::inboundThread, this);
+            m_outboundThread = std::thread(&HiveMindBridgeImpl::outboundThread, this);
         } else {
             m_tcpServer.close();
         }
@@ -71,6 +88,16 @@ bool HiveMindBridgeImpl::registerCustomAction(std::string name, CallbackFunction
     return m_messageHandler.registerCallback(name, callback);
 }
 
+bool HiveMindBridgeImpl::queueAndSend(MessageDTO message) {
+    if (isTCPClientConnected()) {
+        OutboundRequestHandle handle(message);
+        m_outboundQueue.push(handle);
+        return true;
+    }
+
+    return false;
+}
+
 uint32_t HiveMindBridgeImpl::getSwarmAgentId() { return m_swarmAgentID; }
 
 void HiveMindBridgeImpl::inboundThread() {
@@ -80,6 +107,54 @@ void HiveMindBridgeImpl::inboundThread() {
             m_inboundQueue.push(message);
         }
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(THREAD_SLEEP_MS));
+}
+
+void HiveMindBridgeImpl::outboundThread() {
+    while (isTCPClientConnected()) {
+        if (!m_outboundQueue.empty()) {
+            OutboundRequestHandle handle = m_outboundQueue.front();
+
+            MessageDTO outboundMessage = handle.getMessage();
+            auto request = std::get_if<RequestDTO>(&outboundMessage.getMessage());
+
+            if (request) {
+                // verify if the front value has a corresponding inbound response handle
+                auto search = m_inboundResponsesMap.find(request->getId());
+                if (search != m_inboundResponsesMap.end()) {
+                    // Received a response for this request so we delete the request
+                    // TODO add some retry logic in case the response was not ok
+                    m_outboundQueue.pop();
+                    m_inboundResponsesMap.erase(search);
+
+                    ROS_INFO("RECEIVED VALID RESPONSE");
+                } else {
+                    // Did not receive a response for this request. Was the request sent?
+                    if (handle.getState() == OutboundRequestState::READY) {
+                        m_serializer.serializeToStream(outboundMessage);
+                        handle.setState(OutboundRequestState::SENT);
+
+                        m_outboundQueue.pop();
+                        m_outboundQueue.push(handle); // Cycle through the queue
+                    } else {
+                        // Drop message or cycle through queue
+                        if (handle.bumpDelaySinceSent(THREAD_SLEEP_MS) >= DELAY_BRFORE_DROP_S) {
+                            // TODO add some retry logic after a timeout. For now, we simply drop.
+                            m_outboundQueue.pop();
+                        } else {
+                            m_outboundQueue.pop();
+                            m_outboundQueue.push(handle); // Cycle through the queue
+                        }
+                    }
+                }
+            } else {
+                ROS_WARN("Outbound queue contains an unsupported message");
+            }
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(THREAD_SLEEP_MS));
+    }
 }
 
 bool HiveMindBridgeImpl::isTCPClientConnected() {
@@ -87,7 +162,7 @@ bool HiveMindBridgeImpl::isTCPClientConnected() {
     return m_tcpServer.isClientConnected();
 }
 
-void HiveMindBridgeImpl::sendReturn(MessageHandlerResult result) {
+void HiveMindBridgeImpl::sendReturn(InboundRequestHandle result) {
     std::optional<CallbackReturn> callbackReturnOpt = result.getCallbackReturnContext().get();
 
     // Send a return only if there is a return value

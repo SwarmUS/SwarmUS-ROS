@@ -127,7 +127,8 @@ TEST_F(MessageHandlerFixture, testGetCallbackFail) {
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    MessageHandlerResult result = m_messageHandler.handleMessage(*m_messageDto);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(*m_messageDto));
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -150,7 +151,8 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
 }
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
-    MessageHandlerResult result = m_messageHandler.handleMessage(*m_moveByMessageDto);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(*m_moveByMessageDto));
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -174,7 +176,8 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
-    MessageHandlerResult result = m_messageHandler.handleMessage(*m_nonExistingMessageDto);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(*m_nonExistingMessageDto));
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -205,7 +208,8 @@ TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
     m_messageHandler.registerCallback("TestFunctionCallRequestDTO3", m_testFunction);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -226,7 +230,8 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -259,7 +264,8 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -283,7 +289,8 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
     MessageDTO incomingMessage(0, 0, request);
 
     // When
-    MessageHandlerResult result = m_messageHandler.handleMessage(incomingMessage);
+    InboundRequestHandle result =
+        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -295,4 +302,57 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     ASSERT_EQ(genericResponse.getStatus(), GenericResponseStatusDTO::BadRequest);
     ASSERT_STREQ(genericResponse.getDetails(), "Index out of bounds.");
+}
+
+TEST_F(MessageHandlerFixture, handleInboundUserCallResponse) {
+    // Given
+    GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "All good");
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST,
+                                         genericResponse);
+    ResponseDTO response(1, userCallResponse);
+    MessageDTO incomingMessage(0, 0, response);
+
+    // When
+    InboundResponseHandle responseHandle =
+        std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+
+    // Then
+    ASSERT_EQ(responseHandle.getResponseId(), 1);
+    ASSERT_EQ(responseHandle.getResponseStatus(), GenericResponseStatusDTO::Ok);
+    ASSERT_STREQ(responseHandle.getStatusDetails().c_str(), "All good");
+}
+
+TEST_F(MessageHandlerFixture, handleInboundGenericResponse) {
+    // Given
+    GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "All good");
+    ResponseDTO response(1, genericResponse);
+    MessageDTO incomingMessage(0, 0, response);
+
+    // When
+    InboundResponseHandle responseHandle =
+        std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+
+    // Then
+    ASSERT_EQ(responseHandle.getResponseId(), 1);
+    ASSERT_EQ(responseHandle.getResponseStatus(), GenericResponseStatusDTO::Ok);
+    ASSERT_STREQ(responseHandle.getStatusDetails().c_str(), "All good");
+}
+
+TEST_F(MessageHandlerFixture, handleInboundFunctionResponse) {
+    // Given
+    GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "All good");
+    FunctionCallResponseDTO functionCallResponse(genericResponse);
+    UserCallResponseDTO userCallResponse(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST,
+                                         functionCallResponse);
+    ResponseDTO response(1, userCallResponse);
+    MessageDTO incomingMessage(0, 0, response);
+
+    // When
+    InboundResponseHandle responseHandle =
+        std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+
+    // Then
+    ASSERT_EQ(responseHandle.getResponseId(), 1);
+    ASSERT_EQ(responseHandle.getResponseStatus(), GenericResponseStatusDTO::Ok);
+    ASSERT_STREQ(responseHandle.getStatusDetails().c_str(), "All good");
 }

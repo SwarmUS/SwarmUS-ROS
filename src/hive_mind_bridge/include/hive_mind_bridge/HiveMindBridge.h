@@ -3,6 +3,7 @@
 #include "hive_mind_bridge/HiveMindBridgeImpl.h"
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
+#include "hive_mind_bridge/OutboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
 #include "hive_mind_bridge/ThreadSafeQueue.h"
 #include <hivemind-host/HiveMindHostDeserializer.h>
@@ -29,6 +30,8 @@ class HiveMindBridge : public IHiveMindBridge {
 
     bool registerCustomAction(std::string name, CallbackFunction callback);
 
+    bool queueAndSend(MessageDTO message);
+
   private:
     std::unique_ptr<HiveMindBridgeImpl> m_bridge;
     TCPServer m_tcpServer;
@@ -36,6 +39,7 @@ class HiveMindBridge : public IHiveMindBridge {
     HiveMindHostSerializer m_serializer;
     MessageHandler m_messageHandler;
     ThreadSafeQueue<MessageDTO> m_inboundQueue;
+    ThreadSafeQueue<OutboundRequestHandle> m_outboundQueue;
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H

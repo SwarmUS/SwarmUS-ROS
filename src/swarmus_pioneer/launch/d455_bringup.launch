@@ -3,7 +3,7 @@
     <!--remap from="/camera/aligned_depth_to_color/image_raw" to="/camera/depth_registered/image_raw" /-->
     <!--remap from="/camera/depth/color/points" to="/pointcloud" /-->
     <arg name="robot_name" default="pioneer_0"/>
-    <arg name="camera_fps" default="15"/>
+    <arg name="camera_fps" default="30"/>
 
     <include file="$(find realsense2_camera)/launch/rs_camera.launch">
         <arg name="device_type"         default="d455"/>
@@ -26,7 +26,7 @@
 
         <arg name="filters"                   default=""/>
         <arg name="enable_pointcloud"         default="false"/>
-        <arg name="pointcloud_texture_stream" default="RS2_STREAM_ANY"/>
+        <arg name="pointcloud_texture_stream" default="RS2_STREAM_ANY"/> <!-- Set to RS2_STREAM_ANY to have colored pointcloud-->
         <arg name="pointcloud_texture_index"  default="0"/>
         <arg name="allow_no_texture_points"   default="false"/>
         <arg name="ordered_pc"                default="false"/>

@@ -1,5 +1,5 @@
-#include "../utils/TCPClient.h"
-#include "ros/ros.h"
+#include "../../utils/Logger.h"
+#include "../../utils/TCPClient.h"
 #include <chrono>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
@@ -8,12 +8,10 @@
 #include <thread>
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "hive_mind_bridge_tester");
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    Logger logger;
 
     // Create a TCP socket client
-    TCPClient tcpClient;
+    TCPClient tcpClient(8080);
     tcpClient.connect();
     HiveMindHostSerializer serializer(tcpClient);
     HiveMindHostDeserializer deserializer(tcpClient);
@@ -36,7 +34,7 @@ int main(int argc, char** argv) {
         std::get<FunctionCallRequestDTO>(userCallRequest.getRequest());
     std::string functionName = functionCallRequest.getFunctionName();
 
-    ROS_INFO("REQUEST FROM HOST (%s): \n", functionName.c_str());
+    logger.log(LogLevel::Info, "REQUEST FROM HOST (%s): \n", functionName.c_str());
 
     // Send ack
     GenericResponseDTO genericResponse(GenericResponseStatusDTO::Ok, "");
@@ -44,7 +42,7 @@ int main(int argc, char** argv) {
     MessageDTO ackMessage(message.getDestinationId(), message.getSourceId(), response);
     serializer.serializeToStream(ackMessage);
 
-    ROS_INFO("SENT ACK");
+    logger.log(LogLevel::Info, "SENT ACK");
 
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 }

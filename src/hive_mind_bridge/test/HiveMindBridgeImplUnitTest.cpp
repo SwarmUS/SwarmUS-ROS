@@ -5,6 +5,7 @@
 #include "mocks/MessageHandlerInterfaceMock.h"
 #include "mocks/TCPServerInterfaceMock.h"
 #include "mocks/ThreadSafeQueueInterfaceMock.h"
+#include "utils/Logger.h"
 #include <gmock/gmock.h>
 
 std::function<std::optional<CallbackReturn>()> validCallbackWithInstantReturn =
@@ -21,6 +22,7 @@ std::function<std::optional<CallbackReturn>()> validCallbackWithoutInstantReturn
 
 class HiveMindBridgeImplUnitFixture : public testing::Test {
   protected:
+    Logger m_logger;
     TCPServerInterfaceMock m_tcpServer;
     HiveMindHostDeserializerInterfaceMock m_deserializer;
     HiveMindHostSerializerInterfaceMock m_serializer;
@@ -36,7 +38,7 @@ class HiveMindBridgeImplUnitFixture : public testing::Test {
     void SetUp() {
         m_hivemindBridge =
             new HiveMindBridgeImpl(m_tcpServer, m_serializer, m_deserializer, m_messageHandler,
-                                   m_inboundQueue, m_outboundQueue);
+                                   m_inboundQueue, m_outboundQueue, m_logger);
     }
 
     void TearDown() { delete m_hivemindBridge; }

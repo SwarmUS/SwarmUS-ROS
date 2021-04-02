@@ -8,6 +8,7 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "hive_mind_bridge/OutboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
+#include <cpp-common/ILogger.h>
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
@@ -34,7 +35,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
                        IHiveMindHostDeserializer& deserializer,
                        IMessageHandler& messageHandler,
                        IThreadSafeQueue<MessageDTO>& inboundQueue,
-                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue);
+                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue,
+                       ILogger& logger);
 
     ~HiveMindBridgeImpl();
 
@@ -55,6 +57,8 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
     uint32_t getSwarmAgentId();
 
   private:
+    ILogger& m_logger;
+
     ITCPServer& m_tcpServer;
     IHiveMindHostDeserializer& m_deserializer;
     IHiveMindHostSerializer& m_serializer;

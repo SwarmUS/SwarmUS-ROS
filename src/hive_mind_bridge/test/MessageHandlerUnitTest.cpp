@@ -1,5 +1,6 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/MessageHandler.h"
+#include "utils/Logger.h"
 #include <gmock/gmock.h>
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -32,7 +33,8 @@ class MessageHandlerFixture : public testing::Test {
     };
     CallbackArgsManifest m_moveByTestCallbackManifest;
 
-    MessageHandler m_messageHandler;
+    Logger m_logger;
+    MessageHandler* m_messageHandler;
 
     // Declare some test messages
     FunctionCallRequestDTO* m_functionCallRequestDto;
@@ -54,12 +56,13 @@ class MessageHandlerFixture : public testing::Test {
     MessageDTO* m_moveByMessageDto;
 
     void SetUp() override {
+        m_messageHandler = new MessageHandler(m_logger);
         m_moveByTestCallbackManifest.push_back(
             UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Int));
         m_moveByTestCallbackManifest.push_back(
             UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
-        m_messageHandler.registerCallback("MoveBy", m_moveByTestCallback,
-                                          m_moveByTestCallbackManifest);
+        m_messageHandler->registerCallback("MoveBy", m_moveByTestCallback,
+                                           m_moveByTestCallbackManifest);
 
         // Existing void  function
         m_functionCallRequestDto =
@@ -104,31 +107,33 @@ class MessageHandlerFixture : public testing::Test {
         delete m_sideEffectUserCallRequestDto;
         delete m_sideEffectRequestDto;
         delete m_moveByMessageDto;
+
+        delete m_messageHandler;
     }
 };
 
 TEST_F(MessageHandlerFixture, registerNewCallBackSuccess) {
-    ASSERT_FALSE(m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction));
+    ASSERT_FALSE(m_messageHandler->registerCallback("TestFunctionCallRequestDTO", m_testFunction));
 }
 
 TEST_F(MessageHandlerFixture, registerOverwriteCallbackSuccess) {
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    ASSERT_TRUE(m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction));
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+    ASSERT_TRUE(m_messageHandler->registerCallback("TestFunctionCallRequestDTO", m_testFunction));
 }
 
 TEST_F(MessageHandlerFixture, testGetCallbackSuccess) {
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
-    ASSERT_TRUE(m_messageHandler.getCallback("TestFunctionCallRequestDTO"));
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+    ASSERT_TRUE(m_messageHandler->getCallback("TestFunctionCallRequestDTO"));
 }
 
 TEST_F(MessageHandlerFixture, testGetCallbackFail) {
-    ASSERT_FALSE(m_messageHandler.getCallback("Nonexisting"));
+    ASSERT_FALSE(m_messageHandler->getCallback("Nonexisting"));
 }
 
 TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO", m_testFunction);
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO", m_testFunction);
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(*m_messageDto));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(*m_messageDto));
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -152,7 +157,7 @@ TEST_F(MessageHandlerFixture, testHandleMessageVoidFunctionSuccess) {
 
 TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(*m_moveByMessageDto));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(*m_moveByMessageDto));
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -177,7 +182,7 @@ TEST_F(MessageHandlerFixture, TestHandleMessageMoveByFunctionSuccess) {
 
 TEST_F(MessageHandlerFixture, testHandleMessageFail) {
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(*m_nonExistingMessageDto));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(*m_nonExistingMessageDto));
     MessageDTO responseMessage = result.getResponse();
 
     ASSERT_EQ(responseMessage.getSourceId(), 2);
@@ -203,13 +208,13 @@ TEST_F(MessageHandlerFixture, handleFunctionListLengthRequest) {
     RequestDTO request(42, userCallRequest);
     MessageDTO incomingMessage(0, 0, request);
 
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO1", m_testFunction);
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO2", m_testFunction);
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO3", m_testFunction);
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO1", m_testFunction);
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO2", m_testFunction);
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO3", m_testFunction);
 
     // When
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -231,7 +236,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
 
     // When
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -254,7 +259,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequest) {
 }
 
 TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
-    m_messageHandler.registerCallback("TestFunctionCallRequestDTO1", m_testFunction);
+    m_messageHandler->registerCallback("TestFunctionCallRequestDTO1", m_testFunction);
 
     // Given
     FunctionDescriptionRequestDTO functionDescriptionRequest(1); // Testing 'MoveBy'
@@ -265,7 +270,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestVoid) {
 
     // When
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -290,7 +295,7 @@ TEST_F(MessageHandlerFixture, handleFunctionDescriptionRequestOutOfBounds) {
 
     // When
     InboundRequestHandle result =
-        std::get<InboundRequestHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundRequestHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     MessageDTO responseMessage = result.getResponse();
@@ -314,7 +319,7 @@ TEST_F(MessageHandlerFixture, handleInboundUserCallResponse) {
 
     // When
     InboundResponseHandle responseHandle =
-        std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundResponseHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     ASSERT_EQ(responseHandle.getResponseId(), 1);
@@ -330,7 +335,7 @@ TEST_F(MessageHandlerFixture, handleInboundGenericResponse) {
 
     // When
     InboundResponseHandle responseHandle =
-        std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundResponseHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     ASSERT_EQ(responseHandle.getResponseId(), 1);
@@ -349,7 +354,7 @@ TEST_F(MessageHandlerFixture, handleInboundFunctionResponse) {
 
     // When
     InboundResponseHandle responseHandle =
-        std::get<InboundResponseHandle>(m_messageHandler.handleMessage(incomingMessage));
+        std::get<InboundResponseHandle>(m_messageHandler->handleMessage(incomingMessage));
 
     // Then
     ASSERT_EQ(responseHandle.getResponseId(), 1);

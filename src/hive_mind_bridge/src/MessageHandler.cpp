@@ -1,7 +1,7 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include <future>
 
-MessageHandler::MessageHandler() {}
+MessageHandler::MessageHandler(ILogger& logger) : m_logger(logger) {}
 
 MessageHandler::~MessageHandler() {}
 
@@ -96,8 +96,9 @@ std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> Messag
                     responseStatus = GenericResponseStatusDTO::Ok;
                 } else {
                     responseStatus = GenericResponseStatusDTO::Unknown;
-                    ROS_WARN("Function name \"%s\" was not registered as a callback",
-                             functionName.c_str());
+                    m_logger.log(LogLevel::Warn,
+                                 "Function name \"%s\" was not registered as a callback",
+                                 functionName.c_str());
                 }
 
                 result.setResponse(MessageUtils::createResponseMessage(
@@ -142,15 +143,16 @@ std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> Messag
                                              functionCallResponse.getResponse().getStatus(),
                                              functionCallResponse.getResponse().getDetails());
             } else {
-                ROS_WARN("Cannot handle user call response : unknown user call response type");
+                m_logger.log(LogLevel::Warn,
+                             "Cannot handle user call response : unknown user call response type");
                 return {};
             }
         } else {
-            ROS_WARN("Cannot handle response : unknown response type");
+            m_logger.log(LogLevel::Warn, "Cannot handle response : unknown response type");
             return {};
         }
     } else {
-        ROS_WARN("Cannot handle message : unknown message type");
+        m_logger.log(LogLevel::Warn, "Cannot handle message : unknown message type");
         return {};
     }
 }

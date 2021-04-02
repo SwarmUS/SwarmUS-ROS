@@ -5,13 +5,15 @@ HiveMindBridgeImpl::HiveMindBridgeImpl(ITCPServer& tcpServer,
                                        IHiveMindHostDeserializer& deserializer,
                                        IMessageHandler& messageHandler,
                                        IThreadSafeQueue<MessageDTO>& inboundQueue,
-                                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue) :
+                                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue,
+                                       ILogger& logger) :
     m_tcpServer(tcpServer),
     m_serializer(serializer),
     m_deserializer(deserializer),
     m_messageHandler(messageHandler),
     m_inboundQueue(inboundQueue),
-    m_outboundQueue(outboundQueue) {}
+    m_outboundQueue(outboundQueue),
+    m_logger(logger) {}
 
 HiveMindBridgeImpl::~HiveMindBridgeImpl() {
     if (m_inboundThread.joinable()) {
@@ -127,8 +129,7 @@ void HiveMindBridgeImpl::outboundThread() {
                     // TODO add some retry logic in case the response was not ok
                     m_outboundQueue.pop();
                     m_inboundResponsesMap.erase(search);
-
-                    ROS_INFO("RECEIVED VALID RESPONSE");
+                    m_logger.log(LogLevel::Info, "RECEIVED VALID RESPONSE");
                 } else {
                     // Did not receive a response for this request. Was the request sent?
                     if (handle.getState() == OutboundRequestState::READY) {
@@ -149,7 +150,7 @@ void HiveMindBridgeImpl::outboundThread() {
                     }
                 }
             } else {
-                ROS_WARN("Outbound queue contains an unsupported message");
+                m_logger.log(LogLevel::Warn, "Outbound queue contains an unsupported message");
             }
         }
 

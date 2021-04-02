@@ -1,21 +1,19 @@
+#include "../utils/Logger.h"
+#include "../utils/TCPClient.h"
 #include "hive_mind_bridge/MessageUtils.h"
-#include "ros/ros.h"
-#include "utils/TCPClient.h"
 #include <chrono>
 #include <cstdint>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
-#include <memory>
-#include <string.h>
 #include <thread>
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "hive_mind_bridge_tester");
+    Logger logger;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
     // Create a TCP socket client
-    TCPClient tcpClient;
+    TCPClient tcpClient(5555);
     tcpClient.connect();
     HiveMindHostSerializer serializer(tcpClient);
     HiveMindHostDeserializer deserializer(tcpClient);
@@ -54,10 +52,11 @@ int main(int argc, char** argv) {
     GenericResponseDTO statusGenericResponse = statusFunctionCallResponse.getResponse();
     GenericResponseStatusDTO statusStatus = statusGenericResponse.getStatus();
     std::string statusDetails = statusGenericResponse.getDetails();
-    ROS_INFO("RESPONSE FROM HOST (getStatus): \n"
-             "\tResponse status: %d\n"
-             "\tDetails: %s",
-             statusStatus, statusDetails.c_str());
+    logger.log(LogLevel::Info,
+               "RESPONSE FROM HOST (getStatus): \n"
+               "\tResponse status: %d\n"
+               "\tDetails: %s",
+               statusStatus, statusDetails.c_str());
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
@@ -73,9 +72,10 @@ int main(int argc, char** argv) {
     std::array statusReturnFunctionArgs = statusReturnFunctionCallRequest.getArguments();
     int64_t arg0 = std::get<int64_t>(statusReturnFunctionArgs[0].getArgument());
 
-    ROS_INFO("RESPONSE FROM HOST (%s): \n"
-             "\tPayload: %d",
-             statusReturnFunctionName.c_str(), arg0);
+    logger.log(LogLevel::Info,
+               "RESPONSE FROM HOST (%s): \n"
+               "\tPayload: %d",
+               statusReturnFunctionName.c_str(), arg0);
 
     // Send moveBy request
     serializer.serializeToStream(moveByMessageDTO);
@@ -91,10 +91,11 @@ int main(int argc, char** argv) {
     GenericResponseDTO genericResponse = functionCallResponse.getResponse();
     GenericResponseStatusDTO status = genericResponse.getStatus();
     std::string details = genericResponse.getDetails();
-    ROS_INFO("RESPONSE FROM HOST (moveBy): \n"
-             "\tResponse status: %d\n"
-             "\tDetails: %s",
-             status, details.c_str());
+    logger.log(LogLevel::Info,
+               "RESPONSE FROM HOST (moveBy): \n"
+               "\tResponse status: %d\n"
+               "\tDetails: %s",
+               status, details.c_str());
 
     // Listen for a return message
     MessageDTO returnMessage;

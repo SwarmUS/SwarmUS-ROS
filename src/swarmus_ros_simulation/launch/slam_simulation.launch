@@ -5,10 +5,9 @@
     <arg name="robot_name" default="pioneer_0"/>
 
     <!--Remap pioneers_0's camera topics to RTAB-Map -->
-    <remap to="rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
-    <remap to="depth/image" from="/$(arg robot_name)/camera/depth/image_rect_raw"/>
-    <remap to="rgb/image" from="/$(arg robot_name)/camera/color/image_raw"/>
-    <remap to="scan" from="/$(arg robot_name)/scan"/>
+    <remap to="/$(arg robot_name)/rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
+    <remap to="/$(arg robot_name)/depth/image" from="/$(arg robot_name)/camera/depth/image_rect_raw"/>
+    <remap to="/$(arg robot_name)/rgb/image" from="/$(arg robot_name)/camera/color/image_raw"/>
 
     <!-- Launch a Gazebo world with walls and stuff -->
     <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
@@ -20,12 +19,14 @@
     </include>
     
     <!-- Launch RTAB-Map-->
-    <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch">
-        <arg name="robot_name" value="$(arg robot_name)"/>
-    </include>
+    <group ns="$(arg robot_name)">
+        <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+        </include>
 
-    <!--Launch RTAB-Map viz-->
-    <node name="rtabmapviz" pkg="rtabmap_ros" type="rtabmapviz"/>
+        <!--Launch RTAB-Map viz-->
+        <node name="rtabmapviz" pkg="rtabmap_ros" type="rtabmapviz"/>
+    </group>
 
     <!--Launch RVIZ-->
     <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/pioneer_0_config.rviz" />

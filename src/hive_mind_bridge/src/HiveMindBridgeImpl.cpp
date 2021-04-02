@@ -108,7 +108,7 @@ void HiveMindBridgeImpl::inboundThread() {
         }
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    std::this_thread::sleep_for(std::chrono::milliseconds(THREAD_SLEEP_MS));
 }
 
 void HiveMindBridgeImpl::outboundThread() {
@@ -120,7 +120,7 @@ void HiveMindBridgeImpl::outboundThread() {
             auto request = std::get_if<RequestDTO>(&outboundMessage.getMessage());
 
             if (request) {
-                // verify if the front value has a corresponding response handle
+                // verify if the front value has a corresponding inbound response handle
                 auto search = m_inboundResponsesMap.find(request->getId());
                 if (search != m_inboundResponsesMap.end()) {
                     // Received a response for this request so we delete the request
@@ -134,19 +134,26 @@ void HiveMindBridgeImpl::outboundThread() {
                     if (handle.getState() == OutboundRequestState::READY) {
                         m_serializer.serializeToStream(outboundMessage);
                         handle.setState(OutboundRequestState::SENT);
-                    } else {
-                        // TODO add some retry logic after a timeout
-                    }
 
-                    m_outboundQueue.pop();
-                    m_outboundQueue.push(handle); // Cycle through the queue
+                        m_outboundQueue.pop();
+                        m_outboundQueue.push(handle); // Cycle through the queue
+                    } else {
+                        // Drop message or cycle through queue
+                        if (handle.bumpDelaySinceSent(THREAD_SLEEP_MS) >= DELAY_BRFORE_DROP_S) {
+                            // TODO add some retry logic after a timeout. For now, we simply drop.
+                            m_outboundQueue.pop();
+                        } else {
+                            m_outboundQueue.pop();
+                            m_outboundQueue.push(handle); // Cycle through the queue
+                        }
+                    }
                 }
             } else {
                 ROS_WARN("Outbound queue contains an unsupported message");
             }
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        std::this_thread::sleep_for(std::chrono::milliseconds(THREAD_SLEEP_MS));
     }
 }
 

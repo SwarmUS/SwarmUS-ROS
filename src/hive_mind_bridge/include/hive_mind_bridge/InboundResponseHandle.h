@@ -4,6 +4,9 @@
 #include <hivemind-host/GenericResponseDTO.h>
 #include <string>
 
+/**
+ * Class containing the necessary context to handle an inbound response message
+ */
 class InboundResponseHandle {
   public:
     InboundResponseHandle();
@@ -25,9 +28,10 @@ class InboundResponseHandle {
     void setStatusDetails(const std::string& mStatusDetails);
 
   private:
-    uint32_t m_responseId;
-    GenericResponseStatusDTO m_responseStatus;
-    std::string m_statusDetails;
+    uint32_t m_responseId; // The ID of the inbound response. Corresponds to the ID of the Request
+                           // that was first sent.
+    GenericResponseStatusDTO m_responseStatus; // The status of the inbound response
+    std::string m_statusDetails; // A verbose explanation of the status
 };
 
 #endif // HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H

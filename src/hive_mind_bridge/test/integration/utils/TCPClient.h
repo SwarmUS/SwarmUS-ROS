@@ -3,6 +3,7 @@
 
 #include <arpa/inet.h>
 #include <common/IProtobufStream.h>
+#include <cstdio>
 #include <netinet/in.h>
 #include <sys/socket.h>
 

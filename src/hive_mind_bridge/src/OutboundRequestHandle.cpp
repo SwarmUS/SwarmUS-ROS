@@ -9,3 +9,8 @@ void OutboundRequestHandle::setState(OutboundRequestState mState) { m_state = mS
 const MessageDTO& OutboundRequestHandle::getMessage() const { return m_message; }
 
 void OutboundRequestHandle::setMessage(const MessageDTO& mMessage) { m_message = mMessage; }
+
+int OutboundRequestHandle::bumpDelaySinceSent(int bumpValue) {
+    m_delaySinceSent += bumpValue;
+    return m_delaySinceSent;
+}

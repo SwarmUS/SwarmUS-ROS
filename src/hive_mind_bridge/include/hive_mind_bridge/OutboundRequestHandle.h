@@ -17,9 +17,17 @@ class OutboundRequestHandle {
 
     void setMessage(const MessageDTO& mMessage);
 
+    /**
+     * Increment the delay since sent
+     * @param bumpValue Value to add to the delay
+     * @return The delay since sent, incremented with bumpValue
+     */
+    int bumpDelaySinceSent(int bumpValue);
+
   private:
     OutboundRequestState m_state = OutboundRequestState::READY;
     MessageDTO m_message;
+    int m_delaySinceSent = 0;
 };
 
 #endif // HIVE_MIND_BRIDGE_OUTBOUNDREQUESTHANDLE_H

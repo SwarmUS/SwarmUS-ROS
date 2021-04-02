@@ -1,10 +1,10 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/HiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
-#include "hive_mind_bridge/logger/ILogger.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
+#include <cpp-common/ILogger.h>
 #include <optional>
 #include <cstdarg>
 
@@ -74,9 +74,7 @@ private:
 int main(int argc, char** argv) {
     Logger logger;
 
-    logger.log(LogLevel::Info, "Hello world %.2f", 12.0);
 
-    /*
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle;
 
@@ -140,7 +138,6 @@ int main(int argc, char** argv) {
 
         loopRate.sleep();
     }
-    */
 
     return 0;
 }

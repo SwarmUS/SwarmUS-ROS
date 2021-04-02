@@ -46,6 +46,7 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 target_link_libraries(${LIB_NAME}
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::Propolis::Cpp::Common
         )
 
 # Main

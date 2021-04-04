@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<!-- This launch files spawns a swarm of 5 fully functional robots -->
+
+<launch>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch"/>
+
+    <!-- Robot 1 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   default="1"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="pioneer_1"/>
+        <arg name="robot_name" value="pioneer_1"/>
+    </include>
+
+    <!-- Robot 2 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   default="2"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="pioneer_2"/>
+        <arg name="robot_name" value="pioneer_2"/>
+        <arg name="robot_pos_x" value="1.0"/>
+        <arg name="robot_pos_y" value="1.0"/>
+    </include>
+
+    <!-- Robot 3 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   default="3"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="pioneer_3"/>
+        <arg name="robot_name" value="pioneer_3"/>
+        <arg name="robot_pos_x" value="2.0"/>
+        <arg name="robot_pos_y" value="2.0"/>
+    </include>
+
+    <!-- Robot 4 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   default="4"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="pioneer_4"/>
+        <arg name="robot_name" value="pioneer_4"/>
+        <arg name="robot_pos_x" value="-1.0"/>
+        <arg name="robot_pos_y" value="-1.0"/>
+    </include>
+
+    <!-- Robot 5 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   default="5"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="pioneer_5"/>
+        <arg name="robot_name" value="pioneer_5"/>
+        <arg name="robot_pos_x" value="-2.0"/>
+        <arg name="robot_pos_y" value="-2.0"/>
+    </include>
+
+
+</launch>

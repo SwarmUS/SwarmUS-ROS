@@ -26,7 +26,7 @@ SwarmUS-ROS
 │    ├── set_udev_rules.sh
 │    └── 40-swarmus_pioneer.rules
 ├── src
-│   ├── hiveboard_bridge
+│   ├── hive_mind_bridge
 │   ├── swarmus_example_pkg
 │   ├── swarmus_pioneer
 │   ├── swarmus_ros_description
@@ -97,7 +97,7 @@ NOTE:
 
     If  you need the Realsense SDK follow the [librealsense source installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md). This might take some time since you will be building from the source code.
 
-- `catkin_make_isolated` is used instead of `catkin_make` because there is a conflict when the Hivemind code and the hiveboard_bridge node are built since they both share the same code. You will need to source the devel_isolated setup whenever you build new packages with `catkin_make_isolated`.
+- `catkin_make_isolated` is used instead of `catkin_make` because there is a conflict when the Hivemind code and the hive_mind_bridge node are built since they both share the same code. You will need to source the devel_isolated setup whenever you build new packages with `catkin_make_isolated`.
 
 ## Running unit tests
 

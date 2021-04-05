@@ -9,8 +9,8 @@
         <arg name="agent_id"   default="1"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="pioneer_1"/>
-        <arg name="robot_name" value="pioneer_1"/>
+        <arg name="ns" value="agent_1"/>
+        <arg name="robot_name" value="agent_1"/>
     </include>
 
     <!-- Robot 2 -->
@@ -18,8 +18,8 @@
         <arg name="agent_id"   default="2"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="pioneer_2"/>
-        <arg name="robot_name" value="pioneer_2"/>
+        <arg name="ns" value="agent_2"/>
+        <arg name="robot_name" value="agent_2"/>
         <arg name="robot_pos_x" value="1.0"/>
         <arg name="robot_pos_y" value="1.0"/>
     </include>
@@ -29,8 +29,8 @@
         <arg name="agent_id"   default="3"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="pioneer_3"/>
-        <arg name="robot_name" value="pioneer_3"/>
+        <arg name="ns" value="agent_3"/>
+        <arg name="robot_name" value="agent_3"/>
         <arg name="robot_pos_x" value="2.0"/>
         <arg name="robot_pos_y" value="2.0"/>
     </include>
@@ -40,8 +40,8 @@
         <arg name="agent_id"   default="4"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="pioneer_4"/>
-        <arg name="robot_name" value="pioneer_4"/>
+        <arg name="ns" value="agent_4"/>
+        <arg name="robot_name" value="agent_4"/>
         <arg name="robot_pos_x" value="-1.0"/>
         <arg name="robot_pos_y" value="-1.0"/>
     </include>
@@ -51,8 +51,8 @@
         <arg name="agent_id"   default="5"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="pioneer_5"/>
-        <arg name="robot_name" value="pioneer_5"/>
+        <arg name="ns" value="agent_5"/>
+        <arg name="robot_name" value="agent_5"/>
         <arg name="robot_pos_x" value="-2.0"/>
         <arg name="robot_pos_y" value="-2.0"/>
     </include>

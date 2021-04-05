@@ -4,6 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
         - /Status1
         - /Local1/LocalPath1
         - /TF1/Tree1
@@ -378,37 +379,38 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          pioneer_0/odom:
-            pioneer_0/base_footprint:
-              pioneer_0/base_link:
-                pioneer_0/chassis:
-                  pioneer_0/camera_bottom_screw_frame:
-                    pioneer_0/camera_link:
-                      pioneer_0/camera_accel_frame:
-                        pioneer_0/camera_accel_optical_frame:
-                          {}
-                      pioneer_0/camera_aligned_depth_to_color_frame:
-                        pioneer_0/camera_color_optical_frame:
-                          {}
-                      pioneer_0/camera_color_frame:
+          {}
+        pioneer_0/odom:
+          pioneer_0/base_footprint:
+            pioneer_0/base_link:
+              pioneer_0/chassis:
+                pioneer_0/camera_bottom_screw_frame:
+                  pioneer_0/camera_link:
+                    pioneer_0/camera_accel_frame:
+                      pioneer_0/camera_accel_optical_frame:
                         {}
-                      pioneer_0/camera_depth_frame:
-                        pioneer_0/camera_depth_optical_frame:
-                          {}
-                      pioneer_0/camera_gyro_frame:
-                        pioneer_0/camera_imu_optical_frame:
-                          {}
-                  pioneer_0/hiveboard:
-                    {}
-                  pioneer_0/rplidar:
-                    {}
+                    pioneer_0/camera_aligned_depth_to_color_frame:
+                      pioneer_0/camera_color_optical_frame:
+                        {}
+                    pioneer_0/camera_color_frame:
+                      {}
+                    pioneer_0/camera_depth_frame:
+                      pioneer_0/camera_depth_optical_frame:
+                        {}
+                    pioneer_0/camera_gyro_frame:
+                      pioneer_0/camera_imu_optical_frame:
+                        {}
+                pioneer_0/hiveboard:
+                  {}
+                pioneer_0/rplidar:
+                  {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: pioneer_0/base_footprint
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -432,7 +434,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.4885547161102295
+      Distance: 5.043168544769287
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -440,17 +442,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.5032215118408203
-        Y: 0.04247196391224861
-        Z: 0.22306743264198303
+        X: -0.3957172930240631
+        Y: -0.24189120531082153
+        Z: 0.3214276134967804
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7197962999343872
+      Pitch: 0.8247965574264526
       Target Frame: <Fixed Frame>
-      Yaw: 2.3167777061462402
+      Yaw: 6.069964408874512
     Saved: ~
 Window Geometry:
   Displays:

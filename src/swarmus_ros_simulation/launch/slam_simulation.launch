@@ -29,5 +29,5 @@
     </group>
 
     <!--Launch RVIZ-->
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/pioneer_0_config.rviz" />
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/pioneer_0_config_rtabmap.rviz"/>
 </launch>

@@ -2,10 +2,18 @@
 <launch>
     <arg name="robot_name" default="pioneer_0"/>
 
+    <!--Remap pioneers_0's camera topics to RTAB-Map -->
+    <remap to="/$(arg robot_name)/rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
+    <remap to="/$(arg robot_name)/depth/image" from="/$(arg robot_name)/camera/depth/image_rect_raw"/>
+    <remap to="/$(arg robot_name)/rgb/image" from="/$(arg robot_name)/camera/color/image_raw"/>
+
     <!--Launch RTAB-Map-->
-    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" ns="$(arg robot_name)" args="--delete_db_on_start">
         <param name="frame_id" type="string" value="$(arg robot_name)/base_link"/>
         <param name="odom_frame_id" type="string" value="$(arg robot_name)/odom"/>
+
+        <param name="publish_tf" type="bool" value="true"/>
+        <param name="tf_prefix" type="string" value="$(arg robot_name)/"/>
 
         <param name="subscribe_depth" type="bool" value="true"/>
         <param name="subscribe_scan" type="bool" value="true"/>

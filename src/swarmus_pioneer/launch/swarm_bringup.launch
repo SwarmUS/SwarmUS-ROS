@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="robot_name" default="pioneer_0"/>
+
+    <!-- Hive mind bridge -->
+    <include file="$(find hive_mind_bridge)/launch/hive_mind_bridge.launch"/>
+</launch>

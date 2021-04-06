@@ -1,6 +1,5 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/HiveMindBridge.h"
-#include "hive_mind_bridge/MessageHandler.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <cpp-common/ILogger.h>
@@ -80,7 +79,7 @@ int main(int argc, char** argv) {
 
     ros::Subscriber sub;
 
-    int port = ros::param::param("~TCP_SERVER_PORT", 8080);
+    int port = ros::param::param("~TCP_SERVER_PORT", 5555);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 
@@ -94,9 +93,6 @@ int main(int argc, char** argv) {
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
-
-        std::this_thread::sleep_for(
-            std::chrono::seconds(2)); // Just to show that callbacks can be blocking
 
         return {};
     };

@@ -77,9 +77,9 @@ int main(int argc, char** argv) {
                "\tPayload: %d",
                statusReturnFunctionName.c_str(), arg0);
 
-    while (true) {
-        // Send moveBy request
-        serializer.serializeToStream(moveByMessageDTO);
+    // Send moveBy request
+    serializer.serializeToStream(moveByMessageDTO);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     // Listen for a response
     MessageDTO message;

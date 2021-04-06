@@ -1,9 +1,10 @@
 <?xml version="1.0" ?>
 <launch>
-    <node pkg="hive_mind_bridge" type="QueueAndSendIntegrationTestBridgeMain" name="bridge_main" output="screen">
-        <param name="TCP_SERVER_PORT" type="int" value="8080"/>
-    </node>
+    <group ns="agent_1">
+        <node pkg="hive_mind_bridge" type="QueueAndSendIntegrationTestBridgeMain" name="bridge_main" output="screen">
+            <param name="TCP_SERVER_PORT" type="int" value="8080"/>
+        </node>
 
-    <node pkg="hive_mind_bridge" type="QueueAndSendIntegrationTest" name="hive_mind_bridge_queue_and_send_integration_test" output="screen"/>
-
+        <node pkg="hive_mind_bridge" type="QueueAndSendIntegrationTest" name="hive_mind_bridge_queue_and_send_integration_test" output="screen"/>
+    </group>
 </launch>

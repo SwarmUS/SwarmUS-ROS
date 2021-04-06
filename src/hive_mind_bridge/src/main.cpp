@@ -73,7 +73,8 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle("~");
 
-    ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
+    ros::Publisher moveByPublisher =
+            nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
 
     int port = nodeHandle.param("TCP_SERVER_PORT", 8080);
     Logger logger;

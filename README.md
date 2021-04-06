@@ -14,7 +14,7 @@ SwarmUS-ROS contains all the ROS packages developed for the SwarmUS project. It 
 SwarmUS-ROS
 ├── contrib
 │   └── HiveMind
-│   └── realsense
+│   └── realsense-ros
 │   └── roboclaw
 │   └── rplidar
 ├── lgtm.yml
@@ -61,6 +61,7 @@ swarmus_example_pkg
 ```
 
 ### HiveMind
+
 The [HiveMind repository](https://github.com/SwarmUS/HiveMind) is included as a git submodule, in the `contrib` folder. This repository contains a specific BSP that uses ROS nodes. This is to be used in a simulation environment. Thus, the simulation will use the "real" embedded code from the HiveMind.
 
 ## Building
@@ -83,6 +84,7 @@ source ~/.bashrc
 
 sh scripts/set_udev_rules.sh
 ```
+
 NOTE: 
 
 - The `install dependencies.sh` and `set_udev_rules.sh` scripts will only work on Ubuntu-based system. It will ask for elevated permissions to install packages on some specific paths. It is recommended to read the script beforehand to make sure nothing harmful will be done to your system.
@@ -106,6 +108,7 @@ catkin_make run_tests
 ```
 
 ## Running simulations in Gazebo
+
 As of now, there are some launch files located in the package `swarmus_ros_simulation` that spawn some robots in an empty scene in the Gazebo simulator. To launch the basic example, run the command:
 
 ```
@@ -120,12 +123,76 @@ roslaunch swarmus_ros_navigation rviz_pioneer_0.launch
 
 In Rviz, you can control directly the robot with the Teleop pannel in the bottom left corner or by using the *2D Nav Goal* command.
 
+## Running on Pioneer-2Dx
+
+In the SwarmUS team, we use 2 modified Pioneer 2DX. One of the robot is equipped with a Realsense D455 and the other with a Realsense D435i. The package `swarmus_pioneer` and a part of the /contrib folder is used to launch the drivers to listen to sensors and to control the robot base. 
+
+Run the following command and specify the camera being used (`d455`or `d435i`) to launch all the necessary drivers and nodes to control the robot: 
+
+```
+roslaunch swarmus_pioneer pioneer_bringup.launch camera_type:="d455"
+```
+
+Once launched, you can control and visualize the data of the sensors of the pioneer by running this command:
+
+```
+roslaunch swarmus_ros_navigation rviz_pioneer_0.launch
+```
+
+In Rviz, you can control directly the robot with the Teleop pannel in the bottom left corner or by using the *2D Nav Goal* command.
+
+
+
+To launch a more completed launchfile that calls the robot bringup, a navigation stack, a [RTAB-Map]([rtabmap_ros - ROS Wiki](http://wiki.ros.org/rtabmap_ros)) node (SLAM) and all the necessary packages made by SwarmUS to connect the robot to the Swarm, execute the following command:
+
+```
+roslaunch swarmus_pioneer full_d455_swarm_robot_bringup.launch
+```
+
+or 
+
+```
+roslaunch swarmus_pioneer full_d435i_swarm_robot_bringup.launch
+```
+
+Once launched, you can control the robot, visualize its sensors' data, visualize the grid_map and the mapGraph made by RTAB-Map by running this command:
+
+```
+roslaunch swarmus_pioneer rviz_pioneer_0_rtabmap.launch
+```
+
+NOTE:
+
+- The real robot has the `/pionner_0/` prefix on their nodes, tfs and topics to have better compatibility with the packages being developed in simulation.
+
+#### Remote control
+
+Sometimes, its useful to be connected to the ROS nodes being executed on the robot from a remote computer on the same network. To do so, the IP address of the robot and of the remote computer most be known. Run the following commands with the right addresses on the remote computer:
+
+```
+export ROS_IP=<remote_computer_ip_address>
+export ROS_MASTER_URI=http://<robot_ip_address>:11311
+```
+
+Run the following command with the right address on the robot computer:
+
+```
+export ROS_IP=<robot_ip_address>
+```
+
+NOTE:
+
+- The opened session will then communicate with the robot's ROS master whenever a ROS command is issue. So, running the `rostopic list` command will show topics being published on the robot. Furthermore, launching the Rviz's nodes shown above will execute and render Rviz on the remote computer, but it will display the robot's data.
+- The environment variables set with the commands above will not be kept between sessions, so for each new terminal that needs to be connected to the robot's ROS master, you will need to rerun those commands.
+
 ## Tools
 
 This repository contains a `tools` folder with some python scripts that help accomplish a few tasks, mainly the generation of the documentation and some linting. Please refer to the scripts for some extended documentation.
 
 ## Documentation
+
 An up to date version of the documentation can be found [here](https://swarmus.github.io/SwarmUS-ROS/index.html)
 
 ## Static analysis
+
 The packages in this repository are analysed with [Haros](https://github.com/git-afsantos/haros/tree/master/haros). The results are published (here)[https://swarmus.github.io/SwarmUS-ROS-Haros-viz/#dashboard].

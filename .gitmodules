@@ -13,3 +13,6 @@
 [submodule "contrib/realsense-ros"]
 	path = contrib/realsense-ros
 	url = https://github.com/LuAPi/realsense-ros.git
+[submodule "contrib/HiveConnect"]
+	path = contrib/HiveConnect
+	url = https://github.com/SwarmUS/HiveConnect

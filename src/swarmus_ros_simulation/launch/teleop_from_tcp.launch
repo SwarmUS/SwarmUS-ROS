@@ -3,6 +3,6 @@
 
     <include file="$(find swarmus_ros_simulation)/launch/multirobot_empty.launch"/>
     <include file="$(find swarmus_ros_navigation)/launch/navigation.launch"/>
-    <include file="$(find hiveboard_bridge)/launch/socket_to_move_by_integration_test.launch"/>
+    <include file="$(find hive_mind_bridge)/launch/socket_to_move_by_integration_test.launch"/>
 
 </launch>

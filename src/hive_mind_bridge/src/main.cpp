@@ -71,17 +71,12 @@ class Logger : public ILogger {
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
-    ros::NodeHandle nodeHandle;
+    ros::NodeHandle nodeHandle("~");
 
-    std::string robotName = ros::param::param("~ROBOT_NAME", std::string("pioneer_0"));
-    ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(
-        robotName + "/navigation/moveBy", 1000);
+    ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
 
-    ros::Subscriber sub;
-
-    int port = ros::param::param("~TCP_SERVER_PORT", 5555);
-    Logger logger;
-    HiveMindBridge bridge(port, logger);
+    int port = nodeHandle.param("TCP_SERVER_PORT", 8080);
+    HiveMindBridge bridge(port);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args,

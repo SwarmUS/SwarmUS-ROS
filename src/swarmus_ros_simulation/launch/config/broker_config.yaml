@@ -1,0 +1,3 @@
+# Example file for the config of the broker
+Broker:
+  robots: [1, 2, 3, 4, 5]

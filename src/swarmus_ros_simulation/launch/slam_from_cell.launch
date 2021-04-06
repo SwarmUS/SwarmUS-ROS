@@ -6,7 +6,7 @@
     <include file="$(find swarmus_ros_simulation)/launch/slam_simulation.launch"/>
 
     <node pkg="hiveboard_bridge" type="hiveboard_bridge" name="hiveboard_bridge" output="screen">
-        <param name="TCP_SERVER_PORT" type="int" value="8080"/>
+        <rosparam file="$(find hive_mind_bridge)/config/hive_mind_bridge_params.yaml" command="load"/>
         <param name="ROBOT_NAME" type="str" value="$(arg robot_name)"/>
     </node>
 
@@ -14,7 +14,7 @@
         <param name="board_uuid" value="1" />
 
         <param name="host_tcp_address" value="127.0.0.1" />
-        <param name="host_tcp_port" value="8080" />
+        <param name="host_tcp_port" value="5555" />
 
         <!-- Set port to 0 to disable server -->
         <param name="uart_mock_port" value="12345" />

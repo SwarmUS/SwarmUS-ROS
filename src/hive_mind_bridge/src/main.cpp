@@ -76,7 +76,8 @@ int main(int argc, char** argv) {
     ros::Publisher moveByPublisher = nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
 
     int port = nodeHandle.param("TCP_SERVER_PORT", 8080);
-    HiveMindBridge bridge(port);
+    Logger logger;
+    HiveMindBridge bridge(port, logger);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args,

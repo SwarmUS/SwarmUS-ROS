@@ -116,7 +116,7 @@ int main(int argc, char** argv) {
              "\tPayload: %d",
              statusReturnFunctionName.c_str(), arg0);
 
-    for (int i = 0; i < 5; i++) {
+    while (true) {
         // Send moveBy request
         serializer.serializeToStream(moveByMessageDTO);
 

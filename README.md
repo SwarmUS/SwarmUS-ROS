@@ -123,6 +123,10 @@ roslaunch swarmus_ros_navigation rviz_pioneer_0.launch
 
 In Rviz, you can control directly the robot with the Teleop pannel in the bottom left corner or by using the *2D Nav Goal* command.
 
+NOTE:
+
+- The default robot of the swarm is the `pioneer_0`. So, for other launchfiles that start a single robot simulation, the robot name will be `pionner_0`. Since Rviz is not easily dynamically configurable from launchfiles, our Rviz's config expect to have a `pioneer_0`.
+
 ## Running on Pioneer-2Dx
 
 In the SwarmUS team, we use 2 modified Pioneer 2DX. One of the robot is equipped with a Realsense D455 and the other with a Realsense D435i. The package `swarmus_pioneer` and a part of the /contrib folder is used to launch the drivers to listen to sensors and to control the robot base. 

@@ -52,6 +52,13 @@ class IHiveMindBridge {
      * @return True if an existing callback function was overwritten, false otherwise
      */
     virtual bool registerCustomAction(std::string name, CallbackFunction callback) = 0;
+
+    /**
+     * Send a message asynchronously
+     * @param message The message to send
+     * @return true if the operation succeded.
+     */
+    virtual bool queueAndSend(MessageDTO message) = 0;
 };
 
 #endif // HIVEMIND_BRIDGE_IHIVEMINDBRIDGE_H

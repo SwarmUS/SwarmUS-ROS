@@ -36,7 +36,9 @@ set(HIVEMIND_BRIDGE_SOURCES
         src/HiveMindBridgeImpl.cpp
         src/UserCallbackFunctionWrapper.cpp
         src/UserCallbackArgumentDescription.cpp
-        src/MessageHandlerResult.cpp)
+        src/InboundRequestHandle.cpp
+        src/InboundResponseHandle.cpp
+        src/OutboundRequestHandle.cpp)
 
 add_library(${LIB_NAME} STATIC ${HIVEMIND_BRIDGE_SOURCES})
 add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
@@ -44,6 +46,7 @@ add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
 target_link_libraries(${LIB_NAME}
         ${catkin_LIBRARIES}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::Propolis::Cpp::Common
         )
 
 # Main
@@ -94,7 +97,7 @@ target_link_libraries(HiveMindBridgeImplUnitTest
 
 # Integration testing
 add_executable(SocketToMoveByIntegrationTest
-        test/SocketToMoveByIntegrationTest.cpp
+        test/integration/SocketToMoveByIntegrationTest.cpp
         )
 
 target_link_libraries(SocketToMoveByIntegrationTest
@@ -102,3 +105,25 @@ target_link_libraries(SocketToMoveByIntegrationTest
         ${LIB_NAME}
         SwarmUS::Propolis::Pheromones::HiveMind::Host
 )
+
+add_executable(QueueAndSendIntegrationTestBridgeMain
+        test/integration/QueueAndSendIntegrationTest/BridgeMain.cpp
+        )
+
+target_link_libraries(QueueAndSendIntegrationTestBridgeMain
+        ${catkin_LIBRARIES}
+        ${LIB_NAME}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::ROS::HiveMind::Bridge
+        )
+
+add_executable(QueueAndSendIntegrationTest
+        test/integration/QueueAndSendIntegrationTest/QueueAndSendIntegrationTest.cpp
+        )
+
+target_link_libraries(QueueAndSendIntegrationTest
+        ${catkin_LIBRARIES}
+        ${LIB_NAME}
+        SwarmUS::Propolis::Pheromones::HiveMind::Host
+        SwarmUS::ROS::HiveMind::Bridge
+        )

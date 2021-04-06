@@ -1,7 +1,8 @@
 #ifndef HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 #define HIVEMIND_BRIDGE_IMESSAGEHANDLER_H
 
-#include "MessageHandlerResult.h"
+#include "InboundRequestHandle.h"
+#include "hive_mind_bridge/InboundResponseHandle.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <hivemind-host/FunctionCallRequestDTO.h>
@@ -9,7 +10,6 @@
 #include <hivemind-host/MessageDTO.h>
 #include <hivemind-host/RequestDTO.h>
 #include <optional>
-#include <ros/ros.h>
 #include <variant>
 
 typedef std::unordered_map<std::string, UserCallbackFunctionWrapper> CallbackMap;
@@ -24,7 +24,8 @@ class IMessageHandler {
      * @return A message containing the appropriate acknowlege (with appropriate errors if
      * necessary)
      */
-    virtual MessageHandlerResult handleMessage(MessageDTO message) = 0;
+    virtual std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> handleMessage(
+        MessageDTO message) = 0;
 
     /**
      * Parse a greet message and return the contained swarmAgentId.

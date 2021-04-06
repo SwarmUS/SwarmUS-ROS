@@ -3,8 +3,10 @@
 #include "hive_mind_bridge/HiveMindBridgeImpl.h"
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/MessageHandler.h"
+#include "hive_mind_bridge/OutboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
 #include "hive_mind_bridge/ThreadSafeQueue.h"
+#include <cpp-common/ILogger.h>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
@@ -15,7 +17,7 @@ class HiveMindBridge : public IHiveMindBridge {
      * Construct a HiveMindBridge
      * @param tcpPort The port that the TCP server should listen to
      */
-    HiveMindBridge(int tcpPort);
+    HiveMindBridge(int tcpPort, ILogger& logger);
 
     void spin();
 
@@ -29,13 +31,17 @@ class HiveMindBridge : public IHiveMindBridge {
 
     bool registerCustomAction(std::string name, CallbackFunction callback);
 
+    bool queueAndSend(MessageDTO message);
+
   private:
+    ILogger& m_logger;
     std::unique_ptr<HiveMindBridgeImpl> m_bridge;
     TCPServer m_tcpServer;
     HiveMindHostDeserializer m_deserializer;
     HiveMindHostSerializer m_serializer;
     MessageHandler m_messageHandler;
     ThreadSafeQueue<MessageDTO> m_inboundQueue;
+    ThreadSafeQueue<OutboundRequestHandle> m_outboundQueue;
 };
 
 #endif // HIVEMIND_BRIDGE_HIVEMINDBRIDGE_H

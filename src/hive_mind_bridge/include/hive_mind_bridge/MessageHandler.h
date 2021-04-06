@@ -1,16 +1,18 @@
-#ifndef CATKIN_ROS_MESSAGEHANDLER_H
-#define CATKIN_ROS_MESSAGEHANDLER_H
+#ifndef HIVE_MIND_BRIDGE_MESSAGEHANDLER_H
+#define HIVE_MIND_BRIDGE_MESSAGEHANDLER_H
 
 #include "Callback.h"
 #include "IMessageHandler.h"
 #include "hive_mind_bridge/MessageUtils.h"
+#include <cpp-common/ILogger.h>
 
 class MessageHandler : public IMessageHandler {
   public:
-    MessageHandler();
+    MessageHandler(ILogger& logger);
     ~MessageHandler();
 
-    MessageHandlerResult handleMessage(MessageDTO message) override;
+    std::variant<std::monostate, InboundRequestHandle, InboundResponseHandle> handleMessage(
+        MessageDTO message) override;
 
     std::optional<uint32_t> handleGreet(MessageDTO greetMessage) override;
 
@@ -23,6 +25,7 @@ class MessageHandler : public IMessageHandler {
     std::optional<CallbackFunction> getCallback(const std::string& name) override;
 
   private:
+    ILogger& m_logger;
     CallbackMap m_callbacks;
     std::vector<std::string> m_callbackNames; // Association between callbacks' names and their id
 
@@ -39,4 +42,4 @@ class MessageHandler : public IMessageHandler {
         FunctionDescriptionRequestDTO functionDescriptionRequest);
 };
 
-#endif // CATKIN_ROS_MESSAGEHANDLER_H
+#endif // HIVE_MIND_BRIDGE_MESSAGEHANDLER_H

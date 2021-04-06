@@ -4,15 +4,21 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/IHiveMindBridge.h"
 #include "hive_mind_bridge/IThreadSafeQueue.h"
+#include "hive_mind_bridge/InboundRequestHandle.h"
 #include "hive_mind_bridge/MessageHandler.h"
-#include "hive_mind_bridge/MessageHandlerResult.h"
+#include "hive_mind_bridge/OutboundRequestHandle.h"
 #include "hive_mind_bridge/TCPServer.h"
+#include <cpp-common/ILogger.h>
 #include <deque>
 #include <hivemind-host/HiveMindHostDeserializer.h>
 #include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 #include <mutex>
 #include <thread>
+
+constexpr int THREAD_SLEEP_MS = 250; // The sleep time of the trheads
+constexpr int DELAY_BRFORE_DROP_S =
+    10; // The maximum delay before which a request will be dropped if no response was received.
 
 class HiveMindBridgeImpl : public IHiveMindBridge {
   public:
@@ -28,25 +34,31 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
                        IHiveMindHostSerializer& serializer,
                        IHiveMindHostDeserializer& deserializer,
                        IMessageHandler& messageHandler,
-                       IThreadSafeQueue<MessageDTO>& inboundQueue);
+                       IThreadSafeQueue<MessageDTO>& inboundQueue,
+                       IThreadSafeQueue<OutboundRequestHandle>& outboundQueue,
+                       ILogger& logger);
 
     ~HiveMindBridgeImpl();
 
-    void spin();
+    void spin() override;
 
-    void onConnect(std::function<void()> hook);
+    void onConnect(std::function<void()> hook) override;
 
-    void onDisconnect(std::function<void()> hook);
+    void onDisconnect(std::function<void()> hook) override;
 
     bool registerCustomAction(std::string name,
                               CallbackFunction callback,
-                              CallbackArgsManifest manifest);
+                              CallbackArgsManifest manifest) override;
 
-    bool registerCustomAction(std::string name, CallbackFunction callback);
+    bool registerCustomAction(std::string name, CallbackFunction callback) override;
+
+    bool queueAndSend(MessageDTO message) override;
 
     uint32_t getSwarmAgentId();
 
   private:
+    ILogger& m_logger;
+
     ITCPServer& m_tcpServer;
     IHiveMindHostDeserializer& m_deserializer;
     IHiveMindHostSerializer& m_serializer;
@@ -54,15 +66,19 @@ class HiveMindBridgeImpl : public IHiveMindBridge {
 
     IThreadSafeQueue<MessageDTO>& m_inboundQueue;
     std::thread m_inboundThread;
+    IThreadSafeQueue<OutboundRequestHandle>& m_outboundQueue;
+    std::thread m_outboundThread;
     std::mutex m_mutex;
 
-    std::deque<MessageHandlerResult> m_resultQueue;
+    std::deque<InboundRequestHandle> m_inboundRequestsQueue;
+    std::unordered_map<uint32_t, InboundResponseHandle> m_inboundResponsesMap;
 
     uint32_t m_swarmAgentID = 0;
 
     void inboundThread();
+    void outboundThread();
     bool isTCPClientConnected();
-    void sendReturn(MessageHandlerResult result);
+    void sendReturn(InboundRequestHandle result);
     bool greet();
 };
 

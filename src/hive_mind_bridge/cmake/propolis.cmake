@@ -11,7 +11,7 @@ function(propolis_fetch_populate)
             ${PROJECT_NAME}_propolis
 
             GIT_REPOSITORY https://github.com/SwarmUS/Propolis
-            GIT_TAG        304b74c087a4c3d480bb489858bca0f85fc681b9
+            GIT_TAG        ba5c34aeb607c0f12c3ebc8233cf5390647ba49c
             GIT_PROGRESS   TRUE
     )
 
@@ -27,7 +27,7 @@ function(propolis_fetch_populate)
         FetchContent_Populate(${PROPOLIS})
 
         list(APPEND CMAKE_MODULE_PATH ${${PROPOLIS_L}_SOURCE_DIR}/cmake/)
-        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src/pheromones ${${PROPOLIS_L}_BINARY_DIR})
+        add_subdirectory(${${PROPOLIS_L}_SOURCE_DIR}/src ${${PROPOLIS_L}_BINARY_DIR})
     endif()
 
 endfunction()

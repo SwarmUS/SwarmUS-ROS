@@ -1,8 +1,8 @@
-#ifndef CATKIN_ROS_TCPSERVER_H
-#define CATKIN_ROS_TCPSERVER_H
+#ifndef HIVE_MIND_BRIDGE_TCPSERVER_H
+#define HIVE_MIND_BRIDGE_TCPSERVER_H
 
 #include "hive_mind_bridge/ITCPServer.h"
-#include "ros/ros.h"
+#include <cpp-common/ILogger.h>
 #include <cstdint>
 #include <cstring>
 #include <functional>
@@ -18,7 +18,7 @@ class TCPServer : public ITCPServer {
      * Construct a TCPServer
      * @param port Port to open the server to
      */
-    TCPServer(int port);
+    TCPServer(int port, ILogger& logger);
     ~TCPServer();
 
     /**
@@ -66,6 +66,7 @@ class TCPServer : public ITCPServer {
     void onDisconnect(std::function<void()> hook) override;
 
   private:
+    ILogger& m_logger;
     int m_serverFd, m_clientFd, m_port;
     int m_addressLength;
     struct sockaddr_in m_address;
@@ -79,4 +80,4 @@ class TCPServer : public ITCPServer {
     void init();
 };
 
-#endif // CATKIN_ROS_TCPSERVER_H
+#endif // HIVE_MIND_BRIDGE_TCPSERVER_H

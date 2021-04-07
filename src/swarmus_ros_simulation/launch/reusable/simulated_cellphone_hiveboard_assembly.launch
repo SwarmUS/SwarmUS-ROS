@@ -8,6 +8,7 @@
     <arg name="hivemind_board_uuid" default="$(arg agent_id)"/>
 
     <!-- This is the port to use to connect to cellphone, emulated or not -->
+    <arg name="hivemind_host_address" default="127.0.0.1" />
     <arg name="hivemind_host_port" default="$(eval 7000 + arg('agent_id'))"/>
     <arg name="hivemind_remote_port_mock" default="$(eval 8000 + arg('agent_id'))" />
 
@@ -20,10 +21,10 @@
         <node pkg="hive_mind" type="hive_mind"  name="hive_mind" output="screen" >
             <param name="board_uuid" value="$(arg hivemind_board_uuid)" />
 
-            <param name="host_tcp_address" value="127.0.0.1" />
+            <param name="host_tcp_address" value="$(arg hivemind_host_address)" />
             <!-- In order to be able to use this port, you will need to redirect some ports inside the emulator.
                  See HiveAR readme.md for details on how to do this -->
-            <param name="host_tcp_port" type="int" value="6901" />
+            <param name="host_tcp_port" type="int" value="$(arg hivemind_host_port)" />
 
             <!-- Set port to 0 to disable server -->
             <param name="uart_mock_port" value="0" />

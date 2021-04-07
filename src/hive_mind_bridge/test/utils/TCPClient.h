@@ -2,7 +2,7 @@
 #define HIVE_MIND_BRIDGE_TCPCLIENT_H
 
 #include <arpa/inet.h>
-#include <common/IProtobufStream.h>
+#include <pheromones/IProtobufStream.h>
 #include <cstdio>
 #include <netinet/in.h>
 #include <sys/socket.h>

@@ -4,8 +4,8 @@
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <cpp-common/ILogger.h>
 #include <cstdarg>
-#include <pheromones/FunctionCallArgumentDTO.h>
 #include <optional>
+#include <pheromones/FunctionCallArgumentDTO.h>
 
 constexpr uint8_t RATE_HZ{10};
 

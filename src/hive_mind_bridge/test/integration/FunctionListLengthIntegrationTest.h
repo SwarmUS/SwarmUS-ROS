@@ -22,14 +22,13 @@ int main(int argc, char** argv) {
 
     // Send a functionListLength request
 
-
     // Listen for request
     MessageDTO message;
     deserializer.deserializeFromStream(message);
     RequestDTO request = std::get<RequestDTO>(message.getMessage());
     UserCallRequestDTO userCallRequest = std::get<UserCallRequestDTO>(request.getRequest());
     FunctionCallRequestDTO functionCallRequest =
-            std::get<FunctionCallRequestDTO>(userCallRequest.getRequest());
+        std::get<FunctionCallRequestDTO>(userCallRequest.getRequest());
     std::string functionName = functionCallRequest.getFunctionName();
 
     logger.log(LogLevel::Info, "REQUEST FROM HOST (%s): \n", functionName.c_str());
@@ -45,4 +44,4 @@ int main(int argc, char** argv) {
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 }
 
-#endif //HIVE_MIND_BRIDGE_FUNCTIONLISTLENGTHINTEGRATIONTEST_H
+#endif // HIVE_MIND_BRIDGE_FUNCTIONLISTLENGTHINTEGRATIONTEST_H

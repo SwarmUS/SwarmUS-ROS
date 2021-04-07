@@ -7,9 +7,9 @@
 #include "hive_mind_bridge/TCPServer.h"
 #include "hive_mind_bridge/ThreadSafeQueue.h"
 #include <cpp-common/ILogger.h>
+#include <memory>
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
-#include <memory>
 
 class HiveMindBridge : public IHiveMindBridge {
   public:

@@ -4,12 +4,12 @@
 #include "InboundRequestHandle.h"
 #include "hive_mind_bridge/InboundResponseHandle.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
+#include <optional>
 #include <pheromones/FunctionCallArgumentDTO.h>
 #include <pheromones/FunctionCallRequestDTO.h>
 #include <pheromones/FunctionCallResponseDTO.h>
 #include <pheromones/MessageDTO.h>
 #include <pheromones/RequestDTO.h>
-#include <optional>
 #include <variant>
 
 typedef std::unordered_map<std::string, UserCallbackFunctionWrapper> CallbackMap;

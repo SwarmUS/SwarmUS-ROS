@@ -2,9 +2,9 @@
 #define HIVE_MIND_BRIDGE_TCPCLIENT_H
 
 #include <arpa/inet.h>
-#include <pheromones/IProtobufStream.h>
 #include <cstdio>
 #include <netinet/in.h>
+#include <pheromones/IProtobufStream.h>
 #include <sys/socket.h>
 
 class TCPClient : public IProtobufStream {

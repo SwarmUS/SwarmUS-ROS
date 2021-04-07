@@ -1,9 +1,9 @@
 #include "../../utils/Logger.h"
 #include "../../utils/TCPClient.h"
 #include <chrono>
+#include <memory>
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
-#include <memory>
 #include <string.h>
 #include <thread>
 

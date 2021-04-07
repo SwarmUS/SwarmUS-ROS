@@ -54,6 +54,8 @@ void HiveMindBridgeImpl::spin() {
                 } else {
                     result++;
                 }
+            } else {
+                m_inboundRequestsQueue.erase(result);
             }
         }
     } else {

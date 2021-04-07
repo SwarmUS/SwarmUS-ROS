@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     ros::Publisher moveByPublisher =
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
 
-    int port = nodeHandle.param("TCP_SERVER_PORT", 5555);
+    int port = nodeHandle.param("TCP_SERVER_PORT", 5001);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 

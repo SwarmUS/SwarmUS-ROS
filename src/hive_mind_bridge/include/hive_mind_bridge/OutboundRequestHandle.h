@@ -1,7 +1,7 @@
 #ifndef HIVE_MIND_BRIDGE_OUTBOUNDREQUESTHANDLE_H
 #define HIVE_MIND_BRIDGE_OUTBOUNDREQUESTHANDLE_H
 
-#include <hivemind-host/MessageDTO.h>
+#include <pheromones/MessageDTO.h>
 
 enum class OutboundRequestState { READY, SENT };
 

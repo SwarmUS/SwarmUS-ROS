@@ -10,8 +10,8 @@
 #include "hive_mind_bridge/TCPServer.h"
 #include <cpp-common/ILogger.h>
 #include <deque>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
+#include <pheromones/HiveMindHostDeserializer.h>
+#include <pheromones/HiveMindHostSerializer.h>
 #include <memory>
 #include <mutex>
 #include <thread>

@@ -2,7 +2,7 @@
 #define HIVEMIND_BRIDGE_HIVEMINDHOSTSERIALIZERINTERFACEMOCK_H
 
 #include <gmock/gmock.h>
-#include <hivemind-host/IHiveMindHostSerializer.h>
+#include <pheromones/IHiveMindHostSerializer.h>
 
 class HiveMindHostSerializerInterfaceMock : public IHiveMindHostSerializer {
   public:

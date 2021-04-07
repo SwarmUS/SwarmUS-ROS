@@ -1,7 +1,7 @@
 #ifndef HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
 #define HIVE_MIND_BRIDGE_INBOUNDRESPONSEHANDLE_H
 
-#include <hivemind-host/GenericResponseDTO.h>
+#include <pheromones/GenericResponseDTO.h>
 #include <string>
 
 /**

@@ -4,7 +4,7 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <future>
-#include <hivemind-host/MessageDTO.h>
+#include <pheromones/MessageDTO.h>
 #include <optional>
 
 /**

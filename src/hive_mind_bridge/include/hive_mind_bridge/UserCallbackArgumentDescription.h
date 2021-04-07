@@ -1,7 +1,7 @@
 #ifndef HIVE_MIND_BRIDGE_USERCALLBACKARGUMENTDESCRIPTION_H
 #define HIVE_MIND_BRIDGE_USERCALLBACKARGUMENTDESCRIPTION_H
 
-#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
+#include <pheromones/FunctionDescriptionArgumentTypeDTO.h>
 #include <string>
 
 class UserCallbackArgumentDescription {

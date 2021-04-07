@@ -4,11 +4,11 @@
 #include "InboundRequestHandle.h"
 #include "hive_mind_bridge/InboundResponseHandle.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
-#include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallRequestDTO.h>
-#include <hivemind-host/FunctionCallResponseDTO.h>
-#include <hivemind-host/MessageDTO.h>
-#include <hivemind-host/RequestDTO.h>
+#include <pheromones/FunctionCallArgumentDTO.h>
+#include <pheromones/FunctionCallRequestDTO.h>
+#include <pheromones/FunctionCallResponseDTO.h>
+#include <pheromones/MessageDTO.h>
+#include <pheromones/RequestDTO.h>
 #include <optional>
 #include <variant>
 

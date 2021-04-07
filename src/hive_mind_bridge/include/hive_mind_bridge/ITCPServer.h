@@ -1,7 +1,7 @@
 #ifndef HIVEMIND_BRIDGE_ITCPSERVER_H
 #define HIVEMIND_BRIDGE_ITCPSERVER_H
 
-#include <common/IProtobufStream.h>
+#include <pheromones/IProtobufStream.h>
 #include <functional>
 
 class ITCPServer : public IProtobufStream {

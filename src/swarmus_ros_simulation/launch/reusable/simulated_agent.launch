@@ -38,7 +38,7 @@
         <node pkg="hive_mind" type="hive_mind"  name="hive_mind" output="screen" >
             <param name="board_uuid" value="$(arg hivemind_board_uuid)" />
 
-            <param name="host_tcp_address" value="10.0.0.117" />
+            <param name="host_tcp_address" value="127.0.0.1" />
             <param name="host_tcp_port" type="int" value="$(arg hivemind_host_port)" />
 
             <!-- Set port to 0 to disable server -->

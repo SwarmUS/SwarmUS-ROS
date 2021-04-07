@@ -3,8 +3,7 @@
 
 <launch>
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch"/>
-
-    <!-- Robot 1 -->
+    <!-- Agent 1 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="1"/>
     </include>
@@ -13,7 +12,7 @@
         <arg name="robot_name" value="agent_1"/>
     </include>
 
-    <!-- Robot 2 -->
+    <!-- Agent 2 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="2"/>
     </include>
@@ -24,7 +23,7 @@
         <arg name="robot_pos_y" value="1.0"/>
     </include>
 
-    <!-- Robot 3: Used by android cellphone, ID 3, so host port is 7003 -->
+    <!-- Agent 3: Used by android cellphone -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">
         <arg name="agent_id"   value="3"/>
         <!-- This address is the loopback address when running with emulator and the android device address otherwise -->

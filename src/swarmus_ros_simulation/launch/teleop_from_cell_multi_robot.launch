@@ -6,7 +6,7 @@
 
     <!-- Robot 1 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="1"/>
+        <arg name="agent_id"   value="1"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="agent_1"/>
@@ -15,7 +15,7 @@
 
     <!-- Robot 2 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="2"/>
+        <arg name="agent_id"   value="2"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="agent_2"/>
@@ -25,7 +25,7 @@
     </include>
 
     <!-- Robot 3: Used by android cellphone, ID 3, so host port is 7003 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="3"/>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">
+        <arg name="agent_id"   value="3"/>
     </include>
 </launch>

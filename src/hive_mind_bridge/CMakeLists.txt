@@ -127,3 +127,15 @@ target_link_libraries(QueueAndSendIntegrationTest
         SwarmUS::Propolis::Pheromones
         SwarmUS::ROS::HiveMind::Bridge
         )
+
+add_executable(FunctionDescriptionIntegrationTest
+        test/integration/FunctionDescriptionIntegrationTest.cpp
+        )
+
+target_link_libraries(FunctionDescriptionIntegrationTest
+        ${catkin_LIBRARIES}
+        ${LIB_NAME}
+        SwarmUS::Propolis::Pheromones
+        SwarmUS::ROS::HiveMind::Bridge
+        gmock_main
+        )

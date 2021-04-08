@@ -19,6 +19,8 @@ class HiveMindBridge : public IHiveMindBridge {
      */
     HiveMindBridge(int tcpPort, ILogger& logger);
 
+    ~HiveMindBridge();
+
     void spin();
 
     void onConnect(std::function<void()> hook);

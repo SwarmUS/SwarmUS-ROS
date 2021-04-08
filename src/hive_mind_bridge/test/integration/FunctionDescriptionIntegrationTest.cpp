@@ -1,19 +1,19 @@
+#include "../utils/Logger.h"
+#include "../utils/TCPClient.h"
+#include "hive_mind_bridge/HiveMindBridge.h"
+#include <gmock/gmock.h>
 #include <pheromones/FunctionListLengthRequestDTO.h>
-#include <pheromones/UserCallRequestDTO.h>
-#include <pheromones/MessageDTO.h>
-#include <pheromones/RequestDTO.h>
 #include <pheromones/HiveMindHostDeserializer.h>
 #include <pheromones/HiveMindHostSerializer.h>
+#include <pheromones/MessageDTO.h>
+#include <pheromones/RequestDTO.h>
+#include <pheromones/UserCallRequestDTO.h>
 #include <thread>
-#include "../utils/TCPClient.h"
-#include "../utils/Logger.h"
-#include <gmock/gmock.h>
-#include "hive_mind_bridge/HiveMindBridge.h"
 
 bool g_threadShouldRun = true;
 
 class FunctionDescriptionRequestIntegrationTestFixture : public testing::Test {
-protected:
+  protected:
     Logger m_logger;
     int m_tcpPort = 5001;
 
@@ -27,17 +27,14 @@ protected:
 
     void setUpCallbacks() {
         // Register custom actions
-        CallbackFunction moveByCallback = [&](CallbackArgs args,
-                                              int argsLength) -> std::optional<CallbackReturn> {
-
-            return {};
-        };
+        CallbackFunction moveByCallback =
+            [&](CallbackArgs args, int argsLength) -> std::optional<CallbackReturn> { return {}; };
 
         CallbackArgsManifest moveByManifest;
         moveByManifest.push_back(
-                UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Float));
+            UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Float));
         moveByManifest.push_back(
-                UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
+            UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
         m_bridge->registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
         CallbackFunction getStatus = [&](CallbackArgs args,
@@ -57,7 +54,6 @@ protected:
     void connectClient() {
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
         m_tcpClient->connect();
-
     }
 
     void greet() {
@@ -72,18 +68,16 @@ protected:
         }
     }
 
-    void SetUp() {
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
-    }
+    void SetUp() { std::this_thread::sleep_for(std::chrono::milliseconds(250)); }
 
-    void TearDown() {
-    };
+    void TearDown(){};
 
-public:
+  public:
     FunctionDescriptionRequestIntegrationTestFixture() {
         // Bridge side
         m_bridge = new HiveMindBridge(m_tcpPort, m_logger);
-        m_bridgeThread = std::thread(&FunctionDescriptionRequestIntegrationTestFixture::bridgeThread, this);
+        m_bridgeThread =
+            std::thread(&FunctionDescriptionRequestIntegrationTestFixture::bridgeThread, this);
 
         setUpCallbacks();
 
@@ -122,7 +116,8 @@ TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthR
         // LIST LENGTH
         // Given
         FunctionListLengthRequestDTO listLengthRequest;
-        UserCallRequestDTO userCallRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, listLengthRequest);
+        UserCallRequestDTO userCallRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST,
+                                           listLengthRequest);
         RequestDTO request(1, userCallRequest);
         MessageDTO requestMessage(1, 1, request);
 
@@ -135,7 +130,8 @@ TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthR
         // Then
         auto response = std::get<ResponseDTO>(responseMessage.getMessage());
         auto userCallResponse = std::get<UserCallResponseDTO>(response.getResponse());
-        auto functionListLengthResponse = std::get<FunctionListLengthResponseDTO>(userCallResponse.getResponse());
+        auto functionListLengthResponse =
+            std::get<FunctionListLengthResponseDTO>(userCallResponse.getResponse());
 
         ASSERT_EQ(functionListLengthResponse.getLength(), 2);
 
@@ -143,7 +139,8 @@ TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthR
 
         // Given
         FunctionDescriptionRequestDTO functionDescriptionRequest(0);
-        UserCallRequestDTO descriptionUserCallRequest(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, functionDescriptionRequest);
+        UserCallRequestDTO descriptionUserCallRequest(
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, functionDescriptionRequest);
         RequestDTO descriptionRequest(1, descriptionUserCallRequest);
         MessageDTO descriptionRequestMessage(1, 1, descriptionRequest);
 
@@ -155,17 +152,21 @@ TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthR
 
         // Then
         auto descriptionResponse = std::get<ResponseDTO>(descriptionResponseMessage.getMessage());
-        auto descriptionUserCallResponse = std::get<UserCallResponseDTO>(descriptionResponse.getResponse());
-        auto functionDescriptionResponse = std::get<FunctionDescriptionResponseDTO>(descriptionUserCallResponse.getResponse());
-        auto functionDescription = std::get<FunctionDescriptionDTO>(functionDescriptionResponse.getResponse());
+        auto descriptionUserCallResponse =
+            std::get<UserCallResponseDTO>(descriptionResponse.getResponse());
+        auto functionDescriptionResponse =
+            std::get<FunctionDescriptionResponseDTO>(descriptionUserCallResponse.getResponse());
+        auto functionDescription =
+            std::get<FunctionDescriptionDTO>(functionDescriptionResponse.getResponse());
 
-        ASSERT_STREQ( functionDescription.getFunctionName(), "moveBy");
+        ASSERT_STREQ(functionDescription.getFunctionName(), "moveBy");
         ASSERT_EQ(functionDescription.getArgumentsLength(), 2);
 
         // FUNCTION DESCRIPTION 1
         // Given
         FunctionDescriptionRequestDTO functionDescriptionRequest_1(1);
-        UserCallRequestDTO descriptionUserCallRequest_1(UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, functionDescriptionRequest_1);
+        UserCallRequestDTO descriptionUserCallRequest_1(
+            UserCallTargetDTO::BUZZ, UserCallTargetDTO::HOST, functionDescriptionRequest_1);
         RequestDTO descriptionRequest_1(1, descriptionUserCallRequest_1);
         MessageDTO descriptionRequestMessage_1(1, 1, descriptionRequest_1);
 
@@ -176,10 +177,14 @@ TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthR
         m_clientDeserializer->deserializeFromStream(descriptionResponseMessage_1);
 
         // Then
-        auto descriptionResponse_1 = std::get<ResponseDTO>(descriptionResponseMessage_1.getMessage());
-        auto descriptionUserCallResponse_1 = std::get<UserCallResponseDTO>(descriptionResponse_1.getResponse());
-        auto functionDescriptionResponse_1= std::get<FunctionDescriptionResponseDTO>(descriptionUserCallResponse_1.getResponse());
-        auto functionDescription_1 = std::get<FunctionDescriptionDTO>(functionDescriptionResponse_1.getResponse());
+        auto descriptionResponse_1 =
+            std::get<ResponseDTO>(descriptionResponseMessage_1.getMessage());
+        auto descriptionUserCallResponse_1 =
+            std::get<UserCallResponseDTO>(descriptionResponse_1.getResponse());
+        auto functionDescriptionResponse_1 =
+            std::get<FunctionDescriptionResponseDTO>(descriptionUserCallResponse_1.getResponse());
+        auto functionDescription_1 =
+            std::get<FunctionDescriptionDTO>(functionDescriptionResponse_1.getResponse());
 
         ASSERT_STREQ(functionDescription_1.getFunctionName(), "getStatus");
         ASSERT_EQ(functionDescription_1.getArgumentsLength(), 0);

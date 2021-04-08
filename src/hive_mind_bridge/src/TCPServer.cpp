@@ -21,9 +21,7 @@ void TCPServer::init() {
 
     int opt = 1;
     // Forcefully attaching socket
-    if (setsockopt(m_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
-                   &opt, sizeof(opt)))
-    {
+    if (setsockopt(m_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
         m_logger.log(LogLevel::Error, "TCP server setting option failed.");
     }
 

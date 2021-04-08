@@ -1,8 +1,0 @@
-<launch>
-  <arg name="robot_name" value="pioneer_0"/>
-  
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
-    <remap from="/cmd_vel" to="/$(arg robot_name)/cmd_vel"/>
-    <rosparam command="load" file="$(find swarmus_pioneer)/config/ekf_fusing_params.yaml" subst_value="true"/>
-  </node>
-</launch>

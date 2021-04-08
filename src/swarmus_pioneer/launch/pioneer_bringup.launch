@@ -53,6 +53,12 @@
             <param name="angle_compensate"    type="bool"   value="true"/>
         </node>
 
+        <!-- Odometry fusing -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true">
+            <remap from="cmd_vel" to="cmd_vel/filtered"/>
+            <rosparam command="load" file="$(find swarmus_pioneer)/config/ekf_fusing_params.yaml" subst_value="true"/>
+        </node>
+
         <!-- Robot state publisher to publish TF-->
         <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=false"/>
 

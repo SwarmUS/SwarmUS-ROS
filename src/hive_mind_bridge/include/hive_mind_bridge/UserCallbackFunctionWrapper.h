@@ -3,9 +3,9 @@
 
 #include "hive_mind_bridge/Callback.h"
 #include <functional>
-#include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallRequestDTO.h>
-#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
+#include <pheromones/FunctionCallArgumentDTO.h>
+#include <pheromones/FunctionCallRequestDTO.h>
+#include <pheromones/FunctionDescriptionArgumentTypeDTO.h>
 #include <unordered_map>
 
 class UserCallbackFunctionWrapper {

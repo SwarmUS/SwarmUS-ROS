@@ -2,10 +2,10 @@
 #define HIVEMIND_BRIDGE_MESSAGEUTILS_H
 
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
-#include <hivemind-host/FunctionCallResponseDTO.h>
-#include <hivemind-host/MessageDTO.h>
-#include <hivemind-host/ResponseDTO.h>
-#include <hivemind-host/UserCallResponseDTO.h>
+#include <pheromones/FunctionCallResponseDTO.h>
+#include <pheromones/MessageDTO.h>
+#include <pheromones/ResponseDTO.h>
+#include <pheromones/UserCallResponseDTO.h>
 
 /**
  * Utilitary functions for message creation

@@ -3,8 +3,8 @@
 
 #include "hive_mind_bridge/UserCallbackArgumentDescription.h"
 #include <functional>
-#include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallRequestDTO.h>
+#include <pheromones/FunctionCallArgumentDTO.h>
+#include <pheromones/FunctionCallRequestDTO.h>
 
 typedef std::array<FunctionCallArgumentDTO,
                    FunctionCallRequestDTO::FUNCTION_CALL_ARGUMENTS_MAX_LENGTH>

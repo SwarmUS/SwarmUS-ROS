@@ -4,8 +4,8 @@
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <cpp-common/ILogger.h>
 #include <cstdarg>
-#include <hivemind-host/FunctionCallArgumentDTO.h>
 #include <optional>
+#include <pheromones/FunctionCallArgumentDTO.h>
 
 constexpr uint8_t RATE_HZ{10};
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     ros::Publisher moveByPublisher =
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
 
-    int port = nodeHandle.param("TCP_SERVER_PORT", 8080);
+    int port = nodeHandle.param("TCP_SERVER_PORT", 5001);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 

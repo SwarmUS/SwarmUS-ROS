@@ -2,13 +2,13 @@
 #include "hive_mind_bridge/MessageHandler.h"
 #include "utils/Logger.h"
 #include <gmock/gmock.h>
-#include <hivemind-host/FunctionCallArgumentDTO.h>
-#include <hivemind-host/FunctionCallRequestDTO.h>
-#include <hivemind-host/FunctionDescriptionArgumentTypeDTO.h>
-#include <hivemind-host/FunctionDescriptionRequestDTO.h>
-#include <hivemind-host/MessageDTO.h>
-#include <hivemind-host/RequestDTO.h>
-#include <hivemind-host/UserCallRequestDTO.h>
+#include <pheromones/FunctionCallArgumentDTO.h>
+#include <pheromones/FunctionCallRequestDTO.h>
+#include <pheromones/FunctionDescriptionArgumentTypeDTO.h>
+#include <pheromones/FunctionDescriptionRequestDTO.h>
+#include <pheromones/MessageDTO.h>
+#include <pheromones/RequestDTO.h>
+#include <pheromones/UserCallRequestDTO.h>
 
 class MessageHandlerFixture : public testing::Test {
   protected:

@@ -45,13 +45,17 @@ void HiveMindBridgeImpl::spin() {
 
         for (auto result = m_inboundRequestsQueue.begin();
              result != m_inboundRequestsQueue.end();) {
-            if (result->getCallbackReturnContext().wait_for(std::chrono::seconds(0)) ==
-                std::future_status::ready) {
-                sendReturn(*result);
+            if (result->getCallbackReturnContext().valid()) {
+                if (result->getCallbackReturnContext().wait_for(std::chrono::seconds(0)) ==
+                    std::future_status::ready) {
+                    sendReturn(*result);
 
-                m_inboundRequestsQueue.erase(result);
+                    m_inboundRequestsQueue.erase(result);
+                } else {
+                    result++;
+                }
             } else {
-                result++;
+                m_inboundRequestsQueue.erase(result);
             }
         }
     } else {

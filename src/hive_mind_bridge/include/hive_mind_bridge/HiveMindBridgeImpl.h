@@ -10,10 +10,10 @@
 #include "hive_mind_bridge/TCPServer.h"
 #include <cpp-common/ILogger.h>
 #include <deque>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
 #include <memory>
 #include <mutex>
+#include <pheromones/HiveMindHostDeserializer.h>
+#include <pheromones/HiveMindHostSerializer.h>
 #include <thread>
 
 constexpr int THREAD_SLEEP_MS = 250; // The sleep time of the trheads

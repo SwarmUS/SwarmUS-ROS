@@ -4,8 +4,8 @@
 #include "hive_mind_bridge/Callback.h"
 #include "hive_mind_bridge/UserCallbackFunctionWrapper.h"
 #include <future>
-#include <hivemind-host/MessageDTO.h>
 #include <optional>
+#include <pheromones/MessageDTO.h>
 
 /**
  * A class that contains various data to be returned by the handling of an incoming message.

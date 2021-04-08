@@ -3,8 +3,8 @@
 #include "hive_mind_bridge/MessageUtils.h"
 #include <chrono>
 #include <cstdint>
-#include <hivemind-host/HiveMindHostDeserializer.h>
-#include <hivemind-host/HiveMindHostSerializer.h>
+#include <pheromones/HiveMindHostDeserializer.h>
+#include <pheromones/HiveMindHostSerializer.h>
 #include <thread>
 
 int main(int argc, char** argv) {

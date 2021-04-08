@@ -19,6 +19,14 @@ void TCPServer::init() {
     }
     m_serverFd = serverFd;
 
+    int opt = 1;
+    // Forcefully attaching socket
+    if (setsockopt(m_serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+                   &opt, sizeof(opt)))
+    {
+        m_logger.log(LogLevel::Error, "TCP server setting option failed.");
+    }
+
     m_address.sin_family = AF_INET;
     m_address.sin_addr.s_addr = INADDR_ANY;
     m_address.sin_port = htons(m_port);

@@ -15,7 +15,7 @@ bool g_threadShouldRun = true;
 class FunctionDescriptionRequestIntegrationTestFixture : public testing::Test {
 protected:
     Logger m_logger;
-    int m_tcpPort = 5006;
+    int m_tcpPort = 5001;
 
     // Bridge side
     HiveMindBridge* m_bridge;
@@ -115,7 +115,7 @@ public:
         }
     }
 };
-/*
+
 TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthRequest) {
     for (int i = 0; i < 2; i++) {
         // Given
@@ -138,7 +138,6 @@ TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionListLengthR
         ASSERT_EQ(functionListLengthResponse.getLength(), 2);
     }
 }
- */
 
 TEST_F(FunctionDescriptionRequestIntegrationTestFixture, testFunctionDescriptionRequest) {
     // Given

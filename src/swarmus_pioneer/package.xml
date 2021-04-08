@@ -84,6 +84,7 @@
     <exec_depend>realsense2_camera</exec_depend>
     <exec_depend>realsense2_description</exec_depend>
     <exec_depend>swarmus_ros_navigation</exec_depend>
+    <exec_depend>robot_localization</exec_depend>
 
     <!-- The export tag contains other, unspecified, tags -->
     <export>

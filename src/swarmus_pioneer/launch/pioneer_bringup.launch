@@ -35,7 +35,7 @@
             <param name="~tf_prefix" value="$(arg robot_name)"/>
         </node>
 
-        <!-- Intel RealSense D435i -->
+        <!-- Intel RealSense -->
         <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i')">
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>

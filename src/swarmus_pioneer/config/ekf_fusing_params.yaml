@@ -69,6 +69,9 @@ odom_frame: $(arg robot_name)/odom            # Defaults to "odom" if unspecifie
 base_link_frame: $(arg robot_name)/base_link  # Defaults to "base_link" if unspecified
 world_frame: $(arg robot_name)/odom           # Defaults to the value of odom_frame if unspecified
 
+# If set to true, the node will published the transform between the world_frame and it's child.
+publish_tf: true
+
 # The filter accepts an arbitrary number of inputs from each input message type (nav_msgs/Odometry,
 # geometry_msgs/PoseWithCovarianceStamped, geometry_msgs/TwistWithCovarianceStamped,
 # sensor_msgs/Imu). To add an input, simply append the next number in the sequence to its "base" name, e.g., odom0,

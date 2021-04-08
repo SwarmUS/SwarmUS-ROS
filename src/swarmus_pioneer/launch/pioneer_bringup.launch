@@ -33,6 +33,7 @@
             <param name="~max_angular_speed" value="1"/>
 
             <param name="~tf_prefix" value="$(arg robot_name)"/>
+            <param name="~publish_tf" value="false"/>
         </node>
 
         <!-- Intel RealSense -->

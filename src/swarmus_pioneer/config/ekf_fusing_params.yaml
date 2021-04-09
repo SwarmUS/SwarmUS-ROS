@@ -66,7 +66,7 @@ permit_corrected_publication: false
 #         estimation node from robot_localization! However, that instance should *not* fuse the global data.
 map_frame: map              # Defaults to "map" if unspecified
 odom_frame: $(arg robot_name)/odom            # Defaults to "odom" if unspecified
-base_link_frame: $(arg robot_name)/base_link  # Defaults to "base_link" if unspecified
+base_link_frame: $(arg robot_name)/base_footprint  # Defaults to "base_link" if unspecified
 world_frame: $(arg robot_name)/odom           # Defaults to the value of odom_frame if unspecified
 
 # If set to true, the node will published the transform between the world_frame and it's child.

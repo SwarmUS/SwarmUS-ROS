@@ -11,9 +11,7 @@ HiveMindBridge::HiveMindBridge(int tcpPort, ILogger& logger) :
                                                     m_outboundQueue, m_logger);
 }
 
-HiveMindBridge::~HiveMindBridge() {
-    m_bridge.release();
-}
+HiveMindBridge::~HiveMindBridge() { m_bridge.release(); }
 
 void HiveMindBridge::spin() { m_bridge->spin(); }
 

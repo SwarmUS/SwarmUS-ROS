@@ -30,6 +30,6 @@
         <arg name="hivemind_host_address" value="127.0.0.1" />
         <!-- This port is either the one set on the device or the port that has been configured to forward traffic
             to the emulator. See HiveAR readme.md to see how to do this -->
-        <arg name="hivemind_host_port" value="6901"/>
+        <arg name="hivemind_host_port" value="7003"/>
     </include>
 </launch>

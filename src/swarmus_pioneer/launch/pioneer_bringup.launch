@@ -41,10 +41,12 @@
 
         <!-- Intel RealSense -->
         <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i')">
+            <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 
         <include file="$(find swarmus_pioneer)/launch/d455_bringup.launch"  if="$(eval camera_type == 'd455')">
+            <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 

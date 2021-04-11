@@ -11,6 +11,7 @@
     <include file="$(find swarmus_pioneer)/launch/pioneer_bringup.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
         <arg name="camera_type" value="d455"/>
+        <arg name="fuse_odom" value="true"/>
     </include>
 
     <!-- Launch RTAB-MAP and the navigation stack -->

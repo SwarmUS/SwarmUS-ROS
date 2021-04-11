@@ -4,6 +4,7 @@
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="camera_type" default="d455"/>
     <arg name="camera_fps" default="15"/>
+    <arg name="fuse_odom" type="bool" default="true"/>
 
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
@@ -33,7 +34,9 @@
             <param name="~max_angular_speed" value="1"/>
 
             <param name="~tf_prefix" value="$(arg robot_name)"/>
-            <param name="~publish_tf" value="false"/>
+            
+            <param name="~publish_tf" value="false" if="$(arg fuse_odom)"/>
+            <param name="~publish_tf" value="true" unless="$(arg fuse_odom)"/>
         </node>
 
         <!-- Intel RealSense -->
@@ -55,7 +58,7 @@
         </node>
 
         <!-- Odometry fusing -->
-        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true">
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" if="$(arg fuse_odom)">
             <remap from="cmd_vel" to="cmd_vel/filtered"/>
             <rosparam command="load" file="$(find swarmus_pioneer)/config/ekf_fusing_params.yaml" subst_value="true"/>
         </node>

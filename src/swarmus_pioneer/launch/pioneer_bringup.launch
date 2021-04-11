@@ -4,7 +4,7 @@
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="camera_type" default="d455"/>
     <arg name="camera_fps" default="15"/>
-    <arg name="fuse_odom" type="bool" default="true"/>
+    <arg name="fuse_odom" default="true"/>
 
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->

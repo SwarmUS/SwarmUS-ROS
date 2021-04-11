@@ -2,7 +2,6 @@
 <!-- This launch nodes that need to be started exactly once per simulation. These include:
     - The Gazebo runtime
     - The communication broker
-    - The tf publisher node
 -->
 <launch>
     <!-- Gazebo -->
@@ -20,8 +19,5 @@
         <!-- Parameter name to use to find the robot list. Should match the yaml config file -->
         <param name="configList" value="/Broker/robots"/>
     </node>
-
-    <!-- World frame publisher -->
-    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
 
 </launch>

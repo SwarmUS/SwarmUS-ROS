@@ -2,11 +2,14 @@
 <!-- This launch files spawns a swarm of 5 fully functional robots -->
 
 <launch>
+    <arg name="interloc_refresh_rate" default"10.0"/> 
+
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch"/>
 
     <!-- Robot 1 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   default="1"/>
+        <arg name="interloc_refresh_rate"   default="$(arg connector_server_port)"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_1"/>

@@ -12,6 +12,7 @@
         <arg name="robot_name" value="$(arg robot_name)"/>
         <arg name="camera_type" value="d455"/>
         <arg name="fuse_odom" value="true"/>
+        <arg name="odom_config_file" value="$(find swarmus_pioneer)/config/pioneer_0_odom_params.yaml"/> 
     </include>
 
     <!-- Launch RTAB-MAP and the navigation stack -->

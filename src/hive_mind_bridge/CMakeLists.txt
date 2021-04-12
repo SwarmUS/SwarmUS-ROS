@@ -8,12 +8,13 @@ find_package(catkin REQUIRED COMPONENTS
   swarmus_ros_navigation
 )
 
+find_package(swarmus-hivemind-bridge CONFIG REQUIRED)
+find_package(swarmus-propolis-cpp-common CONFIG REQUIRED)
+find_package(swarmus-propolis-pheromones CONFIG REQUIRED)
+
 catkin_package(
   INCLUDE_DIRS include
 )
-
-include(cmake/propolis.cmake)
-propolis_fetch_populate()
 
 ###########
 ## Build ##
@@ -24,118 +25,16 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
 )
 
-# SwarmUS::ROS::HiveMind::Bridge
-set(LIB_NAME "swarmus-ros-hivemind-bridge")
-set(LIB_ALIAS "SwarmUS::ROS::HiveMind::Bridge")
-
-set(HIVEMIND_BRIDGE_SOURCES
-        src/TCPServer.cpp
-        src/MessageHandler.cpp
-        src/MessageUtils.cpp
-        src/HiveMindBridge.cpp
-        src/HiveMindBridgeImpl.cpp
-        src/UserCallbackFunctionWrapper.cpp
-        src/UserCallbackArgumentDescription.cpp
-        src/InboundRequestHandle.cpp
-        src/InboundResponseHandle.cpp
-        src/OutboundRequestHandle.cpp)
-
-add_library(${LIB_NAME} STATIC ${HIVEMIND_BRIDGE_SOURCES})
-add_library(${LIB_ALIAS} ALIAS ${LIB_NAME})
-
-target_link_libraries(${LIB_NAME}
-        ${catkin_LIBRARIES}
-        SwarmUS::Propolis::Pheromones
-        SwarmUS::Propolis::Cpp::Common
-        )
-
 # Main
 add_executable(hive_mind_bridge src/main.cpp)
 add_dependencies(hive_mind_bridge ${catkin_EXPORTED_TARGETS})
 target_link_libraries(hive_mind_bridge
         ${catkin_LIBRARIES}
-        SwarmUS::Propolis::Pheromones
-        SwarmUS::ROS::HiveMind::Bridge
+        swarmus-propolis-pheromones
+        swarmus-hivemind-bridge
         )
 
 target_include_directories(hive_mind_bridge
         PUBLIC include
         PRIVATE ${catkin_INCLUDE_DIRS}
-        )
-
-#############
-## Testing ##
-#############
-
-# MessageHandlerUnitTest
-add_executable(MessageHandlerUnitTest
-        test/MessageHandlerUnitTest.cpp
-        )
-
-add_test(NAME MessageHandlerUnitTest COMMAND MessageHandlerUnitTest)
-
-target_link_libraries(MessageHandlerUnitTest
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones
-        gmock_main
-        )
-
-# HiveMindBridgeImplUnitTest
-add_executable(HiveMindBridgeImplUnitTest
-        test/HiveMindBridgeImplUnitTest.cpp
-        )
-
-add_test(NAME HiveMindBridgeImplUnitTest COMMAND HiveMindBridgeImplUnitTest)
-
-target_link_libraries(HiveMindBridgeImplUnitTest
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones
-        gmock_main
-        )
-
-# Integration testing
-add_executable(SocketToMoveByIntegrationTest
-        test/integration/SocketToMoveByIntegrationTest.cpp
-        )
-
-target_link_libraries(SocketToMoveByIntegrationTest
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones
-)
-
-add_executable(QueueAndSendIntegrationTestBridgeMain
-        test/integration/QueueAndSendIntegrationTest/BridgeMain.cpp
-        )
-
-target_link_libraries(QueueAndSendIntegrationTestBridgeMain
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones
-        SwarmUS::ROS::HiveMind::Bridge
-        )
-
-add_executable(QueueAndSendIntegrationTest
-        test/integration/QueueAndSendIntegrationTest/QueueAndSendIntegrationTest.cpp
-        )
-
-target_link_libraries(QueueAndSendIntegrationTest
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones
-        SwarmUS::ROS::HiveMind::Bridge
-        )
-
-add_executable(FunctionDescriptionIntegrationTest
-        test/integration/FunctionDescriptionIntegrationTest.cpp
-        )
-
-target_link_libraries(FunctionDescriptionIntegrationTest
-        ${catkin_LIBRARIES}
-        ${LIB_NAME}
-        SwarmUS::Propolis::Pheromones
-        SwarmUS::ROS::HiveMind::Bridge
-        gmock_main
         )

@@ -16,3 +16,6 @@
 [submodule "contrib/HiveConnect"]
 	path = contrib/HiveConnect
 	url = https://github.com/SwarmUS/HiveConnect
+[submodule "contrib/HiveMindBridge"]
+	path = contrib/HiveMindBridge
+	url = https://github.com/SwarmUS/HiveMindBridge.git

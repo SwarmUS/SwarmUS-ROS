@@ -33,13 +33,12 @@ jobs:
 
       - name: Install HiveMindBridge dependency
         run: |
-          git clone https://github.com/SwarmUS/HiveMindBridge.git
-          cd HiveMindBridge
           mkdir build
           cd build
           cmake ..
           make -j
           make install
+        working-directory: 'catkin_ws/src/SwarmUS-ROS/contrib/HiveMindBridge'
 
       - name: Build
         run: |

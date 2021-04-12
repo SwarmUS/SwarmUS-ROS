@@ -2,8 +2,10 @@
 <launch>
     <arg name="robot_name" default="pioneer_0"/>
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="odom_config_file" default="$(find swarmus_pioneer)/config/pioneer_0_odom_params.yaml"/>
     <arg name="camera_type" default="d455"/>
     <arg name="camera_fps" default="15"/>
+    <arg name="fuse_odom" default="true"/>
 
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
@@ -17,8 +19,7 @@
 
         <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
             <param name="~roboclaws" value="1"/>
-            <param name="~steps_per_meter" value="77401.855111955000"/>
-            <param name="~base_width" value="0.322444444444444"/>
+            <rosparam command="load" file="$(arg odom_config_file)" subst_value="true"/>
             <param name="~swap_motors" value="true"/>
             <param name="~invert_motor_1" value="false"/>
             <param name="~invert_motor_2" value="false"/>
@@ -33,14 +34,18 @@
             <param name="~max_angular_speed" value="1"/>
 
             <param name="~tf_prefix" value="$(arg robot_name)"/>
+            
+            <param name="~publish_tf" value="$(eval not arg('fuse_odom'))"/>
         </node>
 
-        <!-- Intel RealSense D435i -->
+        <!-- Intel RealSense -->
         <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i')">
+            <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 
         <include file="$(find swarmus_pioneer)/launch/d455_bringup.launch"  if="$(eval camera_type == 'd455')">
+            <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 
@@ -51,6 +56,12 @@
             <param name="frame_id"            type="string" value="$(arg robot_name)/rplidar"/>
             <param name="inverted"            type="bool"   value="false"/>
             <param name="angle_compensate"    type="bool"   value="true"/>
+        </node>
+
+        <!-- Odometry fusing -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" if="$(arg fuse_odom)">
+            <remap from="cmd_vel" to="cmd_vel/filtered"/>
+            <rosparam command="load" file="$(find swarmus_pioneer)/config/ekf_fusing_params.yaml" subst_value="true"/>
         </node>
 
         <!-- Robot state publisher to publish TF-->

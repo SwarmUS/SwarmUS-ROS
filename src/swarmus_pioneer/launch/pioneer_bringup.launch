@@ -35,8 +35,7 @@
 
             <param name="~tf_prefix" value="$(arg robot_name)"/>
             
-            <param name="~publish_tf" value="false" if="$(arg fuse_odom)"/>
-            <param name="~publish_tf" value="true" unless="$(arg fuse_odom)"/>
+            <param name="~publish_tf" value="$(eval not arg('fuse_odom'))"/>
         </node>
 
         <!-- Intel RealSense -->

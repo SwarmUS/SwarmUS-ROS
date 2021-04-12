@@ -12,16 +12,11 @@ find_package(swarmus-hivemind-bridge CONFIG REQUIRED)
 find_package(swarmus-propolis-cpp-common CONFIG REQUIRED)
 find_package(swarmus-propolis-pheromones CONFIG REQUIRED)
 
-catkin_package(
-  INCLUDE_DIRS include
-)
-
 ###########
 ## Build ##
 ###########
 
 include_directories(
-        include
         ${catkin_INCLUDE_DIRS}
 )
 

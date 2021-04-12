@@ -19,3 +19,4 @@
 [submodule "contrib/HiveMindBridge"]
 	path = contrib/HiveMindBridge
 	url = https://github.com/SwarmUS/HiveMindBridge.git
+	branch = master

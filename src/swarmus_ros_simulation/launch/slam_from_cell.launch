@@ -5,21 +5,13 @@
     <include file="$(find swarmus_ros_navigation)/launch/navigation.launch"/>
     <include file="$(find swarmus_ros_simulation)/launch/slam_simulation.launch"/>
 
-    <node pkg="hive_mind_bridge" type="hive_mind_bridge" name="hive_mind_bridge" output="screen">
-        <param name="TCP_SERVER_PORT" type="int" value="8080"/>
-        <param name="ROBOT_NAME" type="str" value="$(arg robot_name)"/>
-    </node>
-
-    <node name="hive_mind" pkg="hive_mind" type="hive_mind"  output="screen" >
-        <param name="board_uuid" value="1" />
-
-        <param name="host_tcp_address" value="127.0.0.1" />
-        <param name="host_tcp_port" value="5555" />
-
-        <!-- Set port to 0 to disable server -->
-        <param name="uart_mock_port" value="12345" />
-
-        <param name="log_level" value="Debug" />
-    </node>
+    <!-- Robot 1 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   default="1"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+        <arg name="ns" value="agent_1"/>
+        <arg name="robot_name" value="agent_1"/>
+    </include>
 
 </launch>

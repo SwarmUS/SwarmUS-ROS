@@ -31,17 +31,20 @@ jobs:
           rosdep install --from-paths src --ignore-src -r -y
         working-directory: 'catkin_ws'
 
+      - name: Install HiveMindBridge dependency
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make -j
+          make install
+        working-directory: 'catkin_ws/src/SwarmUS-ROS/contrib/HiveMindBridge'
+
       - name: Build
         run: |
           . ./devel_isolated/setup.sh
           catkin_make_isolated
         working-directory: 'catkin_ws'
-
-      - name: Unit Tests (Hiveboard Bridge)
-        run: |
-          . ../../devel_isolated/setup.sh
-          ctest -V
-        working-directory: 'catkin_ws/build_isolated/hive_mind_bridge'
       
       - name: Check Format
         run: |

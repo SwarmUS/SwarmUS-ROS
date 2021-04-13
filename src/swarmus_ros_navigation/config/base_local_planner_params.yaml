@@ -2,14 +2,15 @@
 TrajectoryPlannerROS:
   # Robot configuration parameters
   max_vel_x: 0.3
-  min_vel_x: 0.05
+  min_vel_x: 0.025
   acc_lim_x: 0.3
   escape_vel: -0.1
 
   max_vel_theta: 1
   min_vel_theta: -1
   min_in_place_vel_theta: 0.2
-  acc_lim_theta: 0.8
+  acc_lim_theta: 3.70
+
 
   holonomic_robot: false
   
@@ -21,8 +22,8 @@ TrajectoryPlannerROS:
   # Foward simulation parameters
   sim_time: 1.0
   sim_granularity: 0.025
-  angular_sim_granularity: 0.025
-  vx_samples: 3
+  angular_sim_granularity: 0.01
+  vx_samples: 4
   vtheta_samples: 20
   controller_frequency: 20.0
 

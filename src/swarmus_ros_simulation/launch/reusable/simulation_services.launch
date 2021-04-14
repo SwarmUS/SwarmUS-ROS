@@ -15,7 +15,7 @@
 
     <!-- Communication Broker -->
     <rosparam command="load" file="$(find swarmus_ros_simulation)/launch/config/broker_config.yaml" />
-    <node name="commBroker" pkg="hive_connect" type="communication_broker"  output="screen" >
+    <node name="commBroker" pkg="hive_connect" type="communication_broker" >
         <!-- Parameter name to use to find the robot list. Should match the yaml config file -->
         <param name="configList" value="/Broker/robots"/>
     </node>

@@ -1,5 +1,5 @@
-#include "hive_mind_bridge/Callback.h"
-#include "hive_mind_bridge/HiveMindBridge.h"
+#include "HiveMindBridge/Callback.h"
+#include "HiveMindBridge/HiveMindBridge.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <cpp-common/ILogger.h>
@@ -73,10 +73,11 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle("~");
 
+    int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
+    std::string moveByTopic =
+        nodeHandle.param("moveByTopic", std::string("/agent1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
-        nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>("/navigation/moveBy", 1000);
-
-    int port = nodeHandle.param("TCP_SERVER_PORT", 5001);
+        nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 

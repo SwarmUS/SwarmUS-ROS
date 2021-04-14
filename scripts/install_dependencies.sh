@@ -50,6 +50,12 @@ git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \
     sudo make install && \
     sudo ldconfig
 
-
+# Install HiveMindBridge
+cd contrib/HiveMindBridge && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    sudo make install
 
 

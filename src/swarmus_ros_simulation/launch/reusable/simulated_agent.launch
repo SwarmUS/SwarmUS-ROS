@@ -10,6 +10,7 @@
 
     <!-- Generic parameters -->
     <arg name="agent_id"   default="1"/>
+    <arg name="interloc_refresh_rate"   default="10.0"/>
 
     <!-- Navigation stack parameters -->
     <arg name="cmd_vel_topic" default="cmd_vel"/>
@@ -48,7 +49,10 @@
             <!-- Set port to 0 to disable server -->
             <param name="remote_mock_port" type="int" value="$(arg hivemind_remote_port_mock)" />
 
-            <param name="log_level" value="Debug" />
+            <param name="log_level" value="Info" />
+
+            <!-- Interloc refresh rate in Hz -->
+            <param name="interloc_refresh_rate" value="$(arg interloc_refresh_rate)" />
         </node>
 
         <!-- HiveConnect -->

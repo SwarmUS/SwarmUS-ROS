@@ -26,25 +26,25 @@
         <arg name="headless" value="$(arg headless)"/>
     </include>
 
-    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_0_name)"/>
         <arg name="robot_name" value="$(arg robot_0_name)"/>
     </include>
 
-    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_1_name)"/>
         <arg name="robot_name" value="$(arg robot_1_name)"/>
         <arg name="robot_pos_x" value="1.0"/>
         <arg name="yaw" value="1.54"/>
     </include>
 
-    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_2_name)"/>
         <arg name="robot_name" value="$(arg robot_2_name)"/>
         <arg name="robot_pos_x" value="2.0"/>
     </include>
 
-    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="$(arg robot_3_name)"/>
         <arg name="robot_name" value="$(arg robot_3_name)"/>
         <arg name="robot_pos_x" value="7.5"/>

@@ -14,6 +14,8 @@
   <link name="$(arg prefix)/base_link" />
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="wheel_radius" value="0.0825" />
+  <xacro:property name="base_width" value="0.32" />
 
   <!-- ================================== Links ==================================-->
   <link name="$(arg prefix)/chassis">
@@ -29,7 +31,7 @@
       </geometry>
     </collision>
     <collision name="caster_collision">
-      <origin rpy="0 0 0" xyz="-0.2 0 -0.12"/>
+      <origin rpy="0 0 0" xyz="-0.2 0 ${-wheel_radius - 0.05 + 0.04}"/>
       <geometry>
         <sphere radius="0.04"/>
       </geometry>
@@ -41,7 +43,7 @@
       </geometry>
     </visual>
     <visual name="caster_visual">
-      <origin rpy="0 0 0" xyz="-0.2 0 -0.12"/>
+      <origin rpy="0 0 0" xyz="-0.2 0 ${-wheel_radius - 0.05 + 0.04}"/>
       <geometry>
         <sphere radius="0.04"/>
       </geometry>
@@ -57,13 +59,13 @@
     <collision name="collision">
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.11"/>
+        <cylinder length="0.05" radius="${wheel_radius}"/>
       </geometry>
     </collision>
     <visual name="visual">
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.11"/>
+        <cylinder length="0.05" radius="${wheel_radius}"/>
       </geometry>
     </visual>
   </link>
@@ -77,13 +79,13 @@
     <collision name="collision">
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.11"/>
+        <cylinder length="0.05" radius="${wheel_radius}"/>
       </geometry>
     </collision>
     <visual name="visual">
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.11"/>
+        <cylinder length="0.05" radius="${wheel_radius}"/>
       </geometry>
     </visual>
   </link>
@@ -149,8 +151,8 @@
 
   <!-- ================================== Joints ==================================-->
   <joint name="base_footprint_link_joint" type="fixed">
-    <origin xyz="-0.1 0 0.16" rpy="0 0 0" />
-    <parent link="$(arg prefix)/base_footprint" />
+    <origin xyz="-0.1 0 ${wheel_radius + 0.05}" rpy="0 0 0" />
+    <parent link="$(arg prefix)/base_footprint"/>
     <child link="$(arg prefix)/base_link" />
   </joint>
 
@@ -163,7 +165,7 @@
   <joint name="left_wheel_hinge" type="continuous">
     <parent link="$(arg prefix)/chassis"/>
     <child link="$(arg prefix)/left_wheel"/>
-    <origin rpy="0 1.5707 1.5707" xyz="0.1 0.17 -0.05"/>
+    <origin rpy="0 1.5707 1.5707" xyz="0.1 ${base_width/2} -0.05"/>
     <axis xyz="9.00000000e-05 9.00000000e-05 1.00000000e+00"/>
     <limit effort="100.0" velocity="100"/>
   </joint>
@@ -171,7 +173,7 @@
   <joint name="right_wheel_hinge" type="continuous">
     <parent link="$(arg prefix)/chassis"/>
     <child link="$(arg prefix)/right_wheel"/>
-    <origin rpy="0 1.5707 1.5707" xyz="0.1 -0.17 -0.05"/>
+    <origin rpy="0 1.5707 1.5707" xyz="0.1 ${-base_width/2}  -0.05"/>
     <axis xyz="9.00000000e-05 9.00000000e-05 1.00000000e+00"/>
     <limit effort="100.0" velocity="100"/>
   </joint>
@@ -233,9 +235,9 @@
         <updateRate>50</updateRate>
         <leftJoint>left_wheel_hinge</leftJoint>
         <rightJoint>right_wheel_hinge</rightJoint>
-        <wheelSeparation>0.34</wheelSeparation>
-        <wheelDiameter>0.22</wheelDiameter>
-        <wheelAcceleration>1</wheelAcceleration>
+        <wheelSeparation>${base_width}</wheelSeparation>
+        <wheelDiameter>${2*wheel_radius}</wheelDiameter>
+        <wheelAcceleration>0.6</wheelAcceleration>
         <wheelTorque>10</wheelTorque>
         <rosDebugLevel>true</rosDebugLevel>
       </plugin>

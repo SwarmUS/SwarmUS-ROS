@@ -1,7 +1,12 @@
 <?xml version="1.0" ?>
+<!-- This launch files starts a Gazebo world and include a single opperationnal Pioneer robot running  Rtab-Map. These include:
+    - Gazebo
+    - RTAB-Map
+    - rtabmpaviz 
+    - Pioneer spawner that includes a nav stack, the robot model and the simulated sensors published from Gazebo
+-->
 <launch>
     <!-- Arguments-->
-    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="robot_name" default="pioneer_0"/>
 
     <!--Remap pioneers_0's camera topics to RTAB-Map -->
@@ -12,16 +17,12 @@
     <!-- Launch a Gazebo world with walls and stuff -->
     <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
 
-    <!--Spawn a Pioneer with a camera-->
-    <!-- Robot 1 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="1"/>
-    </include>
+    <!-- Spawn pioneer in world -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_1"/>
-        <arg name="robot_name" value="agent_1"/>
+        <arg name="ns" value="$(arg robot_name)"/>
+        <arg name="robot_name" value="$(arg robot_name)"/>
     </include>
-    
+
     <!-- Launch RTAB-Map-->
     <group ns="$(arg robot_name)">
         <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch">
@@ -33,5 +34,5 @@
     </group>
 
     <!--Launch RVIZ-->
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/pioneer_0_config_rtabmap.rviz"/>
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/agent_1_config_rtabmap.rviz"/>
 </launch>

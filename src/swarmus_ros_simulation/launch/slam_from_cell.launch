@@ -1,4 +1,6 @@
 <?xml version="1.0" ?>
+<!-- This file starts a simulated Pioneer that maps its surrounding and start a simulated HiveMind.
+-->
 <launch>
     <arg name="agent_id" default="1"/>
     <arg name="robot_name" default="agent_$(arg agent_id)"/>
@@ -10,10 +12,6 @@
     <!-- Robot 1 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   default="$(arg agent_id)"/>
-    </include>
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="$(arg robot_name)"/>
-        <arg name="robot_name" value="$(arg robot_name)"/>
     </include>
 
 </launch>

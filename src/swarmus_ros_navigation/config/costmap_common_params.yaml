@@ -26,4 +26,7 @@ inflation_layer:
   cost_scaling_factor:  30.0  # exponential rate at which the obstacle cost drops off (default: 10)
   inflation_radius:     0.7  # max. distance from an obstacle at which costs are incurred for planning paths.
 
+plugins:
+  - {name: obstacle_layer,      type: "costmap_2d::ObstacleLayer"}
+  - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
 

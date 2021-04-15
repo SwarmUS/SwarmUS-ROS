@@ -1,17 +1,19 @@
 <?xml version="1.0" ?>
 <launch>
-    <arg name="robot_name" default="pioneer_0"/>
+    <arg name="agent_id" default="1"/>
+    <arg name="robot_name" default="agent_$(arg agent_id)"/>
 
-    <include file="$(find swarmus_ros_navigation)/launch/navigation.launch"/>
-    <include file="$(find swarmus_ros_simulation)/launch/slam_simulation.launch"/>
+    <include file="$(find swarmus_ros_simulation)/launch/slam_simulation.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+    </include>
 
     <!-- Robot 1 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="1"/>
+        <arg name="agent_id"   default="$(arg agent_id)"/>
     </include>
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_1"/>
-        <arg name="robot_name" value="agent_1"/>
+        <arg name="ns" value="$(arg robot_name)"/>
+        <arg name="robot_name" value="$(arg robot_name)"/>
     </include>
 
 </launch>

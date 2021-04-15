@@ -32,8 +32,6 @@
 
         <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
             <arg name="robot_name"    default="$(arg robot_name)"/>
-            <arg name="cmd_vel_topic" default="cmd_vel"/>
-            <arg name="odom_topic"    default="odom"/>
         </include>
     </group>
 </launch>

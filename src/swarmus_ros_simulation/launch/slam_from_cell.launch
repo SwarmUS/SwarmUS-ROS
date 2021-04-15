@@ -9,7 +9,7 @@
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   default="1"/>
     </include>
-    <include file="$(find swarmus_ros_simulation)/launch/pioneer_spawner.launch">
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="agent_1"/>
         <arg name="robot_name" value="agent_1"/>
     </include>

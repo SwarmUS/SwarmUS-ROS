@@ -6,6 +6,9 @@
 
     <arg name="camera_type" default="d455"/>
 
+    <arg name="use_slam" default="false"/>
+    <arg name="use_map_in_nav_stack" default="false"/>
+
     <arg name="robot_pos_x" default="0.0"/>
     <arg name="robot_pos_y" default="0.0"/>
     <arg name="robot_pos_z" default="1.0"/>
@@ -14,6 +17,11 @@
     <arg name="yaw" default="0"/>
 
     <group ns="$(arg ns)">
+        <!--Remap pioneers_0's camera topics to RTAB-Map -->
+        <remap to="rgb/camera_info" from="camera/color/camera_info"/>
+        <remap to="depth/image" from="camera/depth/image_rect_raw"/>
+        <remap to="rgb/image" from="camera/color/image_raw"/>
+
         <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=true"/>
         
         <!-- push robot_description to factory and spawn robot in gazebo -->
@@ -27,11 +35,18 @@
         </node>
 
         <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
-            <param name="robot_name" type="string" value="$(arg robot_name)" />
+            <param name="robot_name" type="string" value="$(arg robot_name)"/>
+            <param name="use_map" value="$(arg use_map_in_nav_stack)"/>
         </node>
 
         <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
             <arg name="robot_name"    default="$(arg robot_name)"/>
+            <arg name="use_map" value="$(arg use_map_in_nav_stack)"/>
+        </include>
+
+        <!-- Launch RTAB-Map -->
+        <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch" if="$(arg use_slam)">
+            <arg name="robot_name" value="$(arg robot_name)"/>
         </include>
     </group>
 </launch>

@@ -1,0 +1,23 @@
+global_costmap:
+  global_frame: /map
+  robot_base_frame: $(arg robot_name)/base_footprint
+  update_frequency: 4.0
+  publish_frequency: 3.0
+  rolling_window: true
+  width: 10.0
+  height: 10.0
+  resolution: 0.05
+  transform_tolerance: 0.5
+
+staticmap_layer:
+  unknow_cost_value: -1         # Value at which a map value is considered as unknown. If map doesn't use unknown, it will be considered occupied
+  lethal_cost_threshold: 100    # Value at which a map value is considedred lethal. Lethal cells are avoided when planning
+  track_unknown_space: false    # Set to true to translate the unknow values of the map in the costmap. Otherwise, unknown value will be considered as free space
+  map_topic: "map"              # Name of the map's topic. The map should be a nav_msgs/OccupancyGridMessage
+  first_map_only: false         # Set to true to only use the first published map ignoring all other pulications
+  subscribe_to_updates: false   # Set to true to use an additionnal map_tppic+"_updates"
+  use_maximum: false            # Only matters if the static layer is not the bottom layer. If true, only the maximum value will be written to the master costmap.
+  trinary_costmap: true         # Set to true to translate map with cells 3 states possible (NO_INFORMATION/FREE_SPACE/LETHAL_OBSTACLE). If false, intermediate values possible.
+  
+  plugins:
+  - {name: staticmap_layer,      type: "costmap_2d::StaticLayer"}

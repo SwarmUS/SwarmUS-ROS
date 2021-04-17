@@ -46,8 +46,7 @@ cd contrib/HiveMindBridge && \
     cd build && \
     cmake .. && \
     make && \
-    sudo make install && \
-    cd ../../.. && pwd
+    sudo make install
 
 # Install Buzz. The /tmp/buzz path can be changed.
 git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \

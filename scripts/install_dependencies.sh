@@ -40,6 +40,15 @@ sudo apt-get update && apt-get install -y \
 # Install cmake from pip for the latest release
 pip3 install cmake
 
+# Install HiveMindBridge
+cd contrib/HiveMindBridge && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    sudo make install && \
+    cd ../../.. && pwd
+
 # Install Buzz. The /tmp/buzz path can be changed.
 git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \
     cd /tmp/buzz && \
@@ -49,13 +58,5 @@ git clone https://github.com/MISTLab/Buzz.git /tmp/buzz && \
     make && \
     sudo make install && \
     sudo ldconfig
-
-# Install HiveMindBridge
-cd contrib/HiveMindBridge && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    sudo make install
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- This file starts a simulated Pioneer that maps its surrounding and start a simulated HiveMind.
+<!-- This file starts a simulated Pioneer that maps its surrounding and starts a simulated HiveMind.
 -->
 <launch>
     <arg name="agent_id" default="1"/>

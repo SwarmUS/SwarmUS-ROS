@@ -3,7 +3,7 @@
 
 ## Overview
 
-This package contains the nodes related to the navigation stack of our pioneer 2DX.
+This package contains the nodes related to the navigation stack and the mapping nodes of our pioneer 2DX.
 
 **Keywords:** Pioneer, Swarm, MoveBase, Navigation, move_base
 
@@ -26,21 +26,17 @@ The swarmus_ros_navigation package has been tested under [ROS] melodic on Noetic
 - [move_base](http://wiki.ros.org/move_base) (navigation stack)
 - [global_planner](http://wiki.ros.org/move_base) (Global trajectory planner)
 - [actionlib](http://wiki.ros.org/move_base) (Interface between the desired goal and the navigation stack)
+- [tf2](http://wiki.ros.org/tf2) (Transform libraries)
+- [RTAB-Map](http://introlab.github.io/rtabmap/)
 
 #### Building
 
-To build from source, clone the latest version from the root of this repository into your catkin workspace and compile the package using
-
-	cd catkin_ws/src
-	git clone https://github.com/SwarmUS/SwarmUS-ROS.git
-	cd ../
-	rosdep install --from-paths . --ignore-src -r -y
-	catkin_make
+To build from source, follow the building instructions in the [SwarmUS/SwarmUS-ROS](https://github.com/SwarmUS/SwarmUS-ROS) repo.
 
 
 ## Usage
 
-To start the navigation stack for the pioneer_0, run this command:
+To start the navigation stack (the move_base node) for the pioneer_0, run this command:
 
 	roslaunch swarmus_ros_navigation navigation.launch
 
@@ -58,35 +54,46 @@ To start the navigation stack of a specific pioneer, run this command:
 
      General arguments:
 
-     - **`robot_name`**  Name of the first robot. Default: `pioneer_0`.
-     - **`cmd_vel_topic`**  Name of the first robot. Default: `cmd_vel`.
-     - **`odom_topic`**  Name of the first robot. Default: `odom`.
-     - **`base_global_planner`** Type of global planner to use. Default: `global_planner/GlobalPlanner`.
+     - **`robot_name`**  Name of the robot that will be used to prefix the topics  and the needed frame. Default: `pioneer_0`.
+     - **`use_map`**  Flag to indicate if the global costmap should used an occupancy grid topic and should receive goals in its map frame. Default: `false`.
      
-     Parameters of the costmap (other parameters are found in the .config files):
+     Parameters of the costmap are found inside the config directory:
      
-     -  **`global_costmap/global_frame`**  Global reference frame in which the global costmap is build. Default: `robot_name/odom`.
-     -  **`global_costmap/robot_base_frame`**  Frame used to represent the base of the robot in the global costmap. Default: `robot_name/base_footprint`.
+     -  **`costmap_common_params.yaml`**  Config files that contains params used by the local and global costmap. Includes the params for all plugins used in the navigation stack.
+     -  **`global_costmap_params.yaml`**  Config files that contains params used by global costmap. This config doesn't use a map as a layer so it will only plan depending on the obstacle layer and an inflation layer. Only loaded if **`use_map`** is false.
+     -  **`global_costmap_with_map_params.yaml`** Config files that contains params used by global costmap. This config uses the map frame and an occupancy grid as a layer. It subscribes to the `grid_map` topic. Only loaded if **`use_map`** is true.
+     -  **`local_costmap_params.yaml`**  Config files that contains params used by lobal costmap. Uses the obstacle layer and an inflation layer.
+-  **`base_local_planer_params.yaml`**  Config files that contains params used by  `TrajectoryPlannerROS`.  Theses params dictate the behavior of the speed controller to follow its trajectory and avoid obstacles.
+     -  **`base_global_planer_params.yaml`**  Config files that contains params used by  `BaseGlobalPlanner`.  Theses params indicates mainly which algorithm to use and how to interpret the global_costmap to create global trajectory.
+     
+     
+     
+* **rtabmap.launch:** Starts a RTAB-map to launch a slam session.
 
-     -  **`local_costmap/global_frame`**  Global reference frame in which the local costmap is build. Default: `robot_name/odom`.
-     -  **`local_costmap/robot_base_frame`**  Frame used to represent the base of the robot in the local costmap. Default: `robot_name/base_footprint`.
+     General arguments:
+
+     - **`robot_name`**  Name of the robot that will be used to prefix the topics  and the needed frame. Default: `pioneer_0`.
+
+     Parameters of the costmap are defined in the [RTAB-Map wiki](http://wiki.ros.org/rtabmap_ros).
+
      
-     
-     
+
 * **rviz_pioneer_0.launch**: Starts a rviz node to visualize the results of move_base costmaps, move_base plans and data of sensors in space.  
 
-     * The config of rviz can be found at swarmus_ros_navigation/rviz/pioneer_0_config.rviz
+* **rviz_agent_1.launch**: Same as **rviz_pioneer_0.launch** but with the robot name changed to `agent_1`.  
+
+* **rviz_pioneer_0_rtabmap.launch**: Starts a rviz node like **rviz_pioneer_0.launch** but the fixed frame is set to `robot_name/map`, move_base's goals are issued in this new frame and an occupancy grid is displayed.  
 ## Nodes
 
 ### Navigation
 
-- Node that transform a x and y desired deplacement of the robot and translate it in move_base goal.
+- Node that transform a x and y desired displacement of the robot and translate it in move_base goal.
 
 #### Subscribed Topics
 
 * **`/robot_name/navigation/moveBy`** (swarmus_ros_navigation::MoveByMessage)
 
-	Deplacement command in x and y command.
+	Displacement command in x and y command.
 
 
 #### Published Topics

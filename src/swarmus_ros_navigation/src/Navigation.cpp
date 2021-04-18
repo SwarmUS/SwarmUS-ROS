@@ -36,9 +36,7 @@ void Navigation::fetchRosParameters() {
         const std::string moveBaseGlobalFrameParam = "move_base/global_costmap/global_frame";
         if (ros::param::get(moveBaseGlobalFrameParam, m_RosParameters.moveBaseGlobalFrame)) {
             // TODO add a check to see if a transform exist between frames
-            m_doGoalNeedsTransform =
-                m_RosParameters.moveBaseGlobalFrame !=
-                m_robotBaseFrame;
+            m_doGoalNeedsTransform = m_RosParameters.moveBaseGlobalFrame != m_robotBaseFrame;
         } else {
             ROS_WARN("Couldn't get the global frame of the move_base's global costmap. The "
                      "swarmus_ros_navigation_node will publish goal in the %s frame",

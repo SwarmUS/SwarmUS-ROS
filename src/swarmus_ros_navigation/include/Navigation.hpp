@@ -23,7 +23,8 @@ struct RosParameters {
 class Navigation {
   protected:
     /**
-     * @brief Stores the tf_prefix that needs to be added before each frame ID and stores the global frame in wich command will be issue
+     * @brief Stores the tf_prefix that needs to be added before each frame ID and stores the global
+     *frame in wich command will be issue
      **/
     void fetchRosParameters();
 
@@ -68,7 +69,8 @@ class Navigation {
     tf2_ros::Buffer m_tfBuffer;
 
     /**
-     * @brief Flag used to indicate if goal needs to be transform in the global frame of move_base. Needed if the global frame is not base_footprint
+     * @brief Flag used to indicate if goal needs to be transform in the global frame of move_base.
+     *Needed if the global frame is not base_footprint
      **/
     bool m_doGoalNeedsTransform;
 
@@ -78,14 +80,16 @@ class Navigation {
     std::string m_robotBaseFrame;
 
     /**
-     * @brief Transforms the goal in the robot base frame into the frame of the move_base's global costmap
+     * @brief Transforms the goal in the robot base frame into the frame of the move_base's global
+     *costmap
      *
      * @param goalInBaseFrame Goal in the robot base frame
-     * 
+     *
      * @return Stamped pose of the goal in the move_base's global costmap
      *
      **/
-    geometry_msgs::PoseStamped getGoalInGlobalFrame(const geometry_msgs::PoseStamped goalInBaseFrame);
+    geometry_msgs::PoseStamped getGoalInGlobalFrame(
+        const geometry_msgs::PoseStamped goalInBaseFrame);
 
     /**
      * @brief Transforms a x and y deplacement command from the user in a move_base goal

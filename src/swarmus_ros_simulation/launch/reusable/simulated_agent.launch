@@ -12,10 +12,6 @@
     <arg name="agent_id"   default="1"/>
     <arg name="interloc_refresh_rate"   default="10.0"/>
 
-    <!-- Navigation stack parameters -->
-    <arg name="cmd_vel_topic" default="cmd_vel"/>
-    <arg name="odom_topic"    default="odom"/>
-
     <!-- HiveMind Connector Node -->
     <arg name="connector_server_port" default="$(eval 7000 + arg('agent_id'))"/>
 

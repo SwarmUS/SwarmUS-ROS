@@ -29,24 +29,16 @@ The swarmus_ros_simulation package has been tested under [ROS] melodic on 18.04 
 
 #### Building
 
-To build from source, clone the latest version from the root of this repository into your catkin workspace and compile the package using
-
-	cd catkin_ws/src
-	git clone https://github.com/SwarmUS/SwarmUS-ROS.git
-	cd ../
-	rosdep install --from-paths . --ignore-src
-	catkin_make
-
-
+To build from source, follow the building instructions in the [SwarmUS/SwarmUS-ROS](https://github.com/SwarmUS/SwarmUS-ROS) repo.
 
 ## Usage
 To start the basic multirobot simulation, run
 
 	roslaunch swarmus_ros_simulation multirobot_empty.launch
 
-Then to visualize and control the pioneer_0, run
+Then to visualize and control the pioneer_1, run
 
-    roslaunch swarmus_ros_navigation rviz_pioneer_0.launch 
+    roslaunch swarmus_ros_navigation rviz_pioneer_1.launch 
 
 ## Message files
 
@@ -74,8 +66,9 @@ Then to visualize and control the pioneer_0, run
      -  **`debug`** Start gzserver (Gazebo Server) in debug mode using gdb. Default: `false`.
 
      Robot instance arguments and params
+     
      -  **`model`** Tells ROS where to find the .URDF model of the robot Default: `$(find swarmus_ros_description)/urdf/pioneer.urdf.xacr`.
--  **`robot_0_name`**  Name of the first robot. Default: `pioneer_0`.
+
      - **`robot_1_name`**  Name of the first robot. Default: `pioneer_1`.
      **...**
      
@@ -129,7 +122,7 @@ Measures the position of all the robots relatively to the owner of the node. Its
 
 	List of the name of all robots.
 
-- **`~/robot_name`**(string, default:"pioneer_0")
+- **`~/robot_name`**(string, default:"pioneer_1")
 
   Name of the robot that owns the node
 
@@ -154,7 +147,7 @@ Node owned by a simulated robot that talks with a **communicationBroker** node. 
 
 #### Parameters
 
-* **`~/robot_name`**(string, default:"pioneer_0")
+* **`~/robot_name`**(string, default:"pioneer_1")
 
 	Name of the robot that owns the node
 	

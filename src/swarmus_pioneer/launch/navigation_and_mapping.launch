@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
-    <arg name="robot_name" default="pioneer_0"/>
+    <arg name="robot_name" default="pioneer_1"/>
 
     <group ns="$(arg robot_name)">
         <!-- Launch move_base and the navigation stack -->
@@ -10,7 +10,7 @@
 
         <!-- Start the moveBy interface -->
         <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
-            <param name="robot_name" type="string" value="$(arg robot_name)" />
+            <param name="tf_prefix" type="string" value="$(arg robot_name)" />
         </node>
 
         <!-- Launch RTAB-Map-->

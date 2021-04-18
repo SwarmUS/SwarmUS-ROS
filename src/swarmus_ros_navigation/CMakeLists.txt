@@ -13,6 +13,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   actionlib
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -107,7 +110,7 @@ add_message_files(
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES swarmus_ros_navigation
-  CATKIN_DEPENDS move_base roscpp std_msgs
+  CATKIN_DEPENDS move_base move_base_msgs roscpp std_msgs actionlib tf2 tf2_ros tf2_geometry_msgs
 #  DEPENDS system_lib
 )
 

@@ -10,7 +10,6 @@
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
 
     <!-- define the robots as args -->
-    <arg name="robot_0_name" default="pioneer_0"/>    
     <arg name="robot_1_name" default="pioneer_1"/>
     <arg name="robot_2_name" default="pioneer_2"/>
     <arg name="robot_3_name" default="pioneer_3"/>
@@ -24,11 +23,6 @@
         <arg name="paused" value="$(arg paused)"/>
         <arg name="use_sim_time" value="$(arg use_sim_time)"/>
         <arg name="headless" value="$(arg headless)"/>
-    </include>
-
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="$(arg robot_0_name)"/>
-        <arg name="robot_name" value="$(arg robot_0_name)"/>
     </include>
 
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">

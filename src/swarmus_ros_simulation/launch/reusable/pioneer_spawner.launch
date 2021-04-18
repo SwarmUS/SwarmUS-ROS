@@ -2,9 +2,12 @@
 <launch>
     <arg name="ns" />
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
-    <arg name="robot_name" default="pioneer"/>
+    <arg name="robot_name" default="pioneer_1"/>
 
     <arg name="camera_type" default="d455"/>
+
+    <arg name="use_slam" default="false"/>
+    <arg name="use_map_in_nav_stack" default="false"/>
 
     <arg name="robot_pos_x" default="0.0"/>
     <arg name="robot_pos_y" default="0.0"/>
@@ -27,13 +30,17 @@
         </node>
 
         <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
-            <param name="robot_name" type="string" value="$(arg robot_name)" />
+            <param name="tf_prefix" value="$(arg robot_name)"/>
         </node>
 
         <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
             <arg name="robot_name"    default="$(arg robot_name)"/>
-            <arg name="cmd_vel_topic" default="cmd_vel"/>
-            <arg name="odom_topic"    default="odom"/>
+            <arg name="use_map" value="$(arg use_map_in_nav_stack)"/>
+        </include>
+
+        <!-- Launch RTAB-Map -->
+        <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch" if="$(arg use_slam)">
+            <arg name="robot_name" value="$(arg robot_name)"/>
         </include>
     </group>
 </launch>

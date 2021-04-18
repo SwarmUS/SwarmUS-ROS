@@ -13,17 +13,18 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <ros/ros.h>
 #include <swarmus_ros_navigation/MoveByMessage.h>
+#include <tf2_ros/transform_listener.h>
 
 struct RosParameters {
-    std::string robotName;
-    std::string clientDestination;
+    std::string tf_prefix;
+    std::string moveBaseGlobalFrame;
 };
 
 class Navigation {
   protected:
     /**
-     * @brief Stores the robotName from the get robot_name ROS param and generates the
-     *clientDestination which is the name of the move_base topic
+     * @brief Stores the tf_prefix that needs to be added before each frame ID and stores the global
+     *frame in wich command will be issue
      **/
     void fetchRosParameters();
 
@@ -56,6 +57,39 @@ class Navigation {
      * @brief Flag used to indicate when a new goal is generated
      **/
     bool m_hasNewGoal;
+
+    /**
+     * @brief Transform listener used to get transfrom between frames
+     **/
+    tf2_ros::TransformListener m_tfListener;
+
+    /**
+     * @brief Transform listener's buffer that holds the frames catch by the listener.
+     **/
+    tf2_ros::Buffer m_tfBuffer;
+
+    /**
+     * @brief Flag used to indicate if goal needs to be transform in the global frame of move_base.
+     *Needed if the global frame is not base_footprint
+     **/
+    bool m_doGoalNeedsTransform;
+
+    /**
+     * @brief Id of the robot base_footprint
+     **/
+    std::string m_robotBaseFrame;
+
+    /**
+     * @brief Transforms the goal in the robot base frame into the frame of the move_base's global
+     *costmap
+     *
+     * @param goalInBaseFrame Goal in the robot base frame
+     *
+     * @return Stamped pose of the goal in the move_base's global costmap
+     *
+     **/
+    geometry_msgs::PoseStamped getGoalInGlobalFrame(
+        const geometry_msgs::PoseStamped goalInBaseFrame);
 
     /**
      * @brief Transforms a x and y deplacement command from the user in a move_base goal

@@ -2,7 +2,7 @@
 <robot name="pioneer_swarmus"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:arg name="prefix" default="p_swarmus"/>
+  <xacro:arg name="prefix" default="pioneer_1"/>
   <xacro:arg name="color" default="DepthMapVS"/>
   <xacro:arg name="camera_type" default="d435i"/>
   <xacro:property name="camera_type" value="$(arg camera_type)"/>

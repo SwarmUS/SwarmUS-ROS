@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
 <!-- This launch files starts a Gazebo world and include a single opperationnal Pioneer robot running  Rtab-Map. These include:
     - Gazebo
-    - RTAB-Map
-    - rtabmpaviz 
+    - Rviz
     - Pioneer spawner that includes a nav stack, the robot model and the simulated sensors published from Gazebo
 -->
 <launch>

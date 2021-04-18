@@ -5,13 +5,12 @@
     
   <!-- Navigation -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-
+    <!-- Load common parameters of the local and global planner-->
     <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
+    <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
 
-    <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>     
-
-    <rosparam file="$(find swarmus_ros_navigation)/config/global_costmap_with_map_params.yaml" command="load" subst_value="true" if="$(arg use_map)"/>
     <rosparam file="$(find swarmus_ros_navigation)/config/global_costmap_params.yaml" command="load" subst_value="true" unless="$(arg use_map)"/>
+    <rosparam file="$(find swarmus_ros_navigation)/config/global_costmap_with_map_params.yaml" command="load" subst_value="true" if="$(arg use_map)"/>
 
     <rosparam file="$(find swarmus_ros_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
 

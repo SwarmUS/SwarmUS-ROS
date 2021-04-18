@@ -9,8 +9,10 @@
     <!-- Arguments-->
     <arg name="robot_name" default="agent_1"/>
 
-    <!-- Launch a Gazebo world with walls and stuff -->
-    <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
+    <!--Remap pioneers_0's camera topics to RTAB-Map -->
+    <remap from="$(arg robot_name)/camera/color/camera_info" to="$(arg robot_name)/rgb/camera_info"/>
+    <remap from="$(arg robot_name)/camera/color/image_raw" to="$(arg robot_name)/rgb/image"/>
+    <remap from="$(arg robot_name)/camera/depth/image_rect_raw" to="$(arg robot_name)/depth/image"/>
 
     <!-- Spawn pioneer in world -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
@@ -19,6 +21,9 @@
         <arg name="use_slam" value="true"/>
         <arg name="use_map_in_nav_stack" value="true"/>
     </include>
+
+    <!-- Launch a Gazebo world with walls and stuff -->
+    <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
 
     <!--Launch RVIZ-->
     <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/agent_1_config_rtabmap.rviz"/>

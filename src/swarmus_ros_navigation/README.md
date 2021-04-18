@@ -36,13 +36,13 @@ To build from source, follow the building instructions in the [SwarmUS/SwarmUS-R
 
 ## Usage
 
-To start the navigation stack (the move_base node) for the pioneer_0, run this command:
+To start the navigation stack (the move_base node) for the pioneer_1, run this command:
 
 	roslaunch swarmus_ros_navigation navigation.launch
 
 To start the navigation stack of a specific pioneer, run this command:
 
-	roslaunch swarmus_ros_navigation navigation.launch robot_name:=pioneer_1
+	roslaunch swarmus_ros_navigation navigation.launch robot_name:=pioneer_2
 
 ## Message files
 
@@ -54,7 +54,7 @@ To start the navigation stack of a specific pioneer, run this command:
 
      General arguments:
 
-     - **`robot_name`**  Name of the robot that will be used to prefix the topics  and the needed frame. Default: `pioneer_0`.
+     - **`robot_name`**  Name of the robot that will be used to prefix the topics  and the needed frame. Default: `pioneer_1`.
      - **`use_map`**  Flag to indicate if the global costmap should used an occupancy grid topic and should receive goals in its map frame. Default: `false`.
      
      Parameters of the costmap are found inside the config directory:
@@ -72,17 +72,17 @@ To start the navigation stack of a specific pioneer, run this command:
 
      General arguments:
 
-     - **`robot_name`**  Name of the robot that will be used to prefix the topics  and the needed frame. Default: `pioneer_0`.
+     - **`robot_name`**  Name of the robot that will be used to prefix the topics  and the needed frame. Default: `pioneer_1`.
 
      Parameters of the costmap are defined in the [RTAB-Map wiki](http://wiki.ros.org/rtabmap_ros).
 
      
 
-* **rviz_pioneer_0.launch**: Starts a rviz node to visualize the results of move_base costmaps, move_base plans and data of sensors in space.  
+* **rviz_pioneer_1.launch**: Starts a rviz node to visualize the results of move_base costmaps, move_base plans and data of sensors in space.  
 
-* **rviz_agent_1.launch**: Same as **rviz_pioneer_0.launch** but with the robot name changed to `agent_1`.  
+* **rviz_agent_1.launch**: Same as **rviz_pioneer_1.launch** but with the robot name changed to `agent_1`.  
 
-* **rviz_pioneer_0_rtabmap.launch**: Starts a rviz node like **rviz_pioneer_0.launch** but the fixed frame is set to `robot_name/map`, move_base's goals are issued in this new frame and an occupancy grid is displayed.  
+* **rviz_pioneer_1_rtabmap.launch**: Starts a rviz node like **rviz_pioneer_1.launch** but the fixed frame is set to `robot_name/map`, move_base's goals are issued in this new frame and an occupancy grid is displayed.  
 ## Nodes
 
 ### Navigation
@@ -104,7 +104,7 @@ To start the navigation stack of a specific pioneer, run this command:
 
 #### Parameters
 
-- **`~/robot_name`**(string, default:"pioneer_0")
+- **`~/robot_name`**(string, default:"pioneer_1")
 
   Name of the robot that owns the node
 

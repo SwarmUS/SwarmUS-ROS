@@ -35,8 +35,8 @@ namespace Simulation {
                 "~robot_name",
                 robot_name)) // The ~ is used to get param declared inside the <node></node> tags
         {
-            ROS_INFO("No param name was given. pioneer_0 will be used instead");
-            robot_name = "pioneer_0";
+            ROS_INFO("No param name was given. pioneer_1 will be used instead");
+            robot_name = "pioneer_1";
         }
 
         return robot_name;

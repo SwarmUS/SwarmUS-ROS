@@ -30,10 +30,10 @@ int main(int argc, char** argv) {
     // Send message each second
     ros::Rate loop_rate(1);
 
-    // For current implementation, pioneer_0 only will send a message to pioneer_1.
+    // For current implementation, pioneer_1 only will send a message to pioneer_1.
     while (ros::ok()) {
         swarmus_ros_simulation::Communication msg;
-        if (m_robotName == "pioneer_0") {
+        if (m_robotName == "pioneer_1") {
             msg.source_robot = m_robotName;
             msg.target_robot = Simulation::Communication::allRobotsExceptSelf;
             msg.message = m_robotName + " say hello.";

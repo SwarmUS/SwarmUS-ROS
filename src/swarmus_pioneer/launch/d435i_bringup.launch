@@ -2,7 +2,7 @@
 <launch>
     <!--remap from="/camera/aligned_depth_to_color/image_raw" to="/camera/depth_registered/image_raw" /-->
     <!--remap from="/camera/depth/color/points" to="/pointcloud" /-->
-    <arg name="robot_name" default="pioneer_0"/>
+    <arg name="robot_name" default="pioneer_1"/>
     <arg name="camera_fps" default="30"/>
 
     <include file="$(find realsense2_camera)/launch/rs_camera.launch">

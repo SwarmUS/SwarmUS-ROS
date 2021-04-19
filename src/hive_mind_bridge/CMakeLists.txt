@@ -12,6 +12,12 @@ find_package(swarmus-hivemind-bridge CONFIG REQUIRED)
 find_package(swarmus-propolis-cpp-common CONFIG REQUIRED)
 find_package(swarmus-propolis-pheromones CONFIG REQUIRED)
 
+catkin_package(
+        CATKIN_DEPENDS
+        roscpp
+        std_msgs
+)
+
 ###########
 ## Build ##
 ###########

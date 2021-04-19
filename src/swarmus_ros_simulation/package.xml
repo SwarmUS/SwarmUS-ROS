@@ -30,6 +30,9 @@
   <build_export_depend>tf</build_export_depend>
 
   <exec_depend>controller_manager</exec_depend>
+  <exec_depend>hive_mind</exec_depend>
+  <exec_depend>hive_connect</exec_depend>
+  <exec_depend>hive_mind_bridge</exec_depend>
   <exec_depend>joint_state_controller</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>roscpp</exec_depend>

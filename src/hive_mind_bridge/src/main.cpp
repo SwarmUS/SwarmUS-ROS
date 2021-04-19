@@ -1,5 +1,5 @@
-#include "HiveMindBridge/Callback.h"
-#include "HiveMindBridge/HiveMindBridge.h"
+#include "hivemind-bridge/Callback.h"
+#include "hivemind-bridge/HiveMindBridge.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
 #include <cpp-common/ILogger.h>

@@ -30,12 +30,19 @@ TrajectoryPlannerROS:
  # Trajectory scoring parameters
  # cost = pdist_scale * (dist_trajectoryEnd_to_path) + gdist_scale * (dist_trajectoryEnd_to_localGoal) + occdist_sclae * (maximum obstacle cost along the trajectory cost (0-254))
   meter_scoring: true
-  pdist_scale: 4
-  gdist_scale: 1
-  occdist_scale: 0.5
-  heading_lookahead: 0.7
+  pdist_scale: 4                          # The weighting for how much the controller should stay close to the path it was given, maximal possible value is 5.0
+  gdist_scale: 1                          # The weighting for how much the controller should attempt to reach its local goal, also controls speed, maximal possible value is 5.0 
+  occdist_scale: 0.5                      # The weighting for how much the controller should attempt to avoid obstacles 
+  heading_lookahead: 0.7                  # How far to look ahead in meters when scoring different in-place-rotation trajectories 
   
-  heading_scoring: false
+  heading_scoring: false                  # Whether to score based on the robot's heading to the path or its distance from the path 
+  heading_scoring_timestep : 0.8          # heading_scoring_timestep
+  dwa: true                               # hether to use the Dynamic Window Approach (DWA)_ or whether to use Trajectory Rollout 
+  publish_cost_grid_pc: false             # Whether or not to publish the cost grid that the planner will use when planning. When true, a sensor_msgs/PointCloud2 will be available on the ~<name>/cost_cloud topic. Each point cloud represents the cost grid and has a field for each individual scoring function component as well as the overall cost for each cell, taking the scoring parameters into account.
+  global_frame_id: $(arg robot_name)/odom # The frame to set for the cost_cloud. Should be set to the same frame as the local costmap's global frame.
+  
+  prune_plan: true                        # Defines whether or not to eat up the plan as the robot moves along the path. If set to true, points will fall off the end of the plan once the robot moves 1 meter past them.
 
   # Osciillation prevention parameters
-  oscillation_reset_dist: 0.1
+  oscillation_reset_dist: 0.1             # How far the robot must travel in meters before oscillation flags are reset
+

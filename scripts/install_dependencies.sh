@@ -42,8 +42,9 @@ pip3 install cmake
 
 # Install HiveMindBridge
 cd contrib/HiveMindBridge && \
-    mkdir build && \
+    mkdir -p build && \
     cd build && \
+    rm -rf ./* && \
     cmake .. && \
     make && \
     sudo make install

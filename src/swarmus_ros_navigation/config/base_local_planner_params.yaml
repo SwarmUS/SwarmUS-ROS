@@ -37,8 +37,8 @@ TrajectoryPlannerROS:
   occdist_scale: 0.01                     # The weighting for how much the controller should attempt to avoid obstacles 
   heading_lookahead: 0.7                  # How far to look ahead in meters when scoring different in-place-rotation trajectories 
   
-  heading_scoring: false                  # Whether to score based on the robot's heading to the path or its distance from the path 
-  heading_scoring_timestep : 0.8          # heading_scoring_timestep
+  heading_scoring: true                   # Whether to score based on the robot's heading to the path or its distance from the path 
+  heading_scoring_timestep : 0.5          # heading_scoring_timestep
   dwa: false                              # Whether to use the Dynamic Window Approach (DWA)_ or whether to use Trajectory Rollout 
   publish_cost_grid_pc: true              # Whether or not to publish the cost grid that the planner will use when planning. When true, a sensor_msgs/PointCloud2 will be available on the ~<name>/cost_cloud topic. Each point cloud represents the cost grid and has a field for each individual scoring function component as well as the overall cost for each cell, taking the scoring parameters into account.
   global_frame_id: $(arg robot_name)/odom # The frame to set for the cost_cloud. Should be set to the same frame as the local costmap's global frame.

@@ -20,8 +20,8 @@ obstacle_layer:
 
 inflation_layer:
   enabled:              true
-  cost_scaling_factor:  30.0  # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:     0.7  # max. distance from an obstacle at which costs are incurred for planning paths.
+  cost_scaling_factor:  2.5  # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:     1  # max. distance from an obstacle at which costs are incurred for planning paths.
 
 staticmap_layer:
   unknow_cost_value: -1         # Value at which a map value is considered as unknown. If map doesn't use unknown, it will be considered occupied

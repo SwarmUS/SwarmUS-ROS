@@ -1,0 +1,34 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- swarmus_ros_navigation
+- catkin
+- controller_manager
+- geometry_msgs
+- tf
+- swarmus_ros_description
+- message_runtime
+- std_msgs
+- rtabmap_ros
+- hive_connect
+- message_generation
+- joint_state_controller
+- rospy
+- roscpp
+- xacro
+- robot_state_publisher
+- hive_mind_bridge
+- hive_mind
+description: The swarmus_ros_simulation package
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs:
+- InterLocalization_grid
+- InterLocalization
+- Communication
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

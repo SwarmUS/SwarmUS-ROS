@@ -1,0 +1,19 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- realsense2_description
+- gazebo_ros
+- robot_state_publisher
+- catkin
+- controller_manager
+- joint_state_controller
+description: The swarmus_ros_description package
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

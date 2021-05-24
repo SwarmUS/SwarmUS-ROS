@@ -1,0 +1,25 @@
+actions: []
+authors: SwarmUS <swarmus@usherbrooke.ca>
+brief: ''
+bugtracker: ''
+depends:
+- std_msgs
+- tf2_ros
+- actionlib
+- roscpp
+- catkin
+- rtabmap_ros
+- move_base
+- move_base_msgs
+- global_planner
+- tf2
+- tf2_geometry_msgs
+description: The swarmus_ros_navigation package
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs:
+- MoveByMessage
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

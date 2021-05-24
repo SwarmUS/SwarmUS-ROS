@@ -1,0 +1,31 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- roscpp
+- roboclaw
+- rplidar_ros
+- controller_manager
+- realsense2_camera
+- catkin
+- realsense2_description
+- std_msgs
+- geometry_msgs
+- joint_state_controller
+- robot_state_publisher
+- xacro
+- rospy
+- robot_localization
+- tf
+- message_generation
+- swarmus_ros_navigation
+- message_runtime
+description: The swarmus_pioneer package
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

@@ -1,0 +1,9 @@
+<map id="swarmus_example_pkg" name="swarmus_example_pkg">
+<area shape="rect" id="node2" href="dir_8ebb8a50b2f5bb9cfafb74266397f65d.html" title="include" alt="" coords="85,159,157,207"/>
+<area shape="rect" id="node3" href="dir_7c7455405f95f1f7535a6acb5dd6a961.html" title="src" alt="" coords="133,63,205,111"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000004_000005.html" title="2" alt="" coords="144,139,154,154"/>
+<area shape="rect" id="node4" href="dir_cdc0db7810968ace9535d0201775150b.html" title="test" alt="" coords="37,63,109,111"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000007_000005.html" title="1" alt="" coords="104,131,113,146"/>
+<area shape="rect" id="clust2" href="dir_31335f123d28117a406bd723fdb5bf27.html" alt="" coords="27,52,416,217"/>
+<area shape="rect" id="clust1" href="dir_5e42fc65c1f031a02210d4a8d7dd072c.html" title="src" alt="" coords="16,16,427,228"/>
+</map>

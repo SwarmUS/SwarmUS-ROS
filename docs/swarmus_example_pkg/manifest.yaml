@@ -1,0 +1,19 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- std_msgs
+- catkin
+- roscpp
+- hive_mind
+description: "This dummy package is for internal use only and serves documentation\
+  \ purposes.\n    It shows how to create and organise packages.\n\n    This package\
+  \ has a dependency on the hive_mind package."
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

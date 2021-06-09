@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<!-- This launch files spawns a swarm of 5 fully functional robots -->
+
+<launch>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch"/>
+    <!-- Agent 1 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   value="1"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+        <arg name="ns" value="agent_1"/>
+        <arg name="robot_name" value="agent_1"/>
+    </include>
+
+    <!-- Agent 2 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   value="2"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+        <arg name="ns" value="agent_2"/>
+        <arg name="robot_name" value="agent_2"/>
+        <arg name="robot_pos_x" value="1.0"/>
+        <arg name="robot_pos_y" value="1.0"/>
+    </include>
+
+    <!-- Agent 3 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   value="3"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+        <arg name="ns" value="agent_3"/>
+        <arg name="robot_name" value="agent_3"/>
+        <arg name="robot_pos_x" value="-2.0"/>
+        <arg name="robot_pos_y" value="-2.0"/>
+    </include>
+
+</launch>

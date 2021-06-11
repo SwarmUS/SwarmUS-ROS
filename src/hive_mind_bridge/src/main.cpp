@@ -69,13 +69,16 @@ class Logger : public ILogger {
     std::string m_accumulatedString;
 };
 
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle("~");
 
     int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
     std::string moveByTopic =
-        nodeHandle.param("moveByTopic", std::string("/agent1/navigation/moveBy"));
+        nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
     Logger logger;
@@ -86,12 +89,20 @@ int main(int argc, char** argv) {
                                           int argsLength) -> std::optional<CallbackReturn> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
-        moveByMessage.distance_x = std::get<float>(args[0].getArgument());
-        moveByMessage.distance_y = std::get<float>(args[1].getArgument());
+        std::visit(overloaded{
+                [&](auto&& arg) {moveByMessage.distance_x = arg;},
+                [](std::monostate) { }},
+            args[0].getArgument());
+            
+        std::visit(overloaded{
+                            [&](auto&& arg) {moveByMessage.distance_y = arg;},
+                            [](std::monostate) { }},
+            args[1].getArgument());
+
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
-
+        ROS_INFO("Moveby called.");
         return {};
     };
 

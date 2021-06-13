@@ -58,8 +58,6 @@
             <param name="spi_mock_address" value="127.0.0.1" />
             <param name="spi_mock_port" type="int" value="$(arg hive_connect_spi_mock_port)" />
 
-            <param name="log_level" value="Warn" />
-
             <!-- Network settings -->
             <param name="tcp_listen_port" type="int" value="$(arg hive_connect_listen_port)"/>
         </node>

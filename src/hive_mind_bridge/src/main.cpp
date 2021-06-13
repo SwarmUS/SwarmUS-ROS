@@ -69,8 +69,12 @@ class Logger : public ILogger {
     std::string m_accumulatedString;
 };
 
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+template <class... Ts>
+struct Overload : Ts... {
+    using Ts::operator()...;
+};
+template <class... Ts>
+Overload(Ts...) -> Overload<Ts...>;
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
@@ -89,16 +93,13 @@ int main(int argc, char** argv) {
                                           int argsLength) -> std::optional<CallbackReturn> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
-        std::visit(overloaded{
-                [&](auto&& arg) {moveByMessage.distance_x = arg;},
-                [](std::monostate) { }},
+        std::visit(
+            Overload{[&](auto&& arg) { moveByMessage.distance_x = arg; }, [](std::monostate) {}},
             args[0].getArgument());
-            
-        std::visit(overloaded{
-                            [&](auto&& arg) {moveByMessage.distance_y = arg;},
-                            [](std::monostate) { }},
-            args[1].getArgument());
 
+        std::visit(
+            Overload{[&](auto&& arg) { moveByMessage.distance_y = arg; }, [](std::monostate) {}},
+            args[1].getArgument());
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);

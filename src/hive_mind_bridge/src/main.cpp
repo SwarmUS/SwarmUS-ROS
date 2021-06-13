@@ -9,6 +9,14 @@
 
 constexpr uint8_t RATE_HZ{10};
 
+// Used to create lambda with overloads
+template <class... Ts>
+struct Overload : Ts... {
+    using Ts::operator()...;
+};
+template <class... Ts>
+Overload(Ts...) -> Overload<Ts...>;
+
 class Logger : public ILogger {
   public:
     Logger() {}
@@ -68,13 +76,6 @@ class Logger : public ILogger {
   private:
     std::string m_accumulatedString;
 };
-
-template <class... Ts>
-struct Overload : Ts... {
-    using Ts::operator()...;
-};
-template <class... Ts>
-Overload(Ts...) -> Overload<Ts...>;
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");

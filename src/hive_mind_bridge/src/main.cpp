@@ -94,13 +94,16 @@ int main(int argc, char** argv) {
                                           int argsLength) -> std::optional<CallbackReturn> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
-        std::visit(
-            Overload{[&](auto&& arg) { moveByMessage.distance_x = arg; }, [](std::monostate) {}},
-            args[0].getArgument());
+        auto* x = std::get_if<float>(&args[0].getArgument());
+        auto* y = std::get_if<float>(&args[1].getArgument());
 
-        std::visit(
-            Overload{[&](auto&& arg) { moveByMessage.distance_y = arg; }, [](std::monostate) {}},
-            args[1].getArgument());
+        if (x == nullptr || y == nullptr) {
+            ROS_WARN("Received invalid argument type in moveby");
+            return {};
+        }
+
+        moveByMessage.distance_x = *x;
+        moveByMessage.distance_y = *y;
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);

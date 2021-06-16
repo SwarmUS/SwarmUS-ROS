@@ -9,14 +9,6 @@
 
 constexpr uint8_t RATE_HZ{10};
 
-// Used to create lambda with overloads
-template <class... Ts>
-struct Overload : Ts... {
-    using Ts::operator()...;
-};
-template <class... Ts>
-Overload(Ts...) -> Overload<Ts...>;
-
 class Logger : public ILogger {
   public:
     Logger() {}

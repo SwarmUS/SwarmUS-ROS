@@ -107,7 +107,6 @@ int main(int argc, char** argv) {
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
-        ROS_INFO("Moveby called.");
         return {};
     };
 

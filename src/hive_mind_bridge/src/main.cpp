@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 
     int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
     std::string moveByTopic =
-        nodeHandle.param("moveByTopic", std::string("/agent1/navigation/moveBy"));
+        nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
     Logger logger;
@@ -86,12 +86,19 @@ int main(int argc, char** argv) {
                                           int argsLength) -> std::optional<CallbackReturn> {
         swarmus_ros_navigation::MoveByMessage moveByMessage;
 
-        moveByMessage.distance_x = std::get<float>(args[0].getArgument());
-        moveByMessage.distance_y = std::get<float>(args[1].getArgument());
+        auto* x = std::get_if<float>(&args[0].getArgument());
+        auto* y = std::get_if<float>(&args[1].getArgument());
+
+        if (x == nullptr || y == nullptr) {
+            ROS_WARN("Received invalid argument type in moveby");
+            return {};
+        }
+
+        moveByMessage.distance_x = *x;
+        moveByMessage.distance_y = *y;
 
         // Publish on moveby
         moveByPublisher.publish(moveByMessage);
-
         return {};
     };
 

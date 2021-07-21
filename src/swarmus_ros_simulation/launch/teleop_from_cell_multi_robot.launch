@@ -10,6 +10,8 @@
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="agent_1"/>
         <arg name="robot_name" value="agent_1"/>
+        <arg name="robot_pos_x" value="1.0"/>
+        <arg name="robot_pos_y" value="0"/>
     </include>
 
     <!-- Agent 2 -->
@@ -19,17 +21,41 @@
     <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
         <arg name="ns" value="agent_2"/>
         <arg name="robot_name" value="agent_2"/>
-        <arg name="robot_pos_x" value="1.0"/>
-        <arg name="robot_pos_y" value="1.0"/>
+        <arg name="robot_pos_x" value="-1"/>
+        <arg name="robot_pos_y" value="1"/>
     </include>
 
-    <!-- Agent 3: Used by android cellphone -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">
+    <!-- Agent 3 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="3"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+        <arg name="ns" value="agent_3"/>
+        <arg name="robot_name" value="agent_3"/>
+        <arg name="robot_pos_x" value="-1"/>
+        <arg name="robot_pos_y" value="0"/>
+    </include>
+
+        <!-- Agent 4 -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+        <arg name="agent_id"   value="4"/>
+    </include>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+        <arg name="ns" value="agent_4"/>
+        <arg name="robot_name" value="agent_4"/>
+        <arg name="robot_pos_x" value="-1"/>
+        <arg name="robot_pos_y" value="-1"/>
+    </include>
+
+
+
+    <!-- Agent 5: Used by android cellphone -->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">
+        <arg name="agent_id"   value="5"/>
         <!-- This address is the loopback address when running with emulator and the android device address otherwise -->
         <arg name="hivemind_host_address" value="127.0.0.1" />
         <!-- This port is either the one set on the device or the port that has been configured to forward traffic
             to the emulator. See HiveAR readme.md to see how to do this -->
-        <arg name="hivemind_host_port" value="7003"/>
+        <arg name="hivemind_host_port" value="7005"/>
     </include>
 </launch>

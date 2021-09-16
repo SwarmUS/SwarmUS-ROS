@@ -82,6 +82,7 @@ cd ~/catkin_ws && catkin_make_isolated
 echo "source ~/catkin_ws/devel_isolated/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
+cd ~/catkin_ws/src/SwarmUS-ROS
 sh scripts/set_udev_rules.sh
 ```
 

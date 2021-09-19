@@ -1,6 +1,6 @@
 #include "ros/ros.h"
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <geometry_msgs/TransformStamped.h>
+#include "swarmus_turtlebot/Navigation.hpp"
+#include <thread>
 
 static const uint8_t RATE_HZ{1};
 
@@ -9,36 +9,42 @@ const std::string ROBOT_BASE_FRAME{"base_footprint"};
 const std::string MOVEBY_TOPIC{"navigation/moveBy"};
 const std::string MOVEBASE_GOAL_TOPIC{"move_base_simple/goal"};
 
+void navigationLoop(Navigation* navigation, ros::Rate loopRate) {
+    while(true) {
+        navigation->execute();
+
+        loopRate.sleep();
+    }
+};
+
 int main(int argc, char** argv) {
     ros::init(argc, argv, "swarmus_turtlebot_bridge");
 
     std::shared_ptr<ros::NodeHandle> nodeHandle(new ros::NodeHandle(""));
 
-    ros::Publisher goalPublisher =
-            nodeHandle->advertise<geometry_msgs::PoseStamped>(MOVEBASE_GOAL_TOPIC, QUEUE_SIZE);
+    Navigation navigation(nodeHandle);
 
     ros::Rate loopRate(RATE_HZ);
 
+    std::string moveByTopic =
+            nodeHandle->param("moveByTopic", std::string("/navigation/moveBy"));
+    ros::Publisher moveByPublisher =
+            nodeHandle->advertise<swarmus_turtlebot::MoveByMessage>(moveByTopic, 1000);
+
+    std::thread navigationThread(navigationLoop, &navigation, loopRate);
+
+    swarmus_turtlebot::MoveByMessage moveByMessage;
+
+    moveByMessage.distance_x = 1;
+    moveByMessage.distance_y = 0;
+
+    moveByPublisher.publish(moveByMessage);
+
     while (ros::ok()) {
-        geometry_msgs::PoseStamped goalPose;
-
-        goalPose.header.stamp = ros::Time::now();
-
-        goalPose.pose.position.x = 0;
-        goalPose.pose.position.y = 1;
-        goalPose.pose.position.z = 0;
-
-        goalPose.pose.orientation.x = 0;
-        goalPose.pose.orientation.y = 0;
-        goalPose.pose.orientation.z = 0;
-        goalPose.pose.orientation.w = 1;
-
-        goalPose.header.frame_id = ROBOT_BASE_FRAME;
-
-        goalPublisher.publish(goalPose);
-
-
         ros::spinOnce();
+
+//        navigation.execute();
+
         loopRate.sleep();
     }
 

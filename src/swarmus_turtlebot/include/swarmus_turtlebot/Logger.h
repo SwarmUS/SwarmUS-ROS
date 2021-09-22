@@ -1,11 +1,11 @@
 #ifndef SRC_LOGGER_H
 #define SRC_LOGGER_H
 
-#include <cpp-common/ILogger.h>
 #include "ros/ros.h"
+#include <cpp-common/ILogger.h>
 
 class Logger : public ILogger {
-public:
+  public:
     Logger() {}
 
     LogRet log(LogLevel level, const char* format, ...) override {
@@ -43,25 +43,25 @@ public:
 
     void flush(LogLevel level) {
         switch (level) {
-            case LogLevel::Debug:
-                ROS_DEBUG("%s", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Info:
-                ROS_INFO("%s", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Warn:
-                ROS_WARN("%s", m_accumulatedString.c_str());
-                break;
-            case LogLevel::Error:
-                ROS_ERROR("%s", m_accumulatedString.c_str());
-                break;
+        case LogLevel::Debug:
+            ROS_DEBUG("%s", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Info:
+            ROS_INFO("%s", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Warn:
+            ROS_WARN("%s", m_accumulatedString.c_str());
+            break;
+        case LogLevel::Error:
+            ROS_ERROR("%s", m_accumulatedString.c_str());
+            break;
         }
 
         m_accumulatedString = "";
     }
 
-private:
+  private:
     std::string m_accumulatedString;
 };
 
-#endif //SRC_LOGGER_H
+#endif // SRC_LOGGER_H

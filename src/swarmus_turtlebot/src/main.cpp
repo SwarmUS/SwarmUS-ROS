@@ -1,12 +1,12 @@
 #include "hivemind-bridge/Callback.h"
 #include "hivemind-bridge/HiveMindBridge.h"
-#include <swarmus_turtlebot/Logger.h>
-#include <pheromones/FunctionCallArgumentDTO.h>
 #include "ros/ros.h"
 #include "swarmus_turtlebot/Navigation.hpp"
-#include <thread>
 #include <cstdarg>
 #include <optional>
+#include <pheromones/FunctionCallArgumentDTO.h>
+#include <swarmus_turtlebot/Logger.h>
+#include <thread>
 
 static const uint8_t RATE_HZ{1};
 
@@ -16,7 +16,7 @@ const std::string MOVEBY_TOPIC{"navigation/moveBy"};
 const std::string MOVEBASE_GOAL_TOPIC{"move_base_simple/goal"};
 
 void navigationLoop(Navigation* navigation, ros::Rate loopRate) {
-    while(true) {
+    while (true) {
         navigation->execute();
 
         loopRate.sleep();
@@ -33,10 +33,9 @@ int main(int argc, char** argv) {
     std::thread navigationThread(navigationLoop, &navigation, loopRate);
 
     int port = nodeHandle->param("TCP_SERVER_PORT", 55551);
-    std::string moveByTopic =
-            nodeHandle->param("moveByTopic", std::string("/navigation/moveBy"));
+    std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("/navigation/moveBy"));
     ros::Publisher moveByPublisher =
-            nodeHandle->advertise<swarmus_turtlebot::MoveByMessage>(moveByTopic, 1000);
+        nodeHandle->advertise<swarmus_turtlebot::MoveByMessage>(moveByTopic, 1000);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 
@@ -63,9 +62,9 @@ int main(int argc, char** argv) {
 
     CallbackArgsManifest moveByManifest;
     moveByManifest.push_back(
-            UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Float));
+        UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Float));
     moveByManifest.push_back(
-            UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
+        UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
     CallbackFunction getStatus = [&](CallbackArgs args,
@@ -92,7 +91,6 @@ int main(int argc, char** argv) {
         bridge.spin();
         loopRate.sleep();
     }
-
 
     return 0;
 }

@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.13)
 project(swarmus_turtlebot)
+set (CMAKE_CXX_STANDARD 17)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
@@ -10,6 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
         move_base
         move_base_msgs
         )
+
+find_package(swarmus-hivemind-bridge CONFIG REQUIRED)
+find_package(swarmus-propolis-cpp-common CONFIG REQUIRED)
+find_package(swarmus-propolis-pheromones CONFIG REQUIRED)
 
 add_message_files(
         FILES
@@ -39,6 +44,8 @@ add_executable(turtlebot_bridge
 add_dependencies(turtlebot_bridge ${catkin_EXPORTED_TARGETS})
 target_link_libraries(turtlebot_bridge
         ${catkin_LIBRARIES}
+        swarmus-propolis-pheromones
+        swarmus-hivemind-bridge
         )
 
 target_include_directories(turtlebot_bridge

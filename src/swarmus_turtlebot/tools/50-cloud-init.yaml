@@ -1,0 +1,23 @@
+# This file contains the required network configuration for the TB3's Raspberry Pi in order to connect with
+# a HiveBoard.
+# When connecting the TB3 to the HiveBoard using Ethernet, a static IP must be set at 192.168.1.101/24.
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: no
+      optional: true
+      addresses: [192.168.1.101/24]
+# The following section is optional and may be included to ease the use of the TB via WIFI.
+  wifis:
+    wlan0:
+      dhcp4: no
+      dhcp6: no
+      addresses: [STATIC_IP_ADDRESS]
+      gateway4: ADDRES_OF_YOUR_ROUTER
+      access-points:
+        SSID_OF_YOUR_WIFI_NETWORK:
+          password: PASSWD_OF_YOUR_WIFI_NW
+      nameservers:
+          addresses: [8.8.8.8,8.8.4.4]

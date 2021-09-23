@@ -24,6 +24,11 @@ jobs:
         run: git submodule update --init --recursive
         working-directory: 'catkin_ws/src/SwarmUS-ROS'
 
+      - name: Check Format
+        run: |
+          python src/SwarmUS-ROS/tools/contrib/run-clang-format.py --recursive --style=file src/SwarmUS-ROS/src/
+        working-directory: 'catkin_ws'
+
       - name: Install ROS dependencies
         run: |
           rosdep update
@@ -46,7 +51,3 @@ jobs:
           catkin_make_isolated
         working-directory: 'catkin_ws'
       
-      - name: Check Format
-        run: |
-          python src/SwarmUS-ROS/tools/contrib/run-clang-format.py --recursive --style=file src/SwarmUS-ROS/src/
-        working-directory: 'catkin_ws'

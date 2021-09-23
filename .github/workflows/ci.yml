@@ -31,7 +31,7 @@ jobs:
 
       - name: Install ROS dependencies
         run: |
-          apt install python3-rosdep2
+          apt-get install -y python3-rosdep2
           rosdep update
           apt update
           rosdep install --from-paths src --ignore-src -r -y

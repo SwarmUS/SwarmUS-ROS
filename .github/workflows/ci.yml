@@ -1,12 +1,12 @@
 name: ROS CI
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build-native:
     runs-on: ubuntu-20.04
     container:
-      image: swarmus/embedded
+      image: swarmus/ros-noetic-desktop-full
     steps:
       - name: Create catkin_ws
         run: |

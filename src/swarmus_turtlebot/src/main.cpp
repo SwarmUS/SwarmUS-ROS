@@ -35,14 +35,14 @@ int main(int argc, char** argv) {
     int port = nodeHandle->param("TCP_SERVER_PORT", 55551);
     std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("/navigation/moveBy"));
     ros::Publisher moveByPublisher =
-        nodeHandle->advertise<swarmus_turtlebot::MoveByMessage>(moveByTopic, 1000);
+        nodeHandle->advertise<swarmus_turtlebot::MoveBy>(moveByTopic, 1000);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args,
                                           int argsLength) -> std::optional<CallbackReturn> {
-        swarmus_turtlebot::MoveByMessage moveByMessage;
+        swarmus_turtlebot::MoveBy moveByMessage;
 
         auto* x = std::get_if<float>(&args[0].getArgument());
         auto* y = std::get_if<float>(&args[1].getArgument());

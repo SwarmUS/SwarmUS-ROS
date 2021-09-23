@@ -18,7 +18,7 @@ find_package(swarmus-propolis-pheromones CONFIG REQUIRED)
 
 add_message_files(
         FILES
-        MoveByMessage.msg
+        MoveBy.msg
 )
 
 generate_messages(
@@ -28,6 +28,7 @@ generate_messages(
 )
 
 catkin_package(
+        INCLUDE_DIRS include
         CATKIN_DEPENDS
         roscpp
         std_msgs
@@ -42,7 +43,7 @@ add_executable(turtlebot_bridge
         src/main.cpp
         src/Navigation.cpp)
 
-add_dependencies(turtlebot_bridge ${catkin_EXPORTED_TARGETS})
+add_dependencies(turtlebot_bridge ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(turtlebot_bridge
         ${catkin_LIBRARIES}
         swarmus-propolis-pheromones

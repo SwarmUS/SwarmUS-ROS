@@ -53,7 +53,7 @@ void Navigation::fetchRosParameters() {
 }
 
 /*************************************************************************************************/
-void Navigation::moveByCallback(const swarmus_turtlebot::MoveByMessage& msg) {
+void Navigation::moveByCallback(const swarmus_turtlebot::MoveBy& msg) {
     // Generate the goal pose in the robot base frame
     geometry_msgs::PoseStamped goalPose;
 

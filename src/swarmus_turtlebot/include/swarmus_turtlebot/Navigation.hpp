@@ -12,7 +12,7 @@
 #include <iostream>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <ros/ros.h>
-#include <swarmus_turtlebot/MoveByMessage.h>
+#include <swarmus_turtlebot/MoveBy.h>
 #include <tf2_ros/transform_listener.h>
 
 struct RosParameters {
@@ -99,7 +99,7 @@ class Navigation {
      * @param msg Message that contains a x and y deplacement command in meters
      *
      **/
-    void moveByCallback(const swarmus_turtlebot::MoveByMessage& msg);
+    void moveByCallback(const swarmus_turtlebot::MoveBy& msg);
 
   public:
     /**

@@ -30,6 +30,7 @@ generate_messages(
 catkin_package(
         CATKIN_DEPENDS
         roscpp
+        std_msgs
 )
 
 include_directories(

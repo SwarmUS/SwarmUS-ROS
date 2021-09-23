@@ -1,12 +1,12 @@
 name: ROS CI
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build-native:
     runs-on: ubuntu-20.04
     container:
-      image: swarmus/embedded
+      image: swarmus/ros-noetic-desktop-full
     steps:
       - name: Create catkin_ws
         run: |
@@ -24,8 +24,14 @@ jobs:
         run: git submodule update --init --recursive
         working-directory: 'catkin_ws/src/SwarmUS-ROS'
 
+      - name: Check Format
+        run: |
+          python src/SwarmUS-ROS/tools/contrib/run-clang-format.py --recursive --style=file src/SwarmUS-ROS/src/
+        working-directory: 'catkin_ws'
+
       - name: Install ROS dependencies
         run: |
+          apt-get install -y python3-rosdep2
           rosdep update
           apt update
           rosdep install --from-paths src --ignore-src -r -y
@@ -46,7 +52,3 @@ jobs:
           catkin_make_isolated
         working-directory: 'catkin_ws'
       
-      - name: Check Format
-        run: |
-          python src/SwarmUS-ROS/tools/contrib/run-clang-format.py --recursive --style=file src/SwarmUS-ROS/src/
-        working-directory: 'catkin_ws'

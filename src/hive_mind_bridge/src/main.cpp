@@ -101,6 +101,7 @@ int main(int argc, char** argv) {
         moveByPublisher.publish(moveByMessage);
         return {};
     };
+    
 
     CallbackArgsManifest moveByManifest;
     moveByManifest.push_back(
@@ -108,6 +109,7 @@ int main(int argc, char** argv) {
     moveByManifest.push_back(
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
+
 
     CallbackFunction getStatus = [&](CallbackArgs args,
                                      int argsLength) -> std::optional<CallbackReturn> {
@@ -122,6 +124,42 @@ int main(int argc, char** argv) {
         return cbReturn;
     };
     bridge.registerCustomAction("getStatus", getStatus);
+
+
+
+    CallbackFunction sendByteTo = [&](CallbackArgs args,
+                                          int argsLength) -> std::optional<CallbackReturn> {
+        swarmus_ros_navigation::MoveByMessage moveByMessage;
+
+        auto* id = std::get_if<int64_t>(&args[0].getArgument());
+        auto* byte = std::get_if<int64_t>(&args[1].getArgument());
+
+        if (id == nullptr && byte == nullptr ) {
+            ROS_WARN("Received invalid argument type in moveby");
+            return {};
+        }
+        ROS_INFO("Sending byte: %d to: %d", (uint32_t)*id, byte[0]);
+        bridge.sendBytes((uint32_t)*id, (uint8_t*)byte, 1);
+        return {};
+    };
+    CallbackArgsManifest sendByteToManifest;
+    sendByteToManifest.push_back(
+        UserCallbackArgumentDescription("id", FunctionDescriptionArgumentTypeDTO::Int));
+    sendByteToManifest.push_back(
+        UserCallbackArgumentDescription("byte", FunctionDescriptionArgumentTypeDTO::Int));
+    bridge.registerCustomAction("sendByteTo", sendByteTo, sendByteToManifest);
+
+    bridge.onBytesReceived([&](uint8_t* bytes, uint64_t bytesLength){
+        for (uint i =0; i<bytesLength; i++){
+            FunctionCallArgumentDTO args[1] {(int64_t)bytes[i]};
+            FunctionCallRequestDTO fCall("setHex", args,1);
+            UserCallRequestDTO UReq(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, fCall);
+            RequestDTO req(69, UReq);
+            MessageDTO msg(1, 1, req);
+            ROS_INFO("Setting hex of: %d to: %d", 1, (int64_t)bytes[i]);
+            bridge.queueAndSend(msg);
+        }
+    });
 
     // Register event hooks
     bridge.onConnect([]() { ROS_INFO("Client connected."); });

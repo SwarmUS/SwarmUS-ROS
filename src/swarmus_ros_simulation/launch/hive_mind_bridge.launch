@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<launch>
+
+    <!-- Bridge -->
+    <node pkg="hive_mind_bridge" type="hive_mind_bridge" name="hive_mind_bridge" output="screen">
+        <param name="TCP_SERVER_PORT" type="int" value="5551"/>
+        <param name="moveByTopic" type="str" value="/agent_$(arg agent_id)/navigation/moveBy"/>
+    </node>
+
+</launch>

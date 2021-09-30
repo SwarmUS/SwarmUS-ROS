@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle("~");
 
-    int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
+    int port = nodeHandle.param("TCP_SERVER_PORT", 55551);
     std::string moveByTopic =
         nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
             ROS_WARN("Received invalid argument type in moveby");
             return {};
         }
-        ROS_INFO("Sending byte: %d to: %d", (uint32_t)*id, byte[0]);
+        ROS_INFO("Sending byte: %d to: %d", byte[0], (uint32_t)*id);
         bridge.sendBytes((uint32_t)*id, (uint8_t*)byte, 1);
         return {};
     };

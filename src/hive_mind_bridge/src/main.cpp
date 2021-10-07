@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
             FunctionCallRequestDTO fCall("setHex", args,1);
             UserCallRequestDTO UReq(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, fCall);
             RequestDTO req(69, UReq);
-            MessageDTO msg(6, 1, req);
+            MessageDTO msg(6, 4, req);
             ROS_INFO("Setting hex of: %d to: %d", 6, (int64_t)bytes[i]);
             bridge.queueAndSend(msg);
         }

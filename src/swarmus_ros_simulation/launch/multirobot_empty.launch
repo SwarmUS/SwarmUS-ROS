@@ -46,8 +46,6 @@
         <arg name="yaw" value="3.927"/>
     </include>
 
-    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>    
-
     <node pkg="swarmus_ros_simulation" type="communicationBroker" name="communicationBroker" output="screen"/>
 
 </launch>

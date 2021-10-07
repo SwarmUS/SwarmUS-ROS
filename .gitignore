@@ -8,3 +8,5 @@ src/hiveboard_bridge/cmake-build-debug
 cmake-build-debug/
 
 src/swarmus_simple_swarm/cmake-build-debug/CMakeFiles/
+
+src/swarmus_ros_simulation/cmake-build-target/

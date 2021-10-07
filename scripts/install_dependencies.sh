@@ -9,7 +9,7 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A
 sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
 
 # Installing dependencies
-sudo apt-get update && apt-get install -y \
+sudo apt-get update && sudo apt-get install -y \
     wget \
     build-essential \
     apt-utils \
@@ -34,7 +34,7 @@ sudo apt-get update && apt-get install -y \
     librealsense2-dbg \
     clang-tidy \
     clang-format \
-    doxygen \
+    doxygen
 
 # Install cmake from pip for the latest release
 pip3 install cmake

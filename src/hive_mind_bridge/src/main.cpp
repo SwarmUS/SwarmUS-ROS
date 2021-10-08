@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
     CallbackFunction sendByteTo = [&](CallbackArgs args,
                                       int argsLength) -> std::optional<CallbackReturn> {
         ROS_INFO("SENDING BYTES");
-        /**swarmus_ros_navigation::MoveByMessage moveByMessage;
+        swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         auto* id = std::get_if<int64_t>(&args[0].getArgument());
         auto* byte = std::get_if<int64_t>(&args[1].getArgument());
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
             return {};
         }
         ROS_INFO("Sending byte: %d to: %d", byte[0], (uint32_t)*id);
-        bridge.sendBytes((uint32_t)*id, (uint8_t*)byte, 1);*/
+        bridge.sendBytes((uint32_t)*id, (uint8_t*)byte, 1);
         return {};
     };
     CallbackArgsManifest sendByteToManifest;
@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
 
     bridge.onBytesReceived([&](uint8_t* bytes, uint64_t bytesLength){
         ROS_INFO("RECEIVED BYTES");
-        /*for (uint i =0; i<bytesLength; i++){
+        for (uint i =0; i<bytesLength; i++){
             FunctionCallArgumentDTO args[1] {(int64_t)bytes[i]};
             FunctionCallRequestDTO fCall("setHex", args,1);
             UserCallRequestDTO UReq(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, fCall);
@@ -188,7 +188,7 @@ int main(int argc, char** argv) {
             MessageDTO msg(6, 4, req);
             ROS_INFO("Setting hex of: %d to: %d", 6, (int64_t)bytes[i]);
             bridge.queueAndSend(msg);
-        }*/
+        }
     });
 
     // Register event hooks

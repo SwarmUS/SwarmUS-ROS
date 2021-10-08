@@ -129,7 +129,8 @@ int main(int argc, char** argv) {
 
     CallbackFunction sendByteTo = [&](CallbackArgs args,
                                       int argsLength) -> std::optional<CallbackReturn> {
-        swarmus_ros_navigation::MoveByMessage moveByMessage;
+        ROS_INFO("SENDING BYTES");
+        /**swarmus_ros_navigation::MoveByMessage moveByMessage;
 
         auto* id = std::get_if<int64_t>(&args[0].getArgument());
         auto* byte = std::get_if<int64_t>(&args[1].getArgument());
@@ -139,7 +140,7 @@ int main(int argc, char** argv) {
             return {};
         }
         ROS_INFO("Sending byte: %d to: %d", byte[0], (uint32_t)*id);
-        bridge.sendBytes((uint32_t)*id, (uint8_t*)byte, 1);
+        bridge.sendBytes((uint32_t)*id, (uint8_t*)byte, 1);*/
         return {};
     };
     CallbackArgsManifest sendByteToManifest;
@@ -149,8 +150,37 @@ int main(int argc, char** argv) {
             UserCallbackArgumentDescription("byte", FunctionDescriptionArgumentTypeDTO::Int));
     bridge.registerCustomAction("sendByteTo", sendByteTo, sendByteToManifest);
 
+
+    CallbackFunction setHex = [&](CallbackArgs args,
+                                      int argsLength) -> std::optional<CallbackReturn> {
+        swarmus_ros_navigation::MoveByMessage moveByMessage;
+
+        auto* id = std::get_if<int64_t>(&args[0].getArgument());
+        auto* hex = std::get_if<int64_t>(&args[1].getArgument());
+
+        if (id == nullptr && hex == nullptr ) {
+            ROS_WARN("Received invalid argument type in moveby");
+            return {};
+        }
+        FunctionCallArgumentDTO fArgs[1] = {{*hex}};
+        FunctionCallRequestDTO fCall("setHex", fArgs, 2);
+        UserCallRequestDTO UReq(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, fCall);
+        RequestDTO req(69, UReq);
+        MessageDTO msg(6, *id, req);
+        ROS_INFO("Setting hex of: %d to: %d", 6, *hex);
+        bridge.queueAndSend(msg);
+        return {};
+    };
+    CallbackArgsManifest setHexManifest;
+    sendByteToManifest.push_back(
+            UserCallbackArgumentDescription("id", FunctionDescriptionArgumentTypeDTO::Int));
+    sendByteToManifest.push_back(
+            UserCallbackArgumentDescription("hex", FunctionDescriptionArgumentTypeDTO::Int));
+    bridge.registerCustomAction("setHex", sendByteTo, sendByteToManifest);
+
     bridge.onBytesReceived([&](uint8_t* bytes, uint64_t bytesLength){
-        for (uint i =0; i<bytesLength; i++){
+        ROS_INFO("RECEIVED BYTES");
+        /*for (uint i =0; i<bytesLength; i++){
             FunctionCallArgumentDTO args[1] {(int64_t)bytes[i]};
             FunctionCallRequestDTO fCall("setHex", args,1);
             UserCallRequestDTO UReq(UserCallTargetDTO::HOST, UserCallTargetDTO::BUZZ, fCall);
@@ -158,7 +188,7 @@ int main(int argc, char** argv) {
             MessageDTO msg(6, 4, req);
             ROS_INFO("Setting hex of: %d to: %d", 6, (int64_t)bytes[i]);
             bridge.queueAndSend(msg);
-        }
+        }*/
     });
 
     // Register event hooks

@@ -1,8 +1,8 @@
 #include "hivemind-bridge/Callback.h"
-#include <hivemind-bridge/HiveMindBridge.h>
 #include "ros/ros.h"
 #include "swarmus_turtlebot/Navigation.hpp"
 #include <cstdarg>
+#include <hivemind-bridge/HiveMindBridge.h>
 #include <optional>
 #include <pheromones/FunctionCallArgumentDTO.h>
 #include <swarmus_turtlebot/Logger.h>

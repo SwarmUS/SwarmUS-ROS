@@ -5,7 +5,7 @@ TrajectoryPlannerROS:
   min_vel_x: 0.06                         # Lowest speed used for the forward trajectory calculation. Set to keep "min_vel_x * sim_time <  0.5 * xy_goal_tolerance"
   acc_lim_x: 0.6                          # Match the set maximum acceleration of the roboclaw controller of the Pioneer robot
   escape_vel: -0.1                        # Speed used to unstuck the robot
-  escape_reset_dist: 0.1                  # Distance that must be traveled during escape before considering the robot is unstuck
+  escape_reset_dist: 0.15                  # Distance that must be traveled during escape before considering the robot is unstuck
 
   max_vel_theta: 1                        # Max angular speed used by the trajectory calculation. Match the desired speed limit set by SwarmUS
   min_vel_theta: -1                       # Minimum angular speed used by the trajectory calculation..Match the desired speed limit set by SwarmUS
@@ -32,14 +32,14 @@ TrajectoryPlannerROS:
  # Trajectory scoring parameters
  # cost = pdist_scale * (dist_trajectoryEnd_to_path) + gdist_scale * (dist_trajectoryEnd_to_localGoal) + occdist_sclae * (maximum obstacle cost along the trajectory cost (0-254))
   meter_scoring: true
-  path_distance_bias: 0.6                 # The weighting for how much the controller should stay close to the path it was given, maximal possible value is 5.0
-  goal_distance_bias: 0.8                          # The weighting for how much the controller should attempt to reach its local goal, also controls speed, maximal possible value is 5.0 
-  occdist_scale: 0.01                     # The weighting for how much the controller should attempt to avoid obstacles 
+  path_distance_bias: 4.0                 # The weighting for how much the controller should stay close to the path it was given, maximal possible value is 5.0
+  goal_distance_bias: 2.0                          # The weighting for how much the controller should attempt to reach its local goal, also controls speed, maximal possible value is 5.0
+  occdist_scale: 0.01                     # The weighting for how much the controller should attempt to avoid obstacles
   heading_lookahead: 0.7                  # How far to look ahead in meters when scoring different in-place-rotation trajectories 
   
-  heading_scoring: true                   # Whether to score based on the robot's heading to the path or its distance from the path 
+  heading_scoring: true                   # Whether to score based on the robot's heading to the path or its distance from the path
   heading_scoring_timestep : 0.5          # heading_scoring_timestep
-  dwa: false                              # Whether to use the Dynamic Window Approach (DWA)_ or whether to use Trajectory Rollout 
+  dwa: false                              # Whether to use the Dynamic Window Approach (DWA)_ or whether to use Trajectory Rollout
   publish_cost_grid_pc: true              # Whether or not to publish the cost grid that the planner will use when planning. When true, a sensor_msgs/PointCloud2 will be available on the ~<name>/cost_cloud topic. Each point cloud represents the cost grid and has a field for each individual scoring function component as well as the overall cost for each cell, taking the scoring parameters into account.
   global_frame_id: $(arg robot_name)/odom # The frame to set for the cost_cloud. Should be set to the same frame as the local costmap's global frame.
   

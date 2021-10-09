@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
         int64_t isRobotOk = 1;
 
         CallbackArgs returnArgs;
-        returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
+        returnArgs.push_back(FunctionCallArgumentDTO(isRobotOk));
 
         CallbackReturn cbReturn("getStatusReturn", returnArgs);
 

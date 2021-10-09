@@ -2,23 +2,9 @@
 <!-- This launch files spawns a swarm of 5 fully functional robots -->
 
 <launch>
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find swarmus_ros_simulation)/worlds/obstacles.world" />
-        <arg name="debug" value="false" />
-        <arg name="gui" value="true" />
-        <arg name="paused" value="false"/>
-        <arg name="use_sim_time" value="true"/>
-        <arg name="headless" value="false"/>
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch">
+        <arg name="world_name" value="$(find swarmus_ros_simulation)/worlds/obstacles.world"/>
     </include>
-
-    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
-
-    <!-- Communication Broker -->
-    <rosparam command="load" file="$(find swarmus_ros_simulation)/launch/config/broker_config.yaml" />
-    <node name="commBroker" pkg="hive_connect" type="communication_broker" >
-        <!-- Parameter name to use to find the robot list. Should match the yaml config file -->
-        <param name="configList" value="/Broker/robots"/>
-    </node>
 
     <!-- Agent 1 -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">

@@ -4,8 +4,10 @@
     - The communication broker
 -->
 <launch>
+    <arg name="world_name" default="$(find gazebo_ros)/worlds/empty.world"/>
     <!-- Gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)"/>
         <arg name="debug" value="false" />
         <arg name="gui" value="true" />
         <arg name="paused" value="false"/>

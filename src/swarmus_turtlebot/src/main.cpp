@@ -1,5 +1,5 @@
 #include "hivemind-bridge/Callback.h"
-#include "hivemind-bridge/HiveMindBridge.h"
+#include <hivemind-bridge/HiveMindBridge.h>
 #include "ros/ros.h"
 #include "swarmus_turtlebot/Navigation.hpp"
 #include <cstdarg>
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     std::thread navigationThread(navigationLoop, &navigation, loopRate);
 
     int port = nodeHandle->param("TCP_SERVER_PORT", 55551);
-    std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("/navigation/moveBy"));
+    std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle->advertise<swarmus_turtlebot::MoveBy>(moveByTopic, 1000);
     Logger logger;
@@ -46,6 +46,8 @@ int main(int argc, char** argv) {
 
         auto* x = std::get_if<float>(&args[0].getArgument());
         auto* y = std::get_if<float>(&args[1].getArgument());
+
+        ROS_INFO("%f", *x);
 
         if (x == nullptr || y == nullptr) {
             ROS_WARN("Received invalid argument type in moveby");
@@ -73,7 +75,7 @@ int main(int argc, char** argv) {
         int64_t isRobotOk = 1;
 
         CallbackArgs returnArgs;
-        returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
+        returnArgs.push_back(FunctionCallArgumentDTO(isRobotOk));
 
         CallbackReturn cbReturn("getStatusReturn", returnArgs);
 

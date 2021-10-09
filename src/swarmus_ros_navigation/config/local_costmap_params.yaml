@@ -7,7 +7,7 @@ local_costmap:
   rolling_window: true
   width: 6.0
   height: 6.0
-  resolution: 0.03  # Needs to be smaller than sim_time*min_vel_x/sqrt(2) 
+  resolution: 0.03  # Needs to be smaller than sim_time*min_vel_x/sqrt(2)
   transform_tolerance: 0.5
 
   plugins:

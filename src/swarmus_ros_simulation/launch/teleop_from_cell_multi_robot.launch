@@ -47,7 +47,7 @@
         <arg name="robot_pos_y" value="-1"/>
     </include>
 
-
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/agent_1_config.rviz"/>
 
     <!-- Agent 5: Used by android cellphone -->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">

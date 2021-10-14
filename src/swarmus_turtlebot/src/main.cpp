@@ -40,8 +40,7 @@ int main(int argc, char** argv) {
     HiveMindBridge bridge(port, logger);
 
     // Register custom actions
-    CallbackFunction moveByCallback = [&](CallbackArgs args,
-                                          int argsLength) -> std::optional<CallbackReturn> {
+    CallbackFunction moveByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         swarmus_turtlebot::MoveBy moveByMessage;
 
         auto* x = std::get_if<float>(&args[0].getArgument());
@@ -69,8 +68,7 @@ int main(int argc, char** argv) {
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
-    CallbackFunction getStatus = [&](CallbackArgs args,
-                                     int argsLength) -> std::optional<CallbackReturn> {
+    CallbackFunction getStatus = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         // todo This remains to be implemented.
         int64_t isRobotOk = 1;
 

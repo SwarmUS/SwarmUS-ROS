@@ -1,8 +1,7 @@
 #include "hivemind-bridge/Callback.h"
-#include "hivemind-bridge/HiveMindBridge.h"
 #include "ros/ros.h"
 #include "swarmus_turtlebot/Navigation.hpp"
-#include <cstdarg>
+#include <hivemind-bridge/HiveMindBridge.h>
 #include <optional>
 #include <pheromones/FunctionCallArgumentDTO.h>
 #include <swarmus_turtlebot/Logger.h>
@@ -33,19 +32,20 @@ int main(int argc, char** argv) {
     std::thread navigationThread(navigationLoop, &navigation, loopRate);
 
     int port = nodeHandle->param("TCP_SERVER_PORT", 55551);
-    std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("/navigation/moveBy"));
+    std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle->advertise<swarmus_turtlebot::MoveBy>(moveByTopic, 1000);
     Logger logger;
     HiveMindBridge bridge(port, logger);
 
     // Register custom actions
-    CallbackFunction moveByCallback = [&](CallbackArgs args,
-                                          int argsLength) -> std::optional<CallbackReturn> {
+    CallbackFunction moveByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         swarmus_turtlebot::MoveBy moveByMessage;
 
         auto* x = std::get_if<float>(&args[0].getArgument());
         auto* y = std::get_if<float>(&args[1].getArgument());
+
+        ROS_INFO("%f", *x);
 
         if (x == nullptr || y == nullptr) {
             ROS_WARN("Received invalid argument type in moveby");
@@ -67,13 +67,12 @@ int main(int argc, char** argv) {
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
-    CallbackFunction getStatus = [&](CallbackArgs args,
-                                     int argsLength) -> std::optional<CallbackReturn> {
+    CallbackFunction getStatus = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         // todo This remains to be implemented.
         int64_t isRobotOk = 1;
 
         CallbackArgs returnArgs;
-        returnArgs[0] = FunctionCallArgumentDTO(isRobotOk);
+        returnArgs.push_back(FunctionCallArgumentDTO(isRobotOk));
 
         CallbackReturn cbReturn("getStatusReturn", returnArgs);
 

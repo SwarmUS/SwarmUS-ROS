@@ -10,7 +10,7 @@ sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C
 sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo focal main" -u
 
 # Installing dependencies
-sudo apt-get update && apt-get install -y \
+sudo apt-get update && sudo apt-get install -y \
     wget \
     build-essential \
     apt-utils \

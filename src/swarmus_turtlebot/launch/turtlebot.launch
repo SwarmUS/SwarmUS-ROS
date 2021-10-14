@@ -15,7 +15,7 @@
   </include>
 
   <!--  Bridge -->
-  <node pkg="swarmus_turtlebot" type="turtlebot_bridge" name="turtlebot_bridge" required="true"/>
+  <node pkg="swarmus_turtlebot" type="turtlebot_bridge" name="turtlebot_bridge" required="true" output="screen"/>
 
   <!--  SLAM-->
   <include file="$(find turtlebot3_slam)/launch/turtlebot3_$(arg slam_methods).launch">

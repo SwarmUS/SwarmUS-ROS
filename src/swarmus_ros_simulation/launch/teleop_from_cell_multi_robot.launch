@@ -53,7 +53,7 @@
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">
         <arg name="agent_id"   value="5"/>
         <!-- This address is the loopback address when running with emulator and the android device address otherwise -->
-        <arg name="hivemind_host_address" value="127.0.0.1" />
+        <arg name="hivemind_host_address" value="10.42.0.210" />
         <!-- This port is either the one set on the device or the port that has been configured to forward traffic
             to the emulator. See HiveAR readme.md to see how to do this -->
         <arg name="hivemind_host_port" value="7005"/>

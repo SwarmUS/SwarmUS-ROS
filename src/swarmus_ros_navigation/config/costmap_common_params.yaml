@@ -1,5 +1,5 @@
 #---(in meters)---
-footprint: [ [-0.3425,-0.195], [0.1425,-0.195], [0.1425,0.195], [-0.3425,0.195] ]
+footprint: [ [-0.5,0.0], [-0.433, 0.25], [-0.25, 0.433], [0.0, 0.5], [0.25, 0.433], [0.433, 0.25], [0.5, 0.0], [0.433,-0.25], [0.25, -0.433], [0.0, -0.5], [-0.25, -0.433], [-0.433, -0.25]]
 
 obstacle_layer:
  enabled: true
@@ -20,15 +20,5 @@ obstacle_layer:
 
 inflation_layer:
   enabled:              true
-  cost_scaling_factor:  5.0  # exponential rate at which the obstacle cost drops off (default: 10)
-  inflation_radius:     1  # max. distance from an obstacle at which costs are incurred for planning paths.
-
-staticmap_layer:
-  unknow_cost_value: -1         # Value at which a map value is considered as unknown. If map doesn't use unknown, it will be considered occupied
-  lethal_cost_threshold: 100    # Value at which a map value is considedred lethal. Lethal cells are avoided when planning
-  track_unknown_space: false    # Set to true to translate the unknow values of the map in the costmap. Otherwise, unknown value will be considered as free space
-  map_topic: "grid_map"              # Name of the map's topic. The map should be a nav_msgs/OccupancyGridMessage
-  first_map_only: false         # Set to true to only use the first published map ignoring all other pulications
-  subscribe_to_updates: false   # Set to true to use an additionnal map_tppic+"_updates"
-  use_maximum: false            # Only matters if the static layer is not the bottom layer. If true, only the maximum value will be written to the master costmap.
-  trinary_costmap: true         # Set to true to translate map with cells 3 states possible (NO_INFORMATION/FREE_SPACE/LETHAL_OBSTACLE). If false, intermediate values possible.
+  cost_scaling_factor:  11.0  # exponential rate at which the obstacle cost drops off (default: 10)
+  inflation_radius:     3.0  # max. distance from an obstacle at which costs are incurred for planning paths.

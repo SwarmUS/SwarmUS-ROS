@@ -1,6 +1,6 @@
 #include "Navigation.hpp"
-#include <math.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <math.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 static const uint32_t QUEUE_SIZE{1000};

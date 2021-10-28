@@ -1,4 +1,5 @@
 #include "swarmus_turtlebot/Navigation.hpp"
+#include <math.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
@@ -63,10 +64,12 @@ void Navigation::moveByCallback(const swarmus_turtlebot::MoveBy& msg) {
     goalPose.pose.position.y = msg.distance_y;
     goalPose.pose.position.z = 0;
 
+    float theta = atan2(msg.distance_y, msg.distance_x);
+
     goalPose.pose.orientation.x = 0;
     goalPose.pose.orientation.y = 0;
-    goalPose.pose.orientation.z = 0;
-    goalPose.pose.orientation.w = 1;
+    goalPose.pose.orientation.z = sin(theta / 2.0); // Always around z as moveBy is in 2D
+    goalPose.pose.orientation.w = cos(theta / 2.0);
 
     // Transform the goal in the global frame if needed
     if (m_doGoalNeedsTransform) {

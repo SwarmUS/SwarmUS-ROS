@@ -78,6 +78,7 @@ int main(int argc, char** argv) {
         nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
+    ROS_INFO("Publishing moveBy on %s", moveByPublisher.getTopic().c_str());
     Logger logger;
     HiveMindBridge bridge(port, logger);
 

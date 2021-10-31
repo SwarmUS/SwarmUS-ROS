@@ -266,7 +266,7 @@
           <plugin name="gazebo_ros_hokuyo_controller" filename="libgazebo_ros_laser.so">
             <robotNamespace>$(arg prefix)</robotNamespace>
             <topicName>scan</topicName>
-            <frameName>$(arg prefix)/rplidar</frameName>
+            <frameName>rplidar</frameName>
           </plugin>
           <always_on>1</always_on>
           <update_rate>10</update_rate>
@@ -314,7 +314,7 @@
             <pointCloudCutoff>0.6</pointCloudCutoff>
             <pointCloudCutoffMax>6</pointCloudCutoffMax>
           </xacro:if>
-          <frameName>$(arg prefix)/camera_depth_optical_frame</frameName>
+          <frameName>camera_depth_optical_frame</frameName>
           <distortionK1>0</distortionK1>
           <distortionK2>0</distortionK2>
           <distortionK3>0</distortionK3>

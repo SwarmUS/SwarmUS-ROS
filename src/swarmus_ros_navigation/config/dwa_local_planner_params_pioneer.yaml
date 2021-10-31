@@ -3,22 +3,22 @@ DWAPlannerROS:
 
   # Robot Configuration Parameters
   max_vel_x: 0.3
-  min_vel_x: -0.0
+  min_vel_x: -0.02
 
   max_vel_y: 0.0
   min_vel_y: 0.0
 
   # The velocity when robot is moving in a straight line
   max_vel_trans:  0.3
-  min_vel_trans:  0.15
+  min_vel_trans:  0.0
 
   # weirdly enough, parameters don't work with names given in documentation
-  max_vel_theta: 1.5
-  min_vel_theta: -1.5
+  max_vel_theta: 1.0
+  min_vel_theta: 0.05
 
-  acc_lim_x: 2.5
+  acc_lim_x: 0.6
   acc_lim_y: 0.0
-  acc_lim_theta: 3.2
+  acc_lim_theta: 3.7
 
   # Goal Tolerance Parametes
   xy_goal_tolerance: 0.1
@@ -43,7 +43,7 @@ DWAPlannerROS:
   max_scaling_factor: 0.2
 
   # Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.05
+  oscillation_reset_dist: 0.01
 
   # Debugging
   publish_traj_pc : true

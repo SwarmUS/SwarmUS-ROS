@@ -15,6 +15,7 @@
 
     <rosparam file="$(find swarmus_ros_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
 
+    <rosparam file="$(find swarmus_ros_navigation)/config/base_global_planner_params.yaml" command="load" subst_value="true"/>
     <rosparam file="$(find swarmus_ros_navigation)/config/move_base_params_pioneer.yaml" command="load" />
     <rosparam file="$(find swarmus_ros_navigation)/config/dwa_local_planner_params_pioneer.yaml" command="load"/>
   </node>

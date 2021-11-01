@@ -18,6 +18,7 @@
     <!-- Launch RTAB-MAP and the navigation stack -->
     <include file="$(find swarmus_pioneer)/launch/navigation_and_mapping.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="use_map" value="false"/>
     </include>
 
     <!-- Launch SwarmUS package: HiveMindBridge-->

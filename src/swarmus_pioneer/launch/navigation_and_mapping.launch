@@ -1,25 +1,18 @@
 <?xml version="1.0" ?>
 <launch>
     <arg name="robot_name" default="pioneer_1"/>
+    <arg name="use_map" default="false"/>
 
     <group ns="$(arg robot_name)">
         <!-- Launch move_base and the navigation stack -->
         <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
             <arg name="robot_name" value="$(arg robot_name)"/>
+            <arg name="use_map" value="$(arg use_map)"/>
         </include>
 
         <!-- Start the moveBy interface -->
         <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
             <param name="tf_prefix" type="string" value="$(arg robot_name)" />
         </node>
-
-        <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">
-            <param name="tf_prefix" value="$(arg robot_name)"/>
-        </node>
-
-        <include file="$(find swarmus_ros_navigation)/launch/navigation.launch">
-            <arg name="robot_name"    default="$(arg robot_name)"/>
-            <arg name="use_map" value="$(arg use_map_in_nav_stack)"/>
-        </include>
     </group>
 </launch>

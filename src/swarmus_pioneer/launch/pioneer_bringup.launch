@@ -3,7 +3,7 @@
     <arg name="robot_name" default="pioneer_1"/>
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="odom_config_file" default="$(find swarmus_pioneer)/config/pioneer_1_odom_params.yaml"/>
-    <arg name="camera_type" default="d455"/>
+    <arg name="camera_type" default="d435i"/>
     <arg name="camera_fps" default="15"/>
     <arg name="fuse_odom" default="true"/>
 

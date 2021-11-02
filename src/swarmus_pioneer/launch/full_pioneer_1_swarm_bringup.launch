@@ -7,7 +7,7 @@
     <remap to="/$(arg robot_name)/depth/image" from="/$(arg robot_name)/camera/depth/image_rect_raw"/>
     <remap to="/$(arg robot_name)/rgb/image" from="/$(arg robot_name)/camera/color/image_raw"/>
 
-    <!-- Launch the bringup of the robot equiped with the d455-->
+    <!-- Launch the bringup of the robot equiped with the d435i-->
     <include file="$(find swarmus_pioneer)/launch/pioneer_bringup.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
         <arg name="camera_type" value="d435i"/>

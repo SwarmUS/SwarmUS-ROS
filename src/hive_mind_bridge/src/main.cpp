@@ -6,8 +6,9 @@
 #include <cstdarg>
 #include <optional>
 #include <pheromones/FunctionCallArgumentDTO.h>
+#include <chrono>
 
-constexpr uint8_t RATE_HZ{10};
+constexpr uint16_t RATE_HZ{500};
 
 class Logger : public ILogger {
   public:
@@ -73,7 +74,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle("~");
 
-    int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
+    int port = nodeHandle.param("TCP_SERVER_PORT", 55551);
     std::string moveByTopic =
         nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
@@ -108,6 +109,36 @@ int main(int argc, char** argv) {
     moveByManifest.push_back(
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
+
+
+
+    // Register custom actions
+    std::chrono::high_resolution_clock::time_point begin;
+    CallbackFunction timeStart = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
+        swarmus_ros_navigation::MoveByMessage moveByMessage;
+        begin = std::chrono::high_resolution_clock::now();
+
+        ROS_WARN("Time start");
+
+        CallbackArgs returnArgs;
+        returnArgs.push_back(FunctionCallArgumentDTO((int64_t)6));
+        CallbackReturn cbReturn("timeLoopBuzz", returnArgs);
+        return cbReturn;
+    };
+    CallbackArgsManifest timeLoopbackStartManifest;
+    bridge.registerCustomAction("timeStart", timeStart, timeLoopbackStartManifest);
+
+    // Register custom actions
+    CallbackFunction timeEnd = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
+        swarmus_ros_navigation::MoveByMessage moveByMessage;
+        std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+
+        ROS_WARN("Time diff %ld", std::chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count());
+
+        return {};
+    };
+    CallbackArgsManifest timeLoopbackStopManifest;
+    bridge.registerCustomAction("timeEnd", timeEnd, timeLoopbackStopManifest);
 
     CallbackFunction getStatus = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         // todo This remains to be implemented.

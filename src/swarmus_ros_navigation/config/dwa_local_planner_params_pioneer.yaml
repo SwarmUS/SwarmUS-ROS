@@ -3,7 +3,7 @@ DWAPlannerROS:
 
   # Robot Configuration Parameters
   max_vel_x: 0.3
-  min_vel_x: -0.02
+  min_vel_x: -0.075
 
   max_vel_y: 0.0
   min_vel_y: 0.0
@@ -14,7 +14,7 @@ DWAPlannerROS:
 
   # weirdly enough, parameters don't work with names given in documentation
   max_vel_theta: 1.0
-  min_vel_theta: 0.05
+  min_vel_theta: 0.2
 
   acc_lim_x: 0.6
   acc_lim_y: 0.0
@@ -43,7 +43,7 @@ DWAPlannerROS:
   max_scaling_factor: 0.2
 
   # Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.01
+  oscillation_reset_dist: 0.05
 
   # Debugging
   publish_traj_pc : true

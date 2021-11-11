@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "hive_mind_bridge");
     ros::NodeHandle nodeHandle("~");
 
-    int port = nodeHandle.param("TCP_SERVER_PORT", 55551);
+    int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
     std::string moveByTopic =
         nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
         ROS_WARN("Time start");
 
         CallbackArgs returnArgs;
-        returnArgs.push_back(FunctionCallArgumentDTO((int64_t)6));
+        returnArgs.push_back(FunctionCallArgumentDTO((int64_t)2));
         CallbackReturn cbReturn("timeLoopBuzz", returnArgs);
         return cbReturn;
     };

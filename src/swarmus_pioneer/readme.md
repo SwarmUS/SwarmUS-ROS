@@ -5,7 +5,7 @@ To add the service you can use those commands.
 ```sh
 sudo cp swarmus-pioneer1.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl start swarmus-turtlebot
+sudo systemctl start swarmus-pioneer1
 ```
 
 Copy the service `swarmus-pioneer2.service` for the pioneer 2.

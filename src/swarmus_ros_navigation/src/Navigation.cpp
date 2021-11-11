@@ -91,7 +91,7 @@ void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg
 
 void Navigation::rotateByCallback(const std_msgs::Float32& msg) {
     geometry_msgs::PoseStamped goalPose;
-
+    ROS_INFO("Navigation: rotating by %f degrees", msg.data);
     goalPose.header.stamp = ros::Time::now();
 
     // No translation

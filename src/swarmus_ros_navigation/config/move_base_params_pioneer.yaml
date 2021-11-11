@@ -8,5 +8,5 @@ conservative_reset_dist: 5.0
 # TODO, look if we should use 0.0 without global feeded map (only local)
 planner_frequency: 0.5
 oscillation_timeout: 5.0
-oscillation_distance: 0.5
+oscillation_distance: 0.05
 holonomic_robot: false

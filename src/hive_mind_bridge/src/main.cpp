@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
 
     CallbackArgsManifest rotateByManifest;
-    moveByManifest.push_back(
+    rotateByManifest.push_back(
         UserCallbackArgumentDescription("theta (degrees)", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("rotateBy", rotateByCallback, rotateByManifest);
 

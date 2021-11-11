@@ -1,0 +1,17 @@
+# /etc/systemd/system/swarmus-pioneer2.service
+
+[Unit]
+Description=Launch the required ros nodes for the SwarmUS project on the Pioneer with the orange camera support
+After=NetworkManager.service time-sync.target
+
+[Service]
+Type=simple
+User=swarmus
+Restart=on-failure
+StartLimitBurst=3
+
+WorkingDirectory=/home/swarmus
+ExecStart=/bin/bash -c ". .bashrc && roslaunch swarmus_pioneer full_pioneer_2_swarm_bringup.launch"
+
+[Install]
+WantedBy=multi-user.target

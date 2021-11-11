@@ -64,11 +64,12 @@ To add the service you can use those commands.
 ```sh
 sudo cp swarmus-turtlebot.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl start swarmus-turtlebot
+sudo systemctl enable swarmus-turtlebot
 ```
+Then you can reboot or start the service manually using `sudo start enable swarmus-turtlebot`.
+
 
 To be runable when non-interactive, you can remove those lines in your .bashrc if they are present.
-
 ```sh
 case $- in
     *i*) ;;

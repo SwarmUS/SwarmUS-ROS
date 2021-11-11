@@ -18,6 +18,8 @@ Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) : m_tfList
 
         ROS_INFO("Subscribing to: %s",
                  (ros::this_node::getNamespace() + "/" + MOVEBY_TOPIC).c_str());
+        ROS_INFO("Subscribing to: %s",
+                 (ros::this_node::getNamespace() + "/" + ROTATEBY_TOPIC).c_str());
         m_MoveBySubscriber =
             m_NodeHandle->subscribe(MOVEBY_TOPIC, QUEUE_SIZE, &Navigation::moveByCallback, this);
 

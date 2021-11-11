@@ -87,6 +87,7 @@ int main(int argc, char** argv) {
         nodeHandle.advertise<std_msgs::Float32>(rotateByTopic, 1000);
 
     ROS_INFO("Publishing moveBy on %s", moveByPublisher.getTopic().c_str());
+    ROS_INFO("Publishing rotateBy on %s", rotateByPublisher.getTopic().c_str());
     Logger logger;
     HiveMindBridge bridge(port, logger);
 
@@ -112,9 +113,8 @@ int main(int argc, char** argv) {
 
     CallbackFunction rotateByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         std_msgs::Float32 rotateByMessage;
-
         auto* theta = std::get_if<float>(&args[0].getArgument());
-
+        ROS_INFO("Bridge received rotate by command of %f", theta);
         if (theta == nullptr) {
             ROS_WARN("Received invalid argument type in moveby");
             return {};

@@ -6,6 +6,7 @@
 static const uint32_t QUEUE_SIZE{1000};
 const std::string ROBOT_BASE_FRAME{"base_footprint"};
 const std::string MOVEBY_TOPIC{"navigation/moveBy"};
+const std::string ROTATEBY_TOPIC{"navigation/rotateBy"};
 const std::string MOVEBASE_GOAL_TOPIC{"move_base_simple/goal"};
 
 /*************************************************************************************************/
@@ -19,6 +20,9 @@ Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) : m_tfList
                  (ros::this_node::getNamespace() + "/" + MOVEBY_TOPIC).c_str());
         m_MoveBySubscriber =
             m_NodeHandle->subscribe(MOVEBY_TOPIC, QUEUE_SIZE, &Navigation::moveByCallback, this);
+
+        m_RotateBySubscriber =
+            m_NodeHandle->subscribe(ROTATEBY_TOPIC, QUEUE_SIZE, &Navigation::rotateByCallback, this);
 
         m_GoalPublisher =
             m_NodeHandle->advertise<geometry_msgs::PoseStamped>(MOVEBASE_GOAL_TOPIC, QUEUE_SIZE);
@@ -72,6 +76,34 @@ void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg
     goalPose.pose.orientation.w = cos(theta / 2.0);
 
     // Transform the goal in the global frame if needed
+    if (m_doGoalNeedsTransform) {
+        goalPose = getGoalInGlobalFrame(goalPose);
+        goalPose.header.frame_id = m_RosParameters.moveBaseGlobalFrame;
+    } else {
+        goalPose.header.frame_id = m_robotBaseFrame;
+    }
+
+    // Update the current goal
+    m_CurrentGoal.target_pose = goalPose;
+    m_hasNewGoal = true;
+}
+
+
+void Navigation::rotateByCallback(const std_msgs::Float32& msg) {
+    geometry_msgs::PoseStamped goalPose;
+
+    goalPose.header.stamp = ros::Time::now();
+
+    // No translation
+    goalPose.pose.position.x = 0;
+    goalPose.pose.position.y = 0;
+    goalPose.pose.position.z = 0;
+
+    goalPose.pose.orientation.x = 0;
+    goalPose.pose.orientation.y = 0;
+    goalPose.pose.orientation.z = sin(msg.data / 2.0); // Always around z as moveBy is in 2D
+    goalPose.pose.orientation.w = cos(msg.data / 2.0);
+
     if (m_doGoalNeedsTransform) {
         goalPose = getGoalInGlobalFrame(goalPose);
         goalPose.header.frame_id = m_RosParameters.moveBaseGlobalFrame;

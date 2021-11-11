@@ -2,6 +2,7 @@
 #include "hivemind-bridge/HiveMindBridge.h"
 #include "ros/ros.h"
 #include "swarmus_ros_navigation/MoveByMessage.h"
+#include <std_msgs/Float32.h>
 #include <cpp-common/ILogger.h>
 #include <cstdarg>
 #include <optional>
@@ -74,10 +75,17 @@ int main(int argc, char** argv) {
     ros::NodeHandle nodeHandle("~");
 
     int port = nodeHandle.param("TCP_SERVER_PORT", 7001);
+
     std::string moveByTopic =
         nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
+
+    std::string rotateByTopic =
+        nodeHandle.param("rotateByTopic", std::string("/agent_1/navigation/rotateBy"));
+    ros::Publisher rotateByPublisher =
+        nodeHandle.advertise<std_msgs::Float32>(rotateByTopic, 1000);
+
     ROS_INFO("Publishing moveBy on %s", moveByPublisher.getTopic().c_str());
     Logger logger;
     HiveMindBridge bridge(port, logger);
@@ -102,12 +110,34 @@ int main(int argc, char** argv) {
         return {};
     };
 
+    CallbackFunction rotateByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
+        std_msgs::Float32 rotateByMessage;
+
+        auto* theta = std::get_if<float>(&args[0].getArgument());
+
+        if (theta == nullptr) {
+            ROS_WARN("Received invalid argument type in moveby");
+            return {};
+        }
+
+        rotateByMessage.data = *theta;
+
+        // Publish on moveby
+        rotateByPublisher.publish(rotateByMessage);
+        return {};
+    };
+
     CallbackArgsManifest moveByManifest;
     moveByManifest.push_back(
         UserCallbackArgumentDescription("x", FunctionDescriptionArgumentTypeDTO::Float));
     moveByManifest.push_back(
         UserCallbackArgumentDescription("y", FunctionDescriptionArgumentTypeDTO::Float));
     bridge.registerCustomAction("moveBy", moveByCallback, moveByManifest);
+
+    CallbackArgsManifest rotateByManifest;
+    moveByManifest.push_back(
+        UserCallbackArgumentDescription("theta (degrees)", FunctionDescriptionArgumentTypeDTO::Float));
+    bridge.registerCustomAction("rotateBy", rotateByCallback, rotateByManifest);
 
     CallbackFunction getStatus = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
         // todo This remains to be implemented.

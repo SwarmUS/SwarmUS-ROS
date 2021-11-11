@@ -11,6 +11,7 @@
 #include <array>
 #include <iostream>
 #include <move_base_msgs/MoveBaseAction.h>
+#include <std_msgs/Float32.h>
 #include <ros/ros.h>
 #include <swarmus_ros_navigation/MoveByMessage.h>
 #include <tf2_ros/transform_listener.h>
@@ -42,6 +43,11 @@ class Navigation {
      * @brief Subscriber used to listen to user commands
      **/
     ros::Subscriber m_MoveBySubscriber;
+
+    /**
+     * @brief Subscriber used to listen to user commands
+     **/
+    ros::Subscriber m_RotateBySubscriber;
 
     /**
      * @brief Publisher used to send goal commands to move_base
@@ -100,6 +106,16 @@ class Navigation {
      *
      **/
     void moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg);
+
+    /**
+     * @brief Rotate by a given angle in degrees
+     *
+     * @details Called whenever a command is sent by the user
+     *
+     * @param msg Message that contains the angle theta
+     *
+     **/
+    void rotateByCallback(const std_msgs::Float32& msg);
 
   public:
     /**

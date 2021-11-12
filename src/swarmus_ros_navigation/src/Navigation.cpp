@@ -2,6 +2,8 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <math.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf/tf.h>
+#include <tf/transform_broadcaster.h>
 
 static const uint32_t QUEUE_SIZE{1000};
 const std::string ROBOT_BASE_FRAME{"base_footprint"};
@@ -96,16 +98,14 @@ void Navigation::rotateByCallback(const std_msgs::Float32& msg) {
     ROS_INFO("Navigation: rotating by %f degrees", msg.data);
     goalPose.header.stamp = ros::Time::now();
 
+
     // No translation
     goalPose.pose.position.x = 0;
     goalPose.pose.position.y = 0;
     goalPose.pose.position.z = 0;
 
     float theta = (msg.data * 180) / M_PI;
-    goalPose.pose.orientation.x = 0;
-    goalPose.pose.orientation.y = 0;
-    goalPose.pose.orientation.z = sin(theta / 2.0f); // Always around z as moveBy is in 2D
-    goalPose.pose.orientation.w = cos(theta / 2.0f);
+    goalPose.pose.orientation = tf::createQuaternionMsgFromYaw(theta);
 
     if (m_doGoalNeedsTransform) {
         goalPose = getGoalInGlobalFrame(goalPose);

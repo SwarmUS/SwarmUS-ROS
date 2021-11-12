@@ -104,8 +104,8 @@ void Navigation::rotateByCallback(const std_msgs::Float32& msg) {
     float theta = (msg.data * 180) / M_PI;
     goalPose.pose.orientation.x = 0;
     goalPose.pose.orientation.y = 0;
-    goalPose.pose.orientation.z = sin(theta / 2.0); // Always around z as moveBy is in 2D
-    goalPose.pose.orientation.w = cos(theta / 2.0);
+    goalPose.pose.orientation.z = 180 - sin(theta / 2.0); // Always around z as moveBy is in 2D
+    goalPose.pose.orientation.w = 180 - cos(theta / 2.0);
 
     if (m_doGoalNeedsTransform) {
         goalPose = getGoalInGlobalFrame(goalPose);

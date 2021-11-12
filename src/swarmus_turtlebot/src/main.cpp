@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
     ros::Rate loopRate(RATE_HZ);
     std::thread navigationThread(navigationLoop, &navigation, loopRate);
 
-    int port = nodeHandle->param("TCP_SERVER_PORT", 55551);
+    int port = nodeHandle->param("TCP_SERVER_PORT", 7001);
     std::string moveByTopic = nodeHandle->param("moveByTopic", std::string("navigation/moveBy"));
     ros::Publisher moveByPublisher =
         nodeHandle->advertise<swarmus_turtlebot::MoveBy>(moveByTopic, 1000);

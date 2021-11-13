@@ -16,8 +16,10 @@
         </node>
 
         <!-- Launch RTAB-Map-->
+	<!--
         <include file="$(find swarmus_ros_navigation)/launch/rtabmap.launch"  if="$(arg use_map)">
             <arg name="robot_name" value="$(arg robot_name)"/>
         </include>
+	-->
     </group>
 </launch>

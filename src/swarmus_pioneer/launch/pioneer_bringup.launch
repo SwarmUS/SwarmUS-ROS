@@ -5,7 +5,7 @@
     <arg name="odom_config_file" default="$(find swarmus_pioneer)/config/pioneer_1_odom_params.yaml"/>
     <arg name="camera_type" default="d435i"/>
     <arg name="camera_fps" default="15"/>
-    <arg name="fuse_odom" default="true"/>
+    <arg name="fuse_odom" default="false"/>
 
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
@@ -39,6 +39,7 @@
         </node>
 
         <!-- Intel RealSense -->
+	<!--
         <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i')">
             <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
@@ -48,7 +49,7 @@
             <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
-
+	-->
         <!-- Lidar -->
         <node pkg="rplidar_ros" type="rplidarNode" name="rplidar_node" output="screen">
             <param name="serial_port"         type="string" value="/dev/rplidar"/>

@@ -1,7 +1,7 @@
 #include "Navigation.hpp"
 #include <ros/ros.h>
 
-static const uint8_t RATE_HZ{10};
+static const uint8_t RATE_HZ{20};
 
 int main(int argc, char** argv) {
     //  Initialize rosbuzz node

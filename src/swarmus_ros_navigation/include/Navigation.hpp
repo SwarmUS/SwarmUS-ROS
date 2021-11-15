@@ -49,6 +49,11 @@ class Navigation {
     ros::Publisher m_GoalPublisher;
 
     /**
+     * @brief Publisher used to send values to cmd_vel
+     */
+     ros::Publisher m_CmdVelPublisher;
+
+    /**
      * @brief Current move_base goal of the robot
      **/
     move_base_msgs::MoveBaseGoal m_CurrentGoal;
@@ -101,6 +106,14 @@ class Navigation {
      **/
     void moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg);
 
+    /**
+     * @brief Transforms a x and displacement in x and y velocity for motors
+     * @param msg Message that contains a x and y deplacement command in meters
+     */
+    void setVelocityCallback(const swarmus_ros_navigation::MoveByMessage& msg);
+
+    void sendCmdVel();
+
   public:
     /**
      * @brief Constructor
@@ -123,6 +136,8 @@ class Navigation {
      *
      **/
     void execute();
+
+    std::pair<float, float> m_currentVelocity;
 };
 
 #endif // NAVIGATION_HPP

@@ -2,11 +2,13 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <math.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/Twist.h>
 
 static const uint32_t QUEUE_SIZE{1000};
 const std::string ROBOT_BASE_FRAME{"base_footprint"};
 const std::string MOVEBY_TOPIC{"navigation/moveBy"};
 const std::string MOVEBASE_GOAL_TOPIC{"move_base_simple/goal"};
+const std::string CMDVEL_GOAL_TOPIC{"cmd_vel"};
 
 /*************************************************************************************************/
 Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) : m_tfListener(m_tfBuffer) {
@@ -18,10 +20,13 @@ Navigation::Navigation(std::shared_ptr<ros::NodeHandle> p_NodeHandle) : m_tfList
         ROS_INFO("Subscribing to: %s",
                  (ros::this_node::getNamespace() + "/" + MOVEBY_TOPIC).c_str());
         m_MoveBySubscriber =
-            m_NodeHandle->subscribe(MOVEBY_TOPIC, QUEUE_SIZE, &Navigation::moveByCallback, this);
+            m_NodeHandle->subscribe(MOVEBY_TOPIC, QUEUE_SIZE, &Navigation::setVelocityCallback, this);
 
         m_GoalPublisher =
             m_NodeHandle->advertise<geometry_msgs::PoseStamped>(MOVEBASE_GOAL_TOPIC, QUEUE_SIZE);
+
+        m_CmdVelPublisher =
+                m_NodeHandle->advertise<geometry_msgs::Twist>(CMDVEL_GOAL_TOPIC, QUEUE_SIZE);
     }
 }
 
@@ -84,6 +89,33 @@ void Navigation::moveByCallback(const swarmus_ros_navigation::MoveByMessage& msg
     m_hasNewGoal = true;
 }
 
+void Navigation::setVelocityCallback(const swarmus_ros_navigation::MoveByMessage& msg) {
+    float norm = sqrt((msg.distance_y*msg.distance_y) + (msg.distance_x*msg.distance_x));
+    if (norm < 0.9) {
+        m_currentVelocity = {0.0, 0.0};
+    }
+    else {
+        float theta = atan2(msg.distance_y, msg.distance_x) ;
+        m_currentVelocity = {1.0, theta};
+    }
+}
+
+void Navigation::sendCmdVel() {
+    geometry_msgs::Twist msg;
+    msg.linear.x = m_currentVelocity.first;
+    msg.linear.y = 0;
+    msg.linear.z = 0;
+
+    msg.angular.x = 0;
+    msg.angular.y = 0;
+    msg.angular.z = m_currentVelocity.second;
+    m_CmdVelPublisher.publish(msg);
+    m_currentVelocity.first *= 0.95;
+    m_currentVelocity.second *= 0.99;
+}
+
+
+
 geometry_msgs::PoseStamped Navigation::getGoalInGlobalFrame(
     const geometry_msgs::PoseStamped goalInBaseFrame) {
 
@@ -108,4 +140,5 @@ void Navigation::execute() {
         m_GoalPublisher.publish(m_CurrentGoal.target_pose);
         m_hasNewGoal = false;
     }
+    sendCmdVel();
 }

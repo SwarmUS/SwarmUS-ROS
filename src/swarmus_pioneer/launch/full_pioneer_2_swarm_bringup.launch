@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
     <arg name="robot_name" default="pioneer_2"/>
+    <arg name="use_map" default="false"/>
 
     <!--Remap pioneers_0's camera topics to RTAB-Map -->
     <remap to="/$(arg robot_name)/rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
@@ -13,11 +14,13 @@
         <arg name="camera_type" value="d455"/>
         <arg name="fuse_odom" value="true"/>
         <arg name="odom_config_file" value="$(find swarmus_pioneer)/config/pioneer_2_odom_params.yaml"/> 
+        <arg name="use_map" value="$(arg use_map)"/>
     </include>
 
     <!-- Launch RTAB-MAP and the navigation stack -->
     <include file="$(find swarmus_pioneer)/launch/navigation_and_mapping.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="use_map" value="$(arg use_map)"/>
     </include>
 
     <!-- Launch SwarmUS package: HiveMindBridge-->

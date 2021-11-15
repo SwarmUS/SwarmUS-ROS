@@ -26,7 +26,7 @@
 
         <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
             <param name="publish_frequency" type="double" value="30.0" />
-            <remap from="/joint_states" to="/p_swarmus/joint_states"/>
+            <remap from="/joint_states" to="/$(arg robot_name)/joint_states"/>
         </node>
 
         <node pkg="swarmus_ros_navigation" type="swarmus_ros_navigation_node" name="swarmus_ros_navigation_node" output="screen">

@@ -224,10 +224,10 @@
       <plugin name="differential_drive" filename="libgazebo_ros_diff_drive.so">
         <commandTopic>cmd_vel</commandTopic>
         <odometryTopic>odom</odometryTopic>
-        <odometryFrame>$(arg prefix)/odom</odometryFrame>
+        <odometryFrame>odom</odometryFrame>
         <odometrySource>world</odometrySource>
         <publishOdomTF>true</publishOdomTF>
-        <robotBaseFrame>$(arg prefix)/base_footprint</robotBaseFrame>
+        <robotBaseFrame>base_footprint</robotBaseFrame>
         <publishWheelTF>false</publishWheelTF>
         <publishTf>true</publishTf>
         <publishWheelJointState>true</publishWheelJointState>

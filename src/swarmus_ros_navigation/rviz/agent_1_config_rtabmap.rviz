@@ -235,7 +235,7 @@ Visualization Manager:
           Radius: 0.029999999329447746
           Shaft Diameter: 0.10000000149011612
           Shaft Length: 0.10000000149011612
-          Topic: /agent_1/move_base/TrajectoryPlannerROS/global_plan
+          Topic: /agent_1/move_base/DWAPlannerROS/global_plan
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -289,7 +289,7 @@ Visualization Manager:
           Radius: 0.029999999329447746
           Shaft Diameter: 0.10000000149011612
           Shaft Length: 0.10000000149011612
-          Topic: /agent_1/move_base/TrajectoryPlannerROS/local_plan
+          Topic: /agent_1/move_base/DWAPlannerROS/local_plan
           Unreliable: false
           Value: true
       Enabled: true

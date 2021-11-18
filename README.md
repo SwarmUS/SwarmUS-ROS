@@ -197,7 +197,3 @@ This repository contains a `tools` folder with some python scripts that help acc
 ## Documentation
 
 An up to date version of the documentation can be found [here](https://swarmus.github.io/SwarmUS-ROS/index.html)
-
-## Static analysis
-
-The packages in this repository are analysed with [Haros](https://github.com/git-afsantos/haros/tree/master/haros). The results are published (here)[https://swarmus.github.io/SwarmUS-ROS-Haros-viz/#dashboard].

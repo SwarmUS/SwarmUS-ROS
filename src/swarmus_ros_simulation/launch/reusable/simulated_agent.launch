@@ -3,7 +3,6 @@
     - The HiveMind connector node
     - The HiveMind node itself
     - The HiveConnect node
-    - The navigation stack mode
 -->
 <launch>
     <!-- The following arguments are used to the different parameters of each nodes. -->
@@ -62,10 +61,6 @@
             <param name="tcp_listen_port" type="int" value="$(arg hive_connect_listen_port)"/>
         </node>
 
-        <!-- Interlocalization -->
-        <!--<node pkg="swarmus_ros_simulation" type="interLocalization" name="interLocalization" output="screen">
-            <param name="robot_name" type="string" value="agent_$(arg agent_id)" />
-        </node>-->
     </group>
 
 </launch>

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- This launch files spawns an HiveMind to use with a cellphone to use for connection -->
+<!-- This launch files spawns an HiveMind to use with a HiveAR to use for connection -->
 <launch>
     <!-- Generic parameters -->
     <arg name="agent_id"   default="1"/>

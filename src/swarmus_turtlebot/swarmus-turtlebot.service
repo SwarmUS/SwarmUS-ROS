@@ -6,11 +6,9 @@ Description=Launch the required ros nodes for the SwarmUS project on the TurtleB
 After=NetworkManager.service time-sync.target
 
 [Service]
-Type=forking
+Type=simple
 User=swarmus
 Restart=on-failure
-StartLimitBurst=3
-TimeoutStopSec=200
 KillMode=process
 
 WorkingDirectory=/home/swarmus

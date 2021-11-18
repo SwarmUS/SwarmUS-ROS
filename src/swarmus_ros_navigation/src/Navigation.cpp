@@ -56,6 +56,14 @@ void Navigation::fetchRosParameters() {
                  "the %s frame",
                  m_robotBaseFrame.c_str());
     }
+
+    m_useMoveBase =  m_NodeHandle->param("~use_nav_stack", true);
+    if (m_useMoveBase) {
+        ROS_INFO("Using navigation stack");
+    }
+    else {
+        ROS_INFO("Using cmd_vel");
+    }
 }
 
 /*************************************************************************************************/

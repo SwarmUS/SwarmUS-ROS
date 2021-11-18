@@ -64,6 +64,11 @@ class Navigation {
     bool m_hasNewGoal;
 
     /**
+     * @brief Flag used to indicate if goals are to be published on move_base
+     **/
+     bool m_useMoveBase;
+
+    /**
      * @brief Transform listener used to get transfrom between frames
      **/
     tf2_ros::TransformListener m_tfListener;

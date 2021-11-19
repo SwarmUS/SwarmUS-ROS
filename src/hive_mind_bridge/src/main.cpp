@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
         nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
     ROS_INFO("Publishing moveBy on %s", moveByPublisher.getTopic().c_str());
     Logger logger;
-    HiveMindBridge bridge(port, logger);
+    HiveMindBridge bridge(port, logger, RATE_HZ);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {

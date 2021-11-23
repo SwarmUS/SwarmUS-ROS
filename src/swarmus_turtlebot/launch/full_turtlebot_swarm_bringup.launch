@@ -1,0 +1,12 @@
+
+<launch>
+  <!-- Launchfile that starts the turtlebot navigation stack, serial communication with the OpenCr and the sensors -->
+  
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/> 
+
+  <include file="$(find swarmus_turtlebot)/launch/turtlebot.launch">
+      <arg name="model" value="burger"/>
+      <arg name="slam_methods" value="gmapping"/>
+  </include>
+
+</launch>

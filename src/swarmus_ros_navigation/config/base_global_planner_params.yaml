@@ -1,14 +1,14 @@
-BaseGlobalPlanner:
+GlobalPlanner:
   allow_unknow: True          # Specifies if the unknow grid cells should be use to plan the trajectory
   default_tolerance: 0.0      # Tolerance around the goal
   
-  use_dijkstra: false          # If true, use Dijkstra's algorithm. Otherwise, use A*.
+  use_dijkstra: false         # If true, use Dijkstra's algorithm. Otherwise, use A*.
   use_quadratic: true         # If true, use the quadratic approximation of the potential. Otherwise, use a simpler calculation
   use_grid_path: false        # If true, create a path that follows the grid boundaries. Otherwise, use a gradient descent method
   old_navfn_behavior: false   # If true, the planner will mirror the behavior of navfn
 
   lethal_cost: 253            # Lethal cost (can be changed with dynamic reconfiguring)
-  neutral_cost : 50           # Neutral Cost 
+  neutral_cost : 66           # Neutral Cost 
   cost_factor: 0.8            # Factor to multiply each cost from costmap by (can be changed with dynamic reconfiguring)
 
   publish_potential: true     # Publish Potential Costmap (can be changed with dynamic reconfiguring)

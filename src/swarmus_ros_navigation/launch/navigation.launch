@@ -6,6 +6,9 @@
   <!-- Navigation -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <!-- Load common parameters of the local and global planner-->
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+    <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+    
     <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
     <rosparam file="$(find swarmus_ros_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
 
@@ -14,9 +17,9 @@
 
     <rosparam file="$(find swarmus_ros_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
 
-    <rosparam file="$(find swarmus_ros_navigation)/config/base_local_planner_params.yaml" command="load" subst_value="true"/>
+    <rosparam file="$(find swarmus_ros_navigation)/config/move_base_params_pioneer.yaml" command="load" />
 
     <rosparam file="$(find swarmus_ros_navigation)/config/base_global_planner_params.yaml" command="load" subst_value="true"/>
-  
+    <rosparam file="$(find swarmus_ros_navigation)/config/dwa_local_planner_params_pioneer.yaml" command="load"/>
   </node>
 </launch>

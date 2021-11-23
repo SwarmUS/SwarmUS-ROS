@@ -46,6 +46,9 @@
 
             <param name="log_level" value="Warn" />
 
+            <!-- Buttons topic-->
+            <param name="button_topic" type="str" value="/agent_$(arg agent_id)/user_interface/button" />
+
             <!-- Interloc refresh rate in Hz -->
             <param name="interloc_refresh_rate" value="$(arg interloc_refresh_rate)" />
         </node>

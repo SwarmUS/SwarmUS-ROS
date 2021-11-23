@@ -2,10 +2,11 @@
 <launch>
     <arg name="robot_name" default="pioneer_1"/>
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
-    <arg name="odom_config_file" default="$(find swarmus_pioneer)/config/pioneer_0_odom_params.yaml"/>
-    <arg name="camera_type" default="d455"/>
+    <arg name="odom_config_file" default="$(find swarmus_pioneer)/config/pioneer_1_odom_params.yaml"/>
+    <arg name="camera_type" default="d435i"/>
     <arg name="camera_fps" default="15"/>
     <arg name="fuse_odom" default="true"/>
+    <arg name="use_map" default="false"/>
 
     <group ns="$(arg robot_name)">
         <!-- Roboclaw -->
@@ -39,12 +40,12 @@
         </node>
 
         <!-- Intel RealSense -->
-        <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i')">
+        <include file="$(find swarmus_pioneer)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i' and use_map == true)">
             <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>
 
-        <include file="$(find swarmus_pioneer)/launch/d455_bringup.launch"  if="$(eval camera_type == 'd455')">
+        <include file="$(find swarmus_pioneer)/launch/d455_bringup.launch"  if="$(eval camera_type == 'd455' and use_map == true)">
             <arg name="robot_name" value="$(arg robot_name)"/>
             <arg name="camera_fps" value="$(arg camera_fps)"/>
         </include>

@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     ros::Publisher moveByPublisher =
         nodeHandle->advertise<swarmus_turtlebot::MoveBy>(moveByTopic, 1000);
     Logger logger;
-    HiveMindBridge bridge(port, logger);
+    HiveMindBridge bridge(port, logger, 5 * RATE_HZ);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {

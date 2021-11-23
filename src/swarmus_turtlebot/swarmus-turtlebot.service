@@ -1,0 +1,18 @@
+# /etc/systemd/system/swarmus-turtlebot.service
+# Make sure your bashrc file can be run non-interactively
+
+[Unit]
+Description=Launch the required ros nodes for the SwarmUS project on the TurtleBot
+After=NetworkManager.service time-sync.target
+
+[Service]
+Type=simple
+User=swarmus
+Restart=on-failure
+KillMode=process
+
+WorkingDirectory=/home/swarmus
+ExecStart=/bin/bash -c '. .bashrc && roslaunch swarmus_turtlebot full_turtlebot_swarm_bringup.launch'
+
+[Install]
+WantedBy=multi-user.target

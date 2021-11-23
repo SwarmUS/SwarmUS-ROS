@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <!-- This launch nodes that need to be started exactly once per simulation. These include:
     - The Gazebo runtime
+    - The communication broker
 -->
 <launch>
     <arg name="world_name" default="$(find gazebo_ros)/worlds/empty.world"/>

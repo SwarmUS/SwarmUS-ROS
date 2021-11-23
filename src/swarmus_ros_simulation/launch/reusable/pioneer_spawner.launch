@@ -1,4 +1,8 @@
 <?xml version="1.0" ?>
+<!-- This launch files spawns a pioneer and all the required nodes of it to work.
+For a whole swarm agent, you can use pioneer_spawner with simulated_agent.
+Once connected they will form a swarm agent.
+-->
 <launch>
     <arg name="ns" />
     <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>

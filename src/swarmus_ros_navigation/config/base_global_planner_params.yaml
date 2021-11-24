@@ -4,7 +4,7 @@ GlobalPlanner:
   
   use_dijkstra: false         # If true, use Dijkstra's algorithm. Otherwise, use A*.
   use_quadratic: true         # If true, use the quadratic approximation of the potential. Otherwise, use a simpler calculation
-  use_grid_path: false        # If true, create a path that follows the grid boundaries. Otherwise, use a gradient descent method
+  use_grid_path: true        # If true, create a path that follows the grid boundaries. Otherwise, use a gradient descent method
   old_navfn_behavior: false   # If true, the planner will mirror the behavior of navfn
 
   lethal_cost: 253            # Lethal cost (can be changed with dynamic reconfiguring)

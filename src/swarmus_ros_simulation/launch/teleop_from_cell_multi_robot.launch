@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
-<!-- This launch files spawns a swarm of 4 fully functional Pioneers 2Dx agents
-and an agent which you can connect to with HiveAR-->
+<!-- This launch files spawns a swarm of 5 fully functional robots -->
 
 <launch>
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch"/>

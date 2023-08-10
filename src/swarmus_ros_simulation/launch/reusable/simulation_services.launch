@@ -15,6 +15,7 @@
         <arg name="headless" value="false"/>
     </include>
 
+    <!-- Publish the odometry tf from Gazebo-->
     <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
 
     <!-- Communication Broker -->

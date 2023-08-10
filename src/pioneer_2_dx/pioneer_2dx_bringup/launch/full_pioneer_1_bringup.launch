@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="robot_name" default="pioneer_1"/>
+    <arg name="use_map"      default="false"/>
+
+    <!--Remap pioneers_0's camera topics to RTAB-Map -->
+    <remap to="/$(arg robot_name)/rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
+    <remap to="/$(arg robot_name)/depth/image" from="/$(arg robot_name)/camera/depth/image_rect_raw"/>
+    <remap to="/$(arg robot_name)/rgb/image" from="/$(arg robot_name)/camera/color/image_raw"/>
+
+    <!-- Launch the bringup of the robot equiped with the d435i-->
+    <include file="$(find pioneer_2dx_bringup)/launch/pioneer_bringup.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="camera_type" value="d435i"/>
+        <arg name="fuse_odom" value="true"/>
+        <arg name="odom_config_file" value="$(find pioneer_2dx_bringup)/config/pioneer_1_odom_params.yaml"/>
+        <arg name="use_map" value="$(arg use_map)"/> 
+    </include>
+
+    <!-- Launch RTAB-MAP and the navigation stack -->
+    <include file="$(find pioneer_2dx_bringup)/launch/navigation_and_mapping.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="use_map"      value="$(arg use_map)"/>
+    </include>
+
+</launch>

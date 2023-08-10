@@ -1,7 +1,7 @@
 #include "hivemind-bridge/Callback.h"
 #include "hivemind-bridge/HiveMindBridge.h"
 #include "ros/ros.h"
-#include "swarmus_ros_navigation/MoveByMessage.h"
+#include "pioneer_2dx_msgs/MoveByMessage.h"
 #include <cpp-common/ILogger.h>
 #include <cstdarg>
 #include <optional>
@@ -77,14 +77,14 @@ int main(int argc, char** argv) {
     std::string moveByTopic =
         nodeHandle.param("moveByTopic", std::string("/agent_1/navigation/moveBy"));
     ros::Publisher moveByPublisher =
-        nodeHandle.advertise<swarmus_ros_navigation::MoveByMessage>(moveByTopic, 1000);
+        nodeHandle.advertise<pioneer_2dx_msgs::MoveByMessage>(moveByTopic, 1000);
     ROS_INFO("Publishing moveBy on %s", moveByPublisher.getTopic().c_str());
     Logger logger;
     HiveMindBridge bridge(port, logger, 5 * RATE_HZ);
 
     // Register custom actions
     CallbackFunction moveByCallback = [&](CallbackArgs args) -> std::optional<CallbackReturn> {
-        swarmus_ros_navigation::MoveByMessage moveByMessage;
+        pioneer_2dx_msgs::MoveByMessage moveByMessage;
 
         auto* x = std::get_if<float>(&args[0].getArgument());
         auto* y = std::get_if<float>(&args[1].getArgument());

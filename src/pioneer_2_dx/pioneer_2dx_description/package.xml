@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pioneer_2dx_description</name>
+  <version>1.0.0</version>
+  <description>Package that contains the Pioneer 2Dx frames and transform description. Also contains the configuration of the simulated sensors for Gazebo.</description>
+
+  <maintainer email="etienne.villemure@usherbrooke.ca">etienne</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- If the robot_description is used for simulation, the parent package should manage the dependancy to
+  gazebo_ros. That prevents the real robots from installing and Gazebo and other simulation utils-->
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>realsense2_description</exec_depend>
+
+</package>

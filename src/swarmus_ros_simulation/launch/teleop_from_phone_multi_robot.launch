@@ -8,7 +8,7 @@ and an agent which you can connect to with HiveAR-->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="1"/>
     </include>
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_1"/>
         <arg name="robot_name" value="agent_1"/>
         <arg name="robot_pos_x" value="1.0"/>
@@ -19,7 +19,7 @@ and an agent which you can connect to with HiveAR-->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="2"/>
     </include>
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_2"/>
         <arg name="robot_name" value="agent_2"/>
         <arg name="robot_pos_x" value="-1"/>
@@ -30,7 +30,7 @@ and an agent which you can connect to with HiveAR-->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="3"/>
     </include>
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_3"/>
         <arg name="robot_name" value="agent_3"/>
         <arg name="robot_pos_x" value="-1"/>
@@ -41,7 +41,7 @@ and an agent which you can connect to with HiveAR-->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
         <arg name="agent_id"   value="4"/>
     </include>
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_4"/>
         <arg name="robot_name" value="agent_4"/>
         <arg name="robot_pos_x" value="-1"/>

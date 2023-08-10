@@ -7,7 +7,7 @@
     <arg name="gui" default="true"/>
     <arg name="headless" default="false"/>
     <arg name="debug" default="false"/>
-    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="model" default="$(find pioneer_2dx_description)/urdf/pioneer.urdf.xacro"/>
 
     <!-- define the robots as args -->
     <arg name="robot_1_name" default="agent_1"/>
@@ -20,7 +20,7 @@
     </include>
     
     <!-- Agent 1 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_1"/>
         <arg name="robot_name" value="agent_1"/>
         <arg name="robot_pos_x" value="-4.75"/>
@@ -28,7 +28,7 @@
     </include>
 
     <!-- Agent 2 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_2"/>
         <arg name="robot_name" value="agent_2"/>
         <arg name="robot_pos_x" value="-1.5"/>
@@ -36,7 +36,7 @@
     </include>
 
     <!-- Agent 3 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_3"/>
         <arg name="robot_name" value="agent_3"/>
         <arg name="robot_pos_x" value="-1.5"/>
@@ -45,7 +45,7 @@
     </include>
 
     <!-- Agent 4 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="ns" value="agent_4"/>
         <arg name="robot_name" value="agent_4"/>
         <arg name="robot_pos_x" value="-2.7"/>

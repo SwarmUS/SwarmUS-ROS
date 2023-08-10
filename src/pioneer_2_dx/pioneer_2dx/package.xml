@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pioneer_2dx</name>
+  <version>0.0.0</version>
+  <description>The metapackage that regroups all the necessary packages to have a working Pioneer 2Dx.</description>
+
+  <!-- One maintainer tag required, multiple allowed, one person per tag -->
+  <!-- Example:  -->
+  <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
+  <maintainer email="etienne.villemure@usherbrooke.ca">Étienne Villemure</maintainer>
+
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>pioneer_2dx_bringup</exec_depend>
+  <exec_depend>pioneer_2dx_description</exec_depend>
+  <exec_depend>pioneer_2dx_msgs</exec_depend>
+  <exec_depend>pioneer_2dx_navigation</exec_depend>
+  <exec_depend>pioneer_2dx_simulation</exec_depend>
+  <exec_depend>pioneer_2dx_slam</exec_depend>
+  <exec_depend>pioneer_2dx_visualization</exec_depend>
+
+ <export>
+   <metapackage />
+ </export>
+</package>

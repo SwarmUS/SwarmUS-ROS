@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="robot_name" default="pioneer_1"/>
+    <arg name="model" default="$(find pioneer_2dx_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="odom_config_file" default="$(find pioneer_2dx_bringup)/config/pioneer_1_odom_params.yaml"/>
+    <arg name="camera_type" default="d435i"/>
+    <arg name="camera_fps" default="15"/>
+    <arg name="fuse_odom" default="true"/>
+    <arg name="use_map" default="false"/>
+
+    <group ns="$(arg robot_name)">
+        <!-- Roboclaw -->
+        <node pkg="roboclaw" type="roboclaw_node" name="roboclaw_node">
+            <param name="~serial_port"  value="/dev/roboclaw"/>
+            <param name="~baudrate"     value="115200"/>
+            <param name="~roboclaws"    value="1"/>
+
+            <param name="~enc_publish_frequency" value="100"/>
+        </node>
+
+        <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
+            <param name="~roboclaws" value="1"/>
+            <rosparam command="load" file="$(arg odom_config_file)" subst_value="true"/>
+            <param name="~swap_motors" value="true"/>
+            <param name="~invert_motor_1" value="false"/>
+            <param name="~invert_motor_2" value="false"/>
+
+            <param name="~var_pos_x" value="0.01"/>
+            <param name="~var_pos_y" value="0.01"/>
+            <param name="~var_theta_z" value="0.01"/>
+            
+            <!-- In m/s and rad/s-->
+            <param name="~max_linear_speed" value="0.3"/>
+            <param name="~max_linear_acceleration" value="0.6"/>
+            <param name="~max_angular_speed" value="1"/>
+
+            <param name="~tf_prefix" value="$(arg robot_name)"/>
+            
+            <param name="~publish_tf" value="$(eval not arg('fuse_odom'))"/>
+        </node>
+
+        <!-- Intel RealSense -->
+        <include file="$(find pioneer_2dx_bringup)/launch/d435i_bringup.launch" if="$(eval camera_type == 'd435i' and use_map == true)">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+            <arg name="camera_fps" value="$(arg camera_fps)"/>
+        </include>
+
+        <include file="$(find pioneer_2dx_bringup)/launch/d455_bringup.launch"  if="$(eval camera_type == 'd455' and use_map == true)">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+            <arg name="camera_fps" value="$(arg camera_fps)"/>
+        </include>
+
+        <!-- Lidar -->
+        <node pkg="rplidar_ros" type="rplidarNode" name="rplidar_node" output="screen">
+            <param name="serial_port"         type="string" value="/dev/rplidar"/>
+            <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
+            <param name="frame_id"            type="string" value="$(arg robot_name)/rplidar"/>
+            <param name="inverted"            type="bool"   value="false"/>
+            <param name="angle_compensate"    type="bool"   value="true"/>
+        </node>
+
+        <!-- Odometry fusing -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" if="$(arg fuse_odom)">
+            <remap from="cmd_vel" to="cmd_vel/filtered"/>
+            <rosparam command="load" file="$(find pioneer_2dx_slam)/config/ekf_fusing_params.yaml" subst_value="true"/>
+        </node>
+
+        <!-- Robot state publisher to publish TF-->
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=false"/>
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <!--remap from="/joint_states" to="$(arg robot_name)/joint_states"/-->
+        </node>
+    </group>
+</launch>

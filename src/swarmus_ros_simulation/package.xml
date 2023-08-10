@@ -40,10 +40,9 @@
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
   <exec_depend>message_runtime</exec_depend>
-  <exec_depend>swarmus_ros_description</exec_depend>
-  <exec_depend>swarmus_ros_navigation</exec_depend>
+  <exec_depend>pioneer_2dx_description</exec_depend>
+  <exec_depend>pioneer_2dx_simulation</exec_depend>
   <exec_depend>xacro</exec_depend>
-  <exec_depend>rtabmap_ros</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>gazebo_ros_pkgs</exec_depend>
   <exec_depend>turtlebot3_gazebo</exec_depend>

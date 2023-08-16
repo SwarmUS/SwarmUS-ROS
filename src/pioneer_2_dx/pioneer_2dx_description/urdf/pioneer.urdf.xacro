@@ -10,6 +10,8 @@
   <xacro:arg name="is_simulation" default="false"/>
   <xacro:property name="is_simulation" value="$(arg is_simulation)"/>
 
+  <xacro:arg name="publish_tf_odom" default="true"/>
+
   <link name="$(arg prefix)/base_footprint" />
   <link name="$(arg prefix)/base_link" />
 
@@ -225,8 +227,9 @@
         <commandTopic>cmd_vel</commandTopic>
         <odometryTopic>odom</odometryTopic>
         <odometryFrame>$(arg prefix)/odom</odometryFrame>
-        <odometrySource>world</odometrySource>
-        <publishOdomTF>true</publishOdomTF>
+        <!-- Option for odometry source: encoder or world-->
+        <odometrySource>encoder</odometrySource>
+        <publishOdomTF>$(arg publish_tf_odom)</publishOdomTF>
         <robotBaseFrame>$(arg prefix)/base_footprint</robotBaseFrame>
         <publishWheelTF>false</publishWheelTF>
         <publishTf>true</publishTf>

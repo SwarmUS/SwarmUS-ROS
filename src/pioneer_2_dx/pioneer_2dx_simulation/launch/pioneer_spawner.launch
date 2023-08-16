@@ -1,8 +1,5 @@
 <?xml version="1.0" ?>
-<!-- This launch files spawns a pioneer and all the required nodes of it to work.
-For a whole swarm agent, you can use pioneer_spawner with simulated_agent.
-Once connected they will form a swarm agent.
--->
+<!-- This launch files spawns a pioneer and all the required nodes of it to work.-->
 <launch>
     <arg name="ns" />
     <arg name="model" default="$(find pioneer_2dx_description)/urdf/pioneer.urdf.xacro"/>
@@ -10,8 +7,12 @@ Once connected they will form a swarm agent.
 
     <arg name="camera_type" default="d455"/>
 
-    <arg name="use_slam" default="false"/>
+    <arg name="use_slam" default="true"/>
     <arg name="use_map_in_nav_stack" default="false"/>
+
+    <arg name="get_odom_from_sim" default="true"/>
+
+    <arg name="fuse_odom" default="false"/>
 
     <arg name="robot_pos_x" default="0.0"/>
     <arg name="robot_pos_y" default="0.0"/>
@@ -20,9 +21,11 @@ Once connected they will form a swarm agent.
     <arg name="pitch" default="0"/>
     <arg name="yaw" default="0"/>
 
+
     <group ns="$(arg ns)">
-        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=true"/>
-        
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=true publish_tf_odom:=$(arg get_odom_from_sim)" />
+        <param name="use_map_tf" type="bool" value="$(arg use_slam)"/>
+
         <!-- push robot_description to factory and spawn robot in gazebo -->
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_pos_x) -y $(arg robot_pos_y) -z $(arg robot_pos_z) 
                 -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)

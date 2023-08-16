@@ -10,5 +10,6 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>rtabmap_ros</depend>
+  <exec_depend>nodelet</exec_depend>
 
 </package>

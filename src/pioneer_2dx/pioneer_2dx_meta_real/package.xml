@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pioneer_2dx_meta_real</name>
+  <version>0.0.0</version>
+  <description>Metapackage of all the necessary packages to deploy on a real pioneer 2dx</description>
+
+  <maintainer email="etienne.villemure@usherbrooke.ca">Étienne Villemure</maintainer>
+
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>pioneer_2dx_bringup</exec_depend>
+  <exec_depend>pioneer_2dx_navgiation</exec_depend>
+  <exec_depend>pioneer_2dx_description</exec_depend>
+  <exec_depend>pioneer_2dx_slam</exec_depend>
+    
+  <export>
+    <metapackage/>
+  </export>
+</package>

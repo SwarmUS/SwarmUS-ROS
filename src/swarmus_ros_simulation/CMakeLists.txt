@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   geometry_msgs
+  gazebo_msgs
   tf
   message_generation
 )
@@ -79,6 +80,7 @@ find_package(catkin REQUIRED COMPONENTS
    DEPENDENCIES
    std_msgs
    geometry_msgs
+   gazebo_msgs
  )
 
 ################################################
@@ -121,8 +123,11 @@ catkin_package(
     roscpp      
     std_msgs 
     geometry_msgs
+    gazebo_msgs
     tf
-#  DEPENDS system_lib
+  DEPENDS
+    map
+    string
 )
 
 ###########

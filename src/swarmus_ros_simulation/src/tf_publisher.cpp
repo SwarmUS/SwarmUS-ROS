@@ -1,6 +1,6 @@
 #include <swarmus_ros_simulation/tf_publisher.h>
-#include <ros/ros.h>
 #include <ros/console.h>
+#include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
 
 
@@ -24,7 +24,6 @@ const bool SimulationTfPublisher::getMapToWorldTransform(const std::string& enti
         return true;
     } catch (tf::TransformException ex) {
         ROS_ERROR("%s", ex.what());
-        ros::Duration(1.0).sleep();
     }
     return false;
 }
@@ -34,7 +33,8 @@ void SimulationTfPublisher::tfCallback(const gazebo_msgs::ModelStates& msg)
     std::vector<std::string>::const_iterator it_name;
     std::vector<geometry_msgs::Pose>::const_iterator it_pose = msg.pose.begin();
 
-    for (it_name = msg.name.begin(); it_name != msg.name.end(); ++it_name) {
+    for (it_name = msg.name.begin(); it_name != msg.name.end(); ++it_name)
+    {
         const geometry_msgs::Pose entity_pose = *it_pose; 
         const std::string entity_name(*it_name);
         bool has_map_tf = false;
@@ -80,9 +80,6 @@ void SimulationTfPublisher::tfCallback(const gazebo_msgs::ModelStates& msg)
             tfBroadcaster_.sendTransform(
                 tf::StampedTransform(getUnitTransform(), ros::Time::now(), "world", entity_name+"/odom"));
         }
-
-        // Sleep for one nanosecond
-        ros::Duration(0, 1).sleep();
         
         // Point towards next pose
         ++it_pose;
@@ -92,11 +89,33 @@ void SimulationTfPublisher::tfCallback(const gazebo_msgs::ModelStates& msg)
 int main(int argc, char** argv) {
     ros::init(argc, argv, "tf_publisher");
 
-    SimulationTfPublisher simTfPublisher;
     ROS_INFO_STREAM("Simulation TF publisher initialization");
-    ros::NodeHandle node;
+    SimulationTfPublisher simTfPublisher;
+    ros::NodeHandle node("~");
     ros::Subscriber sub = node.subscribe("/gazebo/model_states", 1, &SimulationTfPublisher::tfCallback, &simTfPublisher);
 
-    ros::spin();
+    double tf_publish_rate = 0.0;
+    if(node.getParam("tf_publish_rate", tf_publish_rate))
+    {
+        if (tf_publish_rate > 0.0)
+        {
+            ros::Rate rate(tf_publish_rate);
+            while(ros::ok())
+            {
+                ros::spinOnce();
+                rate.sleep();
+            }
+        }
+        else
+        {
+            ROS_ERROR_STREAM("Non-valid publishing frequency was provided");
+        }
+    }
+    else
+    {
+        ROS_INFO_STREAM("No frequency was provided. Will published at the same rate as Gazebo msgs");
+        ros::spin();
+    }
+
     return 0;
 };

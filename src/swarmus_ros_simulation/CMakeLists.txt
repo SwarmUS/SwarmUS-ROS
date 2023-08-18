@@ -12,11 +12,10 @@ find_package(catkin REQUIRED COMPONENTS
   joint_state_controller
   robot_state_publisher
   roscpp
-  std_msgs
   geometry_msgs
   gazebo_msgs
   tf
-  message_generation
+  message_runtime
 )
 
 ## System dependencies are found with CMake's conventions
@@ -53,13 +52,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
- add_message_files(
-   DIRECTORY
-   FILES
-   InterLocalization.msg
-   InterLocalization_grid.msg
-   Communication.msg
- )
+# add_message_files(
+#   DIRECTORY
+#   FILES
+#   Communication.msg
+# )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -76,12 +73,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs
-   geometry_msgs
-   gazebo_msgs
- )
+# generate_messages(
+#   DEPENDENCIES
+#   geometry_msgs
+#   gazebo_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -118,10 +114,9 @@ catkin_package(
   CATKIN_DEPENDS 
     message_runtime
     controller_manager 
-    joint_state_controller 
-    robot_state_publisher 
+    joint_state_controller
+    robot_state_publisher
     roscpp      
-    std_msgs 
     geometry_msgs
     gazebo_msgs
     tf
@@ -226,18 +221,7 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(interLocalization src/interLocalization.cpp)
-target_link_libraries(interLocalization ${catkin_LIBRARIES})
-add_dependencies(interLocalization ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(tf_publisher src/tf_publisher.cpp)
 target_link_libraries(tf_publisher ${catkin_LIBRARIES})
 add_dependencies(tf_publisher ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
-
-add_executable(interCommunication src/interCommunication.cpp)
-target_link_libraries(interCommunication ${catkin_LIBRARIES})
-add_dependencies(interCommunication ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
-
-add_executable(communicationBroker src/communicationBroker.cpp)
-target_link_libraries(communicationBroker ${catkin_LIBRARIES})
-add_dependencies(communicationBroker ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})

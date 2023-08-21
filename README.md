@@ -10,36 +10,6 @@ SwarmUS-ROS contains all the ROS packages developed for the SwarmUS project. It 
 
 ## Repository structure
 
-```
-SwarmUS-ROS
-├── contrib
-│   └── HiveMind
-│   └── realsense-ros
-│   └── roboclaw
-│   └── rplidar
-├── lgtm.yml
-├── LICENSE
-├── README.md
-├── scripts
-│    ├── install_dependencies.sh
-│    ├── setup_librealsense.sh
-│    ├── set_udev_rules.sh
-│    └── 40-swarmus_pioneer.rules
-├── src
-│   ├── hive_mind_bridge
-│   ├── swarmus_example_pkg
-│   ├── swarmus_pioneer
-│   ├── swarmus_ros_description
-|   ├── swarmus_ros_navigation
-│   └── swarmus_ros_simulation
-└── tools
-    ├── check_format.py
-    ├── config.py
-    ├── contrib
-    ├── format.py
-    └── generate_doc.py
-```
-
 This repo contains a `contrib` folder which refers to external code that needs to be included as source.
 
 ## ROS packages structure

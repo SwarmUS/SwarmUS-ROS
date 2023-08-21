@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <!-- This launch files spawns a pioneer and all the required nodes of it to work.-->
 <launch>
-    <arg name="ns" />
     <arg name="model" default="$(find pioneer_2dx_description)/urdf/pioneer.urdf.xacro"/>
     <arg name="robot_name" default="pioneer_1"/>
 
@@ -22,7 +21,7 @@
     <arg name="yaw" default="0"/>
 
 
-    <group ns="$(arg ns)">
+    <group ns="$(arg robot_name)">
         <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=true publish_tf_odom:=$(arg get_odom_from_sim)" />
         <param name="use_map_tf" type="bool" value="$(arg use_slam)"/>
 

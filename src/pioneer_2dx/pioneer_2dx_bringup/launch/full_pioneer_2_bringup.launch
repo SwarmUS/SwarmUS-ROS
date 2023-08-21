@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
     <arg name="robot_name" default="pioneer_2"/>
-    <arg name="use_map" default="false"/>
+    <arg name="use_map"    default="false"/>
 
     <!--Remap pioneers_0's camera topics to RTAB-Map -->
     <remap to="/$(arg robot_name)/rgb/camera_info" from="/$(arg robot_name)/camera/color/camera_info"/>
@@ -20,6 +20,6 @@
     <!-- Launch RTAB-MAP and the navigation stack -->
     <include file="$(find pioneer_2dx_bringup)/launch/navigation_and_mapping.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
-        <arg name="use_map" value="$(arg use_map)"/>
+        <arg name="use_map"    value="$(arg use_map)"/>
     </include>
 </launch>

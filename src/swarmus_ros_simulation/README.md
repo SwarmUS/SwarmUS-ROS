@@ -33,11 +33,4 @@ Note that you will probably need to changed the hivemind_host_address to the IP 
 
 
 You can always use rviz, rqt, rostopic, rosparam or any other ROS tools to get more information on the running nodes, parameters, publisher and listener.
-## Message files
-
-* **Communication.msg**: Description of the message that the broker use for the simulated communication system
-
-* **InterLocalization.msg**: Description of the message used for relative positionning
-
-* **InterLocalization_grid.msg**:  Array of multiple InterLocalization.msg. This is used by the interlocalization system to indicate all relative position of a robot with all the other robots
 

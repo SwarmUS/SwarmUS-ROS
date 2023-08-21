@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<!-- Spawn a simulated Pioneer 2dx and an emulated SwarmUS board -->
+<launch>
+    <arg name="agent_id"                default="1"/>
+
+    <arg name="camera_type"             default="d455"/>
+    <arg name="use_slam"                default="true"/>
+    <arg name="use_map_in_nav_stack"    default="false"/>
+    <arg name="get_odom_from_sim"       default="true"/>
+
+    <arg name="fuse_odom"               default="false"/>
+
+    <arg name="robot_pos_x"             default="0.0"/>
+    <arg name="robot_pos_y"             default="0.0"/>
+    <arg name="robot_pos_z"             default="0.5"/>
+    <arg name="roll"                    default="0"/>
+    <arg name="pitch"                   default="0"/>
+    <arg name="yaw"                     default="0"/>
+
+    <!-- Swarmus parameters -->
+    <!--arg name="interloc_refresh_rate"   default="10.0"/-->
+
+    <!-- HiveMind Connector Node -->
+    <!--arg name="connector_server_port" default="$(eval 7000 + arg('agent_id'))"/-->
+
+    <!-- HiveMind Node -->
+    <!--arg name="hivemind_board_uuid" default="$(arg agent_id)"/>
+    <arg name="hivemind_host_port" default="$(eval 7000 + arg('agent_id'))"/>
+    <arg name="hivemind_remote_port_mock" default="$(eval 8000 + arg('agent_id'))" /-->
+
+    <!-- HiveConnect Node -->
+    <!--arg name="hive_connect_spi_mock_port" default="$(eval 8000 + arg('agent_id'))"/>
+    <arg name="hive_connect_listen_port" default="$(eval 9000 + arg('agent_id'))"/-->
+
+    <include file="$(find swarmus_emulation)/launch/simulated_agent.launch">
+        <arg name="agent_id"   value="$(arg agent_id)"/>
+    </include>
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
+        <arg name="robot_name" value="agent_$(arg agent_id)"/>
+
+        <arg name="camera_type" value="$(arg camera_type)"/>
+        <arg name="use_slam" value="$(arg use_slam)"/>
+        <arg name="use_map_in_nav_stack" value="$(arg use_map_in_nav_stack)"/>
+        <arg name="get_odom_from_sim" value="$(arg get_odom_from_sim)"/>
+
+        <arg name="fuse_odom" value="$(arg fuse_odom)"/>
+
+        <arg name="robot_pos_x" value="$(arg robot_pos_x)"/>
+        <arg name="robot_pos_y" value="$(arg robot_pos_y)"/>
+        <arg name="robot_pos_z" value="$(arg robot_pos_z)"/>
+        <arg name="roll" value="$(arg roll)"/>
+        <arg name="pitch" value="$(arg pitch)"/>
+        <arg name="yaw" value="$(arg yaw)"/>
+    </include>
+</launch>

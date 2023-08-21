@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(swarmus_ros_simulation)
+project(swarmus_emulation)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -7,13 +7,9 @@ project(swarmus_ros_simulation)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  geometry_msgs
-  gazebo_msgs
-  tf
-  message_runtime
-)
+find_package(catkin REQUIRED)
+#
+#)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -50,9 +46,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate messages in the 'msg' folder
 # add_message_files(
-#   DIRECTORY
 #   FILES
-#   Communication.msg
+#   Message1.msg
+#   Message2.msg
 # )
 
 ## Generate services in the 'srv' folder
@@ -72,8 +68,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs
-#   gazebo_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -106,20 +101,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- INCLUDE_DIRS include
-#  LIBRARIES swarmus_ros_simulation
-  CATKIN_DEPENDS 
-    message_runtime
-    controller_manager 
-    joint_state_controller
-    robot_state_publisher
-    roscpp      
-    geometry_msgs
-    gazebo_msgs
-    tf
-  DEPENDS
-    map
-    string
+#  INCLUDE_DIRS include
+#  LIBRARIES swarmus_emulation
+#  CATKIN_DEPENDS 
+#  DEPENDS system_lib
 )
 
 ###########
@@ -128,14 +113,14 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-        include
-  ${catkin_INCLUDE_DIRS}
-)
+#include_directories(
+# include
+#  ${catkin_INCLUDE_DIRS}
+#)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/swarmus_ros_simulation.cpp
+#   src/${PROJECT_NAME}/swarmus_emulation.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -146,7 +131,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/swarmus_ros_simulation_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/swarmus_emulation_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -210,15 +195,10 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_swarmus_ros_simulation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_swarmus_emulation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-
-add_executable(tf_publisher src/tf_publisher.cpp)
-target_link_libraries(tf_publisher ${catkin_LIBRARIES})
-add_dependencies(tf_publisher ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})

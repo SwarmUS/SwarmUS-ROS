@@ -1,53 +1,32 @@
 <?xml version="1.0" ?>
 <!-- This launch files spawns a swarm of 4 fully functional Pioneers 2Dx agents -->
-
 <launch>
     <arg name="interloc_refresh_rate" default="10.0"/> 
 
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch"/>
 
     <!-- Robot 1 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="1"/>
-        <arg name="interloc_refresh_rate"   default="$(arg interloc_refresh_rate)"/>
-    </include>
-    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="agent_1"/>
-        <arg name="robot_name" value="agent_1"/>
+    <include file="$(find pioneer_2dx_swarmus_sim)/launch/pioneer_swarmus_spawner.launch">
+        <arg name="agent_id"   value="1"/>
     </include>
 
     <!-- Robot 2 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
-        <arg name="agent_id"   default="2"/>
-        <arg name="interloc_refresh_rate"   default="$(arg interloc_refresh_rate)"/>
-    </include>
-    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="agent_2"/>
-        <arg name="robot_name" value="agent_2"/>
+    <include file="$(find pioneer_2dx_swarmus_sim)/launch/pioneer_swarmus_spawner.launch">
+        <arg name="agent_id"   value="2"/>
         <arg name="robot_pos_x" value="1.0"/>
         <arg name="robot_pos_y" value="1.0"/>
     </include>
 
     <!-- Robot 3 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+    <include file="$(find pioneer_2dx_swarmus_sim)/launch/pioneer_swarmus_spawner.launch">
         <arg name="agent_id"   default="3"/>
-        <arg name="interloc_refresh_rate"   default="$(arg interloc_refresh_rate)"/>
-    </include>
-    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="agent_3"/>
-        <arg name="robot_name" value="agent_3"/>
         <arg name="robot_pos_x" value="0"/>
         <arg name="robot_pos_y" value="1.0"/>
     </include>
 
     <!-- Robot 4 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+    <include file="$(find pioneer_2dx_swarmus_sim)/launch/pioneer_swarmus_spawner.launch">
         <arg name="agent_id"   default="4"/>
-        <arg name="interloc_refresh_rate"   default="$(arg interloc_refresh_rate)"/>
-    </include>
-    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
-        <arg name="ns" value="agent_4"/>
-        <arg name="robot_name" value="agent_4"/>
         <arg name="robot_pos_x" value="1.0"/>
         <arg name="robot_pos_y" value="0.0"/>
     </include>

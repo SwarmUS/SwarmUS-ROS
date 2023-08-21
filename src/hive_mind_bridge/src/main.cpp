@@ -1,7 +1,7 @@
 #include "hivemind-bridge/Callback.h"
 #include "hivemind-bridge/HiveMindBridge.h"
-#include "ros/ros.h"
 #include "pioneer_2dx_msgs/MoveByMessage.h"
+#include "ros/ros.h"
 #include <cpp-common/ILogger.h>
 #include <cstdarg>
 #include <optional>

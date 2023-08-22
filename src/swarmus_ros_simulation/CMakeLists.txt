@@ -110,9 +110,6 @@ catkin_package(
 #  LIBRARIES swarmus_ros_simulation
   CATKIN_DEPENDS 
     message_runtime
-    controller_manager 
-    joint_state_controller
-    robot_state_publisher
     roscpp      
     geometry_msgs
     gazebo_msgs

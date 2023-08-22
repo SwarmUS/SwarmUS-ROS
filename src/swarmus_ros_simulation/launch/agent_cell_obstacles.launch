@@ -7,20 +7,14 @@
     </include>
 
     <!-- Agent 1 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_agent.launch">
+    <include file="$(find pioneer_2dx_swarmus_sim)/launch/pioneer_swarmus_spawner.launch">
         <arg name="agent_id"   value="1"/>
     </include>
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_1"/>
-        <arg name="robot_name" value="agent_1"/>
-        <arg name="robot_pos_x" value="0"/>
-        <arg name="robot_pos_y" value="0"/>
-    </include>
 
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find swarmus_ros_navigation)/rviz/agent_1_config.rviz"/>
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find pioneer_2dx_visualization)/rviz/agent_1_config.rviz"/>
 
     <!-- Agent 5: Used by android cellphone -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulated_cellphone_hiveboard_assembly.launch">
+    <include file="$(find swarmus_emulation)/launch/simulated_cellphone_hiveboard_assembly.launch">
         <arg name="agent_id"   value="5"/>
         <!-- This address is the loopback address when running with emulator and the android device address otherwise -->
         <arg name="hivemind_host_address" value="192.168.0.56" />

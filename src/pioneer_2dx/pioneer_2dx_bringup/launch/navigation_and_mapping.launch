@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="robot_name" default="pioneer_1"/>
+    <arg name="use_map" default="false"/>
+
+    <group ns="$(arg robot_name)">
+        <!-- Launch move_base and the navigation stack -->
+        <include file="$(find pioneer_2dx_navigation)/launch/navigation.launch">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+            <arg name="use_map"    value="$(arg use_map)"/>
+        </include>
+
+        <!-- Launch RTAB-Map-->
+        <include file="$(find pioneer_2dx_slam)/launch/rtabmap.launch" if="$(arg use_map)">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+        </include>
+    </group>
+</launch>

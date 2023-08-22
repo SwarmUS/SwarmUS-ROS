@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<!-- This launch files spawns a pioneer and all the required nodes of it to work.-->
+<launch>
+    <arg name="model" default="$(find pioneer_2dx_description)/urdf/pioneer.urdf.xacro"/>
+    <arg name="robot_name" default="pioneer_1"/>
+
+    <arg name="camera_type" default="d455"/>
+
+    <arg name="use_slam" default="true"/>
+    <arg name="use_map_in_nav_stack" default="false"/>
+
+    <arg name="get_odom_from_sim" default="true"/>
+
+    <arg name="fuse_odom" default="false"/>
+
+    <arg name="robot_pos_x" default="0.0"/>
+    <arg name="robot_pos_y" default="0.0"/>
+    <arg name="robot_pos_z" default="1.0"/>
+    <arg name="roll" default="0"/>
+    <arg name="pitch" default="0"/>
+    <arg name="yaw" default="0"/>
+
+
+    <group ns="$(arg robot_name)">
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model) prefix:=$(arg robot_name) camera_type:=$(arg camera_type) is_simulation:=true publish_tf_odom:=$(arg get_odom_from_sim)" />
+        <param name="use_map_tf" type="bool" value="$(arg use_slam)"/>
+
+        <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-x $(arg robot_pos_x) -y $(arg robot_pos_y) -z $(arg robot_pos_z) 
+                -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
+                -unpause -urdf -model $(arg robot_name) -param robot_description" respawn="false" output="screen" />
+
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="30.0" />
+            <remap from="/joint_states" to="/$(arg robot_name)/joint_states"/>
+        </node>
+
+        <include file="$(find pioneer_2dx_navigation)/launch/navigation.launch">
+            <arg name="robot_name"    default="$(arg robot_name)"/>
+            <arg name="use_map" value="$(arg use_map_in_nav_stack)"/>
+        </include>
+
+        <!-- Odometry fusing -->
+        <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true" if="$(arg fuse_odom)">
+            <remap from="cmd_vel" to="cmd_vel/filtered"/>
+            <rosparam command="load" file="$(find pioneer_2dx_slam)/config/ekf_fusing_params.yaml" subst_value="true"/>
+        </node>
+
+        <!-- Launch RTAB-Map -->
+        <include file="$(find pioneer_2dx_slam)/launch/rtabmap.launch" if="$(arg use_slam)">
+            <arg name="robot_name" value="$(arg robot_name)"/>
+        </include>
+    </group>
+</launch>

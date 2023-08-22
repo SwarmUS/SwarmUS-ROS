@@ -10,9 +10,6 @@
 	path = contrib/roboclaw
 	url = https://github.com/SwarmUS/roboclaw
 	branch = master
-[submodule "contrib/realsense-ros"]
-	path = contrib/realsense-ros
-	url = https://github.com/LuAPi/realsense-ros.git
 [submodule "contrib/HiveConnect"]
 	path = contrib/HiveConnect
 	url = https://github.com/SwarmUS/HiveConnect
@@ -20,3 +17,6 @@
 	path = contrib/HiveMindBridge
 	url = https://github.com/SwarmUS/HiveMindBridge.git
 	branch = master
+[submodule "contrib/realsense-ros"]
+	path = contrib/realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git

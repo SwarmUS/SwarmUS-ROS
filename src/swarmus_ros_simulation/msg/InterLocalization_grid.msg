@@ -1,3 +1,0 @@
-string source_robot
-swarmus_ros_simulation/InterLocalization[] otherRobots
-int32 otherRobotsListSize

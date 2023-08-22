@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pioneer_2dx_slam</name>
+  <version>1.0.0</version>
+  <description>The pioneer_2dx_slam package</description>
+
+  <maintainer email="etienne.villemure@usherbrooke.ca">Étienne Villemure</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rtabmap_ros</depend>
+  <exec_depend>nodelet</exec_depend>
+
+</package>

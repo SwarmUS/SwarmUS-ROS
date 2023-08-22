@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<!-- This launchfile starts all the services related to the interaction communication interface and interlocalization  -->
+<launch>
+    <!-- Communication Broker -->
+    <include file="$(find hive_connect)/ros/communication_broker.launch"/>
+</launch>

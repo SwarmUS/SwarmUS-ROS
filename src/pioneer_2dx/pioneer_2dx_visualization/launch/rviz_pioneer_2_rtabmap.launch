@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<launch>
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find pioneer_2dx_visualization)/rviz/pioneer_2_config_rtabmap.rviz" />
+</launch>

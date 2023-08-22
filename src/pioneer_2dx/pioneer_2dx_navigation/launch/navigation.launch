@@ -1,0 +1,31 @@
+<!-- -->
+<launch>
+  <arg name="robot_name"    default="pioneer_1"/>
+  <arg name="use_map"      default="false"/>
+    
+  <!-- Navigation -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!-- Load common parameters of the local and global planner-->
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+    <!--param name="base_global_planner" value="global_planner/GlobalPlanner"/-->
+    
+    <rosparam file="$(find pioneer_2dx_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
+    <rosparam file="$(find pioneer_2dx_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
+
+    <rosparam file="$(find pioneer_2dx_navigation)/config/global_costmap_params.yaml" command="load" subst_value="true" unless="$(arg use_map)"/>
+    <rosparam file="$(find pioneer_2dx_navigation)/config/global_costmap_with_map_params.yaml" command="load" subst_value="true" if="$(arg use_map)"/>
+
+    <rosparam file="$(find pioneer_2dx_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
+
+    <rosparam file="$(find pioneer_2dx_navigation)/config/move_base_params_pioneer.yaml" command="load" />
+
+    <rosparam file="$(find pioneer_2dx_navigation)/config/base_global_planner_params.yaml" command="load" subst_value="true"/>
+    <rosparam file="$(find pioneer_2dx_navigation)/config/dwa_local_planner_params_pioneer.yaml" command="load"/>
+  </node>
+
+  <!-- Start the moveBy interface -->
+  <node pkg="pioneer_2dx_navigation" type="pioneer_2dx_navigation_node" name="pioneer_2dx_navigation_node" output="screen">
+      <param name="tf_prefix" type="string" value="$(arg robot_name)" />
+  </node>
+  
+</launch>

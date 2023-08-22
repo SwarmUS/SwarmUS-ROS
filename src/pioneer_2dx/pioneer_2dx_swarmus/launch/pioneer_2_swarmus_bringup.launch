@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<launch>
+    <arg name="use_map"    default="false"/>
+    <arg name="robot_name" value="pioneer_2"/> 
+
+    <!-- Bringup of the Pioneer 1-->
+    <include file="$(find pioneer_2dx_bringup)/launch/full_pioneer_2_bringup.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/> 
+        <arg name="use_map"    value="$(arg use_map)"/>
+    </include>
+
+    <!-- Hive mind bridge -->
+    <include file="$(find hive_mind_bridge)/launch/hive_mind_bridge.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+    </include>
+</launch>

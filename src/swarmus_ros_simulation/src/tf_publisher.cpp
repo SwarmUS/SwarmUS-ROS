@@ -1,8 +1,9 @@
-#include "swarmus_ros_simulation/tf_publisher.h"
+#include <geometry_msgs/Pose.h>
+#include <ros/console.h>
+#include <ros/ros.h>
+#include <swarmus_ros_simulation/tf_publisher.h>
 
-std::map<std::string, tf::Transform> tf_map;
-
-tf::Transform getUnitTransform() {
+const tf::Transform SimulationTfPublisher::getUnitTransform() {
     tf::Transform transform;
 
     transform.setRotation(tf::Quaternion::getIdentity());
@@ -10,31 +11,93 @@ tf::Transform getUnitTransform() {
     return transform;
 }
 
-void tfCallback(const gazebo_msgs::ModelStates& msg) {
-    static tf::TransformBroadcaster s_tfBroadcaster;
+const bool SimulationTfPublisher::getMapToWorldTransform(
+    const std::string& entity_name,
+    const tf::Transform& base_footprint_to_world_tf,
+    tf::Transform& map_to_world_tf) {
+    tf::StampedTransform map_to_base_footprint_stamped_tf;
+    try {
+        tfListener_.lookupTransform(entity_name + "/base_footprint", entity_name + "/map",
+                                    ros::Time(0), map_to_base_footprint_stamped_tf);
+        map_to_world_tf = base_footprint_to_world_tf * map_to_base_footprint_stamped_tf;
+        return true;
+    } catch (tf::TransformException ex) {
+        ROS_ERROR("%s", ex.what());
+    }
+    return false;
+}
 
-    std::vector<std::string>::const_iterator it;
+void SimulationTfPublisher::tfCallback(const gazebo_msgs::ModelStates& msg) {
+    std::vector<std::string>::const_iterator it_name;
+    std::vector<geometry_msgs::Pose>::const_iterator it_pose = msg.pose.begin();
 
-    for (it = msg.name.begin(); it != msg.name.end(); ++it) {
-        // Name of the child link: robot/odom
-        std::string buf(*it);
-        buf.append("/odom");
+    for (it_name = msg.name.begin(); it_name != msg.name.end(); ++it_name) {
+        const geometry_msgs::Pose entity_pose = *it_pose;
+        const std::string entity_name(*it_name);
+        bool has_map_tf = false;
 
-        // Send transform relative to "world"
-        s_tfBroadcaster.sendTransform(
-            tf::StampedTransform(getUnitTransform(), ros::Time::now(), "world", buf));
+        if (entity_publish_map_tf_list_.find(entity_name) != entity_publish_map_tf_list_.end()) {
+            // Check if we registered that this entity has a map frame
+            has_map_tf = entity_publish_map_tf_list_[entity_name];
+        } else {
+            // Register if the node has a map transform
+            ros::param::get(entity_name + "/use_map_tf", has_map_tf);
+            entity_publish_map_tf_list_[entity_name] = has_map_tf;
+            if (has_map_tf) {
+                ROS_INFO_STREAM("Sim_tf_pub: Map frame is expected for " << entity_name);
+            } else {
+                ROS_INFO_STREAM("Sim_tf_pub: Map frame is not expected for " << entity_name);
+            }
+        }
 
-        // Sleep for one nanosecond
-        ros::Duration(0, 1).sleep();
+        if (has_map_tf) {
+            /* Change the transform between the map and the world so the transform between
+             the base_link and the world is consistent with Gazebo*/
+
+            tf::Transform entity_to_world_tf;
+            tf::Transform map_to_world_tf;
+            tf::poseMsgToTF(entity_pose, entity_to_world_tf);
+
+            if (getMapToWorldTransform(entity_name, entity_to_world_tf, map_to_world_tf)) {
+                tfBroadcaster_.sendTransform(tf::StampedTransform(map_to_world_tf, ros::Time::now(),
+                                                                  "world", entity_name + "/map"));
+            }
+        } else {
+            // Send transform relative to "world"
+            tfBroadcaster_.sendTransform(tf::StampedTransform(getUnitTransform(), ros::Time::now(),
+                                                              "world", entity_name + "/odom"));
+        }
+
+        // Point towards next pose
+        ++it_pose;
     }
 }
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "tf_publisher");
 
-    ros::NodeHandle node;
-    ros::Subscriber sub = node.subscribe("/gazebo/model_states", 10, &tfCallback);
+    ROS_INFO_STREAM("Simulation TF publisher initialization");
+    SimulationTfPublisher simTfPublisher;
+    ros::NodeHandle node("~");
+    ros::Subscriber sub = node.subscribe("/gazebo/model_states", 1,
+                                         &SimulationTfPublisher::tfCallback, &simTfPublisher);
 
-    ros::spin();
+    double tf_publish_rate = 0.0;
+    if (node.getParam("tf_publish_rate", tf_publish_rate)) {
+        if (tf_publish_rate > 0.0) {
+            ros::Rate rate(tf_publish_rate);
+            while (ros::ok()) {
+                ros::spinOnce();
+                rate.sleep();
+            }
+        } else {
+            ROS_ERROR_STREAM("Non-valid publishing frequency was provided");
+        }
+    } else {
+        ROS_INFO_STREAM(
+            "No frequency was provided. Will published at the same rate as Gazebo msgs");
+        ros::spin();
+    }
+
     return 0;
 };

@@ -15,13 +15,11 @@
         <arg name="headless" value="false"/>
     </include>
 
-    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher"/>
-
-    <!-- Communication Broker -->
-    <rosparam command="load" file="$(find swarmus_ros_simulation)/launch/config/broker_config.yaml" />
-    <node name="commBroker" pkg="hive_connect" type="communication_broker" >
-        <!-- Parameter name to use to find the robot list. Should match the yaml config file -->
-        <param name="configList" value="/Broker/robots"/>
+    <!-- Publish the odometry tf from Gazebo-->
+    <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher">
+        <param name="tf_publish_rate" value="500"/>
     </node>
 
+    <!--Launch all the necessary nodes to manage the interaction between the simulated SwarmUS boards-->
+    <include file="$(find swarmus_emulation)/launch/swarmus_simulation_services.launch"/>
 </launch>

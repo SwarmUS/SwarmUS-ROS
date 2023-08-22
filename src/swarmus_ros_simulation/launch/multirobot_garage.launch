@@ -1,55 +1,36 @@
 <?xml version="1.0" ?>
 <launch>
-
-    <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-    <arg name="paused" default="false"/>
-    <arg name="use_sim_time" default="true"/>
-    <arg name="gui" default="true"/>
-    <arg name="headless" default="false"/>
-    <arg name="debug" default="false"/>
-    <arg name="model" default="$(find swarmus_ros_description)/urdf/pioneer.urdf.xacro"/>
-
-    <!-- define the robots as args -->
-    <arg name="robot_1_name" default="agent_1"/>
-    <arg name="robot_2_name" default="agent_2"/>
-    <arg name="robot_3_name" default="agent_3"/>
-
     <!-- Launch a garage world, HiveConnect (not used) and the world's tf publisher-->
     <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch">
         <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>
     </include>
-    
+
     <!-- Agent 1 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_1"/>
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="robot_name" value="agent_1"/>
         <arg name="robot_pos_x" value="-4.75"/>
         <arg name="robot_pos_y" value="3.0"/>
     </include>
 
     <!-- Agent 2 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_2"/>
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
         <arg name="robot_name" value="agent_2"/>
         <arg name="robot_pos_x" value="-1.5"/>
         <arg name="robot_pos_y" value="4.25"/>
     </include>
 
     <!-- Agent 3 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_3"/>
-        <arg name="robot_name" value="agent_3"/>
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
+        <arg name="robot_name"    value="agent_3"/>
         <arg name="robot_pos_x" value="-1.5"/>
         <arg name="robot_pos_y" value="2.65"/>
-        <arg name="yaw" value="-1.57"/>
+        <arg name="yaw"         value="-1.57"/>
     </include>
 
     <!-- Agent 4 -->
-    <include file="$(find swarmus_ros_simulation)/launch/reusable/pioneer_spawner.launch">
-        <arg name="ns" value="agent_4"/>
-        <arg name="robot_name" value="agent_4"/>
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
+        <arg name="robot_name"    value="agent_4"/>
         <arg name="robot_pos_x" value="-2.7"/>
         <arg name="robot_pos_y" value="1.5"/>
     </include>
-
 </launch>

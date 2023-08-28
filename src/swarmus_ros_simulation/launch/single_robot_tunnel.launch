@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<!-- Position of the entrance
+        <arg name="robot_pos_x" value="1"/>
+        <arg name="robot_pos_y" value="0.6"/>
+        <arg name="robot_pos_z" value="0.15"/>
+        <arg name="yaw"         value="1.5708"/>
+-->
+
+<!-- Position of the faculty's elevator
+        <arg name="robot_pos_x" value="9.77"/>
+        <arg name="robot_pos_y" value="18.22"/>
+        <arg name="robot_pos_z" value="0.15"/>
+        <arg name="yaw"         value="1.5708"/>
+-->
+
+<launch>
+    <!-- Load tunnels world-->
+    <include file="$(find swarmus_ros_simulation)/launch/reusable/simulation_services.launch">
+        <arg name="world_name" value="$(find swarmus_ros_simulation)/worlds/tunnels.world"/>
+    </include>
+
+    <!-- Agent 1 -->
+    <include file="$(find pioneer_2dx_simulation)/launch/pioneer_spawner.launch">
+        <arg name="robot_name"  value="agent_1"/>
+
+        <arg name="robot_pos_x" value="9.77"/>
+        <arg name="robot_pos_y" value="18.22"/>
+        <arg name="robot_pos_z" value="0.15"/>
+        <arg name="yaw"         value="1.5708"/>
+    </include>
+</launch>

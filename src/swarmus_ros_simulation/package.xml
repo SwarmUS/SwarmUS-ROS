@@ -22,4 +22,9 @@
   <exec_depend>swarmus_emulation</exec_depend>
   <exec_depend>pioneer_2dx_swarmus_sim</exec_depend>
 
+  <export>
+    <gazebo_ros gazebo_model_path="${prefix}/meshes"/>
+    <gazebo_ros gazebo_media_path="${prefix}/meshes"/>
+  </export>
+  
 </package>

@@ -17,7 +17,7 @@
 
     <!-- Publish the odometry tf from Gazebo-->
     <node pkg="swarmus_ros_simulation" type="tf_publisher" name="tf_publisher">
-        <param name="tf_publish_rate" value="500"/>
+        <param name="tf_publish_rate" value="100"/>
     </node>
 
     <!--Launch all the necessary nodes to manage the interaction between the simulated SwarmUS boards-->

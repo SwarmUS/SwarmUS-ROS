@@ -18,6 +18,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>swarmus_emulation</exec_depend>
-  <exec_depend>pionneer_2dx_simulation</exec_depend>
+  <exec_depend>pioneer_2dx_simulation</exec_depend>
 
 </package>

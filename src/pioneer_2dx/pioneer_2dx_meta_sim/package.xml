@@ -12,7 +12,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>pioneer_2dx_simulation</exec_depend>
-  <exec_depend>pioneer_2dx_navgiation</exec_depend>
+  <exec_depend>pioneer_2dx_navigation</exec_depend>
   <exec_depend>pioneer_2dx_description</exec_depend>
   <exec_depend>pioneer_2dx_slam</exec_depend>
   <exec_depend>pioneer_2dx_visualization</exec_depend>

@@ -1,0 +1,27 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- move_base_msgs
+- catkin
+- gmapping
+- move_base
+- navigation
+- turtlebot3_slam
+- std_msgs
+- tf2
+- turtlebot3_bringup
+- roscpp
+- tf2_ros
+- turtlebot3_navigation
+- tf2_geometry_msgs
+description: The swarmus_turtlebot package
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs:
+- MoveBy
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

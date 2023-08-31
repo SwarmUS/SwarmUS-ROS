@@ -1,0 +1,24 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- roscpp
+- swarmus_emulation
+- tf
+- geometry_msgs
+- message_runtime
+- catkin
+- pioneer_2dx_swarmus_sim
+- gazebo_ros
+- gazebo_msgs
+- turtlebot3_gazebo
+- gazebo_ros_pkgs
+description: The swarmus_ros_simulation package
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

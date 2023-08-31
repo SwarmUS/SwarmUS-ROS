@@ -1,0 +1,17 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- catkin
+- hive_connect
+- hive_mind_bridge
+- hive_mind
+description: Package that contains all the necessary node to emulate a SwarmUS system
+license: MIT
+maintainers: "\xC9tienne Villemure <etienne.villemure@usherbrooke.ca>"
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

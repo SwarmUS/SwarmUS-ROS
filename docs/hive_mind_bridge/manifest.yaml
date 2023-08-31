@@ -1,0 +1,18 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- roscpp
+- pioneer_2dx_msgs
+- message_runtime
+- std_msgs
+- catkin
+description: The interface used to interact with a HiveBoard
+license: MIT
+maintainers: SwarmUS <swarmus@usherbrooke.ca>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''
